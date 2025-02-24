@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:SocialMauiApp.Controls"
+             x:Class="SocialMauiApp.Pages.AddPostPage"
+             Title="Create Post"
+             Padding="15"
+             Shell.BackgroundColor="{StaticResource Primary}"
+             Shell.TitleColor="White">
+    <ScrollView>
+        <Grid RowDefinitions="Auto, *,Auto,Auto" RowSpacing="5">
+            <Grid ColumnDefinitions="Auto,Auto"
+                  Grid.Row="0"
+                  ColumnSpacing="5">
+                <Border Grid.Column="0"
+                        StrokeShape="RoundRectangle 20"
+                        HeightRequest="40"
+                        WidthRequest="40">
+                    <Image Source="personal.png"
+                           HeightRequest="30"
+                           WidthRequest="30"
+                           Aspect="AspectFill"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"/>
+                </Border>
+
+                <Grid Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center" ColumnSpacing="5">
+                    <Label Grid.Column="0" Text="Pham Trung" FontAttributes="Bold"/>
+
+                </Grid>
+            </Grid>
+            <controls:NoBorderEditor Grid.Row="1" BackgroundColor="LightGoldenrodYellow"
+                                     Placeholder="Start typing..."/>
+            <Grid Grid.Row="2">
+                <Border 
+                    BackgroundColor="LightSalmon"
+                    HeightRequest="250"
+                    StrokeThickness="0">
+                    <Image Source="dotnet_bot.png" HeightRequest="250"/>
+                </Border>
+                <Border BackgroundColor="{StaticResource Primary}"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        HorizontalOptions="End"
+                        VerticalOptions="Start"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0"
+                        Margin="2">
+                    <controls:WhiteImage Source="trash.png"
+                                         HeightRequest="30"
+                                         WidthRequest="30"/>
+                    <Border.Shadow>
+                        <Shadow/>
+                    </Border.Shadow>
+
+                </Border>
+            </Grid>
+            <FlexLayout Grid.Row="3" JustifyContent="SpaceBetween" Padding="0,0,2,0">
+                <Border Stroke="{StaticResource Primary}" StrokeShape="RoundRectangle 5" Padding="15,5">
+                    <HorizontalStackLayout Spacing="5">
+                        <controls:PrimaryColorImage 
+                            HeightRequest="25"
+                            WidthRequest="25"
+                            Source="photo.png"
+                            VerticalOptions="Center"/>
+                        <Label Text="Add Photo" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
+                <Button 
+                    Padding="50,0"
+                    Style="{StaticResource Key=rounded}"
+                    Text="Post"/>
+            </FlexLayout>
+        </Grid>
+    </ScrollView>
+
+</ContentPage>

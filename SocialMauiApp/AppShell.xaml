@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SocialMauiApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
+    xmlns:pages="clr-namespace:SocialMauiApp.Pages"
+    Shell.FlyoutBehavior="Flyout"
+    Title="SocialMauiApp">
+    <ShellContent
+        Title="Onboarding Page"
+        ContentTemplate="{DataTemplate pages:OnboardingPage}"
+        Route="OnboardingPage" />
+        <ShellContent
+        Title="Login Page"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Route="LoginPage" />
+        <ShellContent
+        Title="Register Page"
+        ContentTemplate="{DataTemplate pages:RegisterPage}"
+        Route="RegisterPage" />
+        <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate pages:HomePage}"
+        Route="HomePage" />
+        <ShellContent
+        Title="Post Details Page"
+        ContentTemplate="{DataTemplate pages:PostDetailsPage}"
+        Route="PostDetailsPage" />
+    <ShellContent
+        Title="Add Post Page"
+        ContentTemplate="{DataTemplate pages:AddPostPage}"
+        Route="AddPostPage" />
+
+</Shell>

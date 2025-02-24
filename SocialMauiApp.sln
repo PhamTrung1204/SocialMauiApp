@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMauiApp", "SocialMauiApp\SocialMauiApp.csproj", "{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMauiApp.Api", "SocialMauiApp.Api\SocialMauiApp.Api.csproj", "{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaMaui.Shared", "SocialMediaMaui.Shared\SocialMediaMaui.Shared.csproj", "{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

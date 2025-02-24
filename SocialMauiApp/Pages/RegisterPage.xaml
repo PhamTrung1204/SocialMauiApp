@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SocialMauiApp.Pages.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:SocialMauiApp.Controls"
+    xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
+    Title="Register"
+    Padding="20"
+    x:DataType="vm:RegisterViewModel"
+    Shell.BackgroundColor="{StaticResource Primary}"
+    Shell.TitleColor="White">
+    <Grid>
+        <ScrollView VerticalScrollBarVisibility="Never">
+            <Grid
+                RowDefinitions="Auto, Auto, Auto"
+                RowSpacing="20"
+                VerticalOptions="Center">
+                <Image
+                    Grid.Row="0"
+                    HeightRequest="200"
+                    Source="social_media.png" />
+                <Label
+                    Grid.Row="1"
+                    FontAttributes="Bold"
+                    FontSize="25"
+                    HorizontalOptions="Center"
+                    Text="Register" />
+                <VerticalStackLayout Grid.Row="2" Spacing="2">
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <Border
+                            HeightRequest="80"
+                            StrokeShape="RoundRectangle 40"
+                            WidthRequest="80">
+                            <Image
+                                Aspect="AspectFill"
+                                HeightRequest="80"
+                                Source="user.png"
+                                WidthRequest="80" />
+                        </Border>
+                        <Button Text="Choose Image" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Label Style="{StaticResource formLabel}" Text="Enter Name" />
+                    <controls:NoBorderEntry
+                        BackgroundColor="LightGoldenrodYellow"
+                        Placeholder="Enter Name"
+                        Text="{Binding Name}" />
+                    <controls:Spacer />
+
+                    <Label Text="Email" />
+                    <controls:NoBorderEntry
+                        BackgroundColor="LightGoldenrodYellow"
+                        IsPassword="True"
+                        Keyboard="Email"
+                        Placeholder="Email"
+                        Text="{Binding Email}" />
+                    <controls:Spacer />
+
+                    <Label Text="Password" />
+                    <controls:NoBorderEntry
+                        BackgroundColor="LightGoldenrodYellow"
+                        IsPassword="True"
+                        Placeholder="Enter Password"
+                        Text="{Binding Password}" />
+                    <controls:Spacer />
+
+                    <Button
+                        x:Name="btnRegister"
+                        Command="{Binding RegisterCommand}"
+                        Style="{StaticResource rounded}"
+                        Text="Register" />
+                    <controls:Spacer />
+                    <Grid ColumnDefinitions="*, Auto, *" ColumnSpacing="5">
+                        <BoxView Grid.Column="0" Style="{StaticResource fadedLine}" />
+
+                        <Label
+                            Grid.Column="1"
+                            HorizontalOptions="Center"
+                            Text="Have an account?"
+                            TextColor="{StaticResource Primary}" />
+                        <BoxView Grid.Column="2" Style="{StaticResource fadedLine}" />
+                    </Grid>
+                    <controls:Spacer />
+                    <Button
+                        x:Name="btnLogin"
+                        Clicked="btnLogin_Clicked"
+                        Style="{StaticResource rounded}"
+                        Text="Login" />
+                </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            VerticalOptions="Center" />
+    </Grid>
+</ContentPage>

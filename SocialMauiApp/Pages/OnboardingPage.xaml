@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SocialMauiApp.Pages.OnboardingPage"
+             Title="OnboardingPage"
+             BackgroundColor="{StaticResource Primary}"
+             Shell.NavBarIsVisible="False">
+    <Grid RowDefinitions="*, Auto, *, Auto">
+        <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto" RowSpacing="20">
+            <Image Grid.Row="0" Source="social_media.png" HeightRequest="200" Aspect="AspectFit"/>
+            <Label
+                Grid.Row="1"
+                FontAttributes="Bold"
+                FontSize="25"
+                HorizontalOptions="Center"
+                TextColor="White"
+                Text="Hello there!"/>
+            <VerticalStackLayout Grid.Row="2" Spacing="10">
+                <Label Text="Welcome to this" HorizontalOptions="Center" FontSize="25" FontAttributes="Bold" TextColor="White"/>
+                <Label Text="Social Network App" HorizontalOptions="Center" FontSize="30" FontAttributes="Bold" TextColor="White"/>
+            </VerticalStackLayout>
+        </Grid>
+        <StackLayout Grid.Row="3" Padding="10">
+            <Button Text="Get Started" BackgroundColor="White" TextColor="{StaticResource Primary}" Style="{StaticResource Key=rounded}" Clicked="Button_Clicked"/>
+        </StackLayout>
+    </Grid>
+</ContentPage>

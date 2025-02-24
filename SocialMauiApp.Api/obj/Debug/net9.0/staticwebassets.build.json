@@ -1,0 +1,20 @@
+{
+  "Version": 1,
+  "Hash": "YesR5HggqA1lr7RD2UMwUiva/cqE4mSrYPHN5rycJjM=",
+  "Source": "SocialMauiApp.Api",
+  "BasePath": "_content/SocialMauiApp.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "SocialMauiApp.Api\\wwwroot",
+      "Source": "SocialMauiApp.Api",
+      "ContentRoot": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\",
+      "BasePath": "_content/SocialMauiApp.Api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [],
+  "Endpoints": []
+}
