@@ -25,7 +25,25 @@ namespace SocialMauiApp.Api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Đăng ký PostDto là keyless entity
             modelBuilder.Entity<PostDto>().HasNoKey();
+
+            // Cấu hình chuyển đổi cho IsLiked: chuyển bool thành int khi lưu, và int thành bool khi đọc
+            modelBuilder.Entity<PostDto>()
+                .Property(p => p.IsLiked)
+                .HasConversion(
+                    v => v ? 1 : 0,   // Khi lưu: true -> 1, false -> 0
+                    v => v == 1       // Khi đọc: 1 -> true, 0 -> false
+                );
+
+            // Tương tự cho IsBookmarked
+            modelBuilder.Entity<PostDto>()
+                .Property(p => p.IsBookmarked)
+                .HasConversion(
+                    v => v ? 1 : 0,
+                    v => v == 1
+                );
 
             modelBuilder.Entity<Bookmarks>(e =>
             {
@@ -47,5 +65,6 @@ namespace SocialMauiApp.Api.Data
                 e.HasOne(b => b.User).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
         }
+
     }
 }

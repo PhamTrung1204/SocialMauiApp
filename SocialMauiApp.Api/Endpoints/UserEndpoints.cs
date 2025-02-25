@@ -29,6 +29,6 @@ namespace SocialMauiApp.Api.Endpoints
 
             return app;
         }
-       
+
     }
 }

@@ -4,6 +4,22 @@
         <name>SocialMauiApp</name>
     </assembly>
     <members>
+        <member name="M:SocialMauiApp.Services.AuthService.Login(SocialMediaMaui.Shared.Dtos.LoginResponseDto)">
+            <summary>
+            Thực hiện đăng nhập, lưu thông tin người dùng và token vào Preferences.
+            </summary>
+            <param name="loginResponseDto">Đối tượng chứa thông tin người dùng và token.</param>
+        </member>
+        <member name="M:SocialMauiApp.Services.AuthService.Logout">
+            <summary>
+            Thực hiện đăng xuất, xóa thông tin người dùng và token.
+            </summary>
+        </member>
+        <member name="M:SocialMauiApp.Services.AuthService.Initialize">
+            <summary>
+            Khởi tạo AuthService bằng cách đọc dữ liệu đã lưu trong Preferences (nếu có).
+            </summary>
+        </member>
         <member name="T:SocialMauiApp.ViewModel.BaseViewModel">
             <inheritdoc/>
         </member>

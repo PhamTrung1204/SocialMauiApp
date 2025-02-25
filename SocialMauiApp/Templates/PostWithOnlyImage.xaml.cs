@@ -1,6 +1,6 @@
 namespace SocialMauiApp.Templates;
 
-public partial class PostWithOnlyImage : ContentPage
+public partial class PostWithOnlyImage : ContentView
 {
 	public PostWithOnlyImage()
 	{

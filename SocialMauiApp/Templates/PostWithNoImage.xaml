@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
+<ContentView
     x:Class="SocialMauiApp.Templates.PostWithNoImage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -11,7 +11,9 @@
         Padding="0,8"
         BackgroundColor="White"
         StrokeThickness="0">
-        <Grid RowDefinitions="Auto,250,Auto,Auto" RowSpacing="5">
+        <!--  Sử dụng 3 hàng: header, nội dung và actions  -->
+        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
+            <!--  Header: Thông tin người dùng  -->
             <Grid
                 Padding="8,0"
                 ColumnDefinitions="40,Auto,*"
@@ -29,10 +31,9 @@
                         VerticalOptions="Center"
                         WidthRequest="30" />
                 </Border>
-
                 <Grid
                     Grid.Column="1"
-                    ColumnDefinitions="Auto, Auto, Auto"
+                    ColumnDefinitions="Auto,Auto,Auto"
                     ColumnSpacing="5"
                     HorizontalOptions="Center"
                     VerticalOptions="Center">
@@ -50,13 +51,14 @@
                     <Label
                         Grid.Column="2"
                         FontSize="12"
-                          Text="{Binding PostedOnDisplay, StringFormat='{0:dd MMM yyyy}'}"
+                        Text="{Binding PostedOnDisplay, StringFormat='{0:dd MMM yyyy}'}"
                         VerticalOptions="Center" />
                 </Grid>
             </Grid>
 
+            <!--  Nội dung bài viết  -->
             <Label
-                Grid.Row="2"
+                Grid.Row="1"
                 Padding="8,0"
                 FontSize="15"
                 Text="{Binding Content}"
@@ -66,12 +68,10 @@
                 </Label.GestureRecognizers>
             </Label>
 
-            <VerticalStackLayout Grid.Row="3">
-
+            <!--  Các hành động (Like, Comment, Save, Share)  -->
+            <VerticalStackLayout Grid.Row="2">
                 <BoxView Style="{StaticResource fadedLine}" />
-
                 <FlexLayout Margin="0,7,0,0" JustifyContent="SpaceAround">
-
                     <HorizontalStackLayout Spacing="2">
                         <controls:PrimaryColorImage
                             Source="heart.png"
@@ -85,7 +85,10 @@
                             Source="comment.png"
                             VerticalOptions="Center"
                             WidthRequest="20" />
-                        <Label Text="Comment" FontSize="12" VerticalOptions="Center"/>
+                        <Label
+                            FontSize="12"
+                            Text="Comment"
+                            VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
                         </HorizontalStackLayout.GestureRecognizers>
@@ -96,7 +99,10 @@
                             Source="save.png"
                             VerticalOptions="Center"
                             WidthRequest="20" />
-                        <Label Text="Save" FontSize="12" VerticalOptions="Center"/>
+                        <Label
+                            FontSize="12"
+                            Text="Save"
+                            VerticalOptions="Center" />
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="2">
                         <controls:PrimaryColorImage
@@ -104,10 +110,13 @@
                             Source="share.png"
                             VerticalOptions="Center"
                             WidthRequest="20" />
-                        <Label Text="Share" FontSize="12" VerticalOptions="Center"/>
+                        <Label
+                            FontSize="12"
+                            Text="Share"
+                            VerticalOptions="Center" />
                     </HorizontalStackLayout>
                 </FlexLayout>
             </VerticalStackLayout>
         </Grid>
     </Border>
-</ContentPage>
+</ContentView>

@@ -8,7 +8,7 @@ public interface IPostApi
 {
     [Multipart]
     [Post("/api/posts/save")]
-    Task<ApiResult> SavePostAsync(StreamPart? photo,string serializedSavePostDto);
+    Task<ApiResult> SavePostAsync(StreamPart? photo,string serializedSavePhotoDto);
     [Get("/api/posts")]
     Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize);
     [Post("/api/posts/{postId}/comments")]

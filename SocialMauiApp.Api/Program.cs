@@ -41,7 +41,8 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = issuer,
         ValidateIssuer = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = symmetricKey
+        IssuerSigningKey = symmetricKey,
+        ValidateAudience = false
     };
 });
 

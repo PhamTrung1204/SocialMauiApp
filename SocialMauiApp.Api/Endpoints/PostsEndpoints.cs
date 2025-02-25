@@ -28,6 +28,7 @@ namespace SocialMauiApp.Api.Endpoints
                    Results.Ok(await postService.SavePostAsync(dto, principal.GetUserId()));
                    return Results.Ok(await postService.SavePostAsync(dto, principal.GetUserId()));
                })
+                .DisableAntiforgery()
                 .Produces<ApiResult>()
                 .WithName("SavePost");
 

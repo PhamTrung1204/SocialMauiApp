@@ -9,468 +9,183 @@
     x:DataType="vm:DetailsViewModel"
     BackgroundColor="{StaticResource Gray100}"
     Shell.PresentationMode="ModalAnimated">
+
     <Grid RowDefinitions="Auto,*,Auto">
-        <Grid
-            Grid.Row="0"
-            Padding="15"
-            BackgroundColor="{StaticResource Primary}"
-            ColumnDefinitions="Auto, *, Auto, Auto"
-            ColumnSpacing="5">
-            <Border
-                Grid.Column="0"
-                BackgroundColor="White"
-                HeightRequest="30"
-                StrokeShape="RoundRectangle 8"
-                StrokeThickness="0"
-                WidthRequest="30">
-                <Image
-                    HeightRequest="24"
-                    HorizontalOptions="Center"
-                    Source="x.png"
-                    VerticalOptions="Center"
-                    WidthRequest="24" />
+        <!-- Header -->
+        <Grid Grid.Row="0" Padding="15" BackgroundColor="{StaticResource Primary}" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10">
+            <!-- Close Button -->
+            <Border Grid.Column="0"
+              BackgroundColor="White"
+              HeightRequest="30"
+              WidthRequest="30"
+              StrokeShape="RoundRectangle 8"
+              StrokeThickness="0">
+                <Image Source="x.png"
+               HeightRequest="24"
+               WidthRequest="24"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
                 <Border.Shadow>
-                    <Shadow Brush="Gray" Radius="10" />
+                    <Shadow Brush="Gray" Radius="10"/>
                 </Border.Shadow>
                 <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                 </Border.GestureRecognizers>
             </Border>
-            <Border
-                Grid.Column="2"
-                BackgroundColor="White"
-                HeightRequest="30"
-                IsVisible="{Binding IsOwnPost}"
-                StrokeShape="RoundRectangle 8"
-                StrokeThickness="0"
-                WidthRequest="30">
-                <Image
-                    HeightRequest="24"
-                    HorizontalOptions="Center"
-                    Source="pencil.png"
-                    VerticalOptions="Center"
-                    WidthRequest="24" />
+            <!-- Spacer -->
+            <Grid Grid.Column="1"/>
+            <!-- Edit Button (chỉ hiển thị nếu là bài viết của chính người dùng) -->
+            <Border Grid.Column="2"
+              BackgroundColor="White"
+              HeightRequest="30"
+              WidthRequest="30"
+              IsVisible="{Binding IsOwnPost}"
+              StrokeShape="RoundRectangle 8"
+              StrokeThickness="0">
+                <Image Source="pencil.png"
+               HeightRequest="24"
+               WidthRequest="24"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
                 <Border.Shadow>
-                    <Shadow Brush="Gray" Radius="10" />
+                    <Shadow Brush="Gray" Radius="10"/>
                 </Border.Shadow>
             </Border>
-            <Border
-                Grid.Column="3"
-                BackgroundColor="White"
-                HeightRequest="30"
-                IsVisible="{Binding IsOwnPost}"
-                StrokeShape="RoundRectangle 8"
-                StrokeThickness="0"
-                WidthRequest="30">
-                <Image
-                    HeightRequest="24"
-                    HorizontalOptions="Center"
-                    Source="trash.png"
-                    VerticalOptions="Center"
-                    WidthRequest="24" />
+            <!-- Delete Button (chỉ hiển thị nếu là bài viết của chính người dùng) -->
+            <Border Grid.Column="3"
+              BackgroundColor="White"
+              HeightRequest="30"
+              WidthRequest="30"
+              IsVisible="{Binding IsOwnPost}"
+              StrokeShape="RoundRectangle 8"
+              StrokeThickness="0">
+                <Image Source="trash.png"
+               HeightRequest="24"
+               WidthRequest="24"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
                 <Border.Shadow>
-                    <Shadow Brush="Gray" Radius="10" />
+                    <Shadow Brush="Gray" Radius="10"/>
                 </Border.Shadow>
             </Border>
         </Grid>
-        <ScrollView Grid.Row="1">
-            <Grid RowDefinitions="Auto,*" RowSpacing="10">
-                <ContentView Grid.Row="0" BindingContext="{Binding Post}">
+
+        <!-- Nội dung chính -->
+        <ScrollView Grid.Row="1" Padding="15">
+            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="15">
+                <!-- Phần hiển thị bài viết theo ControlTemplate -->
+                <ContentView BindingContext="{Binding Post}">
                     <ContentView.Resources>
-                        <DataTemplate x:Key="withImage">
-                            <templates:PostWithImage />
-                        </DataTemplate>
-                        <DataTemplate x:Key="withOnlyImage">
-                            <templates:PostWithOnlyImage />
-                        </DataTemplate>
-                        <DataTemplate x:Key="noImage">
-                            <templates:PostWithNoImage />
-                        </DataTemplate>
+                        <ControlTemplate x:Key="withImage">
+                            <templates:PostWithImage/>
+                        </ControlTemplate>
+                        <ControlTemplate x:Key="withOnlyImage">
+                            <templates:PostWithOnlyImage/>
+                        </ControlTemplate>
+                        <ControlTemplate x:Key="noImage">
+                            <templates:PostWithNoImage/>
+                        </ControlTemplate>
                     </ContentView.Resources>
-                    <ContentView>
-                        <ContentView.Triggers>
-                            <DataTrigger
-                                Binding="{Binding PostTemplateContentViewName}"
-                                TargetType="ContentView"
-                                Value="WithNoImage">
-                                <Setter Property="ControlTemplate" Value="{StaticResource noImage}" />
-                            </DataTrigger>
-                            <DataTrigger
-                                Binding="{Binding PostTemplateContentViewName}"
-                                TargetType="ContentView"
-                                Value="ImageOnly">
-                                <Setter Property="ControlTemplate" Value="{StaticResource withImageOnly}" />
-                            </DataTrigger>
-                            <DataTrigger
-                                Binding="{Binding PostTemplateContentViewName}"
-                                TargetType="ContentView"
-                                Value="WithImage">
-                                <Setter Property="ControlTemplate" Value="{StaticResource withImage}" />
-                            </DataTrigger>
-                        </ContentView.Triggers>
-                    </ContentView>
+                    <ContentView.Triggers>
+                        <DataTrigger Binding="{Binding PostTemplateContentViewName}" TargetType="ContentView" Value="WithNoImage">
+                            <Setter Property="ControlTemplate" Value="{StaticResource noImage}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding PostTemplateContentViewName}" TargetType="ContentView" Value="ImageOnly">
+                            <Setter Property="ControlTemplate" Value="{StaticResource withOnlyImage}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding PostTemplateContentViewName}" TargetType="ContentView" Value="WithImage">
+                            <Setter Property="ControlTemplate" Value="{StaticResource withImage}"/>
+                        </DataTrigger>
+                    </ContentView.Triggers>
                 </ContentView>
 
-                <Border
-                    Grid.Row="0"
-                    Padding="0,8"
-                    BackgroundColor="White"
-                    StrokeThickness="0">
-                    <Grid RowDefinitions="Auto,250,Auto,Auto" RowSpacing="8">
-                        <Grid
-                            Padding="8,0"
-                            ColumnDefinitions="40,Auto,*"
-                            ColumnSpacing="5">
-                            <Border
-                                Grid.Column="0"
-                                BackgroundColor="LightGoldenrodYellow"
-                                HeightRequest="40"
-                                StrokeShape="RoundRectangle 20"
-                                WidthRequest="40">
-                                <Image
-                                    Aspect="AspectFill"
-                                    BackgroundColor="LightGoldenrodYellow"
-                                    HeightRequest="30"
-                                    HorizontalOptions="Center"
-                                    Source="{Binding Post.UserPhotoUrl}"
-                                    VerticalOptions="Center"
-                                    WidthRequest="30" />
+                <!-- Chi tiết bài viết (header, ảnh, nội dung, actions) -->
+                <Border BackgroundColor="White" Padding="10" StrokeThickness="0">
+                    <Grid RowDefinitions="Auto,250,Auto,Auto" RowSpacing="10">
+                        <!-- Thông tin tác giả -->
+                        <Grid Padding="8,0" ColumnDefinitions="40,Auto,*" ColumnSpacing="10">
+                            <Border BackgroundColor="LightGoldenrodYellow" HeightRequest="40" WidthRequest="40" StrokeShape="RoundRectangle 20">
+                                <Image Source="{Binding Post.UserPhotoUrl}"
+                       Aspect="AspectFill"
+                       HeightRequest="30"
+                       WidthRequest="30"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
                             </Border>
-
-                            <Grid
-                                Grid.Column="1"
-                                ColumnDefinitions="Auto, Auto, Auto"
-                                ColumnSpacing="5"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center">
-                                <Label
-                                    Grid.Column="0"
-                                    FontAttributes="Bold"
-                                    Text="{Binding Post.UserName}" />
-                                <Label
-                                    Grid.Column="1"
-                                    Margin="0,-7,0,0"
-                                    FontAttributes="Bold"
-                                    FontSize="14"
-                                    Text="."
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Column="2"
-                                    FontSize="12"
-                                    Text="{Binding Post.PostedOnDisplay}"
-                                    VerticalOptions="Center" />
+                            <Grid Column="1" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="5" VerticalOptions="Center">
+                                <Label Text="{Binding Post.UserName}" FontAttributes="Bold"/>
+                                <Label Text="." FontAttributes="Bold" FontSize="14" Margin="0,-7,0,0" VerticalOptions="Center"/>
+                                <Label Text="{Binding Post.PostedOnDisplay, StringFormat='{0:dd MMM yyyy}'}" FontSize="12" VerticalOptions="Center"/>
                             </Grid>
-
                         </Grid>
-                        <Border
-                            Grid.Row="1"
-                            BackgroundColor="LightBlue"
-                            HeightRequest="250"
-                            StrokeThickness="0">
-                            <Image
-                                Aspect="Center"
-                                HeightRequest="250"
-                                Source="{Binding Post.PhotoUrl}" />
+                        <!-- Ảnh bài viết -->
+                        <Border BackgroundColor="LightBlue" HeightRequest="250">
+                            <Image Source="{Binding Post.PhotoUrl}"
+                     Aspect="Center"
+                     HeightRequest="250"/>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=GoToDetailsPageCommand}"
+                                      CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
                         </Border>
-                        <Label
-                            Grid.Row="2"
-                            Padding="8,0"
-                            FontSize="15"
-                            Text="{Binding Post.Content}"
-                            TextColor="{StaticResource Gray900}" />
-
-
-                        <VerticalStackLayout Grid.Row="3">
-
-                            <BoxView Style="{StaticResource fadedLine}" />
-
-                            <FlexLayout Margin="0,7,0,0" JustifyContent="SpaceAround">
-
-                                <HorizontalStackLayout Spacing="2">
-                                    <controls:PrimaryColorImage
-                                        Source="heart.png"
-                                        VerticalOptions="Center"
-                                        WidthRequest="20" />
-                                    <Label Text="Like" />
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout Spacing="2">
-                                    <controls:PrimaryColorImage
-                                        Source="comment.png"
-                                        VerticalOptions="Center"
-                                        WidthRequest="20" />
-                                    <Label Text="Comment" />
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout Spacing="2">
-                                    <controls:PrimaryColorImage
-                                        Source="save.png"
-                                        VerticalOptions="Center"
-                                        WidthRequest="20" />
-                                    <Label Text="Save" />
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout Spacing="2">
-                                    <controls:PrimaryColorImage
-                                        Source="share.png"
-                                        VerticalOptions="Center"
-                                        WidthRequest="20" />
-                                    <Label Text="Share" />
-                                </HorizontalStackLayout>
-                            </FlexLayout>
-                        </VerticalStackLayout>
-
+                        <!-- Nội dung bài viết -->
+                        <Label Text="{Binding Post.Content}"
+                   FontSize="15"
+                   Padding="8,0"
+                   TextColor="{StaticResource Gray900}"/>
+                        <!-- Action Buttons -->
+                        <FlexLayout Margin="0,7,0,0" JustifyContent="SpaceAround">
+                            <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
+                                <controls:PrimaryColorImage Source="heart.png" HeightRequest="20" WidthRequest="20"/>
+                                <Label Text="Like" FontSize="12" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
+                                <controls:PrimaryColorImage Source="comment.png" HeightRequest="20" WidthRequest="20"/>
+                                <Label Text="Comment" FontSize="12" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
+                                <controls:PrimaryColorImage Source="save.png" HeightRequest="20" WidthRequest="20"/>
+                                <Label Text="Save" FontSize="12" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
+                                <controls:PrimaryColorImage Source="share.png" HeightRequest="20" WidthRequest="20"/>
+                                <Label Text="Share" FontSize="12" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </FlexLayout>
                     </Grid>
-
                 </Border>
-                <VerticalStackLayout
-                    x:Name="comments"
-                    Grid.Row="1"
-                    Padding="0,15"
-                    Spacing="10">
-                    <Grid
-                        Padding="8,0"
-                        ColumnDefinitions="40,*"
-                        ColumnSpacing="5">
-                        <Border
-                            Grid.Column="0"
-                            HeightRequest="40"
-                            StrokeShape="RoundRectangle 20"
-                            VerticalOptions="Start"
-                            WidthRequest="40">
-                            <Image
-                                Aspect="AspectFit"
-                                BackgroundColor="LightGoldenrodYellow"
-                                HeightRequest="30"
-                                HorizontalOptions="Center"
-                                Source="personal.png"
-                                VerticalOptions="Center"
-                                WidthRequest="30" />
+
+                <!-- Mục bình luận -->
+                <VerticalStackLayout x:Name="comments" Spacing="15">
+                    <!-- Mẫu bình luận; có thể chuyển sang CollectionView để hiển thị danh sách động -->
+                    <Grid Padding="8,0" ColumnDefinitions="40,*" ColumnSpacing="10">
+                        <Border HeightRequest="40" WidthRequest="40" StrokeShape="RoundRectangle 20" VerticalOptions="Start">
+                            <Image Source="personal.png" Aspect="AspectFit" BackgroundColor="LightGoldenrodYellow" HeightRequest="30" WidthRequest="30" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
-                        <Grid
-                            Grid.Column="1"
-                            Padding="5"
-                            BackgroundColor="White"
-                            RowDefinitions="Auto,Auto"
-                            RowSpacing="5">
-                            <Grid
-                                Grid.Row="0"
-                                ColumnDefinitions="Auto, Auto, Auto"
-                                ColumnSpacing="5"
-                                VerticalOptions="Center">
-                                <Label
-                                    Grid.Column="0"
-                                    FontAttributes="Bold"
-                                    Text="Pham Trung" />
-                                <Label
-                                    Grid.Column="1"
-                                    Margin="0,-7,0,0"
-                                    FontAttributes="Bold"
-                                    FontSize="14"
-                                    Text="."
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Column="2"
-                                    FontSize="12"
-                                    Text="04 Jan 2025"
-                                    VerticalOptions="Center" />
+                        <Grid Padding="5" BackgroundColor="White" RowDefinitions="Auto,Auto" RowSpacing="5">
+                            <Grid ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="5" VerticalOptions="Center">
+                                <Label Text="Pham Trung" FontAttributes="Bold"/>
+                                <Label Text="." FontAttributes="Bold" FontSize="14" Margin="0,-7,0,0" VerticalOptions="Center"/>
+                                <Label Text="04 Jan 2025" FontSize="12" VerticalOptions="Center"/>
                             </Grid>
-                            <Label
-                                Grid.Row="1"
-                                Text="Comment text"
-                                TextColor="Gray" />
+                            <Label Text="Comment text" TextColor="Gray"/>
                         </Grid>
                     </Grid>
-                    <Grid
-                        Padding="8,0"
-                        ColumnDefinitions="40,*"
-                        ColumnSpacing="5">
-                        <Border
-                            Grid.Column="0"
-                            HeightRequest="40"
-                            StrokeShape="RoundRectangle 20"
-                            VerticalOptions="Start"
-                            WidthRequest="40">
-                            <Image
-                                Aspect="AspectFill"
-                                BackgroundColor="LightGoldenrodYellow"
-                                HeightRequest="30"
-                                HorizontalOptions="Center"
-                                Source="personal.png"
-                                VerticalOptions="Center"
-                                WidthRequest="30" />
-                        </Border>
-                        <Grid
-                            Grid.Column="1"
-                            Padding="5"
-                            BackgroundColor="White"
-                            RowDefinitions="Auto,Auto"
-                            RowSpacing="5">
-                            <Grid
-                                Grid.Row="0"
-                                ColumnDefinitions="Auto, Auto, Auto"
-                                ColumnSpacing="5"
-                                VerticalOptions="Center">
-                                <Label
-                                    Grid.Column="0"
-                                    FontAttributes="Bold"
-                                    Text="Pham Trung" />
-                                <Label
-                                    Grid.Column="1"
-                                    Margin="0,-7,0,0"
-                                    FontAttributes="Bold"
-                                    FontSize="14"
-                                    Text="."
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Column="2"
-                                    FontSize="12"
-                                    Text="04 Jan 2025"
-                                    VerticalOptions="Center" />
-                            </Grid>
-                            <Label
-                                Grid.Row="1"
-                                Text="Comment text"
-                                TextColor="Gray" />
-                        </Grid>
-
-
-
-                    </Grid>
-                    <Grid
-                        Padding="8,0"
-                        ColumnDefinitions="40,*"
-                        ColumnSpacing="5">
-                        <Border
-                            Grid.Column="0"
-                            HeightRequest="40"
-                            StrokeShape="RoundRectangle 20"
-                            VerticalOptions="Start"
-                            WidthRequest="40">
-                            <Image
-                                Aspect="AspectFill"
-                                BackgroundColor="LightGoldenrodYellow"
-                                HeightRequest="30"
-                                HorizontalOptions="Center"
-                                Source="personal.png"
-                                VerticalOptions="Center"
-                                WidthRequest="30" />
-                        </Border>
-                        <Grid
-                            Grid.Column="1"
-                            Padding="5"
-                            BackgroundColor="White"
-                            RowDefinitions="Auto,Auto"
-                            RowSpacing="5">
-                            <Grid
-                                Grid.Row="0"
-                                ColumnDefinitions="Auto, Auto, Auto"
-                                ColumnSpacing="5"
-                                VerticalOptions="Center">
-                                <Label
-                                    Grid.Column="0"
-                                    FontAttributes="Bold"
-                                    Text="Pham Trung" />
-                                <Label
-                                    Grid.Column="1"
-                                    Margin="0,-7,0,0"
-                                    FontAttributes="Bold"
-                                    FontSize="14"
-                                    Text="."
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Column="2"
-                                    FontSize="12"
-                                    Text="04 Jan 2025"
-                                    VerticalOptions="Center" />
-                            </Grid>
-                            <Label
-                                Grid.Row="1"
-                                Text="Comment text Comment text Comment textComment textComment text"
-                                TextColor="Gray" />
-                        </Grid>
-
-
-
-                    </Grid>
-                    <Grid
-                        Padding="8,0"
-                        ColumnDefinitions="40,*"
-                        ColumnSpacing="5">
-                        <Border
-                            Grid.Column="0"
-                            HeightRequest="40"
-                            StrokeShape="RoundRectangle 20"
-                            VerticalOptions="Start"
-                            WidthRequest="40">
-                            <Image
-                                Aspect="AspectFill"
-                                BackgroundColor="LightGoldenrodYellow"
-                                HeightRequest="30"
-                                HorizontalOptions="Center"
-                                Source="personal.png"
-                                VerticalOptions="Center"
-                                WidthRequest="30" />
-                        </Border>
-                        <Grid
-                            Grid.Column="1"
-                            Padding="5"
-                            BackgroundColor="White"
-                            RowDefinitions="Auto,Auto"
-                            RowSpacing="5">
-                            <Grid
-                                Grid.Row="0"
-                                ColumnDefinitions="Auto, Auto, Auto"
-                                ColumnSpacing="5"
-                                VerticalOptions="Center">
-                                <Label
-                                    Grid.Column="0"
-                                    FontAttributes="Bold"
-                                    Text="Pham Trung" />
-                                <Label
-                                    Grid.Column="1"
-                                    Margin="0,-7,0,0"
-                                    FontAttributes="Bold"
-                                    FontSize="14"
-                                    Text="."
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Column="2"
-                                    FontSize="12"
-                                    Text="04 Jan 2025"
-                                    VerticalOptions="Center" />
-                            </Grid>
-                            <Label
-                                Grid.Row="1"
-                                Text="Comment text Comment text Comment textComment textComment text"
-                                TextColor="Gray" />
-                        </Grid>
-
-
-
-                    </Grid>
+                    <!-- Thêm các bình luận khác tương tự hoặc dùng CollectionView -->
                 </VerticalStackLayout>
             </Grid>
         </ScrollView>
-        <Grid
-            Grid.Row="2"
-            Padding="15,10,15,15"
-            BackgroundColor="White"
-            ColumnDefinitions="*,Auto"
-            ColumnSpacing="5">
-            <controls:NoBorderEntry
-                Grid.Column="0"
-                Placeholder="Enter comment..."
-                PlaceholderColor="Black" />
-            <Border
-                Grid.Column="1"
-                BackgroundColor="{StaticResource Primary}"
-                HeightRequest="44"
-                StrokeShape="RoundRectangle 8"
-                WidthRequest="44">
-                <controls:WhiteImage
-                    HeightRequest="24"
-                    Source="send.png"
-                    WidthRequest="24" />
+
+        <!-- Khung nhập bình luận -->
+        <Grid Grid.Row="2" Padding="15,10,15,15" BackgroundColor="White" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+            <controls:NoBorderEntry Grid.Column="0" Placeholder="Enter comment..." PlaceholderColor="Black"/>
+            <Border Grid.Column="1"
+              BackgroundColor="{StaticResource Primary}"
+              HeightRequest="44"
+              WidthRequest="44"
+              StrokeShape="RoundRectangle 8">
+                <controls:WhiteImage Source="send.png" HeightRequest="24" WidthRequest="24"/>
             </Border>
         </Grid>
     </Grid>
-
 </ContentPage>

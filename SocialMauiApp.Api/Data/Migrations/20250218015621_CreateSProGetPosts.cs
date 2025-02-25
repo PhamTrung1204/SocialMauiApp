@@ -40,7 +40,7 @@ END
 ");
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc />  
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"DROP PROC IF EXISTS GetPosts");

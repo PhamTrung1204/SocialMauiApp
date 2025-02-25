@@ -18,6 +18,7 @@ namespace SocialMauiApp.Api.Endpoints
 
             authGroup.MapPost("/register/{userId:guid}/add-photo", async (Guid userId, IFormFile photo, AuthService authService) =>
             Results.Ok(await authService.UploadPhotoAsync(userId, photo)))
+                .DisableAntiforgery()
                 .Produces<ApiResult>()
                 .WithName("Auth-AddPhoto-to-User");
 

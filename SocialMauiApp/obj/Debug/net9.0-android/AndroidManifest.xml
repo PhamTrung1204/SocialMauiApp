@@ -34,4 +34,10 @@
     <service android:name="crc64396a3fe5f8138e3f.KeepAliveService" />
     <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="1999999999" android:authorities="com.companyname.socialmauiapp.mono.MonoRuntimeProvider.__mono_init__" />
   </application>
+  <!-- Cho phép truy vấn cho intent IMAGE_CAPTURE -->
+  <queries>
+    <intent>
+      <action android:name="android.media.action.IMAGE_CAPTURE" />
+    </intent>
+  </queries>
 </manifest>
