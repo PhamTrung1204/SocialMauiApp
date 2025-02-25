@@ -1,75 +1,124 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:SocialMauiApp.Controls"
-             x:Class="SocialMauiApp.Pages.AddPostPage"
-             Title="Create Post"
-             Padding="15"
-             Shell.BackgroundColor="{StaticResource Primary}"
-             Shell.TitleColor="White">
+<ContentPage
+    x:Class="SocialMauiApp.Pages.AddPostPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:SocialMauiApp.Controls"
+    xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
+    Title="Create Post"
+    Padding="15"
+    x:DataType="vm:SavePostViewModel"
+    Shell.BackgroundColor="{StaticResource Primary}"
+    Shell.TitleColor="White">
     <ScrollView>
         <Grid RowDefinitions="Auto, *,Auto,Auto" RowSpacing="5">
-            <Grid ColumnDefinitions="Auto,Auto"
-                  Grid.Row="0"
-                  ColumnSpacing="5">
-                <Border Grid.Column="0"
-                        StrokeShape="RoundRectangle 20"
-                        HeightRequest="40"
-                        WidthRequest="40">
-                    <Image Source="personal.png"
-                           HeightRequest="30"
-                           WidthRequest="30"
-                           Aspect="AspectFill"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center"/>
+            <Grid
+                Grid.Row="0"
+                ColumnDefinitions="Auto,Auto"
+                ColumnSpacing="5">
+                <Border
+                    Grid.Column="0"
+                    HeightRequest="40"
+                    StrokeShape="RoundRectangle 20"
+                    WidthRequest="40">
+                    <Image
+                        Aspect="AspectFill"
+                        HeightRequest="30"
+                        HorizontalOptions="Center"
+                        Source="personal.png"
+                        VerticalOptions="Center"
+                        WidthRequest="30" />
                 </Border>
 
-                <Grid Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center" ColumnSpacing="5">
-                    <Label Grid.Column="0" Text="Pham Trung" FontAttributes="Bold"/>
+                <Grid
+                    Grid.Column="1"
+                    ColumnSpacing="5"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Label
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        Text="Pham Trung" />
 
                 </Grid>
             </Grid>
-            <controls:NoBorderEditor Grid.Row="1" BackgroundColor="LightGoldenrodYellow"
-                                     Placeholder="Start typing..."/>
+            <controls:NoBorderEditor
+                Grid.Row="1"
+                BackgroundColor="LightGoldenrodYellow"
+                Placeholder="Start typing..."
+                Text="{Binding Content}" />
             <Grid Grid.Row="2">
-                <Border 
+                <Border
                     BackgroundColor="LightSalmon"
                     HeightRequest="250"
                     StrokeThickness="0">
-                    <Image Source="dotnet_bot.png" HeightRequest="250"/>
+                    <Image HeightRequest="250" Source="{Binding PhotoPath}" />
                 </Border>
-                <Border BackgroundColor="{StaticResource Primary}"
-                        HeightRequest="40"
-                        WidthRequest="40"
-                        HorizontalOptions="End"
-                        VerticalOptions="Start"
-                        StrokeShape="RoundRectangle 5"
-                        StrokeThickness="0"
-                        Margin="2">
-                    <controls:WhiteImage Source="trash.png"
-                                         HeightRequest="30"
-                                         WidthRequest="30"/>
+                <Border
+                    Margin="2"
+                    BackgroundColor="{StaticResource Primary}"
+                    HeightRequest="40"
+                    HorizontalOptions="End"
+                    StrokeShape="RoundRectangle 5"
+                    StrokeThickness="0"
+                    VerticalOptions="Start"
+                    WidthRequest="40">
+                    <controls:WhiteImage
+                        HeightRequest="30"
+                        Source="trash.png"
+                        WidthRequest="30" />
                     <Border.Shadow>
-                        <Shadow/>
+                        <Shadow />
                     </Border.Shadow>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding RemovePhotoCommand}"/>
+                    </Border.GestureRecognizers>
 
                 </Border>
+                <Grid.Triggers>
+                    <DataTrigger
+                        Binding="{Binding PhotoPath}"
+                        TargetType="Grid"
+                        Value="">
+                        <Setter Property="IsVisible" Value="False" />
+                    </DataTrigger>
+                </Grid.Triggers>
             </Grid>
-            <FlexLayout Grid.Row="3" JustifyContent="SpaceBetween" Padding="0,0,2,0">
-                <Border Stroke="{StaticResource Primary}" StrokeShape="RoundRectangle 5" Padding="15,5">
+            <FlexLayout
+                Grid.Row="3"
+                Padding="0,0,2,0"
+                JustifyContent="SpaceBetween">
+                <Border
+                    Padding="15,5"
+                    Stroke="{StaticResource Primary}"
+                    StrokeShape="RoundRectangle 5">
                     <HorizontalStackLayout Spacing="5">
-                        <controls:PrimaryColorImage 
+                        <controls:PrimaryColorImage
                             HeightRequest="25"
-                            WidthRequest="25"
                             Source="photo.png"
-                            VerticalOptions="Center"/>
-                        <Label Text="Add Photo" VerticalOptions="Center"/>
+                            VerticalOptions="Center"
+                            WidthRequest="25" />
+                        <Label Text="Change Photo" VerticalOptions="Center">
+                            <Label.Triggers>
+                                <DataTrigger Binding="{Binding PhotoPath}" TargetType="Label" Value="">
+                                    <Setter Property="Text" Value="Add Photo" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding PhotoPath}" TargetType="Label" Value="{x:Null}">
+                                    <Setter Property="Text" Value="Add Photo" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+
                     </HorizontalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectPhotoCommand}"/>
+                    </Border.GestureRecognizers>
                 </Border>
-                <Button 
+                <Button
                     Padding="50,0"
+                    Command="{Binding SavePostCommand}"
                     Style="{StaticResource Key=rounded}"
-                    Text="Post"/>
+                    Text="Post" />
             </FlexLayout>
         </Grid>
     </ScrollView>

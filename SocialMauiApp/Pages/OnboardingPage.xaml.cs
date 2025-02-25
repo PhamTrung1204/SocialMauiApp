@@ -1,13 +1,16 @@
-namespace SocialMauiApp.Pages;
-
-public partial class OnboardingPage : ContentPage
+namespace SocialMauiApp.Pages
 {
-	public OnboardingPage()
-	{
-		InitializeComponent();
-	}
-    private async void Button_Clicked(object sender, EventArgs e)
+    public partial class OnboardingPage : ContentPage
     {
-        await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+        public OnboardingPage()
+        {
+            InitializeComponent();
+        }
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            Preferences.Default.Set(InitPage.FirstRunKey, true);
+        }
     }
 }
+

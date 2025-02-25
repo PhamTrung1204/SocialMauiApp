@@ -17,5 +17,21 @@ namespace SocialMediaMaui.Shared.Dtos
         public DateTime PostedOnDisplay => ModifiedOn ?? PostedOn;
         public bool IsLiked { get; set; }
         public bool IsBookmarked { get; set; }
+        [JsonIgnore]
+        public string PostTemplateContentViewName
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(PhotoUrl))
+                {
+                    return "WithNoImage";
+                }
+                if (!string.IsNullOrWhiteSpace(Content))
+                {
+                    return "ImageOnly";
+                }
+                return "WithImage";
+            }
+        }
     }
 }

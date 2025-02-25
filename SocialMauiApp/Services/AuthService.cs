@@ -11,6 +11,10 @@ namespace SocialMauiApp.Services
     public class AuthService
     {
         private const string UserDataKey = "udata";
+        public AuthService()
+        {
+            Initialize();
+        }
         public string? Token { get; set; }
         public LoggedInUser? User { get; set; }
         public bool IsLoggedIn => User is not null && User.Id != default && !string.IsNullOrWhiteSpace(Token);

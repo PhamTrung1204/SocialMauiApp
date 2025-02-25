@@ -3,7 +3,8 @@
     x:Class="SocialMauiApp.App"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:SocialMauiApp">
+    xmlns:local="clr-namespace:SocialMauiApp"
+    xmlns:templates="clr-namespace:SocialMauiApp.Templates">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -21,6 +22,22 @@
                         <Setter Property="Color" Value="{StaticResource Primary}" />
                         <Setter Property="Opacity" Value="0.2" />
                     </Style>
+                    <DataTemplate x:Key="postWithImageTemplate">
+                        <templates:PostWithImage />
+                    </DataTemplate>
+                    <DataTemplate x:Key="postWithNoImageTemplate">
+                        <templates:PostWithNoImage />
+                    </DataTemplate>
+                    <DataTemplate x:Key="postWithImageOnlyTemplate">
+                        <templates:PostWithOnlyImage />
+                    </DataTemplate>
+
+
+                    <templates:PostTemplateSelector
+                        x:Key="postDataTemplateSelector"
+                        ImageOnly="{StaticResource Key=postWithImageOnlyTemplate}"
+                        WithImage="{StaticResource Key=postWithImageTemplate}"
+                        WithNoImage="{StaticResource Key=postWithNoImageTemplate}" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -1,6 +1,11 @@
 ﻿using Android.App;
 using Android.Runtime;
-
+// Needed for Picking photo/video
+[assembly: UsesPermission(Android.Manifest.Permission.ReadExternalStorage, MaxSdkVersion = 32)]
+[assembly: UsesPermission(Android.Manifest.Permission.ReadMediaImages)]
+// Needed for Taking photo/video
+[assembly: UsesPermission(Android.Manifest.Permission.Camera)]
+[assembly: UsesPermission(Android.Manifest.Permission.WriteExternalStorage, MaxSdkVersion = 32)]
 namespace SocialMauiApp
 {
     [Application]

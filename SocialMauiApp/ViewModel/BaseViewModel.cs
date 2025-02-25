@@ -14,6 +14,9 @@ namespace SocialMauiApp.ViewModel
             await Shell.Current.DisplayAlert("Error", message, "Ok");
         protected async Task NavigateAsync(string url) =>
             await Shell.Current.GoToAsync(url, animate: true);
+        protected async Task NavigateAsync(string url, Dictionary<string, object> parameters) =>
+            await Shell.Current.GoToAsync(url, animate: true, parameters);
+        protected async Task NavigateBackAsync() => await NavigateAsync("..");
         protected async Task ToastAsync(string message) =>
             await Toast.Make(message).Show();
         protected async Task MakeApiCall(Func<Task> apiCall)

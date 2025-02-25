@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "PhysicalDevice+Api",
+    "Projects": [
+      {
+        "Path": "SocialMauiApp\\SocialMauiApp.csproj",
+        "Action": "Start",
+        "DebugTarget": "Pixel 7 - API 33 (Android 13.0 - API 33)"
+      },
+      {
+        "Path": "SocialMauiApp.Api\\SocialMauiApp.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
+  }
+]

@@ -109,3 +109,21 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Templates/PostWithImage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Templates.PostWithImage.xaml
+build_metadata.AdditionalFiles.TargetPath = Templates\PostWithImage.xaml
+build_metadata.AdditionalFiles.RelativePath = Templates\PostWithImage.xaml
+
+[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Templates/PostWithNoImage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Templates.PostWithNoImage.xaml
+build_metadata.AdditionalFiles.TargetPath = Templates\PostWithNoImage.xaml
+build_metadata.AdditionalFiles.RelativePath = Templates\PostWithNoImage.xaml
+
+[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Templates/PostWithOnlyImage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Templates.PostWithOnlyImage.xaml
+build_metadata.AdditionalFiles.TargetPath = Templates\PostWithOnlyImage.xaml
+build_metadata.AdditionalFiles.RelativePath = Templates\PostWithOnlyImage.xaml

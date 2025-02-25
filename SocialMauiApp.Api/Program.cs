@@ -58,6 +58,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.Use(async (httpContext, next) =>
+{
+    httpContext.Request.Headers.TryGetValue("Authorization", out var value);
+    await next();
+});
 app.UseAuthentication()
     .UseAuthorization();
 app.MapAuthEndpoints()

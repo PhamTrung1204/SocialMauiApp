@@ -37,7 +37,7 @@ namespace SocialMauiApp.ViewModel
                     return;
                 }
                 var userId = result.Data;
-                await ToastAsync($"{userId} successfully registered");
+                await ToastAsync($"Successfully registered");
                 await NavigateAsync($"//{nameof(LoginPage)}");
             }
             );

@@ -1,6 +1,9 @@
-﻿using SocialMauiApp.Api.Services;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using SocialMauiApp.Api.Services;
 using SocialMediaMaui.Shared.Dtos;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace SocialMauiApp.Api.Endpoints
 {
@@ -12,8 +15,19 @@ namespace SocialMauiApp.Api.Endpoints
                 .RequireAuthorization()
                 .WithTags("Posts");
 
-            postsGroup.MapPost("/save", async (SavePostDto dto, PostService postService, ClaimsPrincipal principal) =>
-                Results.Ok(await postService.SavePostAsync(dto, principal.GetUserId())))
+            //postsGroup.MapPost("/save", async (SavePostDto dto, PostService postService, ClaimsPrincipal principal) =>
+            //    Results.Ok(await postService.SavePostAsync(dto, principal.GetUserId())))
+            //    .Produces<ApiResult>()
+            //    .WithName("SavePost");
+            postsGroup.MapPost("/save", async ([FromForm] IFormFile? photo, [FromForm] string serializedSavePhotoDto, PostService postService, ClaimsPrincipal principal) =>
+               {
+                   if (string.IsNullOrWhiteSpace(serializedSavePhotoDto)) return Results.BadRequest("Missing data");
+
+                   SavePostDto dto = JsonSerializer.Deserialize<SavePostDto>(serializedSavePhotoDto)!;
+                   dto.Photo = photo;
+                   Results.Ok(await postService.SavePostAsync(dto, principal.GetUserId()));
+                   return Results.Ok(await postService.SavePostAsync(dto, principal.GetUserId()));
+               })
                 .Produces<ApiResult>()
                 .WithName("SavePost");
 
@@ -28,7 +42,7 @@ namespace SocialMauiApp.Api.Endpoints
                 .Produces<ApiResult<CommentDto>>()
                 .WithName("SaveComment");
 
-            postsGroup.MapGet("/{postId:guid}/comments", async (Guid postId,int startIndex, int pageSize, PostService postService) =>
+            postsGroup.MapGet("/{postId:guid}/comments", async (Guid postId, int startIndex, int pageSize, PostService postService) =>
                Results.Ok(await postService.GetPostsCommentAsync(postId, startIndex, pageSize)))
                .Produces<CommentDto[]>()
                .WithName("GetPostComments");

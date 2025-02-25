@@ -1,12 +1,15 @@
+using SocialMauiApp.ViewModel;
+
 namespace SocialMauiApp.Pages
 {
     public partial class HomePage : ContentPage
     {
 
 
-        public HomePage()
+        public HomePage(HomeViewModel homeViewModel)
         {
             InitializeComponent();
+            BindingContext = homeViewModel;
         }
 
         private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
@@ -14,10 +17,10 @@ namespace SocialMauiApp.Pages
             await Shell.Current.GoToAsync(nameof(PostDetailsPage), animate: true);
         }
 
-        private async void AddPost_Tapped_1(object sender, TappedEventArgs e)
-        {
-            await Shell.Current.GoToAsync(nameof(AddPostPage), animate: true);
-        }
+        //private async void AddPost_Tapped_1(object sender, TappedEventArgs e)
+        //{
+        //    await Shell.Current.GoToAsync(nameof(AddPostPage), animate: true);
+        //}
 
         private async void GoToProfile(object sender, TappedEventArgs e)
         {

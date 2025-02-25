@@ -47,11 +47,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-android35.0/CommunityToolkit.Maui.dll": {
@@ -4533,11 +4533,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-android35.0/CommunityToolkit.Maui.dll": {
@@ -8913,11 +8913,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-android35.0/CommunityToolkit.Maui.dll": {
@@ -13293,11 +13293,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-android35.0/CommunityToolkit.Maui.dll": {
@@ -17673,11 +17673,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-android35.0/CommunityToolkit.Maui.dll": {
@@ -22053,11 +22053,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-android35.0/CommunityToolkit.Maui.dll": {
@@ -26433,11 +26433,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-ios18.0/CommunityToolkit.Maui.dll": {
@@ -29196,11 +29196,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-ios18.0/CommunityToolkit.Maui.dll": {
@@ -32008,11 +32008,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-ios18.0/CommunityToolkit.Maui.dll": {
@@ -34820,11 +34820,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-ios18.0/CommunityToolkit.Maui.dll": {
@@ -37632,11 +37632,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-ios18.0/CommunityToolkit.Maui.dll": {
@@ -40444,11 +40444,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-ios18.0/CommunityToolkit.Maui.dll": {
@@ -43240,11 +43240,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-maccatalyst18.0/CommunityToolkit.Maui.dll": {
@@ -45907,11 +45907,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-maccatalyst18.0/CommunityToolkit.Maui.dll": {
@@ -48454,11 +48454,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-maccatalyst18.0/CommunityToolkit.Maui.dll": {
@@ -51001,11 +51001,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-maccatalyst18.0/CommunityToolkit.Maui.dll": {
@@ -53545,11 +53545,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-maccatalyst18.0/CommunityToolkit.Maui.dll": {
@@ -56092,11 +56092,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-maccatalyst18.0/CommunityToolkit.Maui.dll": {
@@ -58626,11 +58626,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
@@ -61529,11 +61529,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
@@ -64264,11 +64264,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
@@ -66999,11 +66999,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
@@ -69731,11 +69731,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
@@ -72466,11 +72466,11 @@
           }
         }
       },
-      "CommunityToolkit.Maui/11.1.0": {
+      "CommunityToolkit.Maui/10.0.0": {
         "type": "package",
         "dependencies": {
-          "CommunityToolkit.Maui.Core": "11.1.0",
-          "Microsoft.Maui.Controls": "[9.0.30, 10.0.0)"
+          "CommunityToolkit.Maui.Core": "10.0.0",
+          "Microsoft.Maui.Controls": "[9.0.21, 10.0.0)"
         },
         "compile": {
           "lib/net9.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
@@ -75191,10 +75191,10 @@
         "lib/netstandard2.0/Azure.Identity.xml"
       ]
     },
-    "CommunityToolkit.Maui/11.1.0": {
-      "sha512": "MmLbUAJbm7h7q0bmJci+YS7C6R4DEXPllsc3HTzfBzbhPg17H+EN4wdWXGeq6HUylkRbPndprhCpdJnmIwLV8w==",
+    "CommunityToolkit.Maui/10.0.0": {
+      "sha512": "Yh4CAqewB1Voq+RwCeWP7jxD10MAkjeM3WRkhsr5KMYzuJleM/H0wM2aLIuODVnO787NM/wleI7JFOf9EU1Dbw==",
       "type": "package",
-      "path": "communitytoolkit.maui/11.1.0",
+      "path": "communitytoolkit.maui/10.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -75202,7 +75202,7 @@
         "analyzers/dotnet/cs/CommunityToolkit.Maui.Analyzers.CodeFixes.dll",
         "analyzers/dotnet/cs/CommunityToolkit.Maui.Analyzers.dll",
         "analyzers/dotnet/cs/CommunityToolkit.Maui.SourceGenerators.dll",
-        "communitytoolkit.maui.11.1.0.nupkg.sha512",
+        "communitytoolkit.maui.10.0.0.nupkg.sha512",
         "communitytoolkit.maui.nuspec",
         "icon.png",
         "lib/net9.0-android35.0/CommunityToolkit.Maui.dll",
@@ -75211,8 +75211,8 @@
         "lib/net9.0-ios18.0/CommunityToolkit.Maui.xml",
         "lib/net9.0-maccatalyst18.0/CommunityToolkit.Maui.dll",
         "lib/net9.0-maccatalyst18.0/CommunityToolkit.Maui.xml",
-        "lib/net9.0-tizen10.0/CommunityToolkit.Maui.dll",
-        "lib/net9.0-tizen10.0/CommunityToolkit.Maui.xml",
+        "lib/net9.0-tizen8.0/CommunityToolkit.Maui.dll",
+        "lib/net9.0-tizen8.0/CommunityToolkit.Maui.xml",
         "lib/net9.0-windows10.0.19041/CommunityToolkit.Maui.dll",
         "lib/net9.0-windows10.0.19041/CommunityToolkit.Maui.xml",
         "lib/net9.0/CommunityToolkit.Maui.dll",
@@ -84056,7 +84056,7 @@
   },
   "projectFileDependencyGroups": {
     "net9.0-android35.0": [
-      "CommunityToolkit.Maui >= 11.1.0",
+      "CommunityToolkit.Maui >= 10.0.0",
       "CommunityToolkit.Maui.Core >= 11.1.0",
       "CommunityToolkit.Mvvm >= 8.4.0",
       "DocumentFormat.OpenXml >= 3.2.0",
@@ -84076,7 +84076,7 @@
       "Xamarin.AndroidX.Lifecycle.Runtime.Ktx >= 2.8.7.2"
     ],
     "net9.0-ios18.2": [
-      "CommunityToolkit.Maui >= 11.1.0",
+      "CommunityToolkit.Maui >= 10.0.0",
       "CommunityToolkit.Maui.Core >= 11.1.0",
       "CommunityToolkit.Mvvm >= 8.4.0",
       "DocumentFormat.OpenXml >= 3.2.0",
@@ -84094,7 +84094,7 @@
       "Syncfusion.Maui.Toolkit >= 1.0.3"
     ],
     "net9.0-maccatalyst18.2": [
-      "CommunityToolkit.Maui >= 11.1.0",
+      "CommunityToolkit.Maui >= 10.0.0",
       "CommunityToolkit.Maui.Core >= 11.1.0",
       "CommunityToolkit.Mvvm >= 8.4.0",
       "DocumentFormat.OpenXml >= 3.2.0",
@@ -84112,7 +84112,7 @@
       "Syncfusion.Maui.Toolkit >= 1.0.3"
     ],
     "net9.0-windows10.0.19041": [
-      "CommunityToolkit.Maui >= 11.1.0",
+      "CommunityToolkit.Maui >= 10.0.0",
       "CommunityToolkit.Maui.Core >= 11.1.0",
       "CommunityToolkit.Mvvm >= 8.4.0",
       "DocumentFormat.OpenXml >= 3.2.0",
@@ -84214,7 +84214,7 @@
         "dependencies": {
           "CommunityToolkit.Maui": {
             "target": "Package",
-            "version": "[11.1.0, )"
+            "version": "[10.0.0, )"
           },
           "CommunityToolkit.Maui.Core": {
             "target": "Package",
@@ -84317,7 +84317,7 @@
         "dependencies": {
           "CommunityToolkit.Maui": {
             "target": "Package",
-            "version": "[11.1.0, )"
+            "version": "[10.0.0, )"
           },
           "CommunityToolkit.Maui.Core": {
             "target": "Package",
@@ -84412,7 +84412,7 @@
         "dependencies": {
           "CommunityToolkit.Maui": {
             "target": "Package",
-            "version": "[11.1.0, )"
+            "version": "[10.0.0, )"
           },
           "CommunityToolkit.Maui.Core": {
             "target": "Package",
@@ -84508,7 +84508,7 @@
         "dependencies": {
           "CommunityToolkit.Maui": {
             "target": "Package",
-            "version": "[11.1.0, )"
+            "version": "[10.0.0, )"
           },
           "CommunityToolkit.Maui.Core": {
             "target": "Package",

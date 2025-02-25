@@ -7,6 +7,9 @@
     <SelectedPlatformGroup>Emulator</SelectedPlatformGroup>
     <DefaultDevice>pixel_7_-_api_33</DefaultDevice>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
+  </PropertyGroup>
   <ItemGroup>
     <MauiXaml Update="Pages\AddPostPage.xaml">
       <SubType>Designer</SubType>
@@ -30,6 +33,15 @@
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Pages\RegisterPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Templates\PostWithImage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Templates\PostWithNoImage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Templates\PostWithOnlyImage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>
