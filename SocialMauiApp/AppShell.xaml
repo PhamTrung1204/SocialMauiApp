@@ -6,7 +6,7 @@
     xmlns:pages="clr-namespace:SocialMauiApp.Pages"
     xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
     Title="SocialMauiApp"
-    Shell.FlyoutBehavior="Flyout">
+   FlyoutBehavior="Disabled">
     <ShellContent
         Title="Onboarding Page"
         ContentTemplate="{DataTemplate pages:OnboardingPage}"

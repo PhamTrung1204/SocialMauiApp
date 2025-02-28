@@ -290,7 +290,7 @@
         "IsRequired": false
       },
       {
-        "Name": "serializedSavePhotoDto",
+        "Name": "serializedSavePostDto",
         "Type": "System.String",
         "IsRequired": true
       }

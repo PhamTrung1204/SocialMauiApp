@@ -3,6 +3,8 @@
     x:Class="SocialMauiApp.Pages.AddPostPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+  xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     Title="Create Post"
@@ -25,7 +27,7 @@
                         Aspect="AspectFill"
                         HeightRequest="30"
                         HorizontalOptions="Center"
-                        Source="personal.png"
+                        Source="{Binding UserPhotoUrl}"
                         VerticalOptions="Center"
                         WidthRequest="30" />
                 </Border>
@@ -38,7 +40,7 @@
                     <Label
                         Grid.Column="0"
                         FontAttributes="Bold"
-                        Text="Pham Trung" />
+                        Text="{Binding UserName}" />
 
                 </Grid>
             </Grid>
@@ -103,9 +105,7 @@
                                 <DataTrigger Binding="{Binding PhotoPath}" TargetType="Label" Value="">
                                     <Setter Property="Text" Value="Add Photo" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding PhotoPath}" TargetType="Label" Value="{x:Null}">
-                                    <Setter Property="Text" Value="Add Photo" />
-                                </DataTrigger>
+                               
                             </Label.Triggers>
                         </Label>
 

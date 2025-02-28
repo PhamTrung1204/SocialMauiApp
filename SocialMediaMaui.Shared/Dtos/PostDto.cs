@@ -10,10 +10,10 @@ namespace SocialMediaMaui.Shared.Dtos
         public string? UserPhotoUrl { get; set; }
         public string? Content { get; set; }
         public string? PhotoUrl { get; set; }
-        [JsonIgnore]
+
         public DateTime PostedOn { get; set; }
-        [JsonIgnore]
         public DateTime? ModifiedOn { get; set; }
+        [JsonIgnore]
         public DateTime PostedOnDisplay => ModifiedOn ?? PostedOn;
         public bool IsLiked { get; set; }
         public bool IsBookmarked { get; set; }
@@ -22,11 +22,11 @@ namespace SocialMediaMaui.Shared.Dtos
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(PhotoUrl))
+                if (string.IsNullOrWhiteSpace(PhotoUrl))
                 {
                     return "WithNoImage";
                 }
-                if (!string.IsNullOrWhiteSpace(Content))
+                if (string.IsNullOrWhiteSpace(Content))
                 {
                     return "ImageOnly";
                 }

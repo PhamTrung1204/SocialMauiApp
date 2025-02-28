@@ -1,13 +1,20 @@
 ﻿
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Refit;
+using SocialMauiApp.Apis;
+using SocialMediaMaui.Shared.Dtos;
 
 
 namespace SocialMauiApp.ViewModel
 {
     public partial class BaseViewModel : ObservableObject
     {
+        public BaseViewModel()
+        {
+
+        }
         [ObservableProperty]
         private bool _isBusy;
         protected async Task ShowErrorAlertAsync(string message) =>
@@ -52,6 +59,6 @@ namespace SocialMauiApp.ViewModel
                 IsBusy = false;
             }
         }
-
+        
     }
 }

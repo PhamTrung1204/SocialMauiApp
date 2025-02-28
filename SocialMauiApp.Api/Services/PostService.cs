@@ -80,56 +80,6 @@ namespace SocialMauiApp.Api.Services
             }
 
         }
-
-        //public async Task<(string PhotoPath, string PhotoUrl)> SavePostPhotoAsync(IFormFile photo, Guid userId)
-        //{
-        //    var targetFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "images", "users", userId.ToString(), "posts");
-        //    if (!Directory.Exists(targetFolderPath))
-        //    {
-        //        Directory.CreateDirectory(targetFolderPath);
-        //    }
-        //    var extension = Path.GetExtension(photo.FileName);
-        //    var newPhotoName = $"{Guid.NewGuid()}_{DateTime.UtcNow.Ticks}{extension}";
-        //    var fullPhotoPath = Path.Combine(targetFolderPath, newPhotoName);
-        //    using FileStream fs = File.Create(fullPhotoPath);
-        //    await photo.CopyToAsync(fs);
-        //    var domainUrl = _configuration.GetValue<string>("Domain").TrimEnd('/');
-        //    var photoUrl = $"{domainUrl}/uploads/images/users/{userId}/posts/{newPhotoName}";
-        //    return (fullPhotoPath, photoUrl);
-        //}
-        //public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize, Guid currentUserId)
-        //{
-        //    var posts = await _context.Posts
-        //                        .Include(p => p.User)
-        //                        .Where(p => !p.IsDeleted)
-        //                        .OrderByDescending(p => p.PostOn)
-        //                        .Select(p => new PostDto
-        //                        {
-        //                            Content = p.Content,
-        //                            ModifiedOn = p.ModifiedOn,
-        //                            PhotoUrl = p.PhotoUrl,
-        //                            PostId = p.Id,
-        //                            PostedOn = p.PostOn,
-        //                            UserId = currentUserId,
-        //                            UserName = p.User.Name,
-        //                            UserPhotoUrl = p.User.PhotoUrl
-        //                        })
-        //                        .Skip(startIndex).Take(pageSize)
-        //                        .ToArrayAsync();
-        //    var postIds = posts.Select(p => p.PostId).ToArray();
-        //    var postsLikeByThisUser = await _context.Likes
-        //        .Where(l => l.UserId == currentUserId && postIds.Contains(l.PostId))
-        //        .Select(l => l.PostId).ToArrayAsync();
-        //    var postsSaveByThisUser = await _context.Bookmarks
-        //        .Where(l => l.UserId == currentUserId && postIds.Contains(l.PostId))
-        //        .Select(l => l.PostId).ToArrayAsync();
-        //    foreach ( var post in posts)
-        //    {
-        //        post.IsLiked = postsLikeByThisUser.Contains(post.UserId);
-        //        post.IsBookmarked = postsSaveByThisUser.Contains(post.UserId);
-        //    }
-        //    return posts;
-        //}
         public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize, Guid currentUserId)
         {
             var posts = await _context.Set<PostDto>()

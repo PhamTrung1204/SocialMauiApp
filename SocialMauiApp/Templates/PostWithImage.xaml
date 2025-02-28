@@ -11,7 +11,7 @@
         Padding="0,8"
         BackgroundColor="White"
         StrokeThickness="0">
-        <Grid RowDefinitions="Auto,250,Auto,Auto" RowSpacing="5">
+        <Grid RowDefinitions="Auto,Auto,250,Auto" RowSpacing="5">
             <Grid
                 Padding="8,0"
                 ColumnDefinitions="40,Auto,*"
@@ -54,9 +54,19 @@
                         VerticalOptions="Center" />
                 </Grid>
             </Grid>
-            <Border
+            <Label
                 Grid.Row="1"
-                BackgroundColor="LightBlue"
+                Padding="8,0"
+                FontSize="15"
+                Text="{Binding Content}"
+                TextColor="{StaticResource Gray900}"
+                LineBreakMode="WordWrap">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Border
+                Grid.Row="2"
                 HeightRequest="250"
                 StrokeThickness="0">
                 <Image
@@ -67,18 +77,6 @@
                     <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
                 </Border.GestureRecognizers>
             </Border>
-            <Label
-                Grid.Row="2"
-                Padding="8,0"
-                FontSize="15"
-                Text="{Binding Content}"
-                TextColor="{StaticResource Gray900}">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
-                </Label.GestureRecognizers>
-            </Label>
-
-
             <VerticalStackLayout Grid.Row="3">
 
                 <BoxView Style="{StaticResource fadedLine}" />
@@ -112,7 +110,10 @@
                             Source="save.png"
                             VerticalOptions="Center"
                             WidthRequest="20" />
-                        <Label Text="Save"  FontSize="12" VerticalOptions="Center"/>
+                        <Label
+                            FontSize="12"
+                            Text="Save"
+                            VerticalOptions="Center" />
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="2">
                         <controls:PrimaryColorImage
@@ -120,7 +121,10 @@
                             Source="share.png"
                             VerticalOptions="Center"
                             WidthRequest="20" />
-                        <Label Text="Share" FontSize="12" VerticalOptions="Center"/>
+                        <Label
+                            FontSize="12"
+                            Text="Share"
+                            VerticalOptions="Center" />
                     </HorizontalStackLayout>
                 </FlexLayout>
             </VerticalStackLayout>

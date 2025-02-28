@@ -11,12 +11,10 @@ using System.Threading.Tasks;
 
 namespace SocialMauiApp.ViewModel
 {
-    public partial class HomeViewModel : BaseViewModel
+    public partial class HomeViewModel : BasePostViewModel
     {
-        private readonly IPostApi _postApi;
-        public HomeViewModel(IPostApi postApi)
+        public HomeViewModel(IPostApi postApi):base(postApi) 
         {
-            _postApi = postApi;
             FetchPostsAsync();
         }
         public ObservableCollection<PostDto> Posts { get; set; } = [];
@@ -27,8 +25,8 @@ namespace SocialMauiApp.ViewModel
         {
             await MakeApiCall(async () =>
             {
-                var posts = await _postApi.GetPostsAsync(_startIndex, PageSize);
-                if(posts .Length > 0)
+                var posts = await PostsApi.GetPostsAsync(_startIndex, PageSize);
+                if(posts.Length > 0)
                 {
                     if(_startIndex == 0 && Posts.Count > 0)
                     {

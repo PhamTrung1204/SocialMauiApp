@@ -16,7 +16,9 @@ namespace SocialMauiApp.Api.Services
         public async Task<(string PhotoPath, string PhotoUrl)> SavePhotoAsync (IFormFile photo, params string[] folderPaths)
         {
             //var targetFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "images", "users", userId.ToString(), "posts");
-            var targetFolderPath = Path.Combine([_webHostEnvironment.WebRootPath,..folderPaths]);
+            var paths = new List<string> { _webHostEnvironment.WebRootPath };
+            paths.AddRange(folderPaths);
+            var targetFolderPath = Path.Combine(paths.ToArray());
             if (!Directory.Exists(targetFolderPath))
             {
                 Directory.CreateDirectory(targetFolderPath);

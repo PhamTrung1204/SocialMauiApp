@@ -66,15 +66,10 @@
                     <DataTrigger
                         Binding="{Binding PhotoUrl}"
                         TargetType="Border"
-                        Value="{x:Null}">
+                        >
                         <Setter Property="IsVisible" Value="False" />
                     </DataTrigger>
-                    <DataTrigger
-                        Binding="{Binding PhotoUrl}"
-                        TargetType="Border"
-                        Value="">
-                        <Setter Property="IsVisible" Value="False" />
-                    </DataTrigger>
+                    
                 </Border.Triggers>
                 <Image
                     Aspect="Center"

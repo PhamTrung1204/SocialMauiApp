@@ -16,11 +16,11 @@ namespace SocialMauiApp.Templates
         {
             if(item is PostDto post)
             {
-                if(!string.IsNullOrWhiteSpace(post.PhotoUrl))
+                if(string.IsNullOrWhiteSpace(post.PhotoUrl))
                 {
                     return WithNoImage;
                 }
-                if(!string.IsNullOrWhiteSpace(post.Content))
+                if(string.IsNullOrWhiteSpace(post.Content))
                 {
                     return ImageOnly;   
                 }

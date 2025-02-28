@@ -98,50 +98,61 @@ namespace SocialMauiApp.ViewModel
         {
             PhotoPath = "";
         }
-        [RelayCommand]
+        [RelayCommand(AllowConcurrentExecutions = false)]
         private async Task SavePostAsync()
         {
-            Console.WriteLine("SavePostAsync called.");
-
-            if (string.IsNullOrWhiteSpace(Content) && string.IsNullOrWhiteSpace(PhotoPath))
-            {
-                Console.WriteLine("Validation failed: No content or photo.");
-                await ToastAsync("Either content or photo is required");
+            if (IsBusy)
                 return;
-            }
 
-            await MakeApiCall(async () =>
+            IsBusy = true;
+            try
             {
-                StreamPart? photoStreamPart = null;
+                Console.WriteLine("SavePostAsync called.");
 
-                if (!string.IsNullOrWhiteSpace(PhotoPath))
+                if (string.IsNullOrWhiteSpace(Content) && string.IsNullOrWhiteSpace(PhotoPath))
                 {
-                    Console.WriteLine("Processing photo: " + PhotoPath);
-                    var fileName = Path.GetFileName(PhotoPath);
-                    var fileStream = File.OpenRead(PhotoPath);
-                    photoStreamPart = new StreamPart(fileStream, fileName);
-                }
-
-                var serializedSavePostDto = JsonSerializer.Serialize(new SavePostDto { Content = Content });
-                Console.WriteLine("Serialized DTO: " + serializedSavePostDto);
-
-                var result = await _postApi.SavePostAsync(photoStreamPart, serializedSavePostDto);
-
-                if (!result.IsSuccess)
-                {
-                    Console.WriteLine("API call failed: " + result.Error);
-                    await ShowErrorAlertAsync(result.Error);
+                    Console.WriteLine("Validation failed: No content or photo.");
+                    await ToastAsync("Either content or photo is required");
                     return;
                 }
 
-                Console.WriteLine("Post saved successfully!");
-                await ToastAsync("Post saved");
+                await MakeApiCall(async () =>
+                {
+                    StreamPart? photoStreamPart = null;
+                    if (!string.IsNullOrWhiteSpace(PhotoPath))
+                    {
+                        Console.WriteLine("Processing photo: " + PhotoPath);
+                        var fileName = Path.GetFileName(PhotoPath);
+                        var fileBytes = File.OpenRead(PhotoPath);
+                        photoStreamPart = new StreamPart(fileBytes, fileName);
+                    }
 
-                Content = "";
-                PhotoPath = "";
+                    var serializedSavePostDto = JsonSerializer.Serialize(new SavePostDto { Content = Content });
+                    Console.WriteLine("Serialized DTO: " + serializedSavePostDto);
 
-                await NavigateBackAsync();
-            });
+                    var result = await _postApi.SavePostAsync(photoStreamPart, serializedSavePostDto);
+
+                    if (!result.IsSuccess)
+                    {
+                        Console.WriteLine("API call failed: " + result.Error);
+                        await ShowErrorAlertAsync(result.Error);
+                        return;
+                    }
+
+                    Console.WriteLine("Post saved successfully!");
+                    await ToastAsync("Post saved");
+
+                    Content = "";
+                    PhotoPath = "";
+
+                    await NavigateBackAsync();
+
+                });
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
     }
