@@ -6,7 +6,7 @@
     xmlns:pages="clr-namespace:SocialMauiApp.Pages"
     xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
     Title="SocialMauiApp"
-   FlyoutBehavior="Disabled">
+    FlyoutBehavior="Disabled">
     <ShellContent
         Title="Onboarding Page"
         ContentTemplate="{DataTemplate pages:OnboardingPage}"
@@ -23,6 +23,10 @@
         Title="Home"
         ContentTemplate="{DataTemplate pages:HomePage}"
         Route="HomePage" />
+    <ShellContent
+        Title="Details"
+        ContentTemplate="{DataTemplate pages:PostDetailsPage}"
+        Route="PostDetailsPage" />
 
 
 </Shell>

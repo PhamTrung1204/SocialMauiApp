@@ -33,5 +33,9 @@ namespace SocialMediaMaui.Shared.Dtos
                 return "WithImage";
             }
         }
+        [JsonIgnore]
+        public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
+        [JsonIgnore]
+        public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
     }
 }

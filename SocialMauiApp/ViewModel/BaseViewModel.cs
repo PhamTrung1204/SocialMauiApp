@@ -11,10 +11,6 @@ namespace SocialMauiApp.ViewModel
 {
     public partial class BaseViewModel : ObservableObject
     {
-        public BaseViewModel()
-        {
-
-        }
         [ObservableProperty]
         private bool _isBusy;
         protected async Task ShowErrorAlertAsync(string message) =>

@@ -4,6 +4,15 @@
         <name>SocialMauiApp</name>
     </assembly>
     <members>
+        <member name="T:SocialMauiApp.Models.PostModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsLiked">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isLiked"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsBookmarked">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isBookmarked"/>
+        </member>
         <member name="M:SocialMauiApp.Services.AuthService.Login(SocialMediaMaui.Shared.Dtos.LoginResponseDto)">
             <summary>
             Thực hiện đăng nhập, lưu thông tin người dùng và token vào Preferences.
@@ -19,6 +28,43 @@
             <summary>
             Khởi tạo AuthService bằng cách đọc dữ liệu đã lưu trong Preferences (nếu có).
             </summary>
+        </member>
+        <member name="T:SocialMauiApp.ViewModel.BasePostViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.BasePostViewModel.goToAddPostCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.BasePostViewModel.GoToAddPostCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.BasePostViewModel.GoToAddPostCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.BasePostViewModel.GoToAddPostAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.BasePostViewModel.goToDetailsPageCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.BasePostViewModel.GoToDetailsPageCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.BasePostViewModel.GoToDetailsPageCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.BasePostViewModel.GoToDetailsPageAsync(SocialMauiApp.Models.PostModel)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.BasePostViewModel.toggleLikeCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.BasePostViewModel.ToggleLikeCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.BasePostViewModel.ToggleLikeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.BasePostViewModel.ToggleLikeAsync(SocialMauiApp.Models.PostModel)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.BasePostViewModel.toggleBookmarkCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.BasePostViewModel.ToggleBookmarkCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.BasePostViewModel.ToggleBookmarkCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.BasePostViewModel.ToggleBookmarkAsync(SocialMauiApp.Models.PostModel)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.BasePostViewModel.sharePostCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.BasePostViewModel.SharePostCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.BasePostViewModel.SharePostCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.BasePostViewModel.SharePostAsync(SocialMauiApp.Models.PostModel)"/>.</summary>
         </member>
         <member name="T:SocialMauiApp.ViewModel.BaseViewModel">
             <inheritdoc/>
@@ -39,7 +85,7 @@
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.Comment">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._comment"/>
         </member>
-        <member name="M:SocialMauiApp.ViewModel.DetailsViewModel.OnPostChanged(SocialMediaMaui.Shared.Dtos.PostDto)">
+        <member name="M:SocialMauiApp.ViewModel.DetailsViewModel.OnPostChanged(SocialMauiApp.Models.PostModel)">
             <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.Post"/> just changed.</summary>
             <param name="value">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.Post"/> is changed.</remarks>
@@ -51,8 +97,6 @@
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentAsync"/>.</summary>
         </member>
         <member name="T:SocialMauiApp.ViewModel.HomeViewModel">
-            <inheritdoc/>
-            <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
@@ -72,18 +116,6 @@
         <member name="P:SocialMauiApp.ViewModel.HomeViewModel.RefreshPostsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.HomeViewModel.RefreshPostsAsync"/>.</summary>
         </member>
-        <member name="F:SocialMauiApp.ViewModel.HomeViewModel.goToAddPostCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.GoToAddPostCommand"/>.</summary>
-        </member>
-        <member name="P:SocialMauiApp.ViewModel.HomeViewModel.GoToAddPostCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.HomeViewModel.GoToAddPostAsync"/>.</summary>
-        </member>
-        <member name="F:SocialMauiApp.ViewModel.HomeViewModel.goToDetailsPageCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.GoToDetailsPageCommand"/>.</summary>
-        </member>
-        <member name="P:SocialMauiApp.ViewModel.HomeViewModel.GoToDetailsPageCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.HomeViewModel.GoToDetailsPageAsync(SocialMediaMaui.Shared.Dtos.PostDto)"/>.</summary>
-        </member>
         <member name="T:SocialMauiApp.ViewModel.LoginViewModel">
             <inheritdoc/>
             <inheritdoc/>
@@ -99,6 +131,36 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.LoginViewModel.LoginCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.LoginViewModel.LoginAsync"/>.</summary>
+        </member>
+        <member name="T:SocialMauiApp.ViewModel.ProfileViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.User">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._user"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.IsMyPostsTabSelected">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._isMyPostsTabSelected"/>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.logoutCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.LogoutCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.LogoutCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.LogoutAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.selectMyPostsTabCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.SelectMyPostsTabCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.SelectMyPostsTabCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.SelectMyPostsTabAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.selectBookmarkedPostsTabCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.SelectBookmarkedPostsTabCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.SelectBookmarkedPostsTabCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.SelectBookmarkedPostsTabAsync"/>.</summary>
         </member>
         <member name="T:SocialMauiApp.ViewModel.RegisterViewModel">
             <inheritdoc/>
@@ -281,6 +343,18 @@
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLiked">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLiked" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLikeIcon">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLikeIcon" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBookmarked">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBookmarked" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBookmarkIcon">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBookmarkIcon" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBusy">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBusy" generated properties.</summary>
         </member>
@@ -302,6 +376,15 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Password">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Password" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.User">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "User" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsMyPostsTabSelected">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsMyPostsTabSelected" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBookmarksTabSelected">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBookmarksTabSelected" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Name">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Name" generated properties.</summary>
         </member>
@@ -316,6 +399,18 @@
             A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLiked">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLiked" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLikeIcon">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLikeIcon" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBookmarked">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBookmarked" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBookmarkIcon">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBookmarkIcon" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBusy">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBusy" generated properties.</summary>
@@ -337,6 +432,15 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Password">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Password" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.User">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "User" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsMyPostsTabSelected">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsMyPostsTabSelected" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBookmarksTabSelected">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBookmarksTabSelected" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Name">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Name" generated properties.</summary>

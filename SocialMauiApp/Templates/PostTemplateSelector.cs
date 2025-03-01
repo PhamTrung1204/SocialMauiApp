@@ -1,4 +1,5 @@
-﻿using SocialMediaMaui.Shared.Dtos;
+﻿using SocialMauiApp.Models;
+using SocialMediaMaui.Shared.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace SocialMauiApp.Templates
         public DataTemplate ImageOnly { get; set; }
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if(item is PostDto post)
+            if(item is PostModel post)
             {
                 if(string.IsNullOrWhiteSpace(post.PhotoUrl))
                 {
@@ -29,4 +30,5 @@ namespace SocialMauiApp.Templates
             return null;
         }
     }
+
 }

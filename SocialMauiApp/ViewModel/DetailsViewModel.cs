@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SocialMauiApp.Apis;
+using SocialMauiApp.Models;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
 using System;
@@ -24,15 +25,33 @@ namespace SocialMauiApp.ViewModel
         }
       
         [ObservableProperty]
-        private PostDto _post = new();
+        private PostModel _post = new();
         [ObservableProperty]
         private bool _isOwnPost;
         public ObservableCollection<CommentDto> Comments { get; set; } = [];
-        partial void OnPostChanged(PostDto value)
+        async partial void OnPostChanged(PostModel value)
         {
-            _isOwnPost = value.UserId == _authService.User?.Id;
+            IsOwnPost = value.UserId == _authService.User?.Id;
+            await FetchCommentsAsync();
         }
-        [ObservableProperty]
+        private int _startIndex = 0;
+        private const int PageSize = 10;
+        private async Task FetchCommentsAsync()
+        {
+            await MakeApiCall(async () =>
+            {
+                var comments = await PostsApi.GetPostsCommentAsync(Post.PostId, _startIndex, PageSize);
+                if(comments.Length > 0)
+                {
+                    _startIndex += comments.Length;
+                    foreach(var c in comments)
+                    {
+                        Comments.Add(c);
+                    }
+                }
+            });
+        }
+        [ObservableProperty] 
         private string? _comment;
         [RelayCommand]
         private async Task AddCommentAsync()

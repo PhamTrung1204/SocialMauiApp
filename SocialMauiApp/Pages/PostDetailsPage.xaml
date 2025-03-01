@@ -83,10 +83,10 @@
         </Grid>
 
         <!--  Nội dung chính  -->
-        <ScrollView Grid.Row="1" Padding="15">
-            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="15">
+        <ScrollView Grid.Row="1">
+            <Grid RowDefinitions="Auto, *" RowSpacing="10">
                 <!--  Phần hiển thị bài viết theo ControlTemplate  -->
-                <ContentView BindingContext="{Binding Post}">
+                <ContentView Grid.Row="0" BindingContext="{Binding Post}">
                     <ContentView.Resources>
                         <ControlTemplate x:Key="withImage">
                             <templates:PostWithImage />
@@ -121,12 +121,12 @@
                 </ContentView>
 
                 <!--  Chi tiết bài viết (header, ảnh, nội dung, actions)  -->
-                <Border
+                <!--<Border
                     Padding="10"
                     BackgroundColor="White"
                     StrokeThickness="0">
                     <Grid RowDefinitions="Auto,250,Auto,Auto" RowSpacing="10">
-                        <!--  Thông tin tác giả  -->
+                      
                         <Grid
                             Padding="8,0"
                             ColumnDefinitions="40,Auto,*"
@@ -162,13 +162,13 @@
                                     VerticalOptions="Center" />
                             </Grid>
                         </Grid>
-                        <!--  Nội dung bài viết  -->
+                       
                         <Label
                             Padding="8,0"
                             FontSize="15"
                             Text="{Binding Post.Content}"
                             TextColor="{StaticResource Gray900}" />
-                        <!--  Ảnh bài viết  -->
+                      
                         <Border BackgroundColor="LightBlue" HeightRequest="250">
                             <Image
                                 Aspect="Center"
@@ -179,7 +179,7 @@
                             </Border.GestureRecognizers>
                         </Border>
 
-                        <!--  Action Buttons  -->
+                     
                         <FlexLayout Margin="0,7,0,0" JustifyContent="SpaceAround">
                             <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
                                 <controls:PrimaryColorImage
@@ -204,7 +204,7 @@
                             <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
                                 <controls:PrimaryColorImage
                                     HeightRequest="20"
-                                    Source="save.png"
+                                    Source="bookmark.png"
                                     WidthRequest="20" />
                                 <Label
                                     FontSize="12"
@@ -223,18 +223,21 @@
                             </HorizontalStackLayout>
                         </FlexLayout>
                     </Grid>
-                </Border>
+                </Border> -->
 
                 <!--  Mục bình luận  -->
-                <VerticalStackLayout x:Name="comments" Spacing="15">
+                <VerticalStackLayout x:Name="comments" Spacing="10" Grid.Row="1" Padding="15,0,15,15">
                     <CollectionView ItemsSource="{Binding Comments}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"/>
+                        </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="dto:CommentDto">
                                 <!--  Mẫu bình luận; có thể chuyển sang CollectionView để hiển thị danh sách động  -->
                                 <Grid
                                     Padding="8,0"
                                     ColumnDefinitions="40,*"
-                                    ColumnSpacing="10">
+                                    ColumnSpacing="5">
                                     <Border
                                         HeightRequest="40"
                                         StrokeShape="RoundRectangle 20"

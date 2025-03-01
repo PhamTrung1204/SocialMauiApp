@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SocialMauiApp.Apis;
+using SocialMauiApp.Models;
 using SocialMediaMaui.Shared.Dtos;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace SocialMauiApp.ViewModel
         {
             FetchPostsAsync();
         }
-        public ObservableCollection<PostDto> Posts { get; set; } = [];
+        public ObservableCollection<PostModel> Posts { get; set; } = [];
         private int _startIndex = 0;
         private const int PageSize = 7;
         [RelayCommand]
@@ -35,7 +36,7 @@ namespace SocialMauiApp.ViewModel
                     _startIndex += posts.Length;
                     foreach (var p in posts)
                     {
-                        Posts.Add(p);
+                        Posts.Add(PostModel.FromDto(p));
                     }
                 }
             });
@@ -49,16 +50,6 @@ namespace SocialMauiApp.ViewModel
             await FetchPostsAsync();
             IsRefreshing = false;
         }
-        [RelayCommand]
-        private async Task GoToAddPostAsync() => await NavigateAsync(nameof(AddPostPage));
-        [RelayCommand]
-        private async Task GoToDetailsPageAsync(PostDto post)
-        {
-            var param = new Dictionary<string, object>
-            {
-                [nameof(DetailsViewModel.Post)] = post
-            };
-            await NavigateAsync(nameof(PostDetailsPage), param);
-        }
+        
     }
 }

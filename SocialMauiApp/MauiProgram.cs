@@ -40,8 +40,9 @@ namespace SocialMauiApp
             builder.Services.AddTransient<LoginViewModel>().AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterViewModel>().AddTransient<RegisterPage>();
             builder.Services.AddTransient<SavePostViewModel>().AddTransient<AddPostPage>();
-            builder.Services.AddSingleton<HomeViewModel>().AddTransient<HomePage>();
+            builder.Services.AddSingleton<HomeViewModel>().AddSingleton<HomePage>();
             builder.Services.AddTransient<DetailsViewModel>().AddTransient<PostDetailsPage>();
+            builder.Services.AddTransient<ProfileViewModel>().AddTransient<ProfilePage>();
             ConfigureRefit(builder.Services);
             return builder.Build();
         }
