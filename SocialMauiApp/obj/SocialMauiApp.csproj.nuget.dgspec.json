@@ -143,6 +143,10 @@
               "target": "Package",
               "version": "[2.1.10, )"
             },
+            "Syncfusion.Maui.ImageEditor": {
+              "target": "Package",
+              "version": "[28.1.38, )"
+            },
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
@@ -246,6 +250,10 @@
               "target": "Package",
               "version": "[2.1.10, )"
             },
+            "Syncfusion.Maui.ImageEditor": {
+              "target": "Package",
+              "version": "[28.1.38, )"
+            },
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
@@ -341,6 +349,10 @@
               "target": "Package",
               "version": "[2.1.10, )"
             },
+            "Syncfusion.Maui.ImageEditor": {
+              "target": "Package",
+              "version": "[28.1.38, )"
+            },
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
@@ -430,6 +442,10 @@
             "SQLitePCLRaw.bundle_green": {
               "target": "Package",
               "version": "[2.1.10, )"
+            },
+            "Syncfusion.Maui.ImageEditor": {
+              "target": "Package",
+              "version": "[28.1.38, )"
             },
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",

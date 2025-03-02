@@ -4,8 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     x:DataType="vm:HomeViewModel"
     BackgroundColor="{StaticResource Gray100}"
@@ -74,14 +74,15 @@
     <RefreshView Command="{Binding RefreshPostsCommand}" IsRefreshing="{Binding IsRefreshing}">
         <Grid>
             <!--  CollectionView hiển thị danh sách bài viết  -->
-            <CollectionView ItemsSource="{Binding Posts}"
-          ItemTemplate="{StaticResource postDataTemplateSelector}"
-          RemainingItemsThreshold="2"
-          RemainingItemsThresholdReachedCommand="{Binding FetchPostsCommand}">
+            <CollectionView
+                ItemTemplate="{StaticResource postDataTemplateSelector}"
+                ItemsSource="{Binding Posts}"
+                RemainingItemsThreshold="2"
+                RemainingItemsThresholdReachedCommand="{Binding FetchPostsCommand}">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="15" />
+                    <LinearItemsLayout ItemSpacing="15" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
-                
+
             </CollectionView>
             <!--  Floating Action Button (FAB)  -->
             <Border

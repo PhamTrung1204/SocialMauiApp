@@ -55,6 +55,63 @@ namespace SocialMauiApp.ViewModel
                 IsBusy = false;
             }
         }
-        
+        protected async Task<string?> ChoosePhotoAsync()
+        {
+            if (!MediaPicker.Default.IsCaptureSupported)
+            {
+                const string PickFromDevice = "Pick From Device";
+                const string CapturePhoto = "Capture Photo";
+
+                var result = await Shell.Current.DisplayActionSheet("Choose photo", "Cancel", null, PickFromDevice, CapturePhoto);
+                Console.WriteLine("User selected: " + result);
+
+                if (string.IsNullOrWhiteSpace(result)) return null;
+
+                switch (result)
+                {
+                    case PickFromDevice:
+                        return await PickFromDeviceAsync();
+                    case CapturePhoto:
+                        return await CapturePhotoAsync();
+                }
+                async Task<string?> PickFromDeviceAsync()
+                {
+                    Console.WriteLine("Picking photo from device...");
+                    FileResult? fileResult = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
+                    {
+                        Title = "Select Photo"
+                    });
+
+                    if (fileResult is null)
+                    {
+                        Console.WriteLine("No photo selected.");
+                        await ToastAsync("No photo selected");
+                        return null;
+                    }
+
+                   return fileResult.FullPath;
+                }
+
+                async Task<string?> CapturePhotoAsync()
+                {
+                    Console.WriteLine("Capturing photo...");
+
+                    FileResult? fileResult = await MediaPicker.Default.CapturePhotoAsync(new MediaPickerOptions
+                    {
+                        Title = "Take Photo"
+                    });
+
+                    if (fileResult is null)
+                    {
+                        Console.WriteLine("No photo captured.");
+                        await ToastAsync("No photo captured");
+                        return null;
+                    }
+                    return fileResult.FullPath;
+                }
+            }
+            await ToastAsync("Capture is not supported");
+            return null;
+        }
     }
 }

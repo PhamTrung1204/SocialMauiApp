@@ -18,6 +18,7 @@ namespace SocialMauiApp
             Routing.RegisterRoute(nameof(AddPostPage), typeof(AddPostPage));
             Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
             Routing.RegisterRoute(nameof(NotificationPage), typeof(NotificationPage));
+            Routing.RegisterRoute(nameof(CropPhotoPage), typeof(CropPhotoPage));
         }
     }
 }

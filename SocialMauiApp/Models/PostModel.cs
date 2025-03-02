@@ -14,7 +14,10 @@ namespace SocialMauiApp.Models
         public Guid PostId { get; set; }
         public Guid UserId { get; set; }
         public string UserName { get; set; }
-        public string? UserPhotoUrl { get; set; }
+        [ObservableProperty, NotifyPropertyChangedFor(nameof(UserPhoto))]
+        private string? _userPhotoUrl;
+        public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
+      
         public string? Content { get; set; }
         public string? PhotoUrl { get; set; }
 

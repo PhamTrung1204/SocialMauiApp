@@ -27,7 +27,7 @@
                         Aspect="AspectFill"
                         HeightRequest="30"
                         HorizontalOptions="Center"
-                        Source="{Binding UserPhotoUrl}"
+                        Source="{Binding UserPhoto}"
                         VerticalOptions="Center"
                         WidthRequest="30" />
                 </Border>

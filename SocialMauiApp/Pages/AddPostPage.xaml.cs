@@ -9,4 +9,4 @@ public partial class AddPostPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
-}
+} 

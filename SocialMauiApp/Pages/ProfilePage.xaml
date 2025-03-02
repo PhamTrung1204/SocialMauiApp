@@ -51,7 +51,9 @@
                     <Border.Shadow>
                         <Shadow />
                     </Border.Shadow>
-
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangePhotoCommand}"/>
+                    </Border.GestureRecognizers>
                 </Border>
             </Grid>
             <controls:Spacer Space="10" />
@@ -120,8 +122,9 @@
                 </Grid>
             </Border>
         </VerticalStackLayout>
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout Spacing="10">
+
+        <!--<ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="15">
                 <Border
                     Padding="0,8"
                     BackgroundColor="White"
@@ -441,6 +444,49 @@
 
                 </Border>
             </VerticalStackLayout>
-        </ScrollView>
+        </ScrollView>-->
+        <CollectionView
+            Grid.Row="1"
+            IsVisible="{Binding IsMyPostsTabSelected}"
+            ItemTemplate="{StaticResource postDataTemplateSelector}"
+            ItemsSource="{Binding MyPosts}"
+            RemainingItemsThreshold="2"
+            RemainingItemsThresholdReachedCommand="{Binding FetchMyPostsCommand}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="15" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.EmptyView>
+                <Label
+                    Margin="0,40"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="You have not created any post yet"
+                    TextColor="{StaticResource Gray600}" />
+            </CollectionView.EmptyView>
+        </CollectionView>
+        <CollectionView
+            Grid.Row="1"
+            IsVisible="{Binding IsBookmarksTabSelected}"
+            ItemTemplate="{StaticResource postDataTemplateSelector}"
+            ItemsSource="{Binding BookmarkedPosts}"
+            RemainingItemsThreshold="2"
+            RemainingItemsThresholdReachedCommand="{Binding FetchBookmarkedPostsCommand}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="15" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.EmptyView>
+                <Label
+                    Margin="0,40"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="There are no bookmarked posts"
+                    TextColor="{StaticResource Gray600}" />
+            </CollectionView.EmptyView>
+        </CollectionView>
+        <ActivityIndicator
+            Grid.RowSpan="2"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            VerticalOptions="Center" />
     </Grid>
 </ContentPage>

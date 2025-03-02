@@ -5,6 +5,7 @@ using Refit;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Services;
 using SocialMauiApp.ViewModel;
+using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 
 namespace SocialMauiApp
@@ -29,7 +30,8 @@ namespace SocialMauiApp
                     fonts.AddFont("Ubuntu-Bold.tff", "UbuntuBold");
                     fonts.AddFont("Ubuntu-Regular.ttf", "UbuntuRegular");
                     fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
-                });
+                })
+                .ConfigureSyncfusionCore();
 
 #if DEBUG
             builder.Logging.AddDebug();

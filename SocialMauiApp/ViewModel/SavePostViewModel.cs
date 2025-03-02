@@ -26,7 +26,11 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task SelectPhotoAsync()
         {
-            Console.WriteLine("SelectPhotoAsync called.");
+            var selectPhotoSource = await ChoosePhotoAsync();
+            if(!string.IsNullOrWhiteSpace(selectPhotoSource))
+            {
+                PhotoPath = selectPhotoSource;
+            }
 
             if (!MediaPicker.Default.IsCaptureSupported)
             {

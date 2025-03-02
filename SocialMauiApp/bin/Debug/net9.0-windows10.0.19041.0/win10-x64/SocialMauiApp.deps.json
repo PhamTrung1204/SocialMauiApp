@@ -23,6 +23,7 @@
           "Refit.HttpClientFactory": "8.0.0",
           "SQLitePCLRaw.bundle_green": "2.1.10",
           "SocialMediaMaui.Shared": "1.0.0",
+          "Syncfusion.Maui.ImageEditor": "28.1.38",
           "Syncfusion.Maui.Toolkit": "1.0.3",
           "Microsoft.Maui.Controls.HotReload.Forms": "17.0.0.0",
           "Microsoft.VisualStudio.DesignTools.MobileTapContracts": "17.0.0.0",
@@ -1537,6 +1538,53 @@
           }
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {
+            "assemblyVersion": "28.1.38.0",
+            "fileVersion": "28.1.38.0"
+          }
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "assemblyVersion": "28.1.38.0",
+            "fileVersion": "28.1.38.0"
+          }
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "assemblyVersion": "28.1.38.0",
+            "fileVersion": "28.1.38.0"
+          }
+        },
+        "resources": {
+          "lib/net9.0-windows10.0.19041.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "assemblyVersion": "28.1.38.0",
+            "fileVersion": "28.1.38.0"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "runtime": {
           "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Toolkit.dll": {
@@ -2569,6 +2617,34 @@
       "sha512": "sha512-uZVTi02C1SxqzgT0HqTWatIbWGb40iIkfc3FpFCpE/r7g6K0PqzDUeefL6P6HPhDtc6BacN3yQysfzP7ks+wSQ==",
       "path": "sqlitepclraw.provider.e_sqlite3/2.1.10",
       "hashPath": "sqlitepclraw.provider.e_sqlite3.2.1.10.nupkg.sha512"
+    },
+    "Syncfusion.Licensing/28.1.38": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zFbEdGbfdRN881Ln2oN1/hJBT5LOZxjtfX+idEcEqfZKDAAraaIduqfiHplY/fdoCeTxGcocer4HX1wnZR2jtA==",
+      "path": "syncfusion.licensing/28.1.38",
+      "hashPath": "syncfusion.licensing.28.1.38.nupkg.sha512"
+    },
+    "Syncfusion.Maui.Core/28.1.38": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2POjDg39na2VsTq23dpKcC8S0/7ZVdrUjOjszKbbIxYaGi+Th1KVfDQ8CgDwjSgqHO7XTnAAHJioQsBiXff7uQ==",
+      "path": "syncfusion.maui.core/28.1.38",
+      "hashPath": "syncfusion.maui.core.28.1.38.nupkg.sha512"
+    },
+    "Syncfusion.Maui.ImageEditor/28.1.38": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eFRFZl+YfWJKdFecD8mKucDpygae3V1LclQESsmNa9fVe0IQc0Uh+f8th5iMub8eX/uloW5iz3YgfhbfmnQqig==",
+      "path": "syncfusion.maui.imageeditor/28.1.38",
+      "hashPath": "syncfusion.maui.imageeditor.28.1.38.nupkg.sha512"
+    },
+    "Syncfusion.Maui.Sliders/28.1.38": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-csYNugDDft9DuinRlbjBBo3z/2cI+DBLuxKKmH/bDKwvwtGWsyymyRVP9l1IXhiy9pVHpECliL4aVGe58meenA==",
+      "path": "syncfusion.maui.sliders/28.1.38",
+      "hashPath": "syncfusion.maui.sliders.28.1.38.nupkg.sha512"
     },
     "Syncfusion.Maui.Toolkit/1.0.3": {
       "type": "package",

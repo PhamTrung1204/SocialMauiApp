@@ -35,9 +35,9 @@
 
                     <templates:PostTemplateSelector
                         x:Key="postDataTemplateSelector"
-                        ImageOnly="{StaticResource Key=postWithImageOnlyTemplate}"
-                        WithImage="{StaticResource Key=postWithImageTemplate}"
-                        WithNoImage="{StaticResource Key=postWithNoImageTemplate}" />
+                        ImageOnly="{StaticResource postWithImageOnlyTemplate}"
+                        WithImage="{StaticResource postWithImageTemplate}"
+                        WithNoImage="{StaticResource postWithNoImageTemplate}" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

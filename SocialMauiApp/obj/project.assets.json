@@ -1930,6 +1930,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-android35.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -6382,6 +6451,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-android35.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -10760,6 +10898,75 @@
         },
         "runtime": {
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-android35.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Syncfusion.Maui.Toolkit/1.0.3": {
@@ -15142,6 +15349,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-android35.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -19522,6 +19798,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-android35.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -23900,6 +24245,75 @@
         },
         "runtime": {
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-android35.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Syncfusion.Maui.Toolkit/1.0.3": {
@@ -28291,6 +28705,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-ios18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -31150,6 +31633,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-ios18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -33960,6 +34512,75 @@
         },
         "runtime": {
           "lib/net6.0/SQLitePCLRaw.provider.sqlite3.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-ios18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Syncfusion.Maui.Toolkit/1.0.3": {
@@ -36774,6 +37395,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-ios18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -39586,6 +40276,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-ios18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -42380,6 +43139,75 @@
         },
         "runtime": {
           "lib/net6.0/SQLitePCLRaw.provider.sqlite3.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-ios18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Syncfusion.Maui.Toolkit/1.0.3": {
@@ -45195,6 +46023,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-maccatalyst18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -47791,6 +48688,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-maccatalyst18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -50338,6 +51304,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-maccatalyst18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -52880,6 +53915,75 @@
         },
         "runtime": {
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-maccatalyst18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Syncfusion.Maui.Toolkit/1.0.3": {
@@ -55429,6 +56533,75 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-maccatalyst18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -57961,6 +59134,75 @@
         },
         "runtime": {
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-maccatalyst18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Syncfusion.Maui.Toolkit/1.0.3": {
@@ -60792,6 +62034,75 @@
           "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-windows10.0.19041.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -63582,6 +64893,75 @@
           "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-windows10.0.19041.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -66317,6 +67697,75 @@
           "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-windows10.0.19041.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -69047,6 +70496,75 @@
         },
         "runtime": {
           "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-windows10.0.19041.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
         }
       },
       "Syncfusion.Maui.Toolkit/1.0.3": {
@@ -71784,6 +73302,75 @@
           "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
         }
       },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-windows10.0.19041.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        }
+      },
       "Syncfusion.Maui.Toolkit/1.0.3": {
         "type": "package",
         "compile": {
@@ -74513,6 +76100,75 @@
         },
         "runtime": {
           "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/28.1.38": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.Maui.Core/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll": {
+            "related": ".deps.json;.pri;.xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.Core.props": {}
+        }
+      },
+      "Syncfusion.Maui.ImageEditor/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38",
+          "Syncfusion.Maui.Sliders": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "resource": {
+          "lib/net9.0-windows10.0.19041.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll": {
+            "locale": "en-US"
+          }
+        },
+        "build": {
+          "buildTransitive/Syncfusion.Maui.ImageEditor.props": {}
+        }
+      },
+      "Syncfusion.Maui.Sliders/28.1.38": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "28.1.38"
+        },
+        "compile": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll": {
+            "related": ".deps.json;.xml"
+          }
         }
       },
       "Syncfusion.Maui.Toolkit/1.0.3": {
@@ -79886,6 +81542,175 @@
         "sqlitepclraw.provider.sqlite3.nuspec"
       ]
     },
+    "Syncfusion.Licensing/28.1.38": {
+      "sha512": "zFbEdGbfdRN881Ln2oN1/hJBT5LOZxjtfX+idEcEqfZKDAAraaIduqfiHplY/fdoCeTxGcocer4HX1wnZR2jtA==",
+      "type": "package",
+      "path": "syncfusion.licensing/28.1.38",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/MonoAndroid90/Syncfusion.Licensing.dll",
+        "lib/Xamarin.Mac/Syncfusion.Licensing.dll",
+        "lib/Xamarin.iOS10/Syncfusion.Licensing.dll",
+        "lib/net462/Syncfusion.Licensing.dll",
+        "lib/net6.0/Syncfusion.Licensing.dll",
+        "lib/net7.0/Syncfusion.Licensing.dll",
+        "lib/net8.0/Syncfusion.Licensing.dll",
+        "lib/net9.0/Syncfusion.Licensing.dll",
+        "lib/netstandard2.0/Syncfusion.Licensing.dll",
+        "lib/uap10.0/Syncfusion.Licensing.dll",
+        "syncfusion.licensing.28.1.38.nupkg.sha512",
+        "syncfusion.licensing.nuspec",
+        "syncfusion_logo.png"
+      ]
+    },
+    "Syncfusion.Maui.Core/28.1.38": {
+      "sha512": "2POjDg39na2VsTq23dpKcC8S0/7ZVdrUjOjszKbbIxYaGi+Th1KVfDQ8CgDwjSgqHO7XTnAAHJioQsBiXff7uQ==",
+      "type": "package",
+      "path": "syncfusion.maui.core/28.1.38",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "buildTransitive/Resources/Fonts/MauiMaterialAssets.ttf",
+        "buildTransitive/Syncfusion.Maui.Core.props",
+        "lib/net8.0-android34.0/Syncfusion.Maui.Core.dll",
+        "lib/net8.0-android34.0/Syncfusion.Maui.Core.xml",
+        "lib/net8.0-ios17.0/Syncfusion.Maui.Core.dll",
+        "lib/net8.0-ios17.0/Syncfusion.Maui.Core.xml",
+        "lib/net8.0-maccatalyst17.0/Syncfusion.Maui.Core.dll",
+        "lib/net8.0-maccatalyst17.0/Syncfusion.Maui.Core.xml",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core.deps.json",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core.pri",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core.xml",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/CarouselStyles.xaml",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/CarouselStyles.xbf",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/Resources.xaml",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/Resources.xbf",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/RotatorStyles.xaml",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/RotatorStyles.xbf",
+        "lib/net8.0/Syncfusion.Maui.Core.deps.json",
+        "lib/net8.0/Syncfusion.Maui.Core.dll",
+        "lib/net8.0/Syncfusion.Maui.Core.xml",
+        "lib/net9.0-android35.0/Syncfusion.Maui.Core.dll",
+        "lib/net9.0-android35.0/Syncfusion.Maui.Core.xml",
+        "lib/net9.0-ios18.0/Syncfusion.Maui.Core.dll",
+        "lib/net9.0-ios18.0/Syncfusion.Maui.Core.xml",
+        "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.dll",
+        "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Core.xml",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.deps.json",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.dll",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.pri",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core.xml",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/CarouselStyles.xaml",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/CarouselStyles.xbf",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/Resources.xaml",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/Resources.xbf",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/RotatorStyles.xaml",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Core/Platform/Windows/Styles/RotatorStyles.xbf",
+        "lib/net9.0/Syncfusion.Maui.Core.deps.json",
+        "lib/net9.0/Syncfusion.Maui.Core.dll",
+        "lib/net9.0/Syncfusion.Maui.Core.xml",
+        "syncfusion.maui.core.28.1.38.nupkg.sha512",
+        "syncfusion.maui.core.nuspec",
+        "syncfusion_logo.png"
+      ]
+    },
+    "Syncfusion.Maui.ImageEditor/28.1.38": {
+      "sha512": "eFRFZl+YfWJKdFecD8mKucDpygae3V1LclQESsmNa9fVe0IQc0Uh+f8th5iMub8eX/uloW5iz3YgfhbfmnQqig==",
+      "type": "package",
+      "path": "syncfusion.maui.imageeditor/28.1.38",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "buildTransitive/Resources/Fonts/Boogaloo.ttf",
+        "buildTransitive/Resources/Fonts/Handlee.ttf",
+        "buildTransitive/Resources/Fonts/KaushanScript.ttf",
+        "buildTransitive/Resources/Fonts/PinyonScript.ttf",
+        "buildTransitive/Syncfusion.Maui.ImageEditor.props",
+        "lib/net8.0-android34.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net8.0-android34.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net8.0-android34.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "lib/net8.0-ios17.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net8.0-ios17.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net8.0-ios17.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "lib/net8.0-maccatalyst17.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net8.0-maccatalyst17.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net8.0-maccatalyst17.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.deps.json",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net8.0-windows10.0.19041.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "lib/net8.0/Syncfusion.Maui.ImageEditor.deps.json",
+        "lib/net8.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net8.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net8.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net9.0-android35.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net9.0-android35.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net9.0-ios18.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net9.0-ios18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net9.0-maccatalyst18.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.deps.json",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net9.0-windows10.0.19041.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "lib/net9.0/Syncfusion.Maui.ImageEditor.deps.json",
+        "lib/net9.0/Syncfusion.Maui.ImageEditor.dll",
+        "lib/net9.0/Syncfusion.Maui.ImageEditor.xml",
+        "lib/net9.0/en-US/Syncfusion.Maui.ImageEditor.resources.dll",
+        "syncfusion.maui.imageeditor.28.1.38.nupkg.sha512",
+        "syncfusion.maui.imageeditor.nuspec",
+        "syncfusion_logo.png"
+      ]
+    },
+    "Syncfusion.Maui.Sliders/28.1.38": {
+      "sha512": "csYNugDDft9DuinRlbjBBo3z/2cI+DBLuxKKmH/bDKwvwtGWsyymyRVP9l1IXhiy9pVHpECliL4aVGe58meenA==",
+      "type": "package",
+      "path": "syncfusion.maui.sliders/28.1.38",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net8.0-android34.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net8.0-android34.0/Syncfusion.Maui.Sliders.xml",
+        "lib/net8.0-ios17.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net8.0-ios17.0/Syncfusion.Maui.Sliders.xml",
+        "lib/net8.0-maccatalyst17.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net8.0-maccatalyst17.0/Syncfusion.Maui.Sliders.xml",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.deps.json",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net8.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.xml",
+        "lib/net8.0/Syncfusion.Maui.Sliders.deps.json",
+        "lib/net8.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net8.0/Syncfusion.Maui.Sliders.xml",
+        "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net9.0-android35.0/Syncfusion.Maui.Sliders.xml",
+        "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net9.0-ios18.0/Syncfusion.Maui.Sliders.xml",
+        "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net9.0-maccatalyst18.0/Syncfusion.Maui.Sliders.xml",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.deps.json",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net9.0-windows10.0.19041.0/Syncfusion.Maui.Sliders.xml",
+        "lib/net9.0/Syncfusion.Maui.Sliders.deps.json",
+        "lib/net9.0/Syncfusion.Maui.Sliders.dll",
+        "lib/net9.0/Syncfusion.Maui.Sliders.xml",
+        "syncfusion.maui.sliders.28.1.38.nupkg.sha512",
+        "syncfusion.maui.sliders.nuspec",
+        "syncfusion_logo.png"
+      ]
+    },
     "Syncfusion.Maui.Toolkit/1.0.3": {
       "sha512": "2gRYU2y55TGri7pW/R6MJ12KMaljbuiKztrl7OXWKpmzL1vT+orE+/P1VERKv0KFjSvoGPzij5FpT+J4psZH+Q==",
       "type": "package",
@@ -84071,6 +85896,7 @@
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
       "SocialMediaMaui.Shared >= 1.0.0",
+      "Syncfusion.Maui.ImageEditor >= 28.1.38",
       "Syncfusion.Maui.Toolkit >= 1.0.3",
       "Xamarin.AndroidX.Emoji2 >= 1.5.0.3",
       "Xamarin.AndroidX.Lifecycle.Runtime.Ktx >= 2.8.7.2"
@@ -84091,6 +85917,7 @@
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
       "SocialMediaMaui.Shared >= 1.0.0",
+      "Syncfusion.Maui.ImageEditor >= 28.1.38",
       "Syncfusion.Maui.Toolkit >= 1.0.3"
     ],
     "net9.0-maccatalyst18.2": [
@@ -84109,6 +85936,7 @@
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
       "SocialMediaMaui.Shared >= 1.0.0",
+      "Syncfusion.Maui.ImageEditor >= 28.1.38",
       "Syncfusion.Maui.Toolkit >= 1.0.3"
     ],
     "net9.0-windows10.0.19041": [
@@ -84126,6 +85954,7 @@
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
       "SocialMediaMaui.Shared >= 1.0.0",
+      "Syncfusion.Maui.ImageEditor >= 28.1.38",
       "Syncfusion.Maui.Toolkit >= 1.0.3"
     ]
   },
@@ -84272,6 +86101,10 @@
             "target": "Package",
             "version": "[2.1.10, )"
           },
+          "Syncfusion.Maui.ImageEditor": {
+            "target": "Package",
+            "version": "[28.1.38, )"
+          },
           "Syncfusion.Maui.Toolkit": {
             "target": "Package",
             "version": "[1.0.3, )"
@@ -84375,6 +86208,10 @@
             "target": "Package",
             "version": "[2.1.10, )"
           },
+          "Syncfusion.Maui.ImageEditor": {
+            "target": "Package",
+            "version": "[28.1.38, )"
+          },
           "Syncfusion.Maui.Toolkit": {
             "target": "Package",
             "version": "[1.0.3, )"
@@ -84470,6 +86307,10 @@
             "target": "Package",
             "version": "[2.1.10, )"
           },
+          "Syncfusion.Maui.ImageEditor": {
+            "target": "Package",
+            "version": "[28.1.38, )"
+          },
           "Syncfusion.Maui.Toolkit": {
             "target": "Package",
             "version": "[1.0.3, )"
@@ -84559,6 +86400,10 @@
           "SQLitePCLRaw.bundle_green": {
             "target": "Package",
             "version": "[2.1.10, )"
+          },
+          "Syncfusion.Maui.ImageEditor": {
+            "target": "Package",
+            "version": "[28.1.38, )"
           },
           "Syncfusion.Maui.Toolkit": {
             "target": "Package",

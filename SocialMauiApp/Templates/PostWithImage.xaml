@@ -4,8 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
-    xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     xmlns:models="clr-namespace:SocialMauiApp.Models"
+    xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     x:DataType="models:PostModel">
     <Border
         Padding="0,8"
@@ -25,7 +25,7 @@
                         Aspect="AspectFill"
                         HeightRequest="30"
                         HorizontalOptions="Center"
-                        Source="{Binding UserPhotoUrl}"
+                        Source="{Binding UserPhoto}"
                         VerticalOptions="Center"
                         WidthRequest="30" />
                 </Border>
@@ -93,7 +93,8 @@
                             Text="Like"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleLikeCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="2">
@@ -107,7 +108,8 @@
                             Text="Comment"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="2">
@@ -121,7 +123,8 @@
                             Text="Save"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleBookmarkCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="2">

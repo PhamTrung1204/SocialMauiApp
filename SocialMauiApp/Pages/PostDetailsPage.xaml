@@ -41,7 +41,7 @@
                 </Border.GestureRecognizers>
             </Border>
             <!--  Spacer  -->
-            <Grid Grid.Column="1" />
+            
             <!--  Edit Button (chỉ hiển thị nếu là bài viết của chính người dùng)  -->
             <Border
                 Grid.Column="2"

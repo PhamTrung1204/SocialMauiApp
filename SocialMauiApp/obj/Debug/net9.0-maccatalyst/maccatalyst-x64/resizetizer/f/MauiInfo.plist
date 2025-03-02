@@ -4,10 +4,15 @@
 <dict>
   <key>UIAppFonts</key>
   <array>
+	<string>Boogaloo.ttf</string>
 	<string>FluentSystemIcons-Regular.ttf</string>
 	<string>FluentUI.cs</string>
+	<string>Handlee.ttf</string>
+	<string>KaushanScript.ttf</string>
+	<string>MauiMaterialAssets.ttf</string>
 	<string>OpenSans-Regular.ttf</string>
 	<string>OpenSans-Semibold.ttf</string>
+	<string>PinyonScript.ttf</string>
 	<string>SegoeUI-Semibold.ttf</string>
 	<string>Ubuntu-Bold.ttf</string>
 	<string>Ubuntu-BoldItalic.ttf</string>

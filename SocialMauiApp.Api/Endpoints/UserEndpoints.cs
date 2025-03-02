@@ -8,7 +8,7 @@ namespace SocialMauiApp.Api.Endpoints
     {
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
         {
-            var userGroup = app.MapGroup("api/user")
+            var userGroup = app.MapGroup("/api/user")
                 .RequireAuthorization()
                 .WithName("User");
             userGroup.MapPost("/change-photo", async (IFormFile photo, UserService userService, ClaimsPrincipal principal) =>
