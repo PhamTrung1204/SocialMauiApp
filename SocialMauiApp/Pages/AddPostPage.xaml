@@ -3,9 +3,10 @@
     x:Class="SocialMauiApp.Pages.AddPostPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-      xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-  xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
+    xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
+    xmlns:models="clr-namespace:SocialMauiApp.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     Title="Create Post"
     Padding="15"
@@ -16,8 +17,10 @@
         <Grid RowDefinitions="Auto, *,Auto,Auto" RowSpacing="5">
             <Grid
                 Grid.Row="0"
+                x:DataType="models:PostModel"
                 ColumnDefinitions="Auto,Auto"
                 ColumnSpacing="5">
+
                 <Border
                     Grid.Column="0"
                     HeightRequest="40"
@@ -27,7 +30,7 @@
                         Aspect="AspectFill"
                         HeightRequest="30"
                         HorizontalOptions="Center"
-                        Source="{Binding UserPhotoUrl}"
+                        Source="{Binding UserPhoto}"
                         VerticalOptions="Center"
                         WidthRequest="30" />
                 </Border>
@@ -73,7 +76,7 @@
                         <Shadow />
                     </Border.Shadow>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding RemovePhotoCommand}"/>
+                        <TapGestureRecognizer Command="{Binding RemovePhotoCommand}" />
                     </Border.GestureRecognizers>
 
                 </Border>
@@ -102,22 +105,24 @@
                             WidthRequest="25" />
                         <Label Text="Change Photo" VerticalOptions="Center">
                             <Label.Triggers>
-                                <DataTrigger Binding="{Binding PhotoPath}" TargetType="Label" Value="">
+                                <DataTrigger
+                                    Binding="{Binding PhotoPath}"
+                                    TargetType="Label"
+                                    Value="">
                                     <Setter Property="Text" Value="Add Photo" />
                                 </DataTrigger>
-                               
                             </Label.Triggers>
                         </Label>
 
                     </HorizontalStackLayout>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectPhotoCommand}"/>
+                        <TapGestureRecognizer Command="{Binding SelectPhotoCommand}" />
                     </Border.GestureRecognizers>
                 </Border>
                 <Button
                     Padding="50,0"
                     Command="{Binding SavePostCommand}"
-                    Style="{StaticResource Key=rounded}"
+                    Style="{StaticResource rounded}"
                     Text="Post" />
             </FlexLayout>
         </Grid>

@@ -79,5 +79,28 @@ namespace SocialMauiApp.ViewModel
                 OnPropertyChanged(nameof(Comments));
             });
         }
+        [RelayCommand]
+        private async Task DeletePostAsync()
+        {
+            if(await Shell.Current.DisplayAlert("Confirm?", "Are you sure, you want to delete this post ?", "Yes", "No"))
+            {
+                await MakeApiCall(async () =>
+                {
+                    var result = await PostsApi.DeletePostAsync(Post.PostId);
+                    if (!result.IsSuccess)
+                    {
+                        await ShowErrorAlertAsync(result.Error);
+                        return;
+                    }
+                    await ToastAsync("Post deleted");
+                    await NavigateAsync("..");
+                });
+            }
+        }
+        [RelayCommand]
+        private async Task EditPostAsync(PostModel post)
+        {
+            await NavigateAsync(nameof(AddPostPage));
+        }
     }
 }

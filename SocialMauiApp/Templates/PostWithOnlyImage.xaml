@@ -29,7 +29,14 @@
                         HorizontalOptions="Center"
                         Source="{Binding UserPhoto}"
                         VerticalOptions="Center"
-                        WidthRequest="30" />
+                        WidthRequest="30">
+                        <Image.Clip>
+                            <EllipseGeometry
+                                Center="15,15"
+                                RadiusX="15"
+                                RadiusY="15" />
+                        </Image.Clip>
+                    </Image>
                 </Border>
                 <Grid
                     Grid.Column="1"

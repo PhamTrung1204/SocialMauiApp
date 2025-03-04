@@ -27,7 +27,14 @@
                         HorizontalOptions="Center"
                         Source="{Binding UserPhoto}"
                         VerticalOptions="Center"
-                        WidthRequest="30" />
+                        WidthRequest="30">
+                        <Image.Clip>
+                            <EllipseGeometry
+                                Center="15,15"
+                                RadiusX="15"
+                                RadiusY="15" />
+                        </Image.Clip>
+                    </Image>
                 </Border>
 
                 <Grid
@@ -93,7 +100,7 @@
                             Text="Like"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleLikeCommand}" CommandParameter="{Binding .}" />
 
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
@@ -108,7 +115,7 @@
                             Text="Comment"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
 
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
@@ -123,7 +130,7 @@
                             Text="Save"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleBookmarkCommand}" CommandParameter="{Binding .}" />
 
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>

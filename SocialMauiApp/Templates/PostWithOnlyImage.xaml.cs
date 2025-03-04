@@ -7,6 +7,5 @@ public partial class PostWithOnlyImage : ContentView
 	public PostWithOnlyImage()
 	{
 		InitializeComponent();
-		
 	}
 }

@@ -52,7 +52,7 @@
                         <Shadow />
                     </Border.Shadow>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ChangePhotoCommand}"/>
+                        <TapGestureRecognizer Command="{Binding ChangePhotoCommand}" />
                     </Border.GestureRecognizers>
                 </Border>
             </Grid>

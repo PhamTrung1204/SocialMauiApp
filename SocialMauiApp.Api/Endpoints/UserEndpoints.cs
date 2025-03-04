@@ -13,7 +13,7 @@ namespace SocialMauiApp.Api.Endpoints
                 .WithName("User");
             userGroup.MapPost("/change-photo", async (IFormFile photo, UserService userService, ClaimsPrincipal principal) =>
             Results.Ok(await userService.ChangePhotoAsync(photo, principal.GetUserId())))
-                .DisableAntiforgery()
+            .DisableAntiforgery()
             .Produces<ApiResult>()
             .WithName("ChangePhoto");
 

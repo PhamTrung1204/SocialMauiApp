@@ -15,7 +15,7 @@
                         Padding="10"
                         StrokeThickness="0">
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="{Binding On,  StringFormat='{0:hh mm tt dd MMM yyyy}'}"
+                        <Label Text="{Binding On,  StringFormat='{0:hh mm tt | dd MMM yyyy}'}"
                                FontSize="12"
                                TextColor="DarkGray"/>
 

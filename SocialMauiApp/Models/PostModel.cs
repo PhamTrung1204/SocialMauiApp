@@ -17,14 +17,14 @@ namespace SocialMauiApp.Models
         [ObservableProperty, NotifyPropertyChangedFor(nameof(UserPhoto))]
         private string? _userPhotoUrl;
         public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
-      
+
         public string? Content { get; set; }
         public string? PhotoUrl { get; set; }
 
-       
-        public DateTime PostedOnDisplay {  get; set; }
-       
-        [JsonIgnore]
+
+        public DateTime PostedOnDisplay { get; set; }
+
+
         public string PostTemplateContentViewName
         {
             get
@@ -40,15 +40,14 @@ namespace SocialMauiApp.Models
                 return "WithImage";
             }
         }
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsLikeIcon))]
+        [ObservableProperty,NotifyPropertyChangedFor(nameof(IsLikeIcon))]
         private bool _isLiked;
         [ObservableProperty, NotifyPropertyChangedFor(nameof(IsBookmarkIcon))]
         private bool _isBookmarked;
 
-       
+
         public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
-       
+
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
         public static PostModel FromDto(PostDto dto) =>
             new()
@@ -63,6 +62,5 @@ namespace SocialMauiApp.Models
                 UserName = dto.UserName,
                 UserPhotoUrl = dto.UserPhotoUrl
             };
-
     }
 }

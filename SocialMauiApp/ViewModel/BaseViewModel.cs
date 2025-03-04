@@ -57,7 +57,7 @@ namespace SocialMauiApp.ViewModel
         }
         protected async Task<string?> ChoosePhotoAsync()
         {
-            if (!MediaPicker.Default.IsCaptureSupported)
+            if (MediaPicker.Default.IsCaptureSupported)
             {
                 const string PickFromDevice = "Pick From Device";
                 const string CapturePhoto = "Capture Photo";

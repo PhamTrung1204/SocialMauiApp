@@ -29,7 +29,14 @@
                         HorizontalOptions="Center"
                         Source="{Binding UserPhoto}"
                         VerticalOptions="Center"
-                        WidthRequest="30" />
+                        WidthRequest="30">
+                        <Image.Clip>
+                            <EllipseGeometry
+                                Center="15,15"
+                                RadiusX="15"
+                                RadiusY="15" />
+                        </Image.Clip>
+                    </Image>
                 </Border>
                 <Grid
                     Grid.Column="1"
@@ -64,7 +71,8 @@
                 Text="{Binding Content}"
                 TextColor="{StaticResource Gray900}">
                 <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+                    <!--  Sử dụng RelativeSource để truy xuất command từ BasePostViewModel  -->
+                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
                 </Label.GestureRecognizers>
             </Label>
 
@@ -72,6 +80,7 @@
             <VerticalStackLayout Grid.Row="2">
                 <BoxView Style="{StaticResource fadedLine}" />
                 <FlexLayout Margin="0,7,0,0" JustifyContent="SpaceAround">
+                    <!--  Like  -->
                     <HorizontalStackLayout Spacing="2">
                         <controls:PrimaryColorImage
                             Source="{Binding IsLikeIcon}"
@@ -79,9 +88,11 @@
                             WidthRequest="20" />
                         <Label Text="Like" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleLikeCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleLikeCommand}" CommandParameter="{Binding}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
+
+                    <!--  Comment  -->
                     <HorizontalStackLayout Spacing="2">
                         <controls:PrimaryColorImage
                             HeightRequest="20"
@@ -93,9 +104,11 @@
                             Text="Comment"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
+
+                    <!--  Save  -->
                     <HorizontalStackLayout Spacing="2">
                         <controls:PrimaryColorImage
                             HeightRequest="20"
@@ -107,9 +120,11 @@
                             Text="Save"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleBookmarkCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleBookmarkCommand}" CommandParameter="{Binding}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
+
+                    <!--  Share  -->
                     <HorizontalStackLayout Spacing="2">
                         <controls:PrimaryColorImage
                             HeightRequest="20"
@@ -121,7 +136,7 @@
                             Text="Share"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=SharePostCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=SharePostCommand}" CommandParameter="{Binding .}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
                 </FlexLayout>

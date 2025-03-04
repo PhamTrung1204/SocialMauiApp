@@ -90,15 +90,15 @@
                 BackgroundColor="{StaticResource Primary}"
                 HeightRequest="45"
                 HorizontalOptions="End"
-                StrokeShape="RoundRectangle 10"
+                StrokeShape="RoundRectangle 15"
                 VerticalOptions="End"
                 WidthRequest="45">
                 <controls:WhiteImage
-                    HorizontalOptions="Center"
+                    HeightRequest="24"
                     Source="plus_fab.png"
-                    VerticalOptions="Center" />
+                    WidthRequest="24" />
                 <Border.Shadow>
-                    <Shadow Brush="Black" />
+                    <Shadow Brush="Black" Radius="25"/>
                 </Border.Shadow>
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />

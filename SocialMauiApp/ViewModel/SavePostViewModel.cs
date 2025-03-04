@@ -27,82 +27,78 @@ namespace SocialMauiApp.ViewModel
         private async Task SelectPhotoAsync()
         {
             var selectPhotoSource = await ChoosePhotoAsync();
-            if(!string.IsNullOrWhiteSpace(selectPhotoSource))
+            if (!string.IsNullOrWhiteSpace(selectPhotoSource))
             {
                 PhotoPath = selectPhotoSource;
             }
 
-            if (!MediaPicker.Default.IsCaptureSupported)
+            if (MediaPicker.Default.IsCaptureSupported)
             {
-                Console.WriteLine("Camera not supported.");
-                await ToastAsync("Camera not supported on this device.");
-                return;
-            }
+                const string PickFromDevice = "Pick From Device";
+                const string CapturePhoto = "Capture Photo";
 
-            const string PickFromDevice = "Pick From Device";
-            const string CapturePhoto = "Capture Photo";
+                var result = await Shell.Current.DisplayActionSheet("Choose photo", "Cancel", null, PickFromDevice, CapturePhoto);
+                Console.WriteLine("User selected: " + result);
 
-            var result = await Shell.Current.DisplayActionSheet("Choose photo", "Cancel", null, PickFromDevice, CapturePhoto);
-            Console.WriteLine("User selected: " + result);
+                if (string.IsNullOrWhiteSpace(result)) return;
 
-            if (string.IsNullOrWhiteSpace(result)) return;
+                switch (result)
+                {
+                    case PickFromDevice:
+                        await PickFromDeviceAsync();
+                        break;
+                    case CapturePhoto:
+                        await CapturePhotoAsync();
+                        break;
+                }
+                async Task PickFromDeviceAsync()
+                {
+                    Console.WriteLine("Picking photo from device...");
+                    FileResult? fileResult = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
+                    {
+                        Title = "Select Photo"
+                    });
 
-            switch (result)
-            {
-                case PickFromDevice:
-                    await PickFromDeviceAsync();
-                    break;
-                case CapturePhoto:
-                    await CapturePhotoAsync();
-                    break;
+                    if (fileResult is null)
+                    {
+                        Console.WriteLine("No photo selected.");
+                        await ToastAsync("No photo selected");
+                        return;
+                    }
+
+                    Console.WriteLine("Photo selected: " + fileResult.FullPath);
+                    PhotoPath = fileResult.FullPath;
+                }
+
+                async Task CapturePhotoAsync()
+                {
+                    Console.WriteLine("Capturing photo...");
+
+                    FileResult? fileResult = await MediaPicker.Default.CapturePhotoAsync(new MediaPickerOptions
+                    {
+                        Title = "Take Photo"
+                    });
+
+                    if (fileResult is null)
+                    {
+                        Console.WriteLine("No photo captured.");
+                        await ToastAsync("No photo captured");
+                        return;
+                    }
+
+                    Console.WriteLine("Photo captured: " + fileResult.FullPath);
+                    PhotoPath = fileResult.FullPath;
+                }
             }
         }
-
-        async Task PickFromDeviceAsync()
-        {
-            Console.WriteLine("Picking photo from device...");
-            FileResult? fileResult = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
-            {
-                Title = "Select Photo"
-            });
-
-            if (fileResult is null)
-            {
-                Console.WriteLine("No photo selected.");
-                await ToastAsync("No photo selected");
-                return;
-            }
-
-            Console.WriteLine("Photo selected: " + fileResult.FullPath);
-            PhotoPath = fileResult.FullPath;
-        }
-
-        async Task CapturePhotoAsync()
-        {
-            Console.WriteLine("Capturing photo...");
-
-            FileResult? fileResult = await MediaPicker.Default.CapturePhotoAsync(new MediaPickerOptions
-            {
-                Title = "Take Photo"
-            });
-
-            if (fileResult is null)
-            {
-                Console.WriteLine("No photo captured.");
-                await ToastAsync("No photo captured");
-                return;
-            }
-
-            Console.WriteLine("Photo captured: " + fileResult.FullPath);
-            PhotoPath = fileResult.FullPath;
-        }
+       
 
         [RelayCommand]
         private void RemovePhoto()
         {
             PhotoPath = "";
         }
-        [RelayCommand(AllowConcurrentExecutions = false)]
+        [RelayCommand]
         private async Task SavePostAsync()
         {
             if (IsBusy)
@@ -146,7 +142,7 @@ namespace SocialMauiApp.ViewModel
                     Console.WriteLine("Post saved successfully!");
                     await ToastAsync("Post saved");
 
-                    Content = "";
+                    Content = null;
                     PhotoPath = "";
 
                     await NavigateBackAsync();

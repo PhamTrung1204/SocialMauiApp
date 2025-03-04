@@ -21,7 +21,8 @@ namespace SocialMauiApp.Api.Endpoints
             //    .WithName("SavePost");
             postsGroup.MapPost("/save", async ([FromForm] IFormFile? photo, [FromForm] string serializedSavePostDto, PostService postService, ClaimsPrincipal principal) =>
                {
-                   if (string.IsNullOrWhiteSpace(serializedSavePostDto)) return Results.BadRequest("Missing data");
+                   if (string.IsNullOrWhiteSpace(serializedSavePostDto)) 
+                       return Results.BadRequest("Missing data");
 
                    SavePostDto dto = JsonSerializer.Deserialize<SavePostDto>(serializedSavePostDto)!;
                    dto.Photo = photo;

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Refit;
 using SocialMauiApp.Apis;
+using SocialMauiApp.Models;
 using SocialMauiApp.Services;
 using SocialMauiApp.ViewModel;
 using Syncfusion.Maui.Core.Hosting;
@@ -39,7 +40,9 @@ namespace SocialMauiApp
 #endif
 
             builder.Services.AddSingleton<AuthService>();
+      
             builder.Services.AddTransient<LoginViewModel>().AddTransient<LoginPage>();
+
             builder.Services.AddTransient<RegisterViewModel>().AddTransient<RegisterPage>();
             builder.Services.AddTransient<SavePostViewModel>().AddTransient<AddPostPage>();
             builder.Services.AddSingleton<HomeViewModel>().AddSingleton<HomePage>();

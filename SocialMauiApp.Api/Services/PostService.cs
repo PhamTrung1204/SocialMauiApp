@@ -120,7 +120,7 @@ namespace SocialMauiApp.Api.Services
                 await _context.SaveChangesAsync();
                 var commentDto = new CommentDto
                 {
-                    AddOn = comment.AddedOn,
+                    AddedOn = comment.AddedOn,
                     CommentId = comment.Id,
                     Content = comment.Content,
                     PostId = comment.PostId,
@@ -143,7 +143,7 @@ namespace SocialMauiApp.Api.Services
             .Take(pageSize)
             .Select(c => new CommentDto
             {
-                AddOn = c.AddedOn,
+                AddedOn = c.AddedOn,
                 CommentId = c.Id,
                 Content = c.Content,
                 PostId = postId,

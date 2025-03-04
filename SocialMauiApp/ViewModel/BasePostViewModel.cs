@@ -3,16 +3,20 @@ using Microsoft.Maui.ApplicationModel.DataTransfer;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
 using SocialMediaMaui.Shared.Dtos;
+using System.Windows.Input;
 
 
 namespace SocialMauiApp.ViewModel
 {
     public partial class BasePostViewModel : BaseViewModel, IDisposable
     {
+        
         public BasePostViewModel(IPostApi postApi)
         {
             PostsApi = postApi;
+           
         }
+      
 
         public IPostApi PostsApi { get; }
         protected virtual bool SkipGoToDetailsCommandAction { get; set; }
@@ -67,7 +71,12 @@ namespace SocialMauiApp.ViewModel
         {
             if (string.IsNullOrWhiteSpace(post.PhotoUrl))
             {
-                await Share.Default.RequestAsync(post.Content, "Maui Social");
+                await Share.Default.RequestAsync(new ShareTextRequest
+                {
+                    Title = "Maui Social",
+                    Text = post.Content
+                });
+
             }
             else
             {
@@ -99,7 +108,8 @@ namespace SocialMauiApp.ViewModel
                     Directory.CreateDirectory(localPath);
                 var photoName = Path.GetFileName(photoUrl);
                 var localPhotoPath = Path.Combine(localPath, photoName);
-                File.WriteAllBytes(localPath, photoBytes);
+                File.WriteAllBytes(localPhotoPath, photoBytes);
+
                 _downloadedPhotos[photoUrl] = localPhotoPath;
                 return localPhotoPath;
             }

@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
+    xmlns:models="clr-namespace:SocialMauiApp.Models"
     xmlns:templates="clr-namespace:SocialMauiApp.Templates"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     x:DataType="vm:DetailsViewModel"
@@ -41,7 +42,7 @@
                 </Border.GestureRecognizers>
             </Border>
             <!--  Spacer  -->
-            
+
             <!--  Edit Button (chỉ hiển thị nếu là bài viết của chính người dùng)  -->
             <Border
                 Grid.Column="2"
@@ -71,14 +72,17 @@
                 StrokeThickness="0"
                 WidthRequest="30">
                 <Image
-                    HeightRequest="24"
+                    HeightRequest="18"
                     HorizontalOptions="Center"
                     Source="trash.png"
                     VerticalOptions="Center"
-                    WidthRequest="24" />
+                    WidthRequest="18" />
                 <Border.Shadow>
                     <Shadow Brush="Gray" Radius="10" />
                 </Border.Shadow>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding DeletePostCommand}"/>
+                </Border.GestureRecognizers>
             </Border>
         </Grid>
 
@@ -100,18 +104,21 @@
                     </ContentView.Resources>
                     <ContentView.Triggers>
                         <DataTrigger
+                            x:DataType="models:PostModel"
                             Binding="{Binding PostTemplateContentViewName}"
                             TargetType="ContentView"
                             Value="WithNoImage">
                             <Setter Property="ControlTemplate" Value="{StaticResource noImage}" />
                         </DataTrigger>
                         <DataTrigger
+                            x:DataType="models:PostModel"
                             Binding="{Binding PostTemplateContentViewName}"
                             TargetType="ContentView"
                             Value="ImageOnly">
                             <Setter Property="ControlTemplate" Value="{StaticResource withOnlyImage}" />
                         </DataTrigger>
                         <DataTrigger
+                            x:DataType="models:PostModel"
                             Binding="{Binding PostTemplateContentViewName}"
                             TargetType="ContentView"
                             Value="WithImage">
@@ -126,7 +133,7 @@
                     BackgroundColor="White"
                     StrokeThickness="0">
                     <Grid RowDefinitions="Auto,250,Auto,Auto" RowSpacing="10">
-                      
+
                         <Grid
                             Padding="8,0"
                             ColumnDefinitions="40,Auto,*"
@@ -162,13 +169,13 @@
                                     VerticalOptions="Center" />
                             </Grid>
                         </Grid>
-                       
+
                         <Label
                             Padding="8,0"
                             FontSize="15"
                             Text="{Binding Post.Content}"
                             TextColor="{StaticResource Gray900}" />
-                      
+
                         <Border BackgroundColor="LightBlue" HeightRequest="250">
                             <Image
                                 Aspect="Center"
@@ -179,7 +186,7 @@
                             </Border.GestureRecognizers>
                         </Border>
 
-                     
+
                         <FlexLayout Margin="0,7,0,0" JustifyContent="SpaceAround">
                             <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
                                 <controls:PrimaryColorImage
@@ -223,14 +230,21 @@
                             </HorizontalStackLayout>
                         </FlexLayout>
                     </Grid>
-                </Border> -->
+                </Border>-->
 
                 <!--  Mục bình luận  -->
-                <VerticalStackLayout x:Name="comments" Spacing="10" Grid.Row="1" Padding="15,0,15,15">
+                <VerticalStackLayout
+                    x:Name="comments"
+                    Grid.Row="1"
+                    Padding="15,0,15,15"
+                    Spacing="10">
                     <CollectionView ItemsSource="{Binding Comments}">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"/>
+                            <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
+                        <CollectionView.EmptyView>
+                            <Label Text="No comments here." />
+                        </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="dto:CommentDto">
                                 <!--  Mẫu bình luận; có thể chuyển sang CollectionView để hiển thị danh sách động  -->
@@ -244,13 +258,19 @@
                                         VerticalOptions="Start"
                                         WidthRequest="40">
                                         <Image
-                                            Aspect="AspectFit"
-                                            BackgroundColor="LightGoldenrodYellow"
+                                            Aspect="AspectFill"
                                             HeightRequest="30"
                                             HorizontalOptions="Center"
-                                            Source="{Binding UserPhotoUrl}"
+                                            Source="{Binding UserPhoto}"
                                             VerticalOptions="Center"
-                                            WidthRequest="30" />
+                                            WidthRequest="30">
+                                            <Image.Clip>
+                                                <EllipseGeometry
+                                                    Center="15,15"
+                                                    RadiusX="15"
+                                                    RadiusY="15" />
+                                            </Image.Clip>
+                                        </Image>
                                     </Border>
                                     <Grid
                                         Padding="5"
@@ -270,10 +290,10 @@
                                                 VerticalOptions="Center" />
                                             <Label
                                                 FontSize="12"
-                                                Text="{Binding AddOn, StringFormat='{0: hh:mm dd MMM yyyy'}"
+                                                Text="{Binding AddedOn, StringFormat='{0: hh:mm tt | dd MMM yyyy'}"
                                                 VerticalOptions="Center" />
                                         </Grid>
-                                        <Label Text="Comment text" TextColor="Gray" />
+                                        <Label Text="{Binding Content}" TextColor="{StaticResource Gray900}" />
                                     </Grid>
                                 </Grid>
                                 <!--  Thêm các bình luận khác tương tự hoặc dùng CollectionView  -->
@@ -313,5 +333,10 @@
                     WidthRequest="24" />
             </Border>
         </Grid>
+        <ActivityIndicator
+            Grid.Row="3"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            VerticalOptions="Center" />
     </Grid>
 </ContentPage>

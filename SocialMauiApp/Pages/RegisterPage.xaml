@@ -35,10 +35,13 @@
                             <Image
                                 Aspect="AspectFill"
                                 HeightRequest="80"
-                                Source="user.png"
+                                Source="{Binding PhotoImageSource}"
                                 WidthRequest="80" />
                         </Border>
-                        <Button Text="Choose Image" VerticalOptions="Center" />
+                        <Button
+                            Command="{Binding SelectPhotoCommand}"
+                            Text="Choose Photo"
+                            VerticalOptions="Center" />
                     </HorizontalStackLayout>
 
                     <Label Style="{StaticResource formLabel}" Text="Enter Name" />

@@ -1,10 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
+using Refit;
 using SocialMauiApp.Apis;
 using SocialMediaMaui.Shared.Dtos;
 
 namespace SocialMauiApp.ViewModel
 {
+    [QueryProperty(nameof(CroppedPhotoSource), "new-src")]
     public partial class RegisterViewModel : BaseViewModel
     {
         private readonly IAuthApi _authApi;
@@ -37,12 +40,40 @@ namespace SocialMauiApp.ViewModel
                     return;
                 }
                 var userId = result.Data;
+                if(!string.IsNullOrWhiteSpace(PhotoImageSource)&&PhotoImageSource!="personal.png")
+                {
+                    var photoName = Path.GetFileName(PhotoImageSource);
+                    using var fs = File.OpenRead(PhotoImageSource);
+                    var photoStreamPart = new StreamPart(fs, photoName);
+                    var apiResult = await _authApi.UploadPhotoAsync(userId, photoStreamPart);
+                    if (!result.IsSuccess)
+                    {
+                        await ToastAsync("Photo upload failed.");
+                        return;
+                    }
+                }
                 await ToastAsync($"Successfully registered");
                 await NavigateAsync($"//{nameof(LoginPage)}");
             }
             );
 
         }
-
+        [ObservableProperty]
+        private string _photoImageSource = "personal.png";
+        [RelayCommand]
+        private async Task SelectPhotoAsync()
+        {
+            var selectedPhotoSource = await ChoosePhotoAsync();
+            if (!string.IsNullOrWhiteSpace(selectedPhotoSource))
+            {
+                var param = new Dictionary<string, object>
+                {
+                    [nameof(CropPhotoPage)] = selectedPhotoSource
+                };
+                await NavigateAsync(nameof(CropPhotoPage), param);
+            }
+        }
+        [ObservableProperty]
+        private string? _croppedPhotoSource;
     }
 }

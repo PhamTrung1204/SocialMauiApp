@@ -21,7 +21,7 @@ public partial class CropPhotoPage : ContentPage, IQueryAttributable
                 await Shell.Current.GoToAsync("..");
                 return;
             }
-            PhotoSource = photoSourceObject.ToString();
+            PhotoSource = photoSource;
             imageEditor.Source = PhotoSource;
             imageEditor.ImageLoaded += ImageEditor_ImageLoaded;
         }
@@ -36,7 +36,7 @@ public partial class CropPhotoPage : ContentPage, IQueryAttributable
         if (imageEditor.HasUnsavedEdits)
         {
             if(await Shell.Current.DisplayAlert("Cancel Cropping","Do you really want to cancel this action?", "Yes", "No"))
-            {
+            {  
                 imageEditor.CancelEdits();
                 await Shell.Current.GoToAsync("..");
             }

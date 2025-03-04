@@ -1,12 +1,12 @@
-using SocialMauiApp.ViewModel;
+using Microsoft.Maui.Controls;
 
-namespace SocialMauiApp.Templates;
-
-public partial class PostWithNoImage : ContentView
+namespace SocialMauiApp.Templates
 {
-	public PostWithNoImage()
-	{
-		InitializeComponent();
-		
-	}
+    public partial class PostWithNoImage : ContentView
+    {
+        public PostWithNoImage()
+        {
+            InitializeComponent();
+        }
+    }
 }

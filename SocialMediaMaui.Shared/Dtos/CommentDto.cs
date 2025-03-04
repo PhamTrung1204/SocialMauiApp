@@ -8,6 +8,7 @@
         public Guid UserId { get; set; }
         public string UserName { get; set; }
         public string? UserPhotoUrl { get; set; }
-        public DateTime AddOn { get; set; }
+        public DateTime AddedOn { get; set; }
+        public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
     }
 }
