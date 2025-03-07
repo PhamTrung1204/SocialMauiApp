@@ -43,7 +43,8 @@
                     <Label
                         Grid.Column="0"
                         FontAttributes="Bold"
-                        Text="{Binding UserName}" />
+                        Text="{Binding UserName}"
+                        TextColor="Black"/>
 
                 </Grid>
             </Grid>

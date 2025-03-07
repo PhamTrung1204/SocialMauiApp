@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Refit;
 using SocialMauiApp.Apis;
+using SocialMauiApp.Models;
 using SocialMediaMaui.Shared.Dtos;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace SocialMauiApp.ViewModel
 {
+    [QueryProperty(nameof(Post),nameof(Post))]
     public partial class SavePostViewModel : BaseViewModel
     {
         private readonly IPostApi _postApi;
@@ -23,6 +25,7 @@ namespace SocialMauiApp.ViewModel
         private string _content = string.Empty;
         [ObservableProperty]
         private string _photoPath = string.Empty;
+        private string? _existingPhotoUrl;
         [RelayCommand]
         private async Task SelectPhotoAsync()
         {
@@ -66,8 +69,15 @@ namespace SocialMauiApp.ViewModel
                         return;
                     }
 
-                    Console.WriteLine("Photo selected: " + fileResult.FullPath);
-                    PhotoPath = fileResult.FullPath;
+                    using var stream = await fileResult.OpenReadAsync();
+                    // Upload stream hoặc lưu vào bộ nhớ tạm nếu cần
+                    // Ví dụ: lưu tạm file để sau này upload:
+                    var tempFile = Path.Combine(FileSystem.CacheDirectory, fileResult.FileName);
+                    using (var fileStream = File.Create(tempFile))
+                    {
+                        await stream.CopyToAsync(fileStream);
+                    }
+                    PhotoPath = tempFile; // Gán đường dẫn tạm đã lưu
                 }
 
                 async Task CapturePhotoAsync()
@@ -85,14 +95,17 @@ namespace SocialMauiApp.ViewModel
                         await ToastAsync("No photo captured");
                         return;
                     }
-
                     Console.WriteLine("Photo captured: " + fileResult.FullPath);
-                    PhotoPath = fileResult.FullPath;
+                    using var stream = await fileResult.OpenReadAsync();
+                    var tempFile = Path.Combine(FileSystem.CacheDirectory, fileResult.FileName);
+                    using (var fileStream = File.Create(tempFile))
+                    {
+                        await stream.CopyToAsync(fileStream);
+                    }
+                    PhotoPath = tempFile;
                 }
             }
         }
-       
-
         [RelayCommand]
         private void RemovePhoto()
         {
@@ -119,15 +132,24 @@ namespace SocialMauiApp.ViewModel
                 await MakeApiCall(async () =>
                 {
                     StreamPart? photoStreamPart = null;
-                    if (!string.IsNullOrWhiteSpace(PhotoPath))
+                    if (!string.IsNullOrWhiteSpace(PhotoPath)&&_existingPhotoUrl != PhotoPath)
                     {
                         Console.WriteLine("Processing photo: " + PhotoPath);
                         var fileName = Path.GetFileName(PhotoPath);
                         var fileBytes = File.OpenRead(PhotoPath);
                         photoStreamPart = new StreamPart(fileBytes, fileName);
                     }
+                    var dto = new SavePostDto
+                    {
+                        Content = Content,
+                        PostId = Post?.PostId ?? default
+                    };
+                    if (string.IsNullOrWhiteSpace(PhotoPath) && !string.IsNullOrWhiteSpace(_existingPhotoUrl))
+                    {
+                        dto.IsExistingPhotoRemoved = true;
+                    }
 
-                    var serializedSavePostDto = JsonSerializer.Serialize(new SavePostDto { Content = Content });
+                    var serializedSavePostDto = JsonSerializer.Serialize(dto);
                     Console.WriteLine("Serialized DTO: " + serializedSavePostDto);
 
                     var result = await _postApi.SavePostAsync(photoStreamPart, serializedSavePostDto);
@@ -142,10 +164,10 @@ namespace SocialMauiApp.ViewModel
                     Console.WriteLine("Post saved successfully!");
                     await ToastAsync("Post saved");
 
-                    Content = null;
-                    PhotoPath = "";
-
-                    await NavigateBackAsync();
+                    Content = "";
+                    PhotoPath = ""; 
+                    var savedPost = PostModel.FromDto(result.Data, _postApi);
+                    await NavigateAsync("..", new Dictionary<string, object> { [nameof(DetailsViewModel.Post)] = savedPost});
 
                 });
             }
@@ -154,6 +176,16 @@ namespace SocialMauiApp.ViewModel
                 IsBusy = false;
             }
         }
-
+        [ObservableProperty]
+        private PostModel? _post;
+        partial void OnPostChanged(PostModel? value)
+        {
+            if(value is not null)
+            {
+                Content = Post.Content;
+                PhotoPath = Post.PhotoUrl??"";
+                _existingPhotoUrl = Post.PhotoUrl;
+            }
+        }
     }
 }

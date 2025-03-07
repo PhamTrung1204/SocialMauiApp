@@ -27,10 +27,10 @@ namespace SocialMauiApp.Api.Endpoints
                    SavePostDto dto = JsonSerializer.Deserialize<SavePostDto>(serializedSavePostDto)!;
                    dto.Photo = photo;
 
-                   return Results.Ok(await postService.SavePostAsync(dto, principal.GetUserId()));
+                   return Results.Ok(await postService.SavePostAsync(dto, principal.GetUser()));
                })
                 .DisableAntiforgery()
-                .Produces<ApiResult>()
+                .Produces<ApiResult<PostDto>>()
                 .WithName("SavePost");
 
             postsGroup.MapGet("/", async (int startIndex, int pageSize, PostService postService, ClaimsPrincipal principal) =>

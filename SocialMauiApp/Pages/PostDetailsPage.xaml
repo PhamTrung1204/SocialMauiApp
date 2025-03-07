@@ -41,9 +41,11 @@
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
                 </Border.GestureRecognizers>
             </Border>
-            <!--  Spacer  -->
 
-            <!--  Edit Button (chỉ hiển thị nếu là bài viết của chính người dùng)  -->
+            <!--  Spacer  -->
+            <Grid Grid.Column="1" />
+
+            <!--  Edit Button (hiển thị nếu IsOwnPost = true)  -->
             <Border
                 Grid.Column="2"
                 BackgroundColor="White"
@@ -61,8 +63,12 @@
                 <Border.Shadow>
                     <Shadow Brush="Gray" Radius="10" />
                 </Border.Shadow>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding EditPostCommand}" CommandParameter="{Binding Post}" />
+                </Border.GestureRecognizers>
             </Border>
-            <!--  Delete Button (chỉ hiển thị nếu là bài viết của chính người dùng)  -->
+
+            <!--  Delete Button (hiển thị nếu IsOwnPost = true)  -->
             <Border
                 Grid.Column="3"
                 BackgroundColor="White"
@@ -81,15 +87,15 @@
                     <Shadow Brush="Gray" Radius="10" />
                 </Border.Shadow>
                 <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding DeletePostCommand}"/>
+                    <TapGestureRecognizer Command="{Binding DeletePostCommand}" />
                 </Border.GestureRecognizers>
             </Border>
         </Grid>
 
         <!--  Nội dung chính  -->
         <ScrollView Grid.Row="1">
-            <Grid RowDefinitions="Auto, *" RowSpacing="10">
-                <!--  Phần hiển thị bài viết theo ControlTemplate  -->
+            <Grid RowDefinitions="Auto,*" RowSpacing="10">
+                <!--  ControlTemplate hiển thị bài viết  -->
                 <ContentView Grid.Row="0" BindingContext="{Binding Post}">
                     <ContentView.Resources>
                         <ControlTemplate x:Key="withImage">
@@ -127,182 +133,84 @@
                     </ContentView.Triggers>
                 </ContentView>
 
-                <!--  Chi tiết bài viết (header, ảnh, nội dung, actions)  -->
-                <!--<Border
-                    Padding="10"
-                    BackgroundColor="White"
-                    StrokeThickness="0">
-                    <Grid RowDefinitions="Auto,250,Auto,Auto" RowSpacing="10">
-
-                        <Grid
-                            Padding="8,0"
-                            ColumnDefinitions="40,Auto,*"
-                            ColumnSpacing="10">
-                            <Border
-                                BackgroundColor="LightGoldenrodYellow"
-                                HeightRequest="40"
-                                StrokeShape="RoundRectangle 20"
-                                WidthRequest="40">
-                                <Image
-                                    Aspect="AspectFill"
-                                    HeightRequest="30"
-                                    HorizontalOptions="Center"
-                                    Source="{Binding Post.UserPhotoUrl}"
-                                    VerticalOptions="Center"
-                                    WidthRequest="30" />
-                            </Border>
-                            <Grid
-                                Column="1"
-                                ColumnDefinitions="Auto,Auto,Auto"
-                                ColumnSpacing="5"
-                                VerticalOptions="Center">
-                                <Label FontAttributes="Bold" Text="{Binding Post.UserName}" />
-                                <Label
-                                    Margin="0,-7,0,0"
-                                    FontAttributes="Bold"
-                                    FontSize="14"
-                                    Text="."
-                                    VerticalOptions="Center" />
-                                <Label
-                                    FontSize="12"
-                                    Text="{Binding Post.PostedOnDisplay, StringFormat='{0:dd MMM yyyy}'}"
-                                    VerticalOptions="Center" />
-                            </Grid>
-                        </Grid>
-
-                        <Label
-                            Padding="8,0"
-                            FontSize="15"
-                            Text="{Binding Post.Content}"
-                            TextColor="{StaticResource Gray900}" />
-
-                        <Border BackgroundColor="LightBlue" HeightRequest="250">
-                            <Image
-                                Aspect="Center"
-                                HeightRequest="250"
-                                Source="{Binding Post.PhotoUrl}" />
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
-                        </Border>
-
-
-                        <FlexLayout Margin="0,7,0,0" JustifyContent="SpaceAround">
-                            <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
-                                <controls:PrimaryColorImage
-                                    HeightRequest="20"
-                                    Source="heart.png"
-                                    WidthRequest="20" />
-                                <Label
-                                    FontSize="12"
-                                    Text="Like"
-                                    VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
-                                <controls:PrimaryColorImage
-                                    HeightRequest="20"
-                                    Source="comment.png"
-                                    WidthRequest="20" />
-                                <Label
-                                    FontSize="12"
-                                    Text="Comment"
-                                    VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
-                                <controls:PrimaryColorImage
-                                    HeightRequest="20"
-                                    Source="bookmark.png"
-                                    WidthRequest="20" />
-                                <Label
-                                    FontSize="12"
-                                    Text="Save"
-                                    VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
-                                <controls:PrimaryColorImage
-                                    HeightRequest="20"
-                                    Source="share.png"
-                                    WidthRequest="20" />
-                                <Label
-                                    FontSize="12"
-                                    Text="Share"
-                                    VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-                        </FlexLayout>
-                    </Grid>
-                </Border>-->
-
-                <!--  Mục bình luận  -->
-                <VerticalStackLayout
-                    x:Name="comments"
-                    Grid.Row="1"
-                    Padding="15,0,15,15"
-                    Spacing="10">
+                <!--  Phần bình luận  -->
+                <VerticalStackLayout Grid.Row="1" Spacing="10" Padding="5">
                     <CollectionView ItemsSource="{Binding Comments}">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.EmptyView>
-                            <Label Text="No comments here." />
+                            <Label HorizontalOptions="Center" Text="No comments here." />
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="dto:CommentDto">
-                                <!--  Mẫu bình luận; có thể chuyển sang CollectionView để hiển thị danh sách động  -->
-                                <Grid
-                                    Padding="8,0"
-                                    ColumnDefinitions="40,*"
-                                    ColumnSpacing="5">
-                                    <Border
-                                        HeightRequest="40"
-                                        StrokeShape="RoundRectangle 20"
-                                        VerticalOptions="Start"
-                                        WidthRequest="40">
-                                        <Image
-                                            Aspect="AspectFill"
-                                            HeightRequest="30"
-                                            HorizontalOptions="Center"
-                                            Source="{Binding UserPhoto}"
-                                            VerticalOptions="Center"
-                                            WidthRequest="30">
-                                            <Image.Clip>
-                                                <EllipseGeometry
-                                                    Center="15,15"
-                                                    RadiusX="15"
-                                                    RadiusY="15" />
-                                            </Image.Clip>
-                                        </Image>
-                                    </Border>
+                                <!--  Border để bo góc, có nền trắng, tạo cảm giác tách biệt giữa các comment  -->
+                                <Border
+                                    
+                                    Padding="5"
+                                    BackgroundColor="White"
+                                    StrokeShape="RoundRectangle 10">
+                                    <!--  Grid 2 hàng, 2 cột  -->
                                     <Grid
-                                        Padding="5"
-                                        BackgroundColor="White"
+                                        ColumnDefinitions="Auto,*"
+                                        ColumnSpacing="10"
                                         RowDefinitions="Auto,Auto"
                                         RowSpacing="5">
-                                        <Grid
-                                            ColumnDefinitions="Auto,Auto,Auto"
-                                            ColumnSpacing="5"
-                                            VerticalOptions="Center">
-                                            <Label FontAttributes="Bold" Text="{Binding UserName}" />
+
+                                        <!--  Ảnh đại diện (avatar)  -->
+                                        <!--  Gán RowSpan="2" để avatar trải dài 2 hàng (thông tin user + nội dung comment)  -->
+                                        <Border
+                                            Grid.RowSpan="2"
+                                            HeightRequest="40"
+                                            HorizontalOptions="Start"
+                                            StrokeShape="RoundRectangle 20"
+                                            VerticalOptions="Start"
+                                            WidthRequest="40">
+                                            <Image
+                                                Aspect="AspectFill"
+                                                HeightRequest="40"
+                                                Source="{Binding UserPhoto}"
+                                                WidthRequest="40" />
+                                        </Border>
+
+                                        <!--  Hàng 0, Cột 1: Thông tin người dùng (tên + thời gian)  -->
+                                        <StackLayout
+                                            Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            Spacing="2">
                                             <Label
-                                                Margin="0,-7,0,0"
                                                 FontAttributes="Bold"
                                                 FontSize="14"
-                                                Text="."
+                                                Text="{Binding UserName}"
+                                                VerticalOptions="Center" />
+                                            <Label
+                                                FontSize="14"
+                                                Text="·"
                                                 VerticalOptions="Center" />
                                             <Label
                                                 FontSize="12"
-                                                Text="{Binding AddedOn, StringFormat='{0: hh:mm tt | dd MMM yyyy'}"
+                                                Text="{Binding AddedOn, StringFormat='{0:hh:mm tt | dd MMM yyyy}'}"
+                                                TextColor="Gray"
                                                 VerticalOptions="Center" />
-                                        </Grid>
-                                        <Label Text="{Binding Content}" TextColor="{StaticResource Gray900}" />
+                                        </StackLayout>
+
+                                        <!--  Hàng 1, Cột 1: Nội dung bình luận  -->
+                                        <Label
+                                            
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            FontSize="14"
+                                            LineBreakMode="WordWrap"
+                                            Text="{Binding Content}"
+                                            TextColor="Black"
+                                            VerticalOptions="Start" />
                                     </Grid>
-                                </Grid>
-                                <!--  Thêm các bình luận khác tương tự hoặc dùng CollectionView  -->
+                                </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-
-
                 </VerticalStackLayout>
+
             </Grid>
         </ScrollView>
 
@@ -333,6 +241,8 @@
                     WidthRequest="24" />
             </Border>
         </Grid>
+
+        <!--  Activity Indicator  -->
         <ActivityIndicator
             Grid.Row="3"
             HorizontalOptions="Center"

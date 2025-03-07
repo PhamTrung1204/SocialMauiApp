@@ -17,15 +17,19 @@ namespace SocialMauiApp.Api.Endpoints
             .Produces<ApiResult>()
             .WithName("ChangePhoto");
 
-            userGroup.MapPost("/posts", async (int startIndex, int pageSize, UserService userService, ClaimsPrincipal principal) =>
-            Results.Ok(await userService.GetUserPostsAsync(startIndex, pageSize, principal.GetUserId())))
-            .Produces<PostDto[]>()
-            .WithName("GetUserPosts");
+            userGroup.MapGet("/posts", async (int startIndex, int pageSize, UserService userService, ClaimsPrincipal principal) =>
+    Results.Ok(await userService.GetUserPostsAsync(startIndex, pageSize, principal.GetUserId())))
 
-            userGroup.MapPost("/bookmarked-posts", async (int startIndex, int pageSize, UserService userService, ClaimsPrincipal principal) =>
-            Results.Ok(await userService.GetUserBookmarkedPostsAsync(startIndex, pageSize, principal.GetUserId())))
-            .Produces<PostDto[]>()
-            .WithName("GetBookmarkedPosts");
+    .Produces<PostDto[]>()
+    .WithName("GetUserPosts");
+
+
+            userGroup.MapGet("/bookmarked-posts", async (int startIndex, int pageSize, UserService userService, ClaimsPrincipal principal) =>
+    Results.Ok(await userService.GetUserBookmarkedPostsAsync(startIndex, pageSize, principal.GetUserId())))
+ 
+    .Produces<PostDto[]>()
+    .WithName("GetBookmarkedPosts");
+
 
             return app;
         }

@@ -1,28 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel.DataTransfer;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
-using SocialMediaMaui.Shared.Dtos;
-using System.Windows.Input;
-
 
 namespace SocialMauiApp.ViewModel
 {
     public partial class BasePostViewModel : BaseViewModel, IDisposable
     {
-        
         public BasePostViewModel(IPostApi postApi)
         {
             PostsApi = postApi;
-           
         }
-      
-
+        private bool IsInDetailPage = false;
         public IPostApi PostsApi { get; }
         protected virtual bool SkipGoToDetailsCommandAction { get; set; }
-       
+
         [RelayCommand]
         private async Task GoToAddPostAsync() => await NavigateAsync(nameof(AddPostPage));
+
         [RelayCommand]
         private async Task GoToDetailsPageAsync(PostModel post)
         {
@@ -32,6 +26,7 @@ namespace SocialMauiApp.ViewModel
             };
             await NavigateAsync(nameof(PostDetailsPage), param);
         }
+
         [RelayCommand]
         private async Task ToggleLikeAsync(PostModel post)
         {
@@ -41,7 +36,7 @@ namespace SocialMauiApp.ViewModel
                 post.IsLiked = !post.IsLiked;
 
                 var result = await PostsApi.ToggleLikeAsync(post.PostId);
-                if(!result.IsSuccess)
+                if (!result.IsSuccess)
                 {
                     await ShowErrorAlertAsync(result.Error);
                     post.IsLiked = orginalStatus;
@@ -49,6 +44,7 @@ namespace SocialMauiApp.ViewModel
                 }
             });
         }
+
         [RelayCommand]
         private async Task ToggleBookmarkAsync(PostModel post)
         {
@@ -66,6 +62,7 @@ namespace SocialMauiApp.ViewModel
                 }
             });
         }
+
         [RelayCommand]
         private async Task SharePostAsync(PostModel post)
         {
@@ -76,24 +73,24 @@ namespace SocialMauiApp.ViewModel
                     Title = "Maui Social",
                     Text = post.Content
                 });
-
             }
             else
             {
                 var tempPhotoPath = await DownloadPhotoAsync(post.PhotoUrl);
-                if(!string.IsNullOrWhiteSpace(tempPhotoPath))
+                if (!string.IsNullOrWhiteSpace(tempPhotoPath))
                 {
                     var shareFile = new ShareFile(tempPhotoPath);
-                    var shareFileRequest = new ShareFileRequest("Maui Social",shareFile);
+                    var shareFileRequest = new ShareFileRequest("Maui Social", shareFile);
                     await Share.Default.RequestAsync(shareFileRequest);
                 }
             }
         }
-        private Dictionary<string, string> _downloadedPhotos = [];
+
+        private Dictionary<string, string> _downloadedPhotos = new();
         private HttpClient? _httpClient;
         private async Task<string?> DownloadPhotoAsync(string photoUrl)
         {
-            if(_downloadedPhotos.TryGetValue(photoUrl, out var localPhotoUrl))
+            if (_downloadedPhotos.TryGetValue(photoUrl, out var localPhotoUrl))
             {
                 return localPhotoUrl;
             }
@@ -123,12 +120,15 @@ namespace SocialMauiApp.ViewModel
                 IsBusy = false;
             }
         }
+       
+
         public void Dispose()
         {
             _httpClient?.Dispose();
             foreach (var (_, localPhotoPath) in _downloadedPhotos)
             {
-                if(File.Exists(localPhotoPath)) File.Delete(localPhotoPath);
+                if (File.Exists(localPhotoPath))
+                    File.Delete(localPhotoPath);
             }
         }
     }

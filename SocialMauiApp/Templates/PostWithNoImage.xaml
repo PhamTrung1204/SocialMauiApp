@@ -72,7 +72,7 @@
                 TextColor="{StaticResource Gray900}">
                 <Label.GestureRecognizers>
                     <!--  Sử dụng RelativeSource để truy xuất command từ BasePostViewModel  -->
-                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
+                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
                 </Label.GestureRecognizers>
             </Label>
 
@@ -88,7 +88,7 @@
                             WidthRequest="20" />
                         <Label Text="Like" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleLikeCommand}" CommandParameter="{Binding}" />
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleLikeCommand}" CommandParameter="{Binding .}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
 
@@ -136,7 +136,7 @@
                             Text="Share"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=SharePostCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=SharePostCommand}" CommandParameter="{Binding}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
                 </FlexLayout>

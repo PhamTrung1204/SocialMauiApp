@@ -17,40 +17,41 @@ namespace SocialMauiApp.Api.Services
             _context = context;
             _photoUploadService = photoUploadService;
         }
-        public async Task<ApiResult> SavePostAsync(SavePostDto dto, Guid userId)
+        public async Task<ApiResult<PostDto>> SavePostAsync(SavePostDto dto, LoggedInUser user)
         {
             string? _existingPhotoPath = null;
+            Post? post = null;
             if (dto.PostId == default)
             {
-                var post = new Post
+                post = new Post
                 {
                     Content = dto.Content,
                     PostedOn = DateTime.UtcNow,
-                    UserId = userId
+                    UserId = user.Id
                 };
                 if (dto.Photo is not null)
                 {
-                    (post.PhotoPath, post.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", userId.ToString(), "posts");
+                    (post.PhotoPath, post.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", user.Id.ToString(), "posts");
                 }
                 _context.Posts.Add(post);
             }
             else
             {
-                var post = await _context.Posts.FindAsync(dto.PostId);
+                post = await _context.Posts.FindAsync(dto.PostId);
                 if (post is null)
                 {
-                    return ApiResult.Fail("Post no longer exists");
+                    return ApiResult<PostDto>.Fail("Post no longer exists");
                 }
-                if (post.UserId != userId)
+                if (post.UserId != user.Id)
                 {
-                    return ApiResult.Fail("Permission Denied");
+                    return ApiResult<PostDto>.Fail("Permission Denied");
                 }
                 post.Content = dto.Content;
                 post.ModifiedOn = DateTime.UtcNow;
                 if (dto.Photo is not null)
                 {
                     _existingPhotoPath = post.PhotoPath;
-                    (post.PhotoPath, post.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", userId.ToString(), "posts");
+                    (post.PhotoPath, post.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", user.Id.ToString(), "posts");
 
                 }
                 else
@@ -72,11 +73,22 @@ namespace SocialMauiApp.Api.Services
                 {
                     File.Delete(_existingPhotoPath);
                 }
-                return ApiResult.Success();
+                var postDto = new PostDto
+                {
+                    Content = post.Content,
+                    PhotoUrl = post.PhotoUrl,
+                    ModifiedOn = post.ModifiedOn,
+                    PostId = post.Id,
+                    UserId = user.Id,
+                    UserName = user.Name,
+                    UserPhotoUrl = user.PhotoUrl,
+                    PostedOn = post.PostedOn
+                };
+                return ApiResult<PostDto>.Success(postDto);
             }
             catch (Exception ex)
             {
-                return ApiResult.Fail(ex.Message);
+                return ApiResult<PostDto>.Fail(ex.Message);
             }
 
         }
@@ -236,3 +248,4 @@ namespace SocialMauiApp.Api.Services
     }
 }
 
+    

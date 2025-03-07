@@ -113,7 +113,8 @@ namespace SocialMauiApp.Api.Services
             var securityKey = System.Text.Encoding.UTF8.GetBytes(secretKey);
             var symmetricKey = new SymmetricSecurityKey(securityKey);
             var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
-            var jwtSecurityToken = new JwtSecurityToken(signingCredentials: signingCredentials, issuer: _configuration.GetValue<string>("Jwt:Issuer"),
+            var jwtSecurityToken = new JwtSecurityToken(signingCredentials: signingCredentials, 
+                issuer: _configuration.GetValue<string>("Jwt:Issuer"),
                 expires: DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpireInMinutes")),
                 claims: claims);
             var jwt = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);

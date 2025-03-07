@@ -2,7 +2,7 @@ using SocialMauiApp.Services;
 
 namespace SocialMauiApp.Pages;
 
-public class InitPage : ContentPage
+public partial class InitPage : ContentPage
 {
 	public const string FirstRunKey = " first-run";
 	private readonly AuthService _authService;

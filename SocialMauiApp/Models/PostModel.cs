@@ -1,56 +1,55 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SocialMauiApp.Apis;
+using SocialMauiApp.ViewModel;
 using SocialMediaMaui.Shared.Dtos;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace SocialMauiApp.Models
 {
-    public partial class PostModel : ObservableObject
+    // Lớp PostModel kế thừa từ BasePostViewModel
+    public partial class PostModel : BasePostViewModel
     {
+        // Các thuộc tính dữ liệu của PostModel
         public Guid PostId { get; set; }
         public Guid UserId { get; set; }
         public string UserName { get; set; }
-        [ObservableProperty, NotifyPropertyChangedFor(nameof(UserPhoto))]
+
+        [ObservableProperty]
         private string? _userPhotoUrl;
         public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
 
         public string? Content { get; set; }
         public string? PhotoUrl { get; set; }
-
-
         public DateTime PostedOnDisplay { get; set; }
-
 
         public string PostTemplateContentViewName
         {
             get
             {
                 if (string.IsNullOrWhiteSpace(PhotoUrl))
-                {
                     return "WithNoImage";
-                }
                 if (string.IsNullOrWhiteSpace(Content))
-                {
                     return "ImageOnly";
-                }
                 return "WithImage";
             }
         }
-        [ObservableProperty,NotifyPropertyChangedFor(nameof(IsLikeIcon))]
+
+        [ObservableProperty]
         private bool _isLiked;
-        [ObservableProperty, NotifyPropertyChangedFor(nameof(IsBookmarkIcon))]
+        [ObservableProperty]
         private bool _isBookmarked;
 
-
         public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
-
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
-        public static PostModel FromDto(PostDto dto) =>
-            new()
+
+        // Constructor bắt buộc phải có IPostApi để truyền cho base constructor
+        public PostModel(IPostApi postApi) : base(postApi)
+        {
+        }
+
+        // Phương thức khởi tạo từ DTO, cần truyền IPostApi vào để khởi tạo PostModel
+        public static PostModel FromDto(PostDto dto, IPostApi postApi) =>
+            new PostModel(postApi)
             {
                 PostId = dto.PostId,
                 Content = dto.Content,

@@ -297,7 +297,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult",
+        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[SocialMediaMaui.Shared.Dtos.PostDto, SocialMediaMaui.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -313,7 +313,7 @@
     "ContainingType": "SocialMauiApp.Api.Endpoints.UserEndpoints\u002B\u003C\u003Ec",
     "Method": "\u003CMapUserEndpoints\u003Eb__0_2",
     "RelativePath": "api/user/bookmarked-posts",
-    "HttpMethod": "POST",
+    "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
     "Parameters": [
@@ -368,7 +368,7 @@
     "ContainingType": "SocialMauiApp.Api.Endpoints.UserEndpoints\u002B\u003C\u003Ec",
     "Method": "\u003CMapUserEndpoints\u003Eb__0_1",
     "RelativePath": "api/user/posts",
-    "HttpMethod": "POST",
+    "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
     "Parameters": [

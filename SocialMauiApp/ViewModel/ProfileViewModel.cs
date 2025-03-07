@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SocialMauiApp.ViewModel
 {
-    [QueryProperty(nameof(CroppedPhotoSource),"new-src")]
+    [QueryProperty(nameof(CroppedPhotoSource), "new-src")]
     public partial class ProfileViewModel : BasePostViewModel
     {
         private readonly AuthService _authService;
@@ -52,7 +52,7 @@ namespace SocialMauiApp.ViewModel
         {
             IsMyPostsTabSelected = true;
             _myPostsStartIndex = 0;
-            
+
             await FetchMyPostsAsync();
         }
         [RelayCommand]
@@ -60,7 +60,7 @@ namespace SocialMauiApp.ViewModel
         {
             IsMyPostsTabSelected = false;
             _bookmarkedPostsStartIndex = 0;
-           
+
             await FetchBookmarkedPostsAsync();
         }
         [RelayCommand]
@@ -69,16 +69,16 @@ namespace SocialMauiApp.ViewModel
             await MakeApiCall(async () =>
             {
                 var posts = await _userApi.GetUserPostsAsync(_myPostsStartIndex, PageSize);
-                if(posts.Length > 0)
+                if (posts.Length > 0)
                 {
-                    if(_myPostsStartIndex == 0 && MyPosts.Count > 0)
+                    if (_myPostsStartIndex == 0 && MyPosts.Count > 0)
                     {
                         MyPosts.Clear();
                     }
                     _myPostsStartIndex += posts.Length;
-                    foreach(var p in posts)
+                    foreach (var p in posts)
                     {
-                        MyPosts.Add(PostModel.FromDto(p));
+                        MyPosts.Add(PostModel.FromDto(p, PostsApi));
                     }
                 }
             });
@@ -91,14 +91,14 @@ namespace SocialMauiApp.ViewModel
                 var posts = await _userApi.GetUserBookmarkedPostsAsync(_bookmarkedPostsStartIndex, PageSize);
                 if (posts.Length > 0)
                 {
-                    if(_bookmarkedPostsStartIndex == 0 && BookmarkedPosts.Count > 0)
+                    if (_bookmarkedPostsStartIndex == 0 && BookmarkedPosts.Count > 0)
                     {
                         BookmarkedPosts.Clear();
                     }
                     _bookmarkedPostsStartIndex += posts.Length;
                     foreach (var p in posts)
                     {
-                        BookmarkedPosts.Add(PostModel.FromDto(p));
+                        BookmarkedPosts.Add(PostModel.FromDto(p, PostsApi));
                     }
                 }
             });
@@ -112,17 +112,17 @@ namespace SocialMauiApp.ViewModel
             {
                 var param = new Dictionary<string, object>
                 {
-                    [nameof(CropPhotoPage)] = selectedPhotoSource
+                    ["new-src"] = selectedPhotoSource
                 };
                 await NavigateAsync(nameof(CropPhotoPage), param);
             }
         }
         [ObservableProperty]
         private string? _croppedPhotoSource;
-       
+
         async partial void OnCroppedPhotoSourceChanged(string? oldValue, string? newValue)
         {
-            if(!string.IsNullOrWhiteSpace(newValue))
+            if (!string.IsNullOrWhiteSpace(newValue))
             {
                 await MakeApiCall(async () =>
                 {
@@ -130,7 +130,7 @@ namespace SocialMauiApp.ViewModel
                     using var fs = File.OpenRead(photoName);
                     var photoStreamPart = new StreamPart(fs, photoName);
                     var result = await _userApi.ChangePhotoAsync(photoStreamPart);
-                    if(!result.IsSuccess)
+                    if (!result.IsSuccess)
                     {
                         await ShowErrorAlertAsync(result.Error);
                         return;

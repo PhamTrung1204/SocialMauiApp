@@ -127,7 +127,7 @@
                             Text="Save"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleBookmarkCommand}" CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=SharePostCommand}" CommandParameter="{Binding .}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="2">

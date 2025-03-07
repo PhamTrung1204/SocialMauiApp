@@ -36,8 +36,9 @@ namespace SocialMauiApp.ViewModel
                     _startIndex += posts.Length;
                     foreach (var p in posts)
                     {
-                        Posts.Add(PostModel.FromDto(p));
+                        Posts.Add(PostModel.FromDto(p, PostsApi));
                     }
+
                 }
             });
         }
