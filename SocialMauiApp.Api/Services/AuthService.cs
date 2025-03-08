@@ -70,22 +70,6 @@ namespace SocialMauiApp.Api.Services
             }
 
         }
-        //public async Task<(string PhotoPath, string PhotoUrl)> SaveUserPhotoAsync(IFormFile photo)
-        //{
-        //    var targetFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads","images","users");
-        //    if (!Directory.Exists(targetFolderPath))
-        //    {
-        //        Directory.CreateDirectory(targetFolderPath);
-        //    }
-        //    var extension = Path.GetExtension(photo.FileName);
-        //    var newPhotoName = $"{Guid.NewGuid()}_{DateTime.UtcNow.Ticks}{extension}";
-        //    var fullPhotoPath = Path.Combine(targetFolderPath, newPhotoName);
-        //    using FileStream fs = File.Create(fullPhotoPath);
-        //    await photo.CopyToAsync(fs);
-        //    var domainUrl = _configuration.GetValue<string>("Domain").TrimEnd('/');
-        //    var photoUrl = $"{domainUrl}/uploads/images/users/{newPhotoName}";
-        //    return (fullPhotoPath, photoUrl);
-        //}
         public async Task<ApiResult<LoginResponseDto>> LoginAsync(LoginDto dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
@@ -103,17 +87,19 @@ namespace SocialMauiApp.Api.Services
         }
         private string GenerateJwtToken(User user)
         {
-            Claim[] claims = [
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim("UserPhotoUrl", user.PhotoUrl??""),
-                ];
+            var claims = new[]
+{
+    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+    new Claim(ClaimTypes.Name, user.Name),
+    new Claim(ClaimTypes.Email, user.Email),
+    new Claim("UserPhotoUrl", user.PhotoUrl ?? string.Empty)
+};
+
             var secretKey = _configuration.GetValue<string>("Jwt:SecretKey");
             var securityKey = System.Text.Encoding.UTF8.GetBytes(secretKey);
             var symmetricKey = new SymmetricSecurityKey(securityKey);
             var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
-            var jwtSecurityToken = new JwtSecurityToken(signingCredentials: signingCredentials, 
+            var jwtSecurityToken = new JwtSecurityToken(signingCredentials: signingCredentials,
                 issuer: _configuration.GetValue<string>("Jwt:Issuer"),
                 expires: DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpireInMinutes")),
                 claims: claims);

@@ -1,4 +1,5 @@
-﻿using SocialMauiApp.Api.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using SocialMauiApp.Api.Services;
 using SocialMediaMaui.Shared.Dtos;
 using System.Security.Claims;
 
@@ -17,18 +18,18 @@ namespace SocialMauiApp.Api.Endpoints
             .Produces<ApiResult>()
             .WithName("ChangePhoto");
 
-            userGroup.MapGet("/posts", async (int startIndex, int pageSize, UserService userService, ClaimsPrincipal principal) =>
-    Results.Ok(await userService.GetUserPostsAsync(startIndex, pageSize, principal.GetUserId())))
+            userGroup.MapGet("/posts", async ([FromQuery] int startIndex, [FromQuery] int pageSize, UserService userService, ClaimsPrincipal principal) =>
+              Results.Ok(await userService.GetUserPostsAsync(startIndex, pageSize, principal.GetUserId())))
 
-    .Produces<PostDto[]>()
-    .WithName("GetUserPosts");
+              .Produces<PostDto[]>()
+              .WithName("GetUserPosts");
 
+            userGroup.MapGet("/bookmarked-posts", async ([FromQuery] int startIndex, [FromQuery] int pageSize, UserService userService, ClaimsPrincipal principal) =>
+                Results.Ok(await userService.GetUserBookmarkedPostsAsync(startIndex, pageSize, principal.GetUserId())))
 
-            userGroup.MapGet("/bookmarked-posts", async (int startIndex, int pageSize, UserService userService, ClaimsPrincipal principal) =>
-    Results.Ok(await userService.GetUserBookmarkedPostsAsync(startIndex, pageSize, principal.GetUserId())))
- 
-    .Produces<PostDto[]>()
-    .WithName("GetBookmarkedPosts");
+                .Produces<PostDto[]>()
+                .WithName("GetBookmarkedPosts");
+
 
 
             return app;

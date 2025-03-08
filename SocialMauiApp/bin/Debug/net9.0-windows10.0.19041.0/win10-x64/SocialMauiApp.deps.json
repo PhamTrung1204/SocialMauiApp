@@ -21,6 +21,7 @@
           "Microsoft.EntityFrameworkCore.Tools": "9.0.2",
           "Microsoft.Extensions.Logging.Debug": "9.0.2",
           "Microsoft.Maui.Controls": "9.0.40",
+          "Microsoft.Windows.CsWinRT": "2.2.0",
           "Refit.HttpClientFactory": "8.0.0",
           "SQLitePCLRaw.bundle_green": "2.1.10",
           "SocialMediaMaui.Shared": "1.0.0",
@@ -41,10 +42,6 @@
           "Microsoft.Windows.SDK.NET.dll": {
             "assemblyVersion": "10.0.19041.38",
             "fileVersion": "10.0.19041.52"
-          },
-          "WinRT.Runtime.dll": {
-            "assemblyVersion": "2.1.0.0",
-            "fileVersion": "2.1.6.47881"
           }
         }
       },
@@ -1476,6 +1473,14 @@
           }
         }
       },
+      "Microsoft.Windows.CsWinRT/2.2.0": {
+        "runtime": {
+          "lib/net8.0/WinRT.Runtime.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.48161"
+          }
+        }
+      },
       "Microsoft.Windows.SDK.BuildTools/10.0.22621.756": {},
       "Microsoft.WindowsAppSDK/1.6.250108002": {
         "dependencies": {
@@ -2699,6 +2704,13 @@
       "sha512": "sha512-hqTM5628jSsQiv+HGpiq3WKBl2c8v1KZfby2J6Pr7pEPlK9waPdgEO6b8A/+/xn/yZ9ulv8HuqK71ONy2tg67A==",
       "path": "microsoft.win32.systemevents/6.0.0",
       "hashPath": "microsoft.win32.systemevents.6.0.0.nupkg.sha512"
+    },
+    "Microsoft.Windows.CsWinRT/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-R8MDVawukHrKgYCFgYaoLfbAna/FrImEFRxDK9k8ITbrXv3KLE5uN6tRqrNV83H4MFdqJ/uiA/hg1cSsXkl0vw==",
+      "path": "microsoft.windows.cswinrt/2.2.0",
+      "hashPath": "microsoft.windows.cswinrt.2.2.0.nupkg.sha512"
     },
     "Microsoft.Windows.SDK.BuildTools/10.0.22621.756": {
       "type": "package",

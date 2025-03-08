@@ -55,6 +55,7 @@ namespace SocialMauiApp.ViewModel
                 IsBusy = false;
             }
         }
+       
         protected async Task<string?> ChoosePhotoAsync()
         {
             if (MediaPicker.Default.IsCaptureSupported)

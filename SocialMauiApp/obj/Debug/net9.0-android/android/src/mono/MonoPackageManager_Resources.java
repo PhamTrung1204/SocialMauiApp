@@ -79,6 +79,7 @@ public class MonoPackageManager_Resources {
 		"Microsoft.Net.Http.Headers.dll",
 		"Microsoft.SqlServer.Server.dll",
 		"Microsoft.Win32.SystemEvents.dll",
+		"WinRT.Runtime.dll",
 		"Refit.dll",
 		"Refit.HttpClientFactory.dll",
 		"SQLitePCLRaw.batteries_v2.dll",

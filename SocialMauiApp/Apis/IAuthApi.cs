@@ -21,5 +21,5 @@ public interface IAuthApi
     Task<ApiResult> UploadPhotoAsync(Guid userId, StreamPart photo);
     [Post("/api/auth/login")]
     Task<ApiResult<LoginResponseDto>> LoginAsync(LoginDto dto);
-
 }
+    

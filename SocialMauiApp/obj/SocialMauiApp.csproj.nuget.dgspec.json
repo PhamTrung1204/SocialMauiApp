@@ -139,6 +139,10 @@
               "version": "[9.0.0, )",
               "autoReferenced": true
             },
+            "Microsoft.Windows.CsWinRT": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -250,6 +254,10 @@
               "version": "[9.0.0, )",
               "autoReferenced": true
             },
+            "Microsoft.Windows.CsWinRT": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -353,6 +361,10 @@
               "version": "[9.0.0, )",
               "autoReferenced": true
             },
+            "Microsoft.Windows.CsWinRT": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -450,6 +462,10 @@
             "Microsoft.Maui.Controls": {
               "target": "Package",
               "version": "[9.0.40, )"
+            },
+            "Microsoft.Windows.CsWinRT": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             },
             "Refit.HttpClientFactory": {
               "target": "Package",

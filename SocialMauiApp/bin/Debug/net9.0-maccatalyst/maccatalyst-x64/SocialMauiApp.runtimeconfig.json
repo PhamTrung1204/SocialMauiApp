@@ -12,6 +12,12 @@
       }
     ],
     "configProperties": {
+      "CSWINRT_ENABLE_DYNAMIC_OBJECTS_SUPPORT": true,
+      "CSWINRT_USE_EXCEPTION_RESOURCE_KEYS": false,
+      "CSWINRT_ENABLE_DEFAULT_CUSTOM_TYPE_MAPPINGS": true,
+      "CSWINRT_ENABLE_ICUSTOMPROPERTYPROVIDER_SUPPORT": true,
+      "CSWINRT_ENABLE_IREFERENCE_SUPPORT": true,
+      "CSWINRT_ENABLE_IDYNAMICINTERFACECASTABLE": true,
       "MVVMTOOLKIT_ENABLE_INOTIFYPROPERTYCHANGING_SUPPORT": true,
       "Microsoft.Extensions.DependencyInjection.VerifyOpenGenericServiceTrimmability": true,
       "System.AggressiveAttributeTrimming": true,

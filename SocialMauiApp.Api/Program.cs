@@ -57,6 +57,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.Use(async (httpContext, next) =>

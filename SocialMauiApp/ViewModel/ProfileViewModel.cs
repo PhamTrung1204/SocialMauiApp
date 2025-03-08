@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 using Refit;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
@@ -20,6 +21,7 @@ namespace SocialMauiApp.ViewModel
     {
         private readonly AuthService _authService;
         private readonly IUserApi _userApi;
+
         public ProfileViewModel(IPostApi postsApi, AuthService authService, IUserApi userApi) : base(postsApi)
         {
             User = authService.User!;
@@ -42,9 +44,9 @@ namespace SocialMauiApp.ViewModel
 
         private bool _isMyPostsTabSelected = true;
         public bool IsBookmarksTabSelected => !IsMyPostsTabSelected;
-        private int _bookmarkedPostsStartIndex = 0;
-        public ObservableCollection<PostModel> MyPosts { get; set; } = [];
         private int _myPostsStartIndex = 0;
+        public ObservableCollection<PostModel> MyPosts { get; set; } = [];
+        private int _bookmarkedPostsStartIndex = 0;
         public ObservableCollection<PostModel> BookmarkedPosts { get; set; } = [];
         private const int PageSize = 4;
         [RelayCommand]
@@ -66,44 +68,47 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task FetchMyPostsAsync()
         {
-            await MakeApiCall(async () =>
+
+            var token = "Bearer " + _authService.Token;
+            var posts = await _userApi.GetUserPostsAsync(token, _myPostsStartIndex, PageSize);
+
+            if (posts.Length > 0)
             {
-                var posts = await _userApi.GetUserPostsAsync(_myPostsStartIndex, PageSize);
-                if (posts.Length > 0)
+                if (_myPostsStartIndex == 0 && MyPosts.Count > 0)
                 {
-                    if (_myPostsStartIndex == 0 && MyPosts.Count > 0)
-                    {
-                        MyPosts.Clear();
-                    }
-                    _myPostsStartIndex += posts.Length;
-                    foreach (var p in posts)
-                    {
-                        MyPosts.Add(PostModel.FromDto(p, PostsApi));
-                    }
+                    MyPosts.Clear();
                 }
-            });
+                _myPostsStartIndex += posts.Length;
+                foreach (var p in posts)
+                {
+                    MyPosts.Add(PostModel.FromDto(p, PostsApi));
+                }
+            }
         }
+
+
         [RelayCommand]
         private async Task FetchBookmarkedPostsAsync()
         {
-            await MakeApiCall(async () =>
-            {
-                var posts = await _userApi.GetUserBookmarkedPostsAsync(_bookmarkedPostsStartIndex, PageSize);
-                if (posts.Length > 0)
-                {
-                    if (_bookmarkedPostsStartIndex == 0 && BookmarkedPosts.Count > 0)
-                    {
-                        BookmarkedPosts.Clear();
-                    }
-                    _bookmarkedPostsStartIndex += posts.Length;
-                    foreach (var p in posts)
-                    {
-                        BookmarkedPosts.Add(PostModel.FromDto(p, PostsApi));
-                    }
-                }
-            });
 
+            var token = "Bearer " + _authService.Token;
+            var posts = await _userApi.GetUserBookmarkedPostsAsync(token, _bookmarkedPostsStartIndex, PageSize);
+
+            if (posts.Length > 0)
+            {
+                if (_bookmarkedPostsStartIndex == 0 && BookmarkedPosts.Count > 0)
+                {
+                    BookmarkedPosts.Clear();
+                }
+                _bookmarkedPostsStartIndex += posts.Length;
+                foreach (var p in posts)
+                {
+                    BookmarkedPosts.Add(PostModel.FromDto(p, PostsApi));
+                }
+            }
         }
+
+
         [RelayCommand]
         private async Task ChangePhotoAsync()
         {
@@ -129,7 +134,8 @@ namespace SocialMauiApp.ViewModel
                     var photoName = Path.GetFileName(newValue);
                     using var fs = File.OpenRead(photoName);
                     var photoStreamPart = new StreamPart(fs, photoName);
-                    var result = await _userApi.ChangePhotoAsync(photoStreamPart);
+                    var token = "Bearer " + _authService.Token;
+                    var result = await _userApi.ChangePhotoAsync(token, photoStreamPart);
                     if (!result.IsSuccess)
                     {
                         await ShowErrorAlertAsync(result.Error);

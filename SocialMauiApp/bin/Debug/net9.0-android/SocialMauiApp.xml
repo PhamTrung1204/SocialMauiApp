@@ -615,22 +615,22 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.#ctor(System.Net.Http.HttpClient,Refit.IRequestBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.ChangePhotoAsync(Refit.StreamPart)">
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.ChangePhotoAsync(System.String,Refit.StreamPart)">
             <inheritdoc />
         </member>
-        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.GetUserPostsAsync(System.Int32,System.Int32)">
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.GetUserPostsAsync(System.String,System.Int32,System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.GetUserBookmarkedPostsAsync(System.Int32,System.Int32)">
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.GetUserBookmarkedPostsAsync(System.String,System.Int32,System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#ChangePhotoAsync(Refit.StreamPart)">
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#ChangePhotoAsync(System.String,Refit.StreamPart)">
             <inheritdoc />
         </member>
-        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#GetUserPostsAsync(System.Int32,System.Int32)">
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#GetUserPostsAsync(System.String,System.Int32,System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#GetUserBookmarkedPostsAsync(System.Int32,System.Int32)">
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#GetUserBookmarkedPostsAsync(System.String,System.Int32,System.Int32)">
             <inheritdoc />
         </member>
     </members>
