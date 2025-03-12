@@ -1,21 +1,28 @@
+using SocialMauiApp.Services;
+using SocialMauiApp.ViewModel;
+
 namespace SocialMauiApp.Pages;
 
 public partial class NotificationPage : ContentPage
 {
-    public NotificationPage()
+    private readonly NotificationViewModel _notificationViewModel;
+    private readonly RealtimeUpdatesService _realtimeUpdatesService;
+    public NotificationPage(NotificationViewModel notificationViewModel, RealtimeUpdatesService realtimeUpdatesService)
     {
         InitializeComponent();
-        List<NotificationModel> notification = [
-            new NotificationModel(DateTime.Now,"This person liked your post"),
-            new NotificationModel(DateTime.Now.AddDays(-1),"This person commented your post"),
-            new NotificationModel(DateTime.Now,"This person bookmarked your post"),
-            new NotificationModel(DateTime.Now.AddMinutes(50),"This person liked your post"),
-            new NotificationModel(DateTime.Now,"This person liked your post"),
-            new NotificationModel(DateTime.Now.AddMonths(-5),"This person liked your post"),
-            new NotificationModel(DateTime.Now,"This person liked your post"),
-            new NotificationModel(DateTime.Now,"This person liked your post"),
-            ];
-        collection.ItemsSource = notification;
+       BindingContext = _notificationViewModel;
+        _notificationViewModel = notificationViewModel;
+        _realtimeUpdatesService = realtimeUpdatesService;
     }
-    public record NotificationModel(DateTime On, string Text);
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _notificationViewModel.ConfigureRealtimeUpdates();
+    }
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _realtimeUpdatesService.RemoveHandlers(nameof(NotificationViewModel));
+    }
+  
 }

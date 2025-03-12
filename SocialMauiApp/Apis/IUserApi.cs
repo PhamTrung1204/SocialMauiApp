@@ -15,5 +15,7 @@ public interface IUserApi
 
     [Get("/api/user/bookmarked-posts")]
     Task<PostDto[]> GetUserBookmarkedPostsAsync([Header("Authorization")] string token, int startIndex, int pageSize);
+    [Get("/api/user/notifications")]
+    Task<NotificationDto[]> GetNotificationAsync([Header("Authorization")] string token, int startIndex, int pageSize);
 }
 

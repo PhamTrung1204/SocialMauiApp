@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using DocumentFormat.OpenXml.Drawing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Refit;
@@ -6,6 +7,7 @@ using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
 using SocialMauiApp.Services;
 using SocialMauiApp.ViewModel;
+using SocialMediaMaui.Shared;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 
@@ -48,20 +50,22 @@ namespace SocialMauiApp
             builder.Services.AddSingleton<HomeViewModel>().AddSingleton<HomePage>() ;
             builder.Services.AddTransient<DetailsViewModel>().AddTransient<PostDetailsPage>();
             builder.Services.AddTransient<ProfileViewModel>().AddTransient<ProfilePage>();
+            builder.Services.AddTransient<NotificationViewModel>().AddTransient<NotificationPage>();
+            builder.Services.AddTransient<RealtimeUpdatesService>();
             ConfigureRefit(builder.Services);
             return builder.Build();
         }
 
         private static void ConfigureRefit(IServiceCollection services)
         {
-            var baseApiUrl = "https://8tdthlzc-7022.asse.devtunnels.ms";
+            //var baseApiUrl = "https://8tdthlzc-7022.asse.devtunnels.ms";
             services.AddRefitClient<IAuthApi>()
                 .ConfigureHttpClient(SetHttpClient);
             services.AddRefitClient<IPostApi>(GetRefitSettings)
                 .ConfigureHttpClient(SetHttpClient);
             services.AddRefitClient<IUserApi>(GetRefitSettings)
                 .ConfigureHttpClient(SetHttpClient);
-            void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(baseApiUrl);
+            void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(AppConstants.ApiBaseUrl);
 
             RefitSettings GetRefitSettings(IServiceProvider sp)
             {

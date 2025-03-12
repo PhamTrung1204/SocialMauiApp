@@ -181,11 +181,11 @@ namespace SocialMauiApp.Api.Data.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsBookmarked")
-                        .HasColumnType("bit");
+                    b.Property<int>("IsBookmarked")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsLiked")
-                        .HasColumnType("bit");
+                    b.Property<int>("IsLiked")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -279,7 +279,8 @@ namespace SocialMauiApp.Api.Data.Migrations
 
                     b.HasOne("SocialMauiApp.Api.Data.Entities.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Post");
 

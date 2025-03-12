@@ -6,6 +6,8 @@ using SocialMauiApp.Api.Data;
 using SocialMauiApp.Api.Data.Entities;
 using SocialMauiApp.Api.Endpoints;
 using SocialMauiApp.Api.Services;
+using SocialMediaMaui.Shared;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +49,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 #if DEBUG
@@ -70,6 +73,7 @@ app.UseAuthentication()
 app.MapAuthEndpoints()
     .MapPostsEndpoints()
     .MapUserEndpoints();
+app.MapHub<SocialHub>(AppConstants.HubPattern);
 app.Run();
 static void AutoMigrationDb(IServiceProvider sp)
 {

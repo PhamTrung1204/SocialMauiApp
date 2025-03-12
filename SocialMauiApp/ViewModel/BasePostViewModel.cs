@@ -14,8 +14,7 @@ namespace SocialMauiApp.ViewModel
         public IPostApi PostsApi { get; }
         protected virtual bool SkipGoToDetailsCommandAction { get; set; }
 
-        [RelayCommand]
-        private async Task GoToAddPostAsync() => await NavigateAsync(nameof(AddPostPage));
+        
 
         [RelayCommand]
         private async Task GoToDetailsPageAsync(PostModel post)
@@ -44,7 +43,10 @@ namespace SocialMauiApp.ViewModel
                 }
             });
         }
-
+        protected virtual async void OnToggleBookmarkAsync(PostModel post)
+        {
+            
+        }
         [RelayCommand]
         private async Task ToggleBookmarkAsync(PostModel post)
         {
@@ -60,6 +62,7 @@ namespace SocialMauiApp.ViewModel
                     post.IsBookmarked = orginalStatus;
                     return;
                 }
+                OnToggleBookmarkAsync(post);
             });
         }
 

@@ -20,17 +20,18 @@ namespace SocialMauiApp.Api.Endpoints
 
             userGroup.MapGet("/posts", async ([FromQuery] int startIndex, [FromQuery] int pageSize, UserService userService, ClaimsPrincipal principal) =>
               Results.Ok(await userService.GetUserPostsAsync(startIndex, pageSize, principal.GetUserId())))
-
               .Produces<PostDto[]>()
               .WithName("GetUserPosts");
 
             userGroup.MapGet("/bookmarked-posts", async ([FromQuery] int startIndex, [FromQuery] int pageSize, UserService userService, ClaimsPrincipal principal) =>
                 Results.Ok(await userService.GetUserBookmarkedPostsAsync(startIndex, pageSize, principal.GetUserId())))
-
                 .Produces<PostDto[]>()
                 .WithName("GetBookmarkedPosts");
 
-
+            userGroup.MapGet("/notifications", async ([FromQuery] int startIndex, [FromQuery] int pageSize, UserService userService, ClaimsPrincipal principal) =>
+              Results.Ok(await userService.GetNotificationAsync(startIndex, pageSize, principal.GetUserId())))
+              .Produces<NotificationDto[]>()
+              .WithName("GetNotifications");
 
             return app;
         }

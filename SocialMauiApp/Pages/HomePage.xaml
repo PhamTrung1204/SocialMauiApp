@@ -46,7 +46,7 @@
                         HeightRequest="20"
                         Source="bell.png"
                         WidthRequest="20" />
-                    <Ellipse
+                    <Ellipse IsVisible="{Binding IsThereNewNotification}"
                         Fill="Black"
                         HeightRequest="10"
                         HorizontalOptions="End"

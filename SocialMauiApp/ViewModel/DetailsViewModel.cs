@@ -5,6 +5,7 @@ using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
+using SocialMediaMaui.Shared.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,13 +18,16 @@ namespace SocialMauiApp.ViewModel
     {
         private readonly AuthService _authService;
         private readonly IPostApi PostApi;
+        private readonly RealtimeUpdatesService _realtimeUpdatesService;
 
-        public DetailsViewModel(AuthService authService, IPostApi postApi)
+        public DetailsViewModel(AuthService authService, IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
             : base(postApi)
         {
             _authService = authService;
+            _realtimeUpdatesService = realtimeUpdatesService;
             PostApi = postApi;
             SkipGoToDetailsCommandAction = true;
+            ConfigureRealtimeUpdates();
         }
 
         // Make Post nullable so it can be set via QueryProperty without needing a default instance.
@@ -80,9 +84,7 @@ namespace SocialMauiApp.ViewModel
                 return;
             }
 
-            if (Post is null)
-                return;
-
+            
             await MakeApiCall(async () =>
             {
                 var dto = new SaveCommentDto
@@ -96,11 +98,11 @@ namespace SocialMauiApp.ViewModel
                     await ShowErrorAlertAsync(result.Error);
                     return;
                 }
-                var newComment = result.Data;
-                // Insert the new comment at the beginning.
-                Comments.Insert(0, newComment);
-                OnPropertyChanged(nameof(Comments));
-                // Xóa text sau khi thêm thành công
+                //var newComment = result.Data;
+                //// Insert the new comment at the beginning.
+                //Comments.Insert(0, newComment);
+                //OnPropertyChanged(nameof(Comments));
+                //// Xóa text sau khi thêm thành công
                 Comment = string.Empty;
             });
         }
@@ -136,5 +138,49 @@ namespace SocialMauiApp.ViewModel
             };
             await NavigateAsync(nameof(AddPostPage), param);
         }
+        private void OnPostChanged(PostDto post)
+        {
+            if(Post.PostId == post.PostId)
+            {
+                Post.Content = post.Content;
+                Post.PhotoUrl = post.PhotoUrl;
+            }
+           
+        }
+        private async void OnPostDeleted(Guid postId)
+        {
+            if(Post.PostId == postId)
+            {
+                //await ToastAsync("Post no longer exists");
+                await NavigateBackAsync();
+            }
+        }
+        private void OnUserPhotoChanged(UserPhotoChangedDto dto)
+        {
+            if(Post.UserId == dto.UserId)
+            {
+                Post.UserPhotoUrl = dto.PhotoUrl;
+                foreach( var comment in Comments.Where(c=> c.UserId == dto.UserId))
+                {
+                    comment.UserPhotoUrl = dto.PhotoUrl;
+                }
+            }
+        }
+        private void OnCommentAdded(CommentDto dto)
+        {
+            if(dto.PostId == Post.PostId)
+            {
+                Comments = [dto, .. Comments];
+                OnPropertyChanged(nameof(Comments));
+            }
+        }
+        public void ConfigureRealtimeUpdates()
+        {
+            _realtimeUpdatesService.AddPostChangedHandler(nameof(DetailsViewModel), OnPostChanged);
+            _realtimeUpdatesService.AddPostDeletedHandler(nameof(DetailsViewModel), OnPostDeleted);
+            _realtimeUpdatesService.AddUserPhotoChangedHandler(nameof(DetailsViewModel), OnUserPhotoChanged);
+            _realtimeUpdatesService.AddCommentAddedHandler(nameof(DetailsViewModel), OnCommentAdded);
+        }
+
     }
 }

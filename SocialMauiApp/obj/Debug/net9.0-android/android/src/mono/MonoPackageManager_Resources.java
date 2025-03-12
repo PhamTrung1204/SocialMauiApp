@@ -33,6 +33,7 @@ public class MonoPackageManager_Resources {
 		"Microsoft.AspNetCore.SignalR.Client.dll",
 		"Microsoft.AspNetCore.SignalR.Client.Core.dll",
 		"Microsoft.AspNetCore.SignalR.Common.dll",
+		"Microsoft.AspNetCore.SignalR.Core.dll",
 		"Microsoft.AspNetCore.SignalR.Protocols.Json.dll",
 		"Microsoft.AspNetCore.WebUtilities.dll",
 		"Microsoft.Bcl.AsyncInterfaces.dll",

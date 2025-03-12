@@ -61,6 +61,8 @@ C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Debug\net9.0-win
 --refs 
  C:\Users\PhamTrung\.nuget\packages\microsoft.aspnetcore.signalr.common\9.0.2\lib\net9.0\Microsoft.AspNetCore.SignalR.Common.dll
 --refs 
+ C:\Users\PhamTrung\.nuget\packages\microsoft.aspnetcore.signalr.core\1.2.0\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Core.dll
+--refs 
  C:\Users\PhamTrung\.nuget\packages\microsoft.aspnetcore.signalr.protocols.json\9.0.2\lib\net9.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
 --refs 
  C:\Users\PhamTrung\.nuget\packages\microsoft.aspnetcore.webutilities\2.3.0\lib\netstandard2.0\Microsoft.AspNetCore.WebUtilities.dll

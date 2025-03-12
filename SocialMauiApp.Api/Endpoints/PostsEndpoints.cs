@@ -51,13 +51,13 @@ namespace SocialMauiApp.Api.Endpoints
 
             postsGroup.MapPost("/{postId:guid}/toggle-like",
                 async (Guid postId, PostService postService, ClaimsPrincipal principal) =>
-                Results.Ok(await postService.ToggleLikeAsync(postId, principal.GetUserId())))
+                Results.Ok(await postService.ToggleLikeAsync(postId, principal.GetUser())))
                 .Produces<ApiResult>()
                 .WithName("ToggleLike");
 
             postsGroup.MapPost("/{postId:guid}/toggle-bookmark",
                 async (Guid postId, PostService postService, ClaimsPrincipal principal) =>
-                Results.Ok(await postService.ToggleBookmarkAsync(postId, principal.GetUserId())))
+                Results.Ok(await postService.ToggleBookmarkAsync(postId, principal.GetUser())))
                 .Produces<ApiResult>()
                 .WithName("ToggleBookmark");
 
@@ -66,7 +66,10 @@ namespace SocialMauiApp.Api.Endpoints
                 Results.Ok(await postService.DeletePostAsync(postId, principal.GetUserId())))
                 .Produces<ApiResult>()
                 .WithName("DeletePost");
-
+            postsGroup.MapGet("/{postId:guid}", async (Guid postId, PostService postService, ClaimsPrincipal principal) =>
+              Results.Ok(await postService.GetPostAsync(postId, principal.GetUserId())))
+              .Produces<PostDto>()
+              .WithName("GetPostById");
             return app;
         }
     }

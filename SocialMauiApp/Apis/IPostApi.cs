@@ -21,4 +21,6 @@ public interface IPostApi
     Task<ApiResult> ToggleBookmarkAsync(Guid postId);
     [Delete("/api/posts/{postId}")]
     Task<ApiResult> DeletePostAsync(Guid postId);
+    [Get("/api/posts/{postId}")]
+    Task<PostDto?> GetPostAsync(Guid postId);
 }

@@ -17,9 +17,10 @@ namespace SocialMauiApp.Models
         [ObservableProperty]
         private string? _userPhotoUrl;
         public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
-
-        public string? Content { get; set; }
-        public string? PhotoUrl { get; set; }
+        [ObservableProperty]
+        public string? _content;
+        [ObservableProperty]
+        public string? _photoUrl;
         public DateTime PostedOnDisplay { get; set; }
 
         public string PostTemplateContentViewName

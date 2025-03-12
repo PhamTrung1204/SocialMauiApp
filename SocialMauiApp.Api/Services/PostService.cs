@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SocialMauiApp.Api.Data;
 using SocialMauiApp.Api.Data.Entities;
 using SocialMediaMaui.Shared.Dtos;
+using SocialMediaMaui.Shared.Hubs;
 
 namespace SocialMauiApp.Api.Services
 {
@@ -11,16 +13,18 @@ namespace SocialMauiApp.Api.Services
     {
         private readonly DataContext _context;
         private readonly PhotoUploadService _photoUploadService;
-
-        public PostService(DataContext context, PhotoUploadService photoUploadService)
+        private readonly IHubContext<SocialHub,ISocialHubClient> _hubContext;
+        public PostService(DataContext context, PhotoUploadService photoUploadService, IHubContext<SocialHub, ISocialHubClient> hubContext)
         {
             _context = context;
             _photoUploadService = photoUploadService;
+            _hubContext = hubContext;
         }
         public async Task<ApiResult<PostDto>> SavePostAsync(SavePostDto dto, LoggedInUser user)
         {
             string? _existingPhotoPath = null;
             Post? post = null;
+            bool sendNotification = false; 
             if (dto.PostId == default)
             {
                 post = new Post
@@ -65,10 +69,12 @@ namespace SocialMauiApp.Api.Services
 
                 }
                 _context.Posts.Update(post);
+                sendNotification = true;
             }
             try
             {
                 await _context.SaveChangesAsync();
+                
                 if (!string.IsNullOrEmpty(_existingPhotoPath) && File.Exists(_existingPhotoPath))
                 {
                     File.Delete(_existingPhotoPath);
@@ -84,6 +90,10 @@ namespace SocialMauiApp.Api.Services
                     UserPhotoUrl = user.PhotoUrl,
                     PostedOn = post.PostedOn
                 };
+                if (sendNotification)
+                {
+                    await _hubContext.Clients.All.PostChanged(postDto);
+                }
                 return ApiResult<PostDto>.Success(postDto);
             }
             catch (Exception ex)
@@ -99,9 +109,27 @@ namespace SocialMauiApp.Api.Services
                 .ToArrayAsync();
             return posts;
         }
+        public async Task<PostDto?> GetPostAsync(Guid postId, Guid currentUserId)
+        {
+            var posts = await _context.Set<PostDto>()
+                .FromSqlInterpolated($@"EXEC GetPostById @PostId={postId}, @CurrentUserId={currentUserId}")
+                .ToArrayAsync();
+
+            if (posts.Length == 0)
+                return null;
+
+            return posts[0];
+        }
+
         public async Task<ApiResult<CommentDto>> SaveCommentAsync(SaveCommentDto dto, LoggedInUser currentUser)
         {
+            var postOwnerId = await _context.Posts.Where(p => p.Id == dto.PostId).Select(p => p.UserId).FirstOrDefaultAsync();
+            if (postOwnerId == default)
+            {
+                return ApiResult<CommentDto>.Fail("Post not found");
+            }
             Comment? comment = null;
+            bool sendNotification = false;
             if (dto.CommentId == Guid.Empty)
             {
                 comment = new Comment
@@ -112,6 +140,7 @@ namespace SocialMauiApp.Api.Services
                     AddedOn = DateTime.UtcNow
                 };
                 _context.Comments.Add(comment);
+                sendNotification = true;
             }
             else
             {
@@ -140,6 +169,12 @@ namespace SocialMauiApp.Api.Services
                     UserName = currentUser.Name,
                     UserPhotoUrl = currentUser.PhotoUrl
                 };
+                if(sendNotification)
+                {
+                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} commented on your post",DateTime.Now,dto.PostId);
+                    await SaveNotificationAsync(notificationDto);
+                    await _hubContext.Clients.All.CommentAddedToThePost(commentDto);
+                }
                 return ApiResult<CommentDto>.Success(commentDto);
             }
             catch (Exception ex)
@@ -164,30 +199,37 @@ namespace SocialMauiApp.Api.Services
                 UserPhotoUrl = c.User.PhotoUrl
             })
             .ToArrayAsync();
-        public async Task<ApiResult> ToggleLikeAsync(Guid postId, Guid currentUserId)
+        public async Task<ApiResult> ToggleLikeAsync(Guid postId, LoggedInUser currentUser)
         {
-            var postExists = await _context.Posts.AnyAsync(p => p.Id == postId);
-            if (!postExists)
+            var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p=>p.UserId).FirstOrDefaultAsync();
+            if (postOwnerId == default)
             {
                 return ApiResult.Fail("Post not found");
             }
             try
             {
-                var like = await _context.Likes.FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == currentUserId);
+                bool sendNotification = false;
+                var like = await _context.Likes.FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == currentUser.Id);
                 if (like is null)
                 {
                     like = new Likes
                     {
                         PostId = postId,
-                        UserId = currentUserId
+                        UserId = currentUser.Id
                     };
                     _context.Likes.Add(like);
+                    sendNotification = true;
                 }
                 else
                 {
                     _context.Likes.Remove(like);
                 }
                 await _context.SaveChangesAsync();
+                if (sendNotification)
+                {
+                    var notificationDto = new NotificationDto(postOwnerId,$"{currentUser.Name} liked your post", DateTime.Now, postId);
+                    await _hubContext.Clients.All.NotificationGenerated(notificationDto);
+                }
                 return ApiResult.Success();
             }
             catch (Exception ex)
@@ -195,30 +237,39 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult.Fail(ex.Message);
             }
         }
-        public async Task<ApiResult> ToggleBookmarkAsync(Guid postId, Guid currentUserId)
+        public async Task<ApiResult> ToggleBookmarkAsync(Guid postId, LoggedInUser currentUser)
         {
-            var postExists = await _context.Posts.AnyAsync(p => p.Id == postId);
-            if (!postExists)
+
+            var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p => p.UserId).FirstOrDefaultAsync();
+            if (postOwnerId == default)
             {
                 return ApiResult.Fail("Post not found");
             }
             try
             {
-                var bookmark = await _context.Bookmarks.FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == currentUserId);
+                var sendNotification = false;
+                var bookmark = await _context.Bookmarks.FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == currentUser.Id);
                 if (bookmark is null)
                 {
                     bookmark = new Bookmarks
                     {
                         PostId = postId,
-                        UserId = currentUserId
+                        UserId = currentUser.Id
                     };
                     _context.Bookmarks.Add(bookmark);
+                    sendNotification = true;
                 }
                 else
                 {
                     _context.Bookmarks.Remove(bookmark);
                 }
                 await _context.SaveChangesAsync();
+                if (sendNotification)
+                {
+                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} saved your post", DateTime.Now, postId);
+                    await SaveNotificationAsync(notificationDto);
+                    await _hubContext.Clients.All.NotificationGenerated(notificationDto);
+                }
                 return ApiResult.Success();
             }
             catch (Exception ex)
@@ -235,8 +286,10 @@ namespace SocialMauiApp.Api.Services
                     return ApiResult.Fail("Post not found");
                 if (post.UserId != currentUserId)
                     return ApiResult.Fail("You can delete your own posts only");
-                _context.Posts.Remove(post);
+                post.IsDeleted = true;
+                _context.Posts.Update(post);
                 await _context.SaveChangesAsync();
+                await _hubContext.Clients.All.PostDeleted(postId);
                 return ApiResult.Success();
             }
             catch (Exception ex)
@@ -244,7 +297,25 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult.Fail(ex.Message);
             }
         }
+        public async Task SaveNotificationAsync(NotificationDto dto)
+        {
+            try
+            {
+                var notification = new Notification
+                {
+                    ForUserId = dto.ForUserId,
+                    PostId = dto.PostId,
+                    Text = dto.Text,
+                    When = dto.When,
+                };
+                _context.Notifications.Add(notification);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
 
+            }
+        }
     }
 }
 

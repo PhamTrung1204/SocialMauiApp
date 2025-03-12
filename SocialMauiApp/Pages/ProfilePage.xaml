@@ -33,7 +33,16 @@
                     <Image
                         HorizontalOptions="Center"
                         Source="{Binding User.Photo}"
-                        VerticalOptions="Center" />
+                        VerticalOptions="Center"
+                        HeightRequest="60"
+                        WidthRequest="60">
+                        <Image.Clip>
+                            <EllipseGeometry
+         Center="30,30"
+         RadiusX="30"
+         RadiusY="30" />
+                        </Image.Clip>
+                    </Image>
                 </Border>
                 <Border
                     Margin="0,0,-50,0"
