@@ -1943,7 +1943,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -6665,7 +6665,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -11309,7 +11309,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -14039,7 +14039,7 @@
         }
       }
     },
-    "net9.0-android35.0/ios-arm64": {
+    "net9.0-android35.0/iossimulator-x64": {
       "Azure.Core/1.38.0": {
         "type": "package",
         "dependencies": {
@@ -15953,7 +15953,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -20597,7 +20597,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -25241,7 +25241,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -29887,7 +29887,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -32886,7 +32886,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -35962,7 +35962,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -37150,7 +37150,7 @@
         }
       }
     },
-    "net9.0-ios18.2/ios-arm64": {
+    "net9.0-ios18.2/iossimulator-x64": {
       "Azure.Core/1.38.0": {
         "type": "package",
         "dependencies": {
@@ -39038,7 +39038,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -42114,7 +42114,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -45193,7 +45193,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -48277,7 +48277,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -51180,7 +51180,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -53991,7 +53991,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -54915,7 +54915,7 @@
         }
       }
     },
-    "net9.0-maccatalyst18.2/ios-arm64": {
+    "net9.0-maccatalyst18.2/iossimulator-x64": {
       "Azure.Core/1.38.0": {
         "type": "package",
         "dependencies": {
@@ -56802,7 +56802,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -59610,7 +59610,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -62424,7 +62424,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -72497,7 +72497,7 @@
         }
       }
     },
-    "net9.0-windows10.0.19041/ios-arm64": {
+    "net9.0-windows10.0.19041/iossimulator-x64": {
       "Azure.Core/1.38.0": {
         "type": "package",
         "dependencies": {
@@ -84991,10 +84991,10 @@
         "microsoft.net.http.headers.nuspec"
       ]
     },
-    "Microsoft.NET.ILLink.Tasks/9.0.0": {
-      "sha512": "zAwp213evC3UkimtVXRb+Dlgc/40QG145nmZDtp2LO9zJJMfrp+i/87BnXN7tRXEA4liyzdFkjqG1HE8/RPb4A==",
+    "Microsoft.NET.ILLink.Tasks/9.0.3": {
+      "sha512": "1rqGTfubVg0qj2PsK6esyq3PIxtYJYrN3LsYUV9RrvH3anmt3fT3ozYdAZZH4U8JU/pt5pPIUk8NBSu26wtekA==",
       "type": "package",
-      "path": "microsoft.net.illink.tasks/9.0.0",
+      "path": "microsoft.net.illink.tasks/9.0.3",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -85008,7 +85008,7 @@
         "build/Microsoft.NET.ILLink.Analyzers.props",
         "build/Microsoft.NET.ILLink.Tasks.props",
         "build/Microsoft.NET.ILLink.targets",
-        "microsoft.net.illink.tasks.9.0.0.nupkg.sha512",
+        "microsoft.net.illink.tasks.9.0.3.nupkg.sha512",
         "microsoft.net.illink.tasks.nuspec",
         "tools/net472/ILLink.Tasks.dll",
         "tools/net472/ILLink.Tasks.dll.config",
@@ -91026,7 +91026,7 @@
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.2",
       "Microsoft.Extensions.Logging.Debug >= 9.0.2",
       "Microsoft.Maui.Controls >= 9.0.40",
-      "Microsoft.NET.ILLink.Tasks >= 9.0.0",
+      "Microsoft.NET.ILLink.Tasks >= 9.0.3",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
@@ -91050,7 +91050,7 @@
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.2",
       "Microsoft.Extensions.Logging.Debug >= 9.0.2",
       "Microsoft.Maui.Controls >= 9.0.40",
-      "Microsoft.NET.ILLink.Tasks >= 9.0.0",
+      "Microsoft.NET.ILLink.Tasks >= 9.0.3",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
@@ -91072,7 +91072,7 @@
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.2",
       "Microsoft.Extensions.Logging.Debug >= 9.0.2",
       "Microsoft.Maui.Controls >= 9.0.40",
-      "Microsoft.NET.ILLink.Tasks >= 9.0.0",
+      "Microsoft.NET.ILLink.Tasks >= 9.0.3",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
@@ -91179,7 +91179,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net9.0-android35.0": {
@@ -91242,7 +91242,7 @@
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[9.0.0, )",
+            "version": "[9.0.3, )",
             "autoReferenced": true
           },
           "Microsoft.Windows.CsWinRT": {
@@ -91285,12 +91285,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[9.0.2, 9.0.2]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.Android": {
             "privateAssets": "all"
@@ -91299,7 +91293,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
       },
       "net9.0-ios18.2": {
         "targetAlias": "net9.0-ios",
@@ -91361,7 +91355,7 @@
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[9.0.0, )",
+            "version": "[9.0.3, )",
             "autoReferenced": true
           },
           "Microsoft.Windows.CsWinRT": {
@@ -91396,12 +91390,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[9.0.2, 9.0.2]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.iOS": {
             "privateAssets": "all"
@@ -91410,7 +91398,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
       },
       "net9.0-maccatalyst18.2": {
         "targetAlias": "net9.0-maccatalyst",
@@ -91472,7 +91460,7 @@
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[9.0.0, )",
+            "version": "[9.0.3, )",
             "autoReferenced": true
           },
           "Microsoft.Windows.CsWinRT": {
@@ -91508,12 +91496,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[9.0.2, 9.0.2]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.MacCatalyst": {
             "privateAssets": "all"
@@ -91522,7 +91504,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
       },
       "net9.0-windows10.0.19041": {
         "targetAlias": "net9.0-windows10.0.19041.0",
@@ -91616,7 +91598,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.Windows.SDK.NET.Ref",
-            "version": "[10.0.19041.54, 10.0.19041.54]"
+            "version": "[10.0.19041.57, 10.0.19041.57]"
           }
         ],
         "frameworkReferences": {
@@ -91627,7 +91609,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
@@ -91637,7 +91619,7 @@
       "android-x64": {
         "#import": []
       },
-      "ios-arm64": {
+      "iossimulator-x64": {
         "#import": []
       },
       "maccatalyst-x64": {

@@ -3,11 +3,116 @@
   "WorkspaceRootPath": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\endpoints\\authenpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\endpoints\\authenpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\notificationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\notificationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\endpoints\\userendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\endpoints\\userendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\endpoints\\postsendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\endpoints\\postsendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}|SocialMediaMaui.Shared\\SocialMediaMaui.Shared.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmediamaui.shared\\appconstants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}|SocialMediaMaui.Shared\\SocialMediaMaui.Shared.csproj|solutionrelative:socialmediamaui.shared\\appconstants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\socialmauiapp.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\socialmauiapp.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\addpostpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\addpostpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\templates\\postwithimage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\templates\\postwithimage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\models\\postmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\models\\postmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\savepostviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\savepostviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}|SocialMediaMaui.Shared\\SocialMediaMaui.Shared.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmediamaui.shared\\dtos\\postdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}|SocialMediaMaui.Shared\\SocialMediaMaui.Shared.csproj|solutionrelative:socialmediamaui.shared\\dtos\\postdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\profilepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\profilepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\basepostviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\basepostviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\services\\postservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\services\\postservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\services\\photouploadservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\services\\photouploadservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\addpostpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\addpostpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\registerpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\registerpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\cropphotopage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\cropphotopage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\cropphotopage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\cropphotopage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\homepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\homepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\detailsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\detailsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\postdetailspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\postdetailspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\homepage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\homepage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\loginpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\loginpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\postdetailspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\postdetailspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\notificationpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -22,32 +127,27 @@
       "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\profileviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\homeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\homeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\apis\\ipostapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\apis\\ipostapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\notificationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\notificationpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\apis\\iuserapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\apis\\iuserapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\services\\postservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\services\\postservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\endpoints\\postsendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\endpoints\\postsendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\endpoints\\authenpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\endpoints\\authenpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\endpoints\\userendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\endpoints\\userendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -58,52 +158,12 @@
       "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\apis\\iauthapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\apis\\ipostapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\apis\\ipostapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\homeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\homeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\detailsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\detailsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\data\\migrations\\20250312153751_getpostbyidsp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\data\\migrations\\20250312153751_getpostbyidsp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\homepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\homepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\data\\migrations\\20250218015621_createsprogetposts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\data\\migrations\\20250218015621_createsprogetposts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\basepostviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\basepostviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\postdetailspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\postdetailspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\viewmodel\\savepostviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\viewmodel\\savepostviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\profilepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\profilepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\homepage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\homepage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\services\\realtimeupdatesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -122,20 +182,8 @@
       "RelativeMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|solutionrelative:socialmauiapp.api\\data\\migrations\\20250310033438_addpostiddeletebehavior.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\cropphotopage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\cropphotopage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\cropphotopage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\cropphotopage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\pages\\profilepage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\pages\\profilepage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp\\templates\\postwithimage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{3ACBB236-B2C7-471E-A8F9-E19F7538B3DE}|SocialMauiApp\\SocialMauiApp.csproj|solutionrelative:socialmauiapp\\templates\\postwithimage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DCC3087E-90A4-468A-A1D5-72A22EDE5F0C}|SocialMauiApp.Api\\SocialMauiApp.Api.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmauiapp.api\\data\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -148,10 +196,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250310033507_RemoveNotification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SocialMauiApp.Api\\Data\\Migrations\\20250310033507_RemoveNotification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}|SocialMediaMaui.Shared\\SocialMediaMaui.Shared.csproj|c:\\users\\phamtrung\\desktop\\fast\\socialmauiapp\\socialmediamaui.shared\\dtos\\postdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{563A0318-1EB7-49BE-BCED-CC2E1E4AC916}|SocialMediaMaui.Shared\\SocialMediaMaui.Shared.csproj|solutionrelative:socialmediamaui.shared\\dtos\\postdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -161,7 +205,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
@@ -177,228 +221,70 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Microsoft.Maui.Resizetizer.After.targets",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets",
-              "RelativeDocumentMoniker": "..\\..\\..\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets",
-              "ToolTip": "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets",
-              "RelativeToolTip": "..\\..\\..\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets",
-              "ViewState": "AgIAAHMDAAAAAAAAAAApwIQDAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
-              "WhenOpened": "2025-03-12T16:22:47.164Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "RegisterViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\RegisterViewModel.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\RegisterViewModel.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\RegisterViewModel.cs",
-              "RelativeToolTip": "SocialMauiApp\\ViewModel\\RegisterViewModel.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAzwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T16:06:49.305Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "AuthEnpoints.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\AuthEnpoints.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Endpoints\\AuthEnpoints.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\AuthEnpoints.cs",
-              "RelativeToolTip": "SocialMauiApp.Api\\Endpoints\\AuthEnpoints.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T16:06:14.135Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "IAuthApi.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IAuthApi.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\Apis\\IAuthApi.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IAuthApi.cs",
-              "RelativeToolTip": "SocialMauiApp\\Apis\\IAuthApi.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T16:05:16.338Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "MauiProgram.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\MauiProgram.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\MauiProgram.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\MauiProgram.cs",
-              "RelativeToolTip": "SocialMauiApp\\MauiProgram.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAQwDQAAABkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T15:50:55.358Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "IPostApi.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IPostApi.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\Apis\\IPostApi.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IPostApi.cs",
-              "RelativeToolTip": "SocialMauiApp\\Apis\\IPostApi.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAAwBgAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T15:45:24.094Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "PostsEndpoints.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\PostsEndpoints.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Endpoints\\PostsEndpoints.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\PostsEndpoints.cs",
-              "RelativeToolTip": "SocialMauiApp.Api\\Endpoints\\PostsEndpoints.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAQwEcAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T15:42:30.885Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "20250218015621_CreateSProGetPosts.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250218015621_CreateSProGetPosts.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\Migrations\\20250218015621_CreateSProGetPosts.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250218015621_CreateSProGetPosts.cs",
-              "RelativeToolTip": "SocialMauiApp.Api\\Data\\Migrations\\20250218015621_CreateSProGetPosts.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC8AAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T15:38:27.415Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "20250312153751_GetPostByIdSP.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250312153751_GetPostByIdSP.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\Migrations\\20250312153751_GetPostByIdSP.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250312153751_GetPostByIdSP.cs",
-              "RelativeToolTip": "SocialMauiApp.Api\\Data\\Migrations\\20250312153751_GetPostByIdSP.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAQwCIAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T15:37:51.999Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "NotificationPage.xaml",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\NotificationPage.xaml",
-              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\NotificationPage.xaml",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\NotificationPage.xaml",
-              "RelativeToolTip": "SocialMauiApp\\Pages\\NotificationPage.xaml",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-12T15:19:09.958Z",
+              "DocumentIndex": 6,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\appsettings.json",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\appsettings.json",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\appsettings.json",
+              "RelativeToolTip": "SocialMauiApp.Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-14T02:41:35.649Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "NotificationViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\NotificationViewModel.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\NotificationViewModel.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\NotificationViewModel.cs",
-              "RelativeToolTip": "SocialMauiApp\\ViewModel\\NotificationViewModel.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAhwCEAAAApAAAAAAAAAA==",
+              "Title": "AppConstants.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMediaMaui.Shared\\AppConstants.cs",
+              "RelativeDocumentMoniker": "SocialMediaMaui.Shared\\AppConstants.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMediaMaui.Shared\\AppConstants.cs",
+              "RelativeToolTip": "SocialMediaMaui.Shared\\AppConstants.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAoAAABRAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T15:01:20.938Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "NotificationPage.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\NotificationPage.xaml.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\NotificationPage.xaml.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\NotificationPage.xaml.cs",
-              "RelativeToolTip": "SocialMauiApp\\Pages\\NotificationPage.xaml.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAowBoAAAACAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T15:00:41.527Z",
+              "WhenOpened": "2025-03-14T02:32:42.075Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "IUserApi.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IUserApi.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\Apis\\IUserApi.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IUserApi.cs",
-              "RelativeToolTip": "SocialMauiApp\\Apis\\IUserApi.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA0AAAAUAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Program.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Program.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Program.cs",
+              "RelativeToolTip": "SocialMauiApp.Api\\Program.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T14:58:30.197Z",
+              "WhenOpened": "2025-03-14T02:24:44.666Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "UserEndpoints.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\UserEndpoints.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Endpoints\\UserEndpoints.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\UserEndpoints.cs",
-              "RelativeToolTip": "SocialMauiApp.Api\\Endpoints\\UserEndpoints.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBoAAAB3AAAAAAAAAA==",
+              "DocumentIndex": 15,
+              "Title": "PostService.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\PostService.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Services\\PostService.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\PostService.cs",
+              "RelativeToolTip": "SocialMauiApp.Api\\Services\\PostService.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAgwJMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T14:57:34.956Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T04:04:44.783Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Services\\UserService.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\UserService.cs",
-              "RelativeToolTip": "SocialMauiApp.Api\\Services\\UserService.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAxwDQAAAByAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T14:50:13.319Z",
-              "EditorCaption": ""
+              "DocumentIndex": 9,
+              "Title": "PostWithImage.xaml",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Templates\\PostWithImage.xaml",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Templates\\PostWithImage.xaml",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Templates\\PostWithImage.xaml",
+              "RelativeToolTip": "SocialMauiApp\\Templates\\PostWithImage.xaml",
+              "ViewState": "AgIAADMAAAAAAAAAAAAAAEcAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-10T04:09:39.532Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "SavePostViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\SavePostViewModel.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\SavePostViewModel.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\SavePostViewModel.cs",
-              "RelativeToolTip": "SocialMauiApp\\ViewModel\\SavePostViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T14:41:28.684Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "BasePostViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\BasePostViewModel.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\BasePostViewModel.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\BasePostViewModel.cs",
-              "RelativeToolTip": "SocialMauiApp\\ViewModel\\BasePostViewModel.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAAwBMAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T14:30:51.346Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 13,
               "Title": "ProfilePage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\ProfilePage.xaml.cs",
               "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\ProfilePage.xaml.cs",
@@ -406,34 +292,245 @@
               "RelativeToolTip": "SocialMauiApp\\Pages\\ProfilePage.xaml.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABgAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T14:05:34.667Z",
+              "WhenOpened": "2025-03-12T14:05:34.667Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MauiProgram.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\MauiProgram.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\MauiProgram.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\MauiProgram.cs",
+              "RelativeToolTip": "SocialMauiApp\\MauiProgram.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAQwEMAAABmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T15:50:55.358Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PostsEndpoints.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\PostsEndpoints.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Endpoints\\PostsEndpoints.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\PostsEndpoints.cs",
+              "RelativeToolTip": "SocialMauiApp.Api\\Endpoints\\PostsEndpoints.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAADMAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T15:42:30.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserEndpoints.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\UserEndpoints.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Endpoints\\UserEndpoints.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\UserEndpoints.cs",
+              "RelativeToolTip": "SocialMauiApp.Api\\Endpoints\\UserEndpoints.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAB3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T14:57:34.956Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthEnpoints.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\AuthEnpoints.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Endpoints\\AuthEnpoints.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Endpoints\\AuthEnpoints.cs",
+              "RelativeToolTip": "SocialMauiApp.Api\\Endpoints\\AuthEnpoints.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T16:06:14.135Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "PostModel.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Models\\PostModel.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Models\\PostModel.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Models\\PostModel.cs",
+              "RelativeToolTip": "SocialMauiApp\\Models\\PostModel.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwEEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-13T03:57:56.8Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AddPostPage.xaml",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\AddPostPage.xaml",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\AddPostPage.xaml",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\AddPostPage.xaml",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\AddPostPage.xaml",
+              "ViewState": "AgIAADwAAAAAAAAAAAASwFEAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-13T03:53:19.964Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SocialMauiApp.Api.http",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\SocialMauiApp.Api.http",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\SocialMauiApp.Api.http",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\SocialMauiApp.Api.http",
+              "RelativeToolTip": "SocialMauiApp.Api\\SocialMauiApp.Api.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-03-14T02:24:34.46Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "SavePostViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\SavePostViewModel.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\SavePostViewModel.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\SavePostViewModel.cs",
+              "RelativeToolTip": "SocialMauiApp\\ViewModel\\SavePostViewModel.cs",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAiwL8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T14:41:28.684Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "PostDto.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMediaMaui.Shared\\Dtos\\PostDto.cs",
+              "RelativeDocumentMoniker": "SocialMediaMaui.Shared\\Dtos\\PostDto.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMediaMaui.Shared\\Dtos\\PostDto.cs",
+              "RelativeToolTip": "SocialMediaMaui.Shared\\Dtos\\PostDto.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAqwAgAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-09T15:39:54.547Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "RegisterViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\RegisterViewModel.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\RegisterViewModel.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\RegisterViewModel.cs",
+              "RelativeToolTip": "SocialMauiApp\\ViewModel\\RegisterViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA0AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T16:06:49.305Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "BasePostViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\BasePostViewModel.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\BasePostViewModel.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\BasePostViewModel.cs",
+              "RelativeToolTip": "SocialMauiApp\\ViewModel\\BasePostViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAArwBMAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T14:30:51.346Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "PhotoUploadService.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\PhotoUploadService.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Services\\PhotoUploadService.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\PhotoUploadService.cs",
+              "RelativeToolTip": "SocialMauiApp.Api\\Services\\PhotoUploadService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T01:16:11.419Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 22,
-              "Title": "PostDetailsPage.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\PostDetailsPage.xaml.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\PostDetailsPage.xaml.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\PostDetailsPage.xaml.cs",
-              "RelativeToolTip": "SocialMauiApp\\Pages\\PostDetailsPage.xaml.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAxwB0AAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T14:05:19.556Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
               "Title": "HomePage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\HomePage.xaml.cs",
               "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\HomePage.xaml.cs",
               "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\HomePage.xaml.cs",
               "RelativeToolTip": "SocialMauiApp\\Pages\\HomePage.xaml.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAmwCsAAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAABQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T13:58:59.611Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T13:58:59.611Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "AddPostPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\AddPostPage.xaml.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\AddPostPage.xaml.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\AddPostPage.xaml.cs",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\AddPostPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-13T04:08:02.062Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "CropPhotoPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\CropPhotoPage.xaml.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\CropPhotoPage.xaml.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\CropPhotoPage.xaml.cs",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\CropPhotoPage.xaml.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAcwEUAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-10T04:22:20.36Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "RegisterPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\RegisterPage.xaml.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\RegisterPage.xaml.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\RegisterPage.xaml.cs",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\RegisterPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T00:44:15.516Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "CropPhotoPage.xaml",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\CropPhotoPage.xaml",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\CropPhotoPage.xaml",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\CropPhotoPage.xaml",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\CropPhotoPage.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAiwAoAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-10T04:22:01.777Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "DetailsViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\DetailsViewModel.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\DetailsViewModel.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\DetailsViewModel.cs",
+              "RelativeToolTip": "SocialMauiApp\\ViewModel\\DetailsViewModel.cs",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAwwLEAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T13:13:18.263Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "PostDetailsPage.xaml",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\PostDetailsPage.xaml",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\PostDetailsPage.xaml",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\PostDetailsPage.xaml",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\PostDetailsPage.xaml",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAA8AAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-13T03:19:50.746Z"
             },
             {
               "$type": "Document",
@@ -443,14 +540,157 @@
               "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\HomePage.xaml",
               "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\HomePage.xaml",
               "RelativeToolTip": "SocialMauiApp\\Pages\\HomePage.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAAAkAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-12T13:58:57.736Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T13:58:57.736Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "IAuthApi.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IAuthApi.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Apis\\IAuthApi.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IAuthApi.cs",
+              "RelativeToolTip": "SocialMauiApp\\Apis\\IAuthApi.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T16:05:16.338Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "Microsoft.Maui.Resizetizer.After.targets",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets",
+              "ToolTip": "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets",
+              "RelativeToolTip": "..\\..\\..\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\buildTransitive\\Microsoft.Maui.Resizetizer.After.targets",
+              "ViewState": "AgIAAHMDAAAAAAAAAAApwIADAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-03-12T16:22:47.164Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 26,
+              "Title": "LoginPage.xaml",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\LoginPage.xaml",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\LoginPage.xaml",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\LoginPage.xaml",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\LoginPage.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-13T03:51:26.288Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "IPostApi.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IPostApi.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Apis\\IPostApi.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IPostApi.cs",
+              "RelativeToolTip": "SocialMauiApp\\Apis\\IPostApi.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAcwBQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T15:45:24.094Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "20250218015621_CreateSProGetPosts.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250218015621_CreateSProGetPosts.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\Migrations\\20250218015621_CreateSProGetPosts.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250218015621_CreateSProGetPosts.cs",
+              "RelativeToolTip": "SocialMauiApp.Api\\Data\\Migrations\\20250218015621_CreateSProGetPosts.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T15:38:27.415Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "20250312153751_GetPostByIdSP.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250312153751_GetPostByIdSP.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\Migrations\\20250312153751_GetPostByIdSP.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250312153751_GetPostByIdSP.cs",
+              "RelativeToolTip": "SocialMauiApp.Api\\Data\\Migrations\\20250312153751_GetPostByIdSP.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwCIAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T15:37:51.999Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "NotificationPage.xaml",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\NotificationPage.xaml",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\NotificationPage.xaml",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\NotificationPage.xaml",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\NotificationPage.xaml",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-12T15:19:09.958Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "NotificationViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\NotificationViewModel.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\NotificationViewModel.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\NotificationViewModel.cs",
+              "RelativeToolTip": "SocialMauiApp\\ViewModel\\NotificationViewModel.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAADsAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T15:01:20.938Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "NotificationPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\NotificationPage.xaml.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\NotificationPage.xaml.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\NotificationPage.xaml.cs",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\NotificationPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T15:00:41.527Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "IUserApi.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IUserApi.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Apis\\IUserApi.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Apis\\IUserApi.cs",
+              "RelativeToolTip": "SocialMauiApp\\Apis\\IUserApi.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA0AAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T14:58:30.197Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\UserService.cs",
+              "RelativeToolTip": "SocialMauiApp.Api\\Services\\UserService.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwDQAAAByAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T14:50:13.319Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "PostDetailsPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\PostDetailsPage.xaml.cs",
+              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\PostDetailsPage.xaml.cs",
+              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\PostDetailsPage.xaml.cs",
+              "RelativeToolTip": "SocialMauiApp\\Pages\\PostDetailsPage.xaml.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAuwBIAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T14:05:19.556Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
               "Title": "RealtimeUpdatesService.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Services\\RealtimeUpdatesService.cs",
               "RelativeDocumentMoniker": "SocialMauiApp\\Services\\RealtimeUpdatesService.cs",
@@ -458,12 +698,11 @@
               "RelativeToolTip": "SocialMauiApp\\Services\\RealtimeUpdatesService.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAvwBkAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T13:40:21.111Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T13:40:21.111Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 36,
               "Title": "LoginViewModel.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\LoginViewModel.cs",
               "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\LoginViewModel.cs",
@@ -471,63 +710,23 @@
               "RelativeToolTip": "SocialMauiApp\\ViewModel\\LoginViewModel.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAxwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T13:26:33.781Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T13:26:33.781Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 30,
               "Title": "ProfileViewModel.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\ProfileViewModel.cs",
               "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\ProfileViewModel.cs",
               "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\ProfileViewModel.cs",
               "RelativeToolTip": "SocialMauiApp\\ViewModel\\ProfileViewModel.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAASwEsAAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAAL8AAAAAAAAAAAAqwEsAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T13:14:31.53Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T13:14:31.53Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "DetailsViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\DetailsViewModel.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\DetailsViewModel.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\DetailsViewModel.cs",
-              "RelativeToolTip": "SocialMauiApp\\ViewModel\\DetailsViewModel.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAzwE4AAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T13:13:18.263Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 31,
-              "Title": "CropPhotoPage.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\CropPhotoPage.xaml.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\CropPhotoPage.xaml.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\CropPhotoPage.xaml.cs",
-              "RelativeToolTip": "SocialMauiApp\\Pages\\CropPhotoPage.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T04:22:20.36Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 30,
-              "Title": "CropPhotoPage.xaml",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\CropPhotoPage.xaml",
-              "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\CropPhotoPage.xaml",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\CropPhotoPage.xaml",
-              "RelativeToolTip": "SocialMauiApp\\Pages\\CropPhotoPage.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAiwBsAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-10T04:22:01.777Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 45,
               "Title": "ProfilePage.xaml",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Pages\\ProfilePage.xaml",
               "RelativeDocumentMoniker": "SocialMauiApp\\Pages\\ProfilePage.xaml",
@@ -539,45 +738,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
-              "Title": "PostWithImage.xaml",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Templates\\PostWithImage.xaml",
-              "RelativeDocumentMoniker": "SocialMauiApp\\Templates\\PostWithImage.xaml",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\Templates\\PostWithImage.xaml",
-              "RelativeToolTip": "SocialMauiApp\\Templates\\PostWithImage.xaml",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACMAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-10T04:09:39.532Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 31,
               "Title": "HomeViewModel.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\HomeViewModel.cs",
               "RelativeDocumentMoniker": "SocialMauiApp\\ViewModel\\HomeViewModel.cs",
               "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\ViewModel\\HomeViewModel.cs",
               "RelativeToolTip": "SocialMauiApp\\ViewModel\\HomeViewModel.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAAwGkAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAswE4AAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T04:08:23.033Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T04:08:23.033Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "PostService.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\PostService.cs",
-              "RelativeDocumentMoniker": "SocialMauiApp.Api\\Services\\PostService.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Services\\PostService.cs",
-              "RelativeToolTip": "SocialMauiApp.Api\\Services\\PostService.cs",
-              "ViewState": "AgIAAHsAAAAAAAAAAAA7wHcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T04:04:44.783Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 47,
               "Title": "20250217104712_Initial.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250217104712_Initial.cs",
               "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\Migrations\\20250217104712_Initial.cs",
@@ -589,7 +762,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 42,
               "Title": "DataContextModelSnapshot.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\DataContextModelSnapshot.cs",
               "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\Migrations\\DataContextModelSnapshot.cs",
@@ -597,12 +770,11 @@
               "RelativeToolTip": "SocialMauiApp.Api\\Data\\Migrations\\DataContextModelSnapshot.cs",
               "ViewState": "AgIAAAwBAAAAAAAAAAAuwCEBAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T03:37:22.802Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T03:37:22.802Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 43,
               "Title": "20250310033609_RemoveNotification.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250310033609_RemoveNotification.cs",
               "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\Migrations\\20250310033609_RemoveNotification.cs",
@@ -610,12 +782,11 @@
               "RelativeToolTip": "SocialMauiApp.Api\\Data\\Migrations\\20250310033609_RemoveNotification.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAABXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T03:36:09.904Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T03:36:09.904Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 48,
               "Title": "20250310033507_RemoveNotification.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250310033507_RemoveNotification.cs",
               "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\Migrations\\20250310033507_RemoveNotification.cs",
@@ -627,7 +798,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 44,
               "Title": "20250310033438_AddPostIdDeleteBehavior.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\Migrations\\20250310033438_AddPostIdDeleteBehavior.cs",
               "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\Migrations\\20250310033438_AddPostIdDeleteBehavior.cs",
@@ -635,24 +806,11 @@
               "RelativeToolTip": "SocialMauiApp.Api\\Data\\Migrations\\20250310033438_AddPostIdDeleteBehavior.cs",
               "ViewState": "AgIAAJIAAAAAAAAAAAAuwK8AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T03:34:38.116Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T03:34:38.116Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
-              "Title": "PostDto.cs",
-              "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMediaMaui.Shared\\Dtos\\PostDto.cs",
-              "RelativeDocumentMoniker": "SocialMediaMaui.Shared\\Dtos\\PostDto.cs",
-              "ToolTip": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMediaMaui.Shared\\Dtos\\PostDto.cs",
-              "RelativeToolTip": "SocialMediaMaui.Shared\\Dtos\\PostDto.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAA3wBoAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-09T15:39:54.547Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 46,
               "Title": "DataContext.cs",
               "DocumentMoniker": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\Data\\DataContext.cs",
               "RelativeDocumentMoniker": "SocialMauiApp.Api\\Data\\DataContext.cs",

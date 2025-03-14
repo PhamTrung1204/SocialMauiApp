@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
     xmlns:models="clr-namespace:SocialMauiApp.Models"
     xmlns:templates="clr-namespace:SocialMauiApp.Templates"
@@ -12,7 +13,10 @@
     BackgroundColor="{StaticResource Gray100}"
     Shell.PresentationMode="ModalAnimated">
 
-    <Grid RowDefinitions="Auto,*,Auto">
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Primary}" StatusBarStyle="LightContent"/>
+    </ContentPage.Behaviors>
+    <Grid RowDefinitions="Auto,*,Auto" Margin="0,-10,0,0">
         <!--  Header  -->
         <Grid
             Grid.Row="0"

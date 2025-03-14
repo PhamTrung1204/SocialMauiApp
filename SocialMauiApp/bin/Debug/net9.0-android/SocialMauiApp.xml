@@ -7,6 +7,9 @@
         <member name="T:SocialMauiApp.Models.PostModel">
             <inheritdoc/>
         </member>
+        <member name="P:SocialMauiApp.Models.PostModel.UserName">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._userName"/>
+        </member>
         <member name="P:SocialMauiApp.Models.PostModel.UserPhotoUrl">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._userPhotoUrl"/>
         </member>
@@ -283,14 +286,14 @@
             <inheritdoc/>
             <inheritdoc/>
         </member>
+        <member name="P:SocialMauiApp.ViewModel.SavePostViewModel.Post">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.SavePostViewModel._post"/>
+        </member>
         <member name="P:SocialMauiApp.ViewModel.SavePostViewModel.Content">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.SavePostViewModel._content"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.SavePostViewModel.PhotoPath">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.SavePostViewModel._photoPath"/>
-        </member>
-        <member name="P:SocialMauiApp.ViewModel.SavePostViewModel.Post">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.SavePostViewModel._post"/>
         </member>
         <member name="M:SocialMauiApp.ViewModel.SavePostViewModel.OnPostChanged(SocialMauiApp.Models.PostModel)">
             <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.SavePostViewModel.Post"/> just changed.</summary>
@@ -447,6 +450,9 @@
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UserName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UserName" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UserPhotoUrl">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UserPhotoUrl" generated properties.</summary>
         </member>
@@ -512,6 +518,9 @@
             A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UserName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UserName" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UserPhotoUrl">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UserPhotoUrl" generated properties.</summary>

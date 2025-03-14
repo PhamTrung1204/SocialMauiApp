@@ -6,49 +6,48 @@ using System;
 
 namespace SocialMauiApp.Models
 {
-    // Lớp PostModel kế thừa từ BasePostViewModel
     public partial class PostModel : BasePostViewModel
     {
-        // Các thuộc tính dữ liệu của PostModel
         public Guid PostId { get; set; }
         public Guid UserId { get; set; }
-        public string UserName { get; set; }
+
+        // Khi thay đổi, UI sẽ tự động nhận thông báo nhờ [ObservableProperty]
+        [ObservableProperty]
+        private string _userName = string.Empty;
 
         [ObservableProperty]
         private string? _userPhotoUrl;
+
+        // Computed property dùng để hiển thị ảnh đại diện (mặc định nếu UserPhotoUrl rỗng)
         public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
+
         [ObservableProperty]
-        public string? _content;
+        private string? _content;
+
         [ObservableProperty]
-        public string? _photoUrl;
+        private string? _photoUrl;
+
         public DateTime PostedOnDisplay { get; set; }
 
-        public string PostTemplateContentViewName
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(PhotoUrl))
-                    return "WithNoImage";
-                if (string.IsNullOrWhiteSpace(Content))
-                    return "ImageOnly";
-                return "WithImage";
-            }
-        }
+        public string PostTemplateContentViewName =>
+            string.IsNullOrWhiteSpace(PhotoUrl) ? "WithNoImage" :
+            string.IsNullOrWhiteSpace(Content) ? "ImageOnly" : "WithImage";
 
         [ObservableProperty]
         private bool _isLiked;
+
         [ObservableProperty]
         private bool _isBookmarked;
 
         public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
 
-        // Constructor bắt buộc phải có IPostApi để truyền cho base constructor
+        // Constructor bắt buộc có IPostApi để khởi tạo đối tượng
         public PostModel(IPostApi postApi) : base(postApi)
         {
         }
 
-        // Phương thức khởi tạo từ DTO, cần truyền IPostApi vào để khởi tạo PostModel
+        // Phương thức khởi tạo từ DTO, đảm bảo mapping đầy đủ các property
         public static PostModel FromDto(PostDto dto, IPostApi postApi) =>
             new PostModel(postApi)
             {

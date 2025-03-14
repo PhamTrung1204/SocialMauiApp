@@ -67,10 +67,11 @@ public partial class CropPhotoPage : ContentPage, IQueryAttributable
 
     private void ImageEditor_ImageLoaded(object? sender, EventArgs e)
     {
-        // Khi ảnh load xong, thực hiện crop
+        Debug.WriteLine("Image loaded successfully");
         imageEditor.Crop(ImageCropType.Circle);
         imageEditor.ImageLoaded -= ImageEditor_ImageLoaded;
     }
+
 
     private async void Cancel_Clicked(object? sender, EventArgs e)
     {

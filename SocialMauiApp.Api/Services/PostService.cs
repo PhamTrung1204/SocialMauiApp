@@ -144,7 +144,8 @@ namespace SocialMauiApp.Api.Services
             }
             else
             {
-                comment = await _context.Comments.FindAsync(currentUser.Id);
+                comment = await _context.Comments.FindAsync(dto.CommentId); // comment = await _context.Comments.FindAsync(currentUser.Id);
+
                 if (comment is null)
                 {
                     return ApiResult<CommentDto>.Fail("Comment not found");

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "O0+dgesPFFA=",
+  "dgSpecHash": "c2fVoPGFcAQ=",
   "success": true,
   "projectFilePath": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\SocialMauiApp.csproj",
   "expectedPackageFiles": [
@@ -99,7 +99,7 @@
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.maui.graphics.win2d.winui.desktop\\9.0.40\\microsoft.maui.graphics.win2d.winui.desktop.9.0.40.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.40\\microsoft.maui.resizetizer.9.0.40.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.net.http.headers\\2.3.0\\microsoft.net.http.headers.2.3.0.nupkg.sha512",
-    "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.0\\microsoft.net.illink.tasks.9.0.0.nupkg.sha512",
+    "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.3\\microsoft.net.illink.tasks.9.0.3.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
@@ -280,10 +280,7 @@
     "C:\\Users\\PhamTrung\\.nuget\\packages\\xamarin.kotlinx.coroutines.core.jvm\\1.9.0.2\\xamarin.kotlinx.coroutines.core.jvm.1.9.0.2.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\xamarin.kotlinx.serialization.core\\1.7.3.2\\xamarin.kotlinx.serialization.core.1.7.3.2.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\xamarin.kotlinx.serialization.core.jvm\\1.7.3.2\\xamarin.kotlinx.serialization.core.jvm.1.7.3.2.nupkg.sha512",
-    "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.2\\microsoft.netcore.app.ref.9.0.2.nupkg.sha512",
-    "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.2\\microsoft.netcore.app.ref.9.0.2.nupkg.sha512",
-    "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.2\\microsoft.netcore.app.ref.9.0.2.nupkg.sha512",
-    "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.54\\microsoft.windows.sdk.net.ref.10.0.19041.54.nupkg.sha512"
+    "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
   ],
   "logs": []
 }

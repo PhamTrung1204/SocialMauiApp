@@ -32,17 +32,21 @@
           "Microsoft.VisualStudio.DesignTools.MobileTapContracts": "17.0.0.0",
           "Microsoft.VisualStudio.DesignTools.TapContract": "17.0.0.0",
           "Microsoft.Web.WebView2.Core.Projection": "1.0.2792.45",
-          "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.19041.54"
+          "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.19041.57"
         },
         "runtime": {
           "SocialMauiApp.dll": {}
         }
       },
-      "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.19041.54": {
+      "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.19041.57": {
         "runtime": {
           "Microsoft.Windows.SDK.NET.dll": {
             "assemblyVersion": "10.0.19041.38",
-            "fileVersion": "10.0.19041.52"
+            "fileVersion": "10.0.19041.55"
+          },
+          "WinRT.Runtime.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.48161"
           }
         }
       },
@@ -1492,14 +1496,7 @@
           }
         }
       },
-      "Microsoft.Windows.CsWinRT/2.2.0": {
-        "runtime": {
-          "lib/net8.0/WinRT.Runtime.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.48161"
-          }
-        }
-      },
+      "Microsoft.Windows.CsWinRT/2.2.0": {},
       "Microsoft.Windows.SDK.BuildTools/10.0.22621.756": {},
       "Microsoft.WindowsAppSDK/1.6.250108002": {
         "dependencies": {
@@ -1823,14 +1820,7 @@
           }
         }
       },
-      "System.Formats.Asn1/9.0.2": {
-        "runtime": {
-          "lib/net9.0/System.Formats.Asn1.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.225.6610"
-          }
-        }
-      },
+      "System.Formats.Asn1/9.0.2": {},
       "System.IdentityModel.Tokens.Jwt/6.35.0": {
         "dependencies": {
           "Microsoft.IdentityModel.JsonWebTokens": "6.35.0",
@@ -1955,22 +1945,8 @@
         }
       },
       "System.Text.Encodings.Web/8.0.0": {},
-      "System.Text.Json/9.0.2": {
-        "runtime": {
-          "lib/net9.0/System.Text.Json.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.225.6610"
-          }
-        }
-      },
-      "System.Threading.Channels/9.0.2": {
-        "runtime": {
-          "lib/net9.0/System.Threading.Channels.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.225.6610"
-          }
-        }
-      },
+      "System.Text.Json/9.0.2": {},
+      "System.Threading.Channels/9.0.2": {},
       "System.Threading.Tasks.Extensions/4.6.0": {},
       "System.Windows.Extensions/6.0.0": {
         "dependencies": {
@@ -1989,7 +1965,7 @@
         },
         "runtime": {
           "SocialMediaMaui.Shared.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -1998,7 +1974,7 @@
         "runtime": {
           "Microsoft.Maui.Controls.HotReload.Forms.dll": {
             "assemblyVersion": "17.0.0.0",
-            "fileVersion": "17.12.40308.65294"
+            "fileVersion": "17.13.39978.13290"
           }
         }
       },
@@ -2006,7 +1982,7 @@
         "runtime": {
           "Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll": {
             "assemblyVersion": "17.0.0.0",
-            "fileVersion": "17.12.40308.65294"
+            "fileVersion": "17.13.39978.13290"
           }
         }
       },
@@ -2014,7 +1990,7 @@
         "runtime": {
           "Microsoft.VisualStudio.DesignTools.TapContract.dll": {
             "assemblyVersion": "17.0.0.0",
-            "fileVersion": "17.12.40308.65294"
+            "fileVersion": "17.13.39978.13290"
           }
         }
       },
@@ -2034,7 +2010,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.19041.54": {
+    "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.19041.57": {
       "type": "runtimepack",
       "serviceable": false,
       "sha512": ""

@@ -69,7 +69,7 @@ namespace SocialMauiApp.ViewModel
         }
         public void ConfigureRealtimeUpdates()
         {
-            _realtimeUpdatesService.AddNotificationGeneratedHandler(nameof(HomeViewModel), OnNotificationGenerated);
+            _realtimeUpdatesService.AddNotificationGeneratedHandler(nameof(NotificationViewModel), OnNotificationGenerated);
         }
         [RelayCommand]
         private async Task OpenPostAsync(Guid? postId)

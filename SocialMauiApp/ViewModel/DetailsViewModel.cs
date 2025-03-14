@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DocumentFormat.OpenXml.Spreadsheet;
+
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
 using SocialMauiApp.Services;
@@ -123,7 +124,7 @@ namespace SocialMauiApp.ViewModel
                         await ShowErrorAlertAsync(result.Error);
                         return;
                     }
-                    await ToastAsync("Post deleted");
+                    await Shell.Current.Dispatcher.DispatchAsync(()=>ToastAsync("Post deleted"));
                     await NavigateAsync("..");
                 });
             }

@@ -10,123 +10,106 @@
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     Title="Create Post"
     Padding="15"
-    x:DataType="vm:SavePostViewModel"
     Shell.BackgroundColor="{StaticResource Primary}"
     Shell.TitleColor="White">
+
+    <!-- Giả sử BindingContext của trang đã được thiết lập là SavePostViewModel (qua DI hoặc code-behind) -->
     <ScrollView>
-        <Grid RowDefinitions="Auto, *,Auto,Auto" RowSpacing="5">
-            <Grid
-                Grid.Row="0"
-                x:DataType="models:PostModel"
-                ColumnDefinitions="Auto,Auto"
-                ColumnSpacing="5">
+        <!-- Container hiển thị thông tin bài đăng: BindingContext được đặt là Post (models:PostModel) -->
+        <Grid RowDefinitions="Auto, *, Auto, Auto" RowSpacing="5"
+          BindingContext="{Binding Post}" 
+          x:DataType="models:PostModel">
 
-                <Border
-                    Grid.Column="0"
-                    HeightRequest="40"
-                    StrokeShape="RoundRectangle 20"
-                    WidthRequest="40">
+            <!-- Phần header: Hiển thị ảnh đại diện và tên người dùng -->
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="5">
+                <Border Grid.Column="0" HeightRequest="40" WidthRequest="40">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
                     <Image
-                        Aspect="AspectFill"
-                        HeightRequest="30"
-                        HorizontalOptions="Center"
-                        Source="{Binding UserPhoto}"
-                        VerticalOptions="Center"
-                        WidthRequest="30" />
+              Aspect="AspectFill"
+              HeightRequest="30"
+              WidthRequest="30"
+              HorizontalOptions="Center"
+              VerticalOptions="Center"
+              Source="{Binding UserPhoto, FallbackValue='personal.png'}"/>
                 </Border>
-
-                <Grid
-                    Grid.Column="1"
-                    ColumnSpacing="5"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center">
+                <Grid Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center">
                     <Label
-                        Grid.Column="0"
-                        FontAttributes="Bold"
-                        Text="{Binding UserName}"
-                        TextColor="Black"/>
-
+              FontAttributes="Bold"
+              Text="{Binding UserName, FallbackValue='Your Name'}"
+              TextColor="Black"/>
                 </Grid>
             </Grid>
+
+            <!-- Phần nhập nội dung bài đăng: Nội dung (Content) nằm ở SavePostViewModel, vì vậy dùng RelativeSource -->
             <controls:NoBorderEditor
-                Grid.Row="1"
-                BackgroundColor="LightGoldenrodYellow"
-                Placeholder="Start typing..."
-                Text="{Binding Content}" />
+          Grid.Row="1"
+          BackgroundColor="LightGoldenrodYellow"
+          Placeholder="Start typing..."
+          Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SavePostViewModel}}, Path=Content}"/>
+
+            <!-- Phần hiển thị ảnh bài đăng (nếu có): Lấy PhotoPath từ SavePostViewModel -->
             <Grid Grid.Row="2">
-                <Border
-                    BackgroundColor="LightSalmon"
-                    HeightRequest="250"
-                    StrokeThickness="0">
-                    <Image HeightRequest="250" Source="{Binding PhotoPath}" />
+                <Border BackgroundColor="LightSalmon" HeightRequest="250" StrokeThickness="0">
+                    <Image HeightRequest="250" 
+                 Source="{Binding Source={RelativeSource AncestorType={x:Type vm:SavePostViewModel}}, Path=PhotoPath}"/>
                 </Border>
-                <Border
-                    Margin="2"
-                    BackgroundColor="{StaticResource Primary}"
-                    HeightRequest="40"
-                    HorizontalOptions="End"
-                    StrokeShape="RoundRectangle 5"
-                    StrokeThickness="0"
-                    VerticalOptions="Start"
-                    WidthRequest="40">
-                    <controls:WhiteImage
-                        HeightRequest="30"
-                        Source="trash.png"
-                        WidthRequest="30" />
+                <!-- Nút xoá ảnh ở góc trên bên phải -->
+                <Border Margin="2" BackgroundColor="{StaticResource Primary}"
+                HeightRequest="40" WidthRequest="40"
+                HorizontalOptions="End" VerticalOptions="Start"
+                StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="5"/>
+                    </Border.StrokeShape>
+                    <controls:WhiteImage HeightRequest="30" WidthRequest="30" Source="trash.png"/>
                     <Border.Shadow>
-                        <Shadow />
+                        <Shadow/>
                     </Border.Shadow>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding RemovePhotoCommand}" />
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SavePostViewModel}}, Path=RemovePhotoCommand}"/>
                     </Border.GestureRecognizers>
-
                 </Border>
+                <!-- Ẩn Grid nếu PhotoPath rỗng -->
                 <Grid.Triggers>
-                    <DataTrigger
-                        Binding="{Binding PhotoPath}"
-                        TargetType="Grid"
-                        Value="">
-                        <Setter Property="IsVisible" Value="False" />
+                    <DataTrigger Binding="{Binding Source={RelativeSource AncestorType={x:Type vm:SavePostViewModel}}, Path=PhotoPath}" TargetType="Grid" Value="">
+                        <Setter Property="IsVisible" Value="False"/>
                     </DataTrigger>
                 </Grid.Triggers>
             </Grid>
-            <FlexLayout
-                Grid.Row="3"
-                Padding="0,0,2,0"
-                JustifyContent="SpaceBetween">
-                <Border
-                    Padding="15,5"
-                    Stroke="{StaticResource Primary}"
-                    StrokeShape="RoundRectangle 5">
+
+            <!-- Phần nút thao tác: Chọn/đổi ảnh và đăng bài -->
+            <FlexLayout Grid.Row="3" Padding="0,0,2,0" JustifyContent="SpaceBetween">
+                <!-- Nút chọn/đổi ảnh -->
+                <Border Padding="15,5" Stroke="{StaticResource Primary}">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="5"/>
+                    </Border.StrokeShape>
                     <HorizontalStackLayout Spacing="5">
                         <controls:PrimaryColorImage
-                            HeightRequest="25"
-                            Source="photo.png"
-                            VerticalOptions="Center"
-                            WidthRequest="25" />
-                        <Label Text="Change Photo" VerticalOptions="Center">
+                HeightRequest="25"
+                WidthRequest="25"
+                Source="photo.png"
+                VerticalOptions="Center"/>
+                        <Label VerticalOptions="Center" Text="Change Photo">
                             <Label.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding PhotoPath}"
-                                    TargetType="Label"
-                                    Value="">
-                                    <Setter Property="Text" Value="Add Photo" />
+                                <DataTrigger Binding="{Binding Source={RelativeSource AncestorType={x:Type vm:SavePostViewModel}}, Path=PhotoPath}" TargetType="Label" Value="">
+                                    <Setter Property="Text" Value="Add Photo"/>
                                 </DataTrigger>
                             </Label.Triggers>
                         </Label>
-
                     </HorizontalStackLayout>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectPhotoCommand}" />
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SavePostViewModel}}, Path=SelectPhotoCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
-                <Button
-                    Padding="50,0"
-                    Command="{Binding SavePostCommand}"
-                    Style="{StaticResource rounded}"
-                    Text="Post" />
+                <!-- Nút đăng bài -->
+                <Button Padding="50,0"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SavePostViewModel}}, Path=SavePostCommand}"
+                Style="{StaticResource rounded}"
+                Text="Post"/>
             </FlexLayout>
         </Grid>
     </ScrollView>
-
 </ContentPage>

@@ -7,7 +7,7 @@
     <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
     <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\PhamTrung\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
-    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.12.2</NuGetToolVersion>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.13.2</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="C:\Users\PhamTrung\.nuget\packages\" />
@@ -18,7 +18,7 @@
     <Import Project="$(NuGetPackageRoot)syncfusion.maui.imageeditor\28.1.38\buildTransitive\Syncfusion.Maui.ImageEditor.props" Condition="Exists('$(NuGetPackageRoot)syncfusion.maui.imageeditor\28.1.38\buildTransitive\Syncfusion.Maui.ImageEditor.props')" />
     <Import Project="$(NuGetPackageRoot)refit\8.0.0\buildTransitive\netstandard2.0\refit.props" Condition="Exists('$(NuGetPackageRoot)refit\8.0.0\buildTransitive\netstandard2.0\refit.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.windows.cswinrt\2.2.0\build\Microsoft.Windows.CsWinRT.props" Condition="Exists('$(NuGetPackageRoot)microsoft.windows.cswinrt\2.2.0\build\Microsoft.Windows.CsWinRT.props')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.0\build\Microsoft.NET.ILLink.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.0\build\Microsoft.NET.ILLink.Tasks.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.3\build\Microsoft.NET.ILLink.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.3\build\Microsoft.NET.ILLink.Tasks.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.resizetizer\9.0.40\buildTransitive\Microsoft.Maui.Resizetizer.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.resizetizer\9.0.40\buildTransitive\Microsoft.Maui.Resizetizer.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.core\9.0.40\buildTransitive\Microsoft.Maui.Core.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.core\9.0.40\buildTransitive\Microsoft.Maui.Core.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.controls.build.tasks\9.0.40\buildTransitive\netstandard2.0\Microsoft.Maui.Controls.Build.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.controls.build.tasks\9.0.40\buildTransitive\netstandard2.0\Microsoft.Maui.Controls.Build.Tasks.props')" />
@@ -31,7 +31,7 @@
     <Import Project="$(NuGetPackageRoot)syncfusion.maui.imageeditor\28.1.38\buildTransitive\Syncfusion.Maui.ImageEditor.props" Condition="Exists('$(NuGetPackageRoot)syncfusion.maui.imageeditor\28.1.38\buildTransitive\Syncfusion.Maui.ImageEditor.props')" />
     <Import Project="$(NuGetPackageRoot)refit\8.0.0\buildTransitive\netstandard2.0\refit.props" Condition="Exists('$(NuGetPackageRoot)refit\8.0.0\buildTransitive\netstandard2.0\refit.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.windows.cswinrt\2.2.0\build\Microsoft.Windows.CsWinRT.props" Condition="Exists('$(NuGetPackageRoot)microsoft.windows.cswinrt\2.2.0\build\Microsoft.Windows.CsWinRT.props')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.0\build\Microsoft.NET.ILLink.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.0\build\Microsoft.NET.ILLink.Tasks.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.3\build\Microsoft.NET.ILLink.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.3\build\Microsoft.NET.ILLink.Tasks.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.resizetizer\9.0.40\buildTransitive\Microsoft.Maui.Resizetizer.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.resizetizer\9.0.40\buildTransitive\Microsoft.Maui.Resizetizer.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.core\9.0.40\buildTransitive\Microsoft.Maui.Core.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.core\9.0.40\buildTransitive\Microsoft.Maui.Core.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.controls.build.tasks\9.0.40\buildTransitive\net6.0-ios10.0\Microsoft.Maui.Controls.Build.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.controls.build.tasks\9.0.40\buildTransitive\net6.0-ios10.0\Microsoft.Maui.Controls.Build.Tasks.props')" />
@@ -44,7 +44,7 @@
     <Import Project="$(NuGetPackageRoot)syncfusion.maui.imageeditor\28.1.38\buildTransitive\Syncfusion.Maui.ImageEditor.props" Condition="Exists('$(NuGetPackageRoot)syncfusion.maui.imageeditor\28.1.38\buildTransitive\Syncfusion.Maui.ImageEditor.props')" />
     <Import Project="$(NuGetPackageRoot)refit\8.0.0\buildTransitive\netstandard2.0\refit.props" Condition="Exists('$(NuGetPackageRoot)refit\8.0.0\buildTransitive\netstandard2.0\refit.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.windows.cswinrt\2.2.0\build\Microsoft.Windows.CsWinRT.props" Condition="Exists('$(NuGetPackageRoot)microsoft.windows.cswinrt\2.2.0\build\Microsoft.Windows.CsWinRT.props')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.0\build\Microsoft.NET.ILLink.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.0\build\Microsoft.NET.ILLink.Tasks.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.3\build\Microsoft.NET.ILLink.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.illink.tasks\9.0.3\build\Microsoft.NET.ILLink.Tasks.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.resizetizer\9.0.40\buildTransitive\Microsoft.Maui.Resizetizer.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.resizetizer\9.0.40\buildTransitive\Microsoft.Maui.Resizetizer.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.core\9.0.40\buildTransitive\Microsoft.Maui.Core.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.core\9.0.40\buildTransitive\Microsoft.Maui.Core.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.controls.build.tasks\9.0.40\buildTransitive\net6.0-maccatalyst13.1\Microsoft.Maui.Controls.Build.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.controls.build.tasks\9.0.40\buildTransitive\net6.0-maccatalyst13.1\Microsoft.Maui.Controls.Build.Tasks.props')" />
@@ -67,17 +67,17 @@
     <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore.design\9.0.2\build\net8.0\Microsoft.EntityFrameworkCore.Design.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore.design\9.0.2\build\net8.0\Microsoft.EntityFrameworkCore.Design.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net9.0-android' AND '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.net.illink.tasks\9.0.0</PkgMicrosoft_NET_ILLink_Tasks>
+    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.net.illink.tasks\9.0.3</PkgMicrosoft_NET_ILLink_Tasks>
     <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.codeanalysis.analyzers\3.3.4</PkgMicrosoft_CodeAnalysis_Analyzers>
     <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.entityframeworkcore.tools\9.0.2</PkgMicrosoft_EntityFrameworkCore_Tools>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net9.0-ios' AND '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.net.illink.tasks\9.0.0</PkgMicrosoft_NET_ILLink_Tasks>
+    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.net.illink.tasks\9.0.3</PkgMicrosoft_NET_ILLink_Tasks>
     <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.codeanalysis.analyzers\3.3.4</PkgMicrosoft_CodeAnalysis_Analyzers>
     <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.entityframeworkcore.tools\9.0.2</PkgMicrosoft_EntityFrameworkCore_Tools>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net9.0-maccatalyst' AND '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.net.illink.tasks\9.0.0</PkgMicrosoft_NET_ILLink_Tasks>
+    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.net.illink.tasks\9.0.3</PkgMicrosoft_NET_ILLink_Tasks>
     <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.codeanalysis.analyzers\3.3.4</PkgMicrosoft_CodeAnalysis_Analyzers>
     <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\PhamTrung\.nuget\packages\microsoft.entityframeworkcore.tools\9.0.2</PkgMicrosoft_EntityFrameworkCore_Tools>
   </PropertyGroup>
