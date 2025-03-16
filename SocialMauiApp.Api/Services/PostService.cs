@@ -121,6 +121,7 @@ namespace SocialMauiApp.Api.Services
             return posts[0];
         }
 
+
         public async Task<ApiResult<CommentDto>> SaveCommentAsync(SaveCommentDto dto, LoggedInUser currentUser)
         {
             var postOwnerId = await _context.Posts.Where(p => p.Id == dto.PostId).Select(p => p.UserId).FirstOrDefaultAsync();
@@ -280,24 +281,58 @@ namespace SocialMauiApp.Api.Services
         }
         public async Task<ApiResult> DeletePostAsync(Guid postId, Guid currentUserId)
         {
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var post = await _context.Posts.FindAsync(postId);
+                var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
                 if (post is null)
                     return ApiResult.Fail("Post not found");
+
                 if (post.UserId != currentUserId)
                     return ApiResult.Fail("You can delete your own posts only");
-                post.IsDeleted = true;
-                _context.Posts.Update(post);
-                await _context.SaveChangesAsync();
-                await _hubContext.Clients.All.PostDeleted(postId);
-                return ApiResult.Success();
+
+                // Xóa ảnh nếu có
+                if (!string.IsNullOrEmpty(post.PhotoPath) && File.Exists(post.PhotoPath))
+                {
+                    try
+                    {
+                        File.Delete(post.PhotoPath);
+                    }
+                    catch (Exception exFile)
+                    {
+                        // Log lỗi nếu không xóa được file ảnh, nhưng không nên dừng transaction
+                        Console.WriteLine("Error deleting file: " + exFile.ToString());
+                    }
+                }
+
+                // Xóa dữ liệu liên quan
+                _context.Comments.RemoveRange(_context.Comments.Where(c => c.PostId == postId));
+                _context.Likes.RemoveRange(_context.Likes.Where(l => l.PostId == postId));
+                _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.PostId == postId));
+                _context.Notifications.RemoveRange(_context.Notifications.Where(n => n.PostId == postId)); // Thêm dòng này
+
+                // Hard delete bài post
+                _context.Posts.Remove(post);
+
+                int result = await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                if (result > 0)
+                {
+                    await _hubContext.Clients.All.PostDeleted(postId);
+                    return ApiResult.Success();
+                }
+                return ApiResult.Fail("No rows affected");
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
+                Console.WriteLine("Error in DeletePostAsync: " + ex.ToString());
                 return ApiResult.Fail(ex.Message);
             }
         }
+
+
         public async Task SaveNotificationAsync(NotificationDto dto)
         {
             try

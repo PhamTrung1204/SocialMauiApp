@@ -27,6 +27,6 @@
         Title="Details"
         ContentTemplate="{DataTemplate pages:PostDetailsPage}"
         Route="PostDetailsPage" />
-
+    
 
 </Shell>

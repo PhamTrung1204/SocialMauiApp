@@ -84,13 +84,13 @@
             <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.Post">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._post"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.post"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.IsOwnPost">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._isOwnPost"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.isOwnPost"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.Comment">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._comment"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.comment"/>
         </member>
         <member name="M:SocialMauiApp.ViewModel.DetailsViewModel.OnPostChanged(SocialMauiApp.Models.PostModel)">
             <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.Post"/> just changed.</summary>
@@ -122,10 +122,10 @@
             <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.HomeViewModel.IsRefreshing">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel._isRefreshing"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel.isRefreshing"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.HomeViewModel.IsThereNewNotification">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel._isThereNewNotification"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel.isThereNewNotification"/>
         </member>
         <member name="F:SocialMauiApp.ViewModel.HomeViewModel.fetchPostsCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.FetchPostsCommand"/>.</summary>
@@ -168,7 +168,7 @@
             <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.NotificationViewModel.IsRefreshing">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.NotificationViewModel._isRefreshing"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.NotificationViewModel.isRefreshing"/>
         </member>
         <member name="F:SocialMauiApp.ViewModel.NotificationViewModel.fetchNotificationCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.NotificationViewModel.FetchNotificationCommand"/>.</summary>
@@ -267,6 +267,11 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.CroppedPhotoSource">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._croppedPhotoSource"/>
+        </member>
+        <member name="M:SocialMauiApp.ViewModel.RegisterViewModel.OnCroppedPhotoSourceChanged(System.String)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.RegisterViewModel.CroppedPhotoSource"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.RegisterViewModel.CroppedPhotoSource"/> is changed.</remarks>
         </member>
         <member name="F:SocialMauiApp.ViewModel.RegisterViewModel.registerCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.RegisterViewModel.RegisterCommand"/>.</summary>

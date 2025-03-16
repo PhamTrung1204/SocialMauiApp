@@ -8,13 +8,13 @@ using SocialMauiApp.Models;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
 using SocialMediaMaui.Shared.Hubs;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 
 namespace SocialMauiApp.ViewModel
 {
@@ -24,6 +24,7 @@ namespace SocialMauiApp.ViewModel
         private readonly AuthService _authService;
         private readonly IUserApi _userApi;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
+       
         public ProfileViewModel(IPostApi postsApi, AuthService authService, IUserApi userApi, RealtimeUpdatesService realtimeUpdatesService) : base(postsApi)
         {
             User = authService.User!;
@@ -31,6 +32,7 @@ namespace SocialMauiApp.ViewModel
             _userApi = userApi;
             _realtimeUpdatesService = realtimeUpdatesService;
         }
+
         [ObservableProperty]
         private LoggedInUser _user;
 
@@ -43,31 +45,33 @@ namespace SocialMauiApp.ViewModel
                 await NavigateAsync($"//{nameof(LoginPage)}");
             }
         }
-        [ObservableProperty, NotifyPropertyChangedFor(nameof(IsBookmarksTabSelected))]
 
+        [ObservableProperty, NotifyPropertyChangedFor(nameof(IsBookmarksTabSelected))]
         private bool _isMyPostsTabSelected = true;
         public bool IsBookmarksTabSelected => !IsMyPostsTabSelected;
+
         private int _myPostsStartIndex = 0;
         public ObservableCollection<PostModel> MyPosts { get; set; } = [];
         private int _bookmarkedPostsStartIndex = 0;
         public ObservableCollection<PostModel> BookmarkedPosts { get; set; } = [];
         private const int PageSize = 4;
+        
         [RelayCommand]
         private async Task SelectMyPostsTabAsync()
         {
             IsMyPostsTabSelected = true;
             _myPostsStartIndex = 0;
-
             await FetchMyPostsAsync();
         }
+
         [RelayCommand]
         private async Task SelectBookmarkedPostsTabAsync()
         {
             IsMyPostsTabSelected = false;
             _bookmarkedPostsStartIndex = 0;
-
             await FetchBookmarkedPostsAsync();
         }
+
         [RelayCommand]
         private async Task FetchMyPostsAsync()
         {
@@ -78,10 +82,7 @@ namespace SocialMauiApp.ViewModel
 
                 if (posts.Length > 0)
                 {
-                    if (_myPostsStartIndex == 0 && MyPosts.Count > 0)
-                    {
-                        MyPosts.Clear();
-                    }
+                    if (_myPostsStartIndex == 0) MyPosts.Clear();
                     _myPostsStartIndex += posts.Length;
                     foreach (var p in posts)
                     {
@@ -89,23 +90,19 @@ namespace SocialMauiApp.ViewModel
                     }
                 }
             });
-            
         }
-
 
         [RelayCommand]
         private async Task FetchBookmarkedPostsAsync()
         {
-            await MakeApiCall(async () => {
+            await MakeApiCall(async () =>
+            {
                 var token = "Bearer " + _authService.Token;
                 var posts = await _userApi.GetUserBookmarkedPostsAsync(token, _bookmarkedPostsStartIndex, PageSize);
 
                 if (posts.Length > 0)
                 {
-                    if (_bookmarkedPostsStartIndex == 0 && BookmarkedPosts.Count > 0)
-                    {
-                        BookmarkedPosts.Clear();
-                    }
+                    if (_bookmarkedPostsStartIndex == 0) BookmarkedPosts.Clear();
                     _bookmarkedPostsStartIndex += posts.Length;
                     foreach (var p in posts)
                     {
@@ -114,19 +111,17 @@ namespace SocialMauiApp.ViewModel
                 }
             });
         }
+
         [RelayCommand]
         private async Task ChangePhotoAsync()
         {
             var selectedPhotoSource = await ChoosePhotoAsync();
             if (!string.IsNullOrWhiteSpace(selectedPhotoSource))
             {
-                var param = new Dictionary<string, object>
-                {
-                    ["new-src"] = selectedPhotoSource
-                };
-                await NavigateAsync(nameof(CropPhotoPage), param);
+                await NavigateAsync(nameof(CropPhotoPage), new Dictionary<string, object> { ["new-src"] = selectedPhotoSource });
             }
         }
+
         [ObservableProperty]
         private string? _croppedPhotoSource;
 
@@ -136,26 +131,30 @@ namespace SocialMauiApp.ViewModel
             {
                 await MakeApiCall(async () =>
                 {
-                    var photoName = Path.GetFileName(newValue);
-                    using var fs = File.OpenRead(photoName);
-                    var photoStreamPart = new StreamPart(fs, photoName);
+                    using var fs = File.OpenRead(newValue);
+                    var photoStreamPart = new StreamPart(fs, Path.GetFileName(newValue));
                     var token = "Bearer " + _authService.Token;
                     var result = await _userApi.ChangePhotoAsync(token, photoStreamPart);
+
                     if (!result.IsSuccess)
                     {
                         await ShowErrorAlertAsync(result.Error);
                         return;
                     }
-                    var newPhotoUrl = result.Data;
-                    User = User with { PhotoUrl = newPhotoUrl };
+
+                    User = User with { PhotoUrl = result.Data };
                     _authService.Login(new LoginResponseDto(User, _authService.Token));
-                    //foreach (var post in MyPosts)
-                    //{
-                    //    post.UserPhotoUrl = newPhotoUrl;
-                    //}
                 });
             }
         }
+
+        public void ConfigureRealtimeUpdates()
+        {
+            _realtimeUpdatesService.AddPostChangedHandler(nameof(ProfileViewModel), OnPostChanged);
+            _realtimeUpdatesService.AddPostDeletedHandler(nameof(ProfileViewModel), OnPostDeleted);
+            _realtimeUpdatesService.AddUserPhotoChangedHandler(nameof(ProfileViewModel), OnUserPhotoChanged);
+        }
+
         private void OnPostChanged(PostDto post)
         {
             var myPost = MyPosts.FirstOrDefault(p => p.PostId == post.PostId);
@@ -164,56 +163,27 @@ namespace SocialMauiApp.ViewModel
                 myPost.Content = post.Content;
                 myPost.PhotoUrl = post.PhotoUrl;
             }
-            var bookmarked = BookmarkedPosts.FirstOrDefault(p => p.PostId == post.PostId);
-            if (bookmarked != null)
-            {
-                bookmarked.Content = post.Content;
-                bookmarked.PhotoUrl = post.PhotoUrl;
-            }
-        }
-        private void OnPostDeleted(Guid postId)
-        {
-            var myPost = MyPosts.FirstOrDefault(p => p.PostId == postId);
-            if (myPost != null)
-            {
-                MyPosts.Remove(myPost);
-            }
-            var bookmarked = BookmarkedPosts.FirstOrDefault(p => p.PostId == postId);
-            if (bookmarked != null)
-            {
-                BookmarkedPosts.Remove(bookmarked);
-            }
-        }
-        private void OnUserPhotoChanged(UserPhotoChangedDto dto)
-        {
-            if(dto.UserId == User.Id)
-            {
-                foreach(var p in MyPosts)
-                {
-                    p.UserPhotoUrl = dto.PhotoUrl;
-                }
-            }
-            foreach (var p in BookmarkedPosts.Where(p => p.UserId == dto.UserId))   
-            {
-                p.UserPhotoUrl = dto.PhotoUrl;
-            }
-        }
-       
-        public void ConfigureRealtimeUpdates()
-        {
-            _realtimeUpdatesService.AddPostChangedHandler(nameof(ProfileViewModel), OnPostChanged);
-            _realtimeUpdatesService.AddPostDeletedHandler(nameof(ProfileViewModel), OnPostDeleted);
-            _realtimeUpdatesService.AddUserPhotoChangedHandler(nameof(ProfileViewModel), OnUserPhotoChanged);
-           
-        }
-        protected override void OnToggleBookmarkAsync(PostModel post)
-        {
-            var currentPost = BookmarkedPosts.FirstOrDefault(p => p.PostId == post.PostId);
-            if (currentPost != null && !post.IsBookmarked)
-            {
-                BookmarkedPosts.Remove(currentPost);
-            }
         }
 
+        private void OnPostDeleted(Guid postId)
+        {
+            MyPosts.Remove(MyPosts.FirstOrDefault(p => p.PostId == postId));
+            BookmarkedPosts.Remove(BookmarkedPosts.FirstOrDefault(p => p.PostId == postId));
+        }
+
+        private void OnUserPhotoChanged(UserPhotoChangedDto dto)
+        {
+            if (dto.UserId == User.Id)
+            {
+                foreach (var post in MyPosts)
+                {
+                    post.UserPhotoUrl = dto.PhotoUrl;
+                }
+            }
+            foreach (var post in BookmarkedPosts.Where(p => p.UserId == dto.UserId))
+            {
+                post.UserPhotoUrl = dto.PhotoUrl;
+            }
+        }
     }
 }

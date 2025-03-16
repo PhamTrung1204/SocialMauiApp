@@ -13,6 +13,7 @@
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+  <uses-feature android:name="android.hardware.camera" />
   <!-- Cho phép truy vấn cho intent IMAGE_CAPTURE -->
   <queries>
     <intent>

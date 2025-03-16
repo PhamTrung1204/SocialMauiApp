@@ -16,6 +16,8 @@ namespace SocialMediaMaui.Shared.Dtos
         [JsonIgnore]
         public DateTime PostedOnDisplay => ModifiedOn ?? PostedOn;
         public bool IsLiked { get; set; }
+        
+  
         public bool IsBookmarked { get; set; }
         [JsonIgnore]
         public string PostTemplateContentViewName

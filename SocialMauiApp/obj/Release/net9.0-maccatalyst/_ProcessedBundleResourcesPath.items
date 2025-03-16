@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\dotnet_bot.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\dotnet_bot@2x.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\dotnet_bot@3x.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\bell.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\bookmark.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\bookmark_f.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\comment.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\heart.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\heart_f.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\pencil.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\personal.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\photo.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\plus.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\plus_fab.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\power_off.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\send.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\share.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\share_f.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\social_media.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\trash.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\user.png" />
+    <BundleResource Include="C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-maccatalyst\resizetizer\r\Resources\x.png" />
+  </ItemGroup>
+</Project>

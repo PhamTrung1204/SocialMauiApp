@@ -1,0 +1,7 @@
+-target net8.0
+-input 35.0
+-input 
+-output "C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-android\Generated Files\CsWinRT"
+
+-exclude Windows
+-exclude Microsoft

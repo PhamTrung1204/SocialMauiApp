@@ -1,36 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:imageEditor="clr-namespace:Syncfusion.Maui.ImageEditor;assembly=Syncfusion.Maui.ImageEditor"
              x:Class="SocialMauiApp.Pages.CropPhotoPage"
-             Title="Crop Photo"
-             Shell.NavBarIsVisible="False"
-             Padding="10">
-    <Grid RowDefinitions="*, Auto">
-        <!-- SfImageEditor chiếm toàn bộ không gian của row 0 -->
-        <imageEditor:SfImageEditor x:Name="imageEditor"
-                               Grid.Row="0"
-                               ShowToolbar="False"
-                               VerticalOptions="FillAndExpand"
-                               HorizontalOptions="FillAndExpand"/>
-        <!-- Thanh điều hướng ở dưới, dùng StackLayout cho giao diện đẹp -->
-        <StackLayout Grid.Row="1"
-                 Orientation="Horizontal"
-                 HorizontalOptions="Center"
-                 Spacing="20"
-                 Padding="10">
-            <Button Text="Cancel"
-              Clicked="Cancel_Clicked"
-              BackgroundColor="LightGray"
-              TextColor="Black"
-              CornerRadius="10"
-              WidthRequest="120"/>
-            <Button Text="Accept"
-              Clicked="AcceptChanges_Clicked"
-              BackgroundColor="DodgerBlue"
-              TextColor="White"
-              CornerRadius="10"
-              WidthRequest="120"/>
-        </StackLayout>
-    </Grid>
+             Title="Crop Photo">
+    <VerticalStackLayout Padding="20">
+        <Image x:Name="PhotoImage" HeightRequest="300" Aspect="AspectFit"/>
+        <Button Text="Cắt Ảnh" Clicked="OnCropPhotoClicked"/>
+    </VerticalStackLayout>
 </ContentPage>

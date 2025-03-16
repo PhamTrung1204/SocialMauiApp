@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.NotificationPage"
+    x:Name="notificationPageRoot"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
@@ -11,6 +12,7 @@
     BackgroundColor="{StaticResource Gray100}"
     Shell.BackgroundColor="{StaticResource Primary}"
     Shell.TitleColor="White">
+
     <RefreshView Command="{Binding RefreshNotificationsCommand}" IsRefreshing="{Binding IsRefreshing}">
         <Grid>
             <CollectionView
@@ -29,11 +31,12 @@
                                     FontSize="12"
                                     Text="{Binding When, StringFormat='{0:hh mm tt | dd MMM yyyy}'}"
                                     TextColor="DarkGray" />
-
                                 <Label Text="{Binding Text}" />
                             </VerticalStackLayout>
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:NotificationViewModel}}, Path=OpenPostCommand}" CommandParameter="{Binding PostId}"/>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={x:Reference notificationPageRoot}, Path=BindingContext.OpenPostCommand}" 
+                                    CommandParameter="{Binding PostId}" />
                             </Border.GestureRecognizers>
                         </Border>
                     </DataTemplate>

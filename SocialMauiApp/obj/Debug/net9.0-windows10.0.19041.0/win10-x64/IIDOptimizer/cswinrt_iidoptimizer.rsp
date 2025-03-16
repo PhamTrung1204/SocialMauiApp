@@ -211,6 +211,8 @@ C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Debug\net9.0-win
 --refs 
  C:\Users\PhamTrung\.nuget\packages\microsoft.windowsappsdk\1.6.250108002\lib\net6.0-windows10.0.18362.0\Microsoft.WinUI.dll
 --refs 
+ C:\Users\PhamTrung\.nuget\packages\mono.httputility\1.0.0.1\lib\net40\Mono.HttpUtility.dll
+--refs 
  C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.3\ref\net9.0\mscorlib.dll
 --refs 
  C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.3\ref\net9.0\netstandard.dll
@@ -218,6 +220,8 @@ C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Debug\net9.0-win
  C:\Users\PhamTrung\.nuget\packages\refit\8.0.0\lib\net8.0\Refit.dll
 --refs 
  C:\Users\PhamTrung\.nuget\packages\refit.httpclientfactory\8.0.0\lib\net8.0\Refit.HttpClientFactory.dll
+--refs 
+ C:\Users\PhamTrung\.nuget\packages\skiasharp\3.116.1\ref\net8.0-windows10.0.19041\SkiaSharp.dll
 --refs 
  C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMediaMaui.Shared\obj\Debug\net9.0\ref\SocialMediaMaui.Shared.dll
 --refs 

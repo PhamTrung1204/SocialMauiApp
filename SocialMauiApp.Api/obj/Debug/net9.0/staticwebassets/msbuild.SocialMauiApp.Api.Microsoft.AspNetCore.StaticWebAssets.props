@@ -1,5 +1,41 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\1305cb63-a32d-4a15-bfb2-8ec513c0fe28_638775386608361171.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>SocialMauiApp.Api</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/SocialMauiApp.Api</BasePath>
+      <RelativePath>uploads/images/users/1305cb63-a32d-4a15-bfb2-8ec513c0fe28_638775386608361171.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>3p3496bu74</Fingerprint>
+      <Integrity>SWP+Ky/OEW+Z8TYulj2DWzDsilu0Hx+t8mdpnuBnkAI=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\1305cb63-a32d-4a15-bfb2-8ec513c0fe28_638775386608361171.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\526749fd-83b9-4906-b561-710060ba879d_638776640127461838.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>SocialMauiApp.Api</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/SocialMauiApp.Api</BasePath>
+      <RelativePath>uploads/images/users/526749fd-83b9-4906-b561-710060ba879d_638776640127461838.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>ialt589mf7</Fingerprint>
+      <Integrity>CmY2SILcQAx9nmbGsTacGuEMZlg3ababpp7yI0t6Uy8=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\526749fd-83b9-4906-b561-710060ba879d_638776640127461838.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\6a006d11-7c11-4b05-ffe2-08dd54718e99\posts\0404fdf0-d2ca-4015-89c8-a28cc6778418_638762229844449185.jpg'))">
       <SourceType>Package</SourceType>
       <SourceId>SocialMauiApp.Api</SourceId>
@@ -53,42 +89,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\6a006d11-7c11-4b05-ffe2-08dd54718e99\posts\09a2d184-c4d8-4fd4-aaac-907c55f88144_638768320844719969.jpg'))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\6a006d11-7c11-4b05-ffe2-08dd54718e99\posts\0eeac0e6-7606-4142-9268-e5ac5160fdef_638775129758315992.jpg'))">
-      <SourceType>Package</SourceType>
-      <SourceId>SocialMauiApp.Api</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/SocialMauiApp.Api</BasePath>
-      <RelativePath>uploads/images/users/6a006d11-7c11-4b05-ffe2-08dd54718e99/posts/0eeac0e6-7606-4142-9268-e5ac5160fdef_638775129758315992.jpg</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>5a60zwq17u</Fingerprint>
-      <Integrity>M301bcwH9EGnTxUKv/b9Y9IMeS65BS4P7dYIOlNIYLo=</Integrity>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\6a006d11-7c11-4b05-ffe2-08dd54718e99\posts\0eeac0e6-7606-4142-9268-e5ac5160fdef_638775129758315992.jpg'))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\6a006d11-7c11-4b05-ffe2-08dd54718e99\posts\1a1e9073-4772-4d26-8789-f0a13ea558cd_638775101169242102.jpg'))">
-      <SourceType>Package</SourceType>
-      <SourceId>SocialMauiApp.Api</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/SocialMauiApp.Api</BasePath>
-      <RelativePath>uploads/images/users/6a006d11-7c11-4b05-ffe2-08dd54718e99/posts/1a1e9073-4772-4d26-8789-f0a13ea558cd_638775101169242102.jpg</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>nmqzskcx5b</Fingerprint>
-      <Integrity>j91nCDfLxeAqPRgqYvcJKClHECmT++VLcf+3smwAhZg=</Integrity>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\6a006d11-7c11-4b05-ffe2-08dd54718e99\posts\1a1e9073-4772-4d26-8789-f0a13ea558cd_638775101169242102.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\6a006d11-7c11-4b05-ffe2-08dd54718e99\posts\2abd0667-cd9e-4d30-9c52-40eea3c43c33_638762218569047223.webp'))">
       <SourceType>Package</SourceType>
@@ -594,6 +594,42 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\6a006d11-7c11-4b05-ffe2-08dd54718e99\posts\e985581c-0bd9-4357-828a-e9b4ef6ca404_638762680672400708.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\910285e7-234b-4dce-62b8-08dd62cbc642\posts\0576fceb-cfd2-42c1-bffd-0ee5d23b62b8_638775355895727785.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>SocialMauiApp.Api</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/SocialMauiApp.Api</BasePath>
+      <RelativePath>uploads/images/users/910285e7-234b-4dce-62b8-08dd62cbc642/posts/0576fceb-cfd2-42c1-bffd-0ee5d23b62b8_638775355895727785.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>nplgmip2zt</Fingerprint>
+      <Integrity>6z8bCNNGDaFUrsFFXhg9kz6zoFiH9OO7LQX5JU3cbtU=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\910285e7-234b-4dce-62b8-08dd62cbc642\posts\0576fceb-cfd2-42c1-bffd-0ee5d23b62b8_638775355895727785.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\910285e7-234b-4dce-62b8-08dd62cbc642\posts\f5ebd306-198d-4f5e-97ca-8894e6e1ec29_638775352459856105.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>SocialMauiApp.Api</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/SocialMauiApp.Api</BasePath>
+      <RelativePath>uploads/images/users/910285e7-234b-4dce-62b8-08dd62cbc642/posts/f5ebd306-198d-4f5e-97ca-8894e6e1ec29_638775352459856105.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>lt8oqwei49</Fingerprint>
+      <Integrity>qXz7AeWSE8NjriLHE8/IiPjiUjlHeaiwQ7Ho7D8p2C4=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\910285e7-234b-4dce-62b8-08dd62cbc642\posts\f5ebd306-198d-4f5e-97ca-8894e6e1ec29_638775352459856105.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\9422ba9a-fa6f-4844-9cb3-08dd5a15836f\posts\a1608ec6-81c7-4f7e-b9fd-f6ab073b2463_638765771551340950.jpg'))">
       <SourceType>Package</SourceType>
       <SourceId>SocialMauiApp.Api</SourceId>
@@ -629,6 +665,24 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\9422ba9a-fa6f-4844-9cb3-08dd5a15836f\posts\c534db04-0e58-42bb-8eae-1f48d26a796c_638766557978952239.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\a8ff0516-d396-4d08-9dd6-2e186cf8d5c7_638777322518031969.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>SocialMauiApp.Api</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/SocialMauiApp.Api</BasePath>
+      <RelativePath>uploads/images/users/a8ff0516-d396-4d08-9dd6-2e186cf8d5c7_638777322518031969.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>e22hrgnr11</Fingerprint>
+      <Integrity>SnCFnBrAOejfcF3UNmk9ZQGlgbpasMTbbXtL7o3AKXY=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\a8ff0516-d396-4d08-9dd6-2e186cf8d5c7_638777322518031969.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>

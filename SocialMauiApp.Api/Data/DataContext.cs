@@ -46,6 +46,7 @@ namespace SocialMauiApp.Api.Data
                     v => v == 1
                 );
 
+
             modelBuilder.Entity<Bookmarks>(e =>
             {
                 e.HasKey(b => new { b.PostId, b.UserId });

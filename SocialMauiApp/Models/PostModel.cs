@@ -11,14 +11,13 @@ namespace SocialMauiApp.Models
         public Guid PostId { get; set; }
         public Guid UserId { get; set; }
 
-        // Khi thay đổi, UI sẽ tự động nhận thông báo nhờ [ObservableProperty]
         [ObservableProperty]
         private string _userName = string.Empty;
 
         [ObservableProperty]
         private string? _userPhotoUrl;
 
-        // Computed property dùng để hiển thị ảnh đại diện (mặc định nếu UserPhotoUrl rỗng)
+        // Computed property: nếu UserPhotoUrl rỗng, trả về "personal.png"
         public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
 
         [ObservableProperty]
@@ -42,12 +41,10 @@ namespace SocialMauiApp.Models
         public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
 
-        // Constructor bắt buộc có IPostApi để khởi tạo đối tượng
         public PostModel(IPostApi postApi) : base(postApi)
         {
         }
 
-        // Phương thức khởi tạo từ DTO, đảm bảo mapping đầy đủ các property
         public static PostModel FromDto(PostDto dto, IPostApi postApi) =>
             new PostModel(postApi)
             {

@@ -1,141 +1,89 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using Syncfusion.Maui.ImageEditor;
-using System.Diagnostics;
+﻿using Microsoft.Maui.Controls;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
-namespace SocialMauiApp.Pages;
-
-[QueryProperty(nameof(PhotoSource), nameof(PhotoSource))]
-public partial class CropPhotoPage : ContentPage, IQueryAttributable
+namespace SocialMauiApp.Pages
 {
-    public CropPhotoPage()
+    [QueryProperty(nameof(ImagePath), "new-src")]
+    public partial class CropPhotoPage : ContentPage
     {
-        InitializeComponent();
-    }
-
-    // Thuộc tính nhận giá trị từ Query (đường dẫn ảnh)
-    public string PhotoSource { get; set; }
-
-    // Triển khai IQueryAttributable: bắt buộc dùng chữ ký (signature) void
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        // Gọi hàm async để xử lý bất đồng bộ
-        _ = ApplyQueryAttributesAsync(query);
-    }
-
-    // Xử lý bất đồng bộ trong hàm riêng
-    private async Task ApplyQueryAttributesAsync(IDictionary<string, object> query)
-    {
-        // 1. Lấy giá trị PhotoSource từ query
-        if (!query.TryGetValue(nameof(PhotoSource), out var photoSourceObject)
-            || photoSourceObject is not string photoSource)
+        private string _imagePath;
+        public string ImagePath
         {
-            await Toast.Make("Invalid photo source provided").Show();
-            await Shell.Current.GoToAsync("..");
-            return;
-        }
-
-        // 2. Kiểm tra xem chuỗi có rỗng không
-        if (string.IsNullOrWhiteSpace(photoSource))
-        {
-            await Toast.Make("No photo provided for cropping").Show();
-            await Shell.Current.GoToAsync("..");
-            return;
-        }
-
-        // 3. Nếu đường dẫn chưa tuyệt đối, ghép với CacheDirectory
-        if (!Path.IsPathRooted(photoSource))
-        {
-            photoSource = Path.Combine(FileSystem.CacheDirectory, photoSource);
-        }
-
-        // 4. Kiểm tra file tồn tại
-        if (!File.Exists(photoSource))
-        {
-            await Toast.Make($"File not found: {photoSource}").Show();
-            await Shell.Current.GoToAsync("..");
-            return;
-        }
-
-        // 5. Gán PhotoSource đã chuẩn hoá
-        PhotoSource = photoSource;
-        Debug.WriteLine($"Loading image from: {PhotoSource}");
-
-        // 6. Gán cho ImageEditor
-        imageEditor.Source = ImageSource.FromFile(PhotoSource);
-        imageEditor.ImageLoaded += ImageEditor_ImageLoaded;
-    }
-
-    private void ImageEditor_ImageLoaded(object? sender, EventArgs e)
-    {
-        Debug.WriteLine("Image loaded successfully");
-        imageEditor.Crop(ImageCropType.Circle);
-        imageEditor.ImageLoaded -= ImageEditor_ImageLoaded;
-    }
-
-
-    private async void Cancel_Clicked(object? sender, EventArgs e)
-    {
-        if (imageEditor.HasUnsavedEdits)
-        {
-            bool confirmCancel = await Shell.Current.DisplayAlert(
-                "Cancel Cropping",
-                "Do you really want to cancel this action?",
-                "Yes",
-                "No"
-            );
-            if (confirmCancel)
+            get => _imagePath;
+            set
             {
-                imageEditor.CancelEdits();
-                await Shell.Current.GoToAsync("..");
-            }
-            else
-            {
-                bool secondConfirm = await Shell.Current.DisplayAlert("Cancel", "Are you sure?", "Yes", "No");
-                if (secondConfirm)
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    await Shell.Current.GoToAsync("..");
+                    _imagePath = value;
+                    OnPropertyChanged(nameof(ImagePath));
+                    UpdatePhotoSource();
                 }
             }
         }
-        else
-        {
-            await Shell.Current.GoToAsync("..");
-        }
-    }
 
-    private async void AcceptChanges_Clicked(object? sender, EventArgs e)
-    {
-        if (!imageEditor.HasUnsavedEdits)
+        public CropPhotoPage()
         {
-            await Shell.Current.DisplayAlert("Alert", "There are no changes", "Ok");
-            return;
+            InitializeComponent();
+            BindingContext = this; // Đảm bảo BindingContext được đặt chính xác
         }
 
-        try
+        protected override void OnAppearing()
         {
-            // Lưu các chỉnh sửa
-            imageEditor.SaveEdits();
-            var newPhotoStream = await imageEditor.GetImageStream();
+            base.OnAppearing();
+            UpdatePhotoSource();
+        }
 
-            // Tạo tên file mới trong CacheDirectory
-            var extension = Path.GetExtension(PhotoSource);
-            var tempPath = Path.Combine(FileSystem.CacheDirectory, $"{Guid.NewGuid()}{extension}");
-
-            // Ghi stream vào file mới
-            using (var fileStream = File.OpenWrite(tempPath))
+        private void UpdatePhotoSource()
+        {
+            try
             {
-                await newPhotoStream.CopyToAsync(fileStream);
+                if (!string.IsNullOrWhiteSpace(_imagePath) && File.Exists(_imagePath))
+                {
+                    // Sử dụng FromFile để load ảnh từ đường dẫn trên thiết bị thật
+                    PhotoImage.Source = ImageSource.FromFile(_imagePath);
+                }
+                else
+                {
+                    // Nếu file không tồn tại, có thể hiển thị ảnh placeholder
+                    PhotoImage.Source = "placeholder.png";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error updating photo source: " + ex.ToString());
+            }
+        }
+
+        private async void OnCropPhotoClicked(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(_imagePath))
+            {
+                await DisplayAlert("Lỗi", "Không tìm thấy ảnh để cắt", "OK");
+                return;
             }
 
-            Debug.WriteLine($"Saved cropped image to: {tempPath}");
+            if (!File.Exists(_imagePath))
+            {
+                await DisplayAlert("Lỗi", "Ảnh gốc không tồn tại", "OK");
+                return;
+            }
 
-            // Điều hướng quay lại kèm query string chứa đường dẫn ảnh đã crop
-            await Shell.Current.GoToAsync("..?new-src=" + tempPath);
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine("Error saving cropped image: " + ex.Message);
-            await Shell.Current.DisplayAlert("Error", "Failed to save cropped image", "Ok");
+            try
+            {
+                // Giả lập crop ảnh: copy file gốc sang file mới trong thư mục CacheDirectory
+                var croppedFileName = $"{Guid.NewGuid()}_cropped.jpg";
+                var croppedPath = Path.Combine(FileSystem.CacheDirectory, croppedFileName);
+                File.Copy(_imagePath, croppedPath, true);
+
+                // Điều hướng quay lại trang đăng ký với query parameter chứa đường dẫn ảnh đã cắt
+                await Shell.Current.GoToAsync($"..?new-src={Uri.EscapeDataString(croppedPath)}");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Lỗi", $"Không thể cắt ảnh: {ex.Message}", "OK");
+            }
         }
     }
 }

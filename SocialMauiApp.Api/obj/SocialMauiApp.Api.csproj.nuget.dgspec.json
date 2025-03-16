@@ -76,6 +76,18 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.2, )"
+            },
+            "Mono.HttpUtility": {
+              "target": "Package",
+              "version": "[1.0.0.1, )"
+            },
+            "System.Collections.Specialized": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            },
+            "System.Net.Http.Json": {
+              "target": "Package",
+              "version": "[9.0.3, )"
             }
           },
           "imports": [

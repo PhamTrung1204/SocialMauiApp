@@ -1,4 +1,4 @@
-using SocialMauiApp.Services;
+﻿using SocialMauiApp.Services;
 using SocialMauiApp.ViewModel;
 
 namespace SocialMauiApp.Pages
@@ -7,6 +7,7 @@ namespace SocialMauiApp.Pages
     {
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
         private readonly HomeViewModel _homeViewModel;
+
         public HomePage(HomeViewModel homeViewModel, RealtimeUpdatesService realtimeUpdatesService)
         {
             InitializeComponent();
@@ -14,25 +15,28 @@ namespace SocialMauiApp.Pages
             _homeViewModel = homeViewModel;
             _realtimeUpdatesService = realtimeUpdatesService;
         }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _homeViewModel.ConfigureRealtimeUpdates();
+            // Cấu hình SignalR và cập nhật UI trên main thread
+            Shell.Current.Dispatcher.DispatchAsync(() =>
+            {
+                _homeViewModel.ConfigureRealtimeUpdates();
+            });
         }
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            // Hủy đăng ký các handler khi trang không còn hiển thị
             _realtimeUpdatesService.RemoveHandlers(nameof(HomeViewModel));
         }
+
         private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
         {
             await Shell.Current.GoToAsync(nameof(PostDetailsPage), animate: true);
         }
-
-        //private async void AddPost_Tapped_1(object sender, TappedEventArgs e)
-        //{
-        //    await Shell.Current.GoToAsync(nameof(AddPostPage), animate: true);
-        //}
 
         private async void GoToProfile(object sender, TappedEventArgs e)
         {
@@ -45,5 +49,4 @@ namespace SocialMauiApp.Pages
             await Shell.Current.GoToAsync(nameof(NotificationPage), animate: true);
         }
     }
-
 }

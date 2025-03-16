@@ -147,6 +147,10 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "Mono.HttpUtility": {
+              "target": "Package",
+              "version": "[1.0.0.1, )"
+            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -155,6 +159,10 @@
               "target": "Package",
               "version": "[2.1.10, )"
             },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
+            },
             "Syncfusion.Maui.ImageEditor": {
               "target": "Package",
               "version": "[28.1.38, )"
@@ -162,6 +170,10 @@
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
+            },
+            "System.Collections.Specialized": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             },
             "Xamarin.AndroidX.Emoji2": {
               "target": "Package",
@@ -260,6 +272,10 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "Mono.HttpUtility": {
+              "target": "Package",
+              "version": "[1.0.0.1, )"
+            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -268,6 +284,10 @@
               "target": "Package",
               "version": "[2.1.10, )"
             },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
+            },
             "Syncfusion.Maui.ImageEditor": {
               "target": "Package",
               "version": "[28.1.38, )"
@@ -275,6 +295,10 @@
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
+            },
+            "System.Collections.Specialized": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [
@@ -365,6 +389,10 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "Mono.HttpUtility": {
+              "target": "Package",
+              "version": "[1.0.0.1, )"
+            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -373,6 +401,10 @@
               "target": "Package",
               "version": "[2.1.10, )"
             },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
+            },
             "Syncfusion.Maui.ImageEditor": {
               "target": "Package",
               "version": "[28.1.38, )"
@@ -380,6 +412,10 @@
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
+            },
+            "System.Collections.Specialized": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [
@@ -465,6 +501,10 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "Mono.HttpUtility": {
+              "target": "Package",
+              "version": "[1.0.0.1, )"
+            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -473,6 +513,10 @@
               "target": "Package",
               "version": "[2.1.10, )"
             },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
+            },
             "Syncfusion.Maui.ImageEditor": {
               "target": "Package",
               "version": "[28.1.38, )"
@@ -480,6 +524,10 @@
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
+            },
+            "System.Collections.Specialized": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [

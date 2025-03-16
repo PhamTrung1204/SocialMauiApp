@@ -112,11 +112,11 @@ target triple = "x86_64-unknown-linux-android21"
 	i32 3, ; uint32_t package_naming_policy
 	i32 6, ; uint32_t environment_variable_count
 	i32 0, ; uint32_t system_property_count
-	i32 405, ; uint32_t number_of_assemblies_in_apk
+	i32 407, ; uint32_t number_of_assemblies_in_apk
 	i32 65, ; uint32_t bundled_assembly_name_width
-	i32 44, ; uint32_t number_of_dso_cache_entries
+	i32 48, ; uint32_t number_of_dso_cache_entries
 	i32 0, ; uint32_t number_of_aot_cache_entries
-	i32 11, ; uint32_t number_of_shared_libraries
+	i32 12, ; uint32_t number_of_shared_libraries
 	i32 u0x0200135e, ; uint32_t android_runtime_jnienv_class_token
 	i32 u0x0601395a, ; uint32_t jnienv_initialize_method_token
 	i32 u0x06013959, ; uint32_t jnienv_registerjninatives_method_token
@@ -127,7 +127,7 @@ target triple = "x86_64-unknown-linux-android21"
 }, align 16
 
 ; DSO cache entries
-@dso_cache = dso_local local_unnamed_addr global [44 x %struct.DSOCacheEntry] [
+@dso_cache = dso_local local_unnamed_addr global [48 x %struct.DSOCacheEntry] [
 	%struct.DSOCacheEntry {
 		i64 u0x01848c0093f0afd8, ; from name: libSystem.Security.Cryptography.Native.Android
 		i64 u0x4818e42ca66bbd75, ; uint64_t real_name_hash
@@ -164,284 +164,312 @@ target triple = "x86_64-unknown-linux-android21"
 		ptr null; void* handle
 	}, ; 4
 	%struct.DSOCacheEntry {
+		i64 u0x12e73d483788709d, ; from name: SkiaSharp.so
+		i64 u0x43db119dcc3147fa, ; uint64_t real_name_hash
+		i1 false, ; bool ignore
+		ptr @.DSOCacheEntry.11_name, ; name: libSkiaSharp.so
+		ptr null; void* handle
+	}, ; 5
+	%struct.DSOCacheEntry {
 		i64 u0x18d2ba05358f7c3a, ; from name: e_sqlite3.so
 		i64 u0x69f1737e78a3229a, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlite3.so
 		ptr null; void* handle
-	}, ; 5
+	}, ; 6
 	%struct.DSOCacheEntry {
 		i64 u0x1a1918dd01662b19, ; from name: libmonosgen-2.0.so
 		i64 u0x1a1918dd01662b19, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.8_name, ; name: libmonosgen-2.0.so
 		ptr null; void* handle
-	}, ; 6
+	}, ; 7
 	%struct.DSOCacheEntry {
 		i64 u0x21cc3326a27c28e1, ; from name: xamarin-debug-app-helper.so
 		i64 u0x641102ea13f025b2, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.10_name, ; name: libxamarin-debug-app-helper.so
 		ptr null; void* handle
-	}, ; 7
+	}, ; 8
 	%struct.DSOCacheEntry {
 		i64 u0x28b5c8fca080abd5, ; from name: libSystem.Globalization.Native
 		i64 u0x74b568291c419777, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.1_name, ; name: libSystem.Globalization.Native.so
 		ptr null; void* handle
-	}, ; 8
+	}, ; 9
 	%struct.DSOCacheEntry {
 		i64 u0x2b87bb6ac8822015, ; from name: libmonodroid
 		i64 u0x4434c7fd110c8d8b, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.9_name, ; name: libmonodroid.so
 		ptr null; void* handle
-	}, ; 9
+	}, ; 10
 	%struct.DSOCacheEntry {
 		i64 u0x3807dd20062deb45, ; from name: monodroid
 		i64 u0x4434c7fd110c8d8b, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.9_name, ; name: libmonodroid.so
 		ptr null; void* handle
-	}, ; 10
+	}, ; 11
 	%struct.DSOCacheEntry {
 		i64 u0x40f32024ffd1c0be, ; from name: System.IO.Compression.Native.so
 		i64 u0xc3cb80650fe5a0ab, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.2_name, ; name: libSystem.IO.Compression.Native.so
 		ptr null; void* handle
-	}, ; 11
+	}, ; 12
+	%struct.DSOCacheEntry {
+		i64 u0x43db119dcc3147fa, ; from name: libSkiaSharp.so
+		i64 u0x43db119dcc3147fa, ; uint64_t real_name_hash
+		i1 false, ; bool ignore
+		ptr @.DSOCacheEntry.11_name, ; name: libSkiaSharp.so
+		ptr null; void* handle
+	}, ; 13
 	%struct.DSOCacheEntry {
 		i64 u0x4434c7fd110c8d8b, ; from name: libmonodroid.so
 		i64 u0x4434c7fd110c8d8b, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.9_name, ; name: libmonodroid.so
 		ptr null; void* handle
-	}, ; 12
+	}, ; 14
 	%struct.DSOCacheEntry {
 		i64 u0x4818e42ca66bbd75, ; from name: libSystem.Security.Cryptography.Native.Android.so
 		i64 u0x4818e42ca66bbd75, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.4_name, ; name: libSystem.Security.Cryptography.Native.Android.so
 		ptr null; void* handle
-	}, ; 13
+	}, ; 15
 	%struct.DSOCacheEntry {
 		i64 u0x486aa459231fc98b, ; from name: mono-component-hot_reload
 		i64 u0xb9c2fcad5704a3c9, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.6_name, ; name: libmono-component-hot_reload.so
 		ptr null; void* handle
-	}, ; 14
+	}, ; 16
 	%struct.DSOCacheEntry {
 		i64 u0x49959b1b390dc809, ; from name: xamarin-debug-app-helper
 		i64 u0x641102ea13f025b2, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.10_name, ; name: libxamarin-debug-app-helper.so
 		ptr null; void* handle
-	}, ; 15
+	}, ; 17
 	%struct.DSOCacheEntry {
 		i64 u0x4cd7bd0032e920e1, ; from name: libSystem.Native
 		i64 u0xa337ccc8aef94267, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.3_name, ; name: libSystem.Native.so
 		ptr null; void* handle
-	}, ; 16
+	}, ; 18
 	%struct.DSOCacheEntry {
 		i64 u0x4ecd24baaf5a9280, ; from name: e_sqlite3
 		i64 u0x69f1737e78a3229a, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlite3.so
 		ptr null; void* handle
-	}, ; 17
+	}, ; 19
 	%struct.DSOCacheEntry {
 		i64 u0x61c4cca6c77a9014, ; from name: libmonosgen-2.0
 		i64 u0x1a1918dd01662b19, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.8_name, ; name: libmonosgen-2.0.so
 		ptr null; void* handle
-	}, ; 18
+	}, ; 20
 	%struct.DSOCacheEntry {
 		i64 u0x641102ea13f025b2, ; from name: libxamarin-debug-app-helper.so
 		i64 u0x641102ea13f025b2, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.10_name, ; name: libxamarin-debug-app-helper.so
 		ptr null; void* handle
-	}, ; 19
+	}, ; 21
 	%struct.DSOCacheEntry {
 		i64 u0x69f1737e78a3229a, ; from name: libe_sqlite3.so
 		i64 u0x69f1737e78a3229a, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.0_name, ; name: libe_sqlite3.so
 		ptr null; void* handle
-	}, ; 20
+	}, ; 22
 	%struct.DSOCacheEntry {
 		i64 u0x6f9c86874c77b639, ; from name: libmono-component-debugger.so
 		i64 u0x6f9c86874c77b639, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.5_name, ; name: libmono-component-debugger.so
 		ptr null; void* handle
-	}, ; 21
+	}, ; 23
 	%struct.DSOCacheEntry {
 		i64 u0x74b568291c419777, ; from name: libSystem.Globalization.Native.so
 		i64 u0x74b568291c419777, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.1_name, ; name: libSystem.Globalization.Native.so
 		ptr null; void* handle
-	}, ; 22
+	}, ; 24
 	%struct.DSOCacheEntry {
 		i64 u0x81bc2b0b52670f30, ; from name: System.Security.Cryptography.Native.Android
 		i64 u0x4818e42ca66bbd75, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.4_name, ; name: libSystem.Security.Cryptography.Native.Android.so
 		ptr null; void* handle
-	}, ; 23
+	}, ; 25
 	%struct.DSOCacheEntry {
 		i64 u0x9190f4cb761b1d3c, ; from name: libSystem.IO.Compression.Native
 		i64 u0xc3cb80650fe5a0ab, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.2_name, ; name: libSystem.IO.Compression.Native.so
 		ptr null; void* handle
-	}, ; 24
+	}, ; 26
 	%struct.DSOCacheEntry {
 		i64 u0x936d971cc035eac2, ; from name: mono-component-marshal-ilgen
 		i64 u0x0582d422de762780, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.7_name, ; name: libmono-component-marshal-ilgen.so
 		ptr null; void* handle
-	}, ; 25
+	}, ; 27
 	%struct.DSOCacheEntry {
 		i64 u0x9c62065cdbdf43a5, ; from name: monosgen-2.0
 		i64 u0x1a1918dd01662b19, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.8_name, ; name: libmonosgen-2.0.so
 		ptr null; void* handle
-	}, ; 26
+	}, ; 28
 	%struct.DSOCacheEntry {
 		i64 u0x9ff54ae8a9311b68, ; from name: System.Native
 		i64 u0xa337ccc8aef94267, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.3_name, ; name: libSystem.Native.so
 		ptr null; void* handle
-	}, ; 27
+	}, ; 29
 	%struct.DSOCacheEntry {
 		i64 u0xa337ccc8aef94267, ; from name: libSystem.Native.so
 		i64 u0xa337ccc8aef94267, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.3_name, ; name: libSystem.Native.so
 		ptr null; void* handle
-	}, ; 28
+	}, ; 30
 	%struct.DSOCacheEntry {
 		i64 u0xa76ab5a3894f5a01, ; from name: System.Globalization.Native
 		i64 u0x74b568291c419777, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.1_name, ; name: libSystem.Globalization.Native.so
 		ptr null; void* handle
-	}, ; 29
+	}, ; 31
 	%struct.DSOCacheEntry {
 		i64 u0xab177aa6a32873ac, ; from name: monodroid.so
 		i64 u0x4434c7fd110c8d8b, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.9_name, ; name: libmonodroid.so
 		ptr null; void* handle
-	}, ; 30
+	}, ; 32
 	%struct.DSOCacheEntry {
 		i64 u0xb5c2ff9910024930, ; from name: libmono-component-debugger
 		i64 u0x6f9c86874c77b639, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.5_name, ; name: libmono-component-debugger.so
 		ptr null; void* handle
-	}, ; 31
+	}, ; 33
 	%struct.DSOCacheEntry {
 		i64 u0xb9c2fcad5704a3c9, ; from name: libmono-component-hot_reload.so
 		i64 u0xb9c2fcad5704a3c9, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.6_name, ; name: libmono-component-hot_reload.so
 		ptr null; void* handle
-	}, ; 32
+	}, ; 34
 	%struct.DSOCacheEntry {
 		i64 u0xb9c4d8821da5c5de, ; from name: mono-component-hot_reload.so
 		i64 u0xb9c2fcad5704a3c9, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.6_name, ; name: libmono-component-hot_reload.so
 		ptr null; void* handle
-	}, ; 33
+	}, ; 35
 	%struct.DSOCacheEntry {
 		i64 u0xc20cd752ee7ce28d, ; from name: libxamarin-debug-app-helper
 		i64 u0x641102ea13f025b2, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.10_name, ; name: libxamarin-debug-app-helper.so
 		ptr null; void* handle
-	}, ; 34
+	}, ; 36
 	%struct.DSOCacheEntry {
 		i64 u0xc3cb80650fe5a0ab, ; from name: libSystem.IO.Compression.Native.so
 		i64 u0xc3cb80650fe5a0ab, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.2_name, ; name: libSystem.IO.Compression.Native.so
 		ptr null; void* handle
-	}, ; 35
+	}, ; 37
 	%struct.DSOCacheEntry {
 		i64 u0xc7bf0aae66d69fe4, ; from name: mono-component-debugger.so
 		i64 u0x6f9c86874c77b639, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.5_name, ; name: libmono-component-debugger.so
 		ptr null; void* handle
-	}, ; 36
+	}, ; 38
+	%struct.DSOCacheEntry {
+		i64 u0xccf5ce5cbae59392, ; from name: libSkiaSharp
+		i64 u0x43db119dcc3147fa, ; uint64_t real_name_hash
+		i1 false, ; bool ignore
+		ptr @.DSOCacheEntry.11_name, ; name: libSkiaSharp.so
+		ptr null; void* handle
+	}, ; 39
 	%struct.DSOCacheEntry {
 		i64 u0xd334d108d628ab4f, ; from name: System.IO.Compression.Native
 		i64 u0xc3cb80650fe5a0ab, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.2_name, ; name: libSystem.IO.Compression.Native.so
 		ptr null; void* handle
-	}, ; 37
+	}, ; 40
 	%struct.DSOCacheEntry {
 		i64 u0xd565cc57ed541a90, ; from name: monosgen-2.0.so
 		i64 u0x1a1918dd01662b19, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.8_name, ; name: libmonosgen-2.0.so
 		ptr null; void* handle
-	}, ; 38
+	}, ; 41
 	%struct.DSOCacheEntry {
 		i64 u0xde69d0ab38ed00d3, ; from name: mono-component-debugger
 		i64 u0x6f9c86874c77b639, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.5_name, ; name: libmono-component-debugger.so
 		ptr null; void* handle
-	}, ; 39
+	}, ; 42
 	%struct.DSOCacheEntry {
 		i64 u0xde6fb4b955d66724, ; from name: libmono-component-marshal-ilgen
 		i64 u0x0582d422de762780, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.7_name, ; name: libmono-component-marshal-ilgen.so
 		ptr null; void* handle
-	}, ; 40
+	}, ; 43
 	%struct.DSOCacheEntry {
 		i64 u0xe02ec096c271894c, ; from name: libmono-component-hot_reload
 		i64 u0xb9c2fcad5704a3c9, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.6_name, ; name: libmono-component-hot_reload.so
 		ptr null; void* handle
-	}, ; 41
+	}, ; 44
 	%struct.DSOCacheEntry {
 		i64 u0xe0d15587b4505ecd, ; from name: mono-component-marshal-ilgen.so
 		i64 u0x0582d422de762780, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.7_name, ; name: libmono-component-marshal-ilgen.so
 		ptr null; void* handle
-	}, ; 42
+	}, ; 45
 	%struct.DSOCacheEntry {
 		i64 u0xecb906ed9649ed1c, ; from name: System.Native.so
 		i64 u0xa337ccc8aef94267, ; uint64_t real_name_hash
 		i1 false, ; bool ignore
 		ptr @.DSOCacheEntry.3_name, ; name: libSystem.Native.so
 		ptr null; void* handle
-	} ; 43
+	}, ; 46
+	%struct.DSOCacheEntry {
+		i64 u0xf4727d423e5d26f3, ; from name: SkiaSharp
+		i64 u0x43db119dcc3147fa, ; uint64_t real_name_hash
+		i1 false, ; bool ignore
+		ptr @.DSOCacheEntry.11_name, ; name: libSkiaSharp.so
+		ptr null; void* handle
+	} ; 47
 ], align 16
 
 ; AOT DSO cache entries
 @aot_dso_cache = dso_local local_unnamed_addr global [0 x %struct.DSOCacheEntry] zeroinitializer, align 8
 
-@dso_apk_entries = dso_local local_unnamed_addr global [11 x %struct.DSOApkEntry] zeroinitializer, align 16
+@dso_apk_entries = dso_local local_unnamed_addr global [12 x %struct.DSOApkEntry] zeroinitializer, align 16
 
 @_XamarinAndroidBundledAssembly_file_name_0_0 = internal dso_local global [73 x i8] zeroinitializer, align 16
 @_XamarinAndroidBundledAssembly_name_0_0 = internal dso_local global [65 x i8] zeroinitializer, align 16
@@ -1253,9 +1281,13 @@ target triple = "x86_64-unknown-linux-android21"
 @_XamarinAndroidBundledAssembly_name_193_193 = internal dso_local global [65 x i8] zeroinitializer, align 16
 @_XamarinAndroidBundledAssembly_file_name_194_194 = internal dso_local global [73 x i8] zeroinitializer, align 16
 @_XamarinAndroidBundledAssembly_name_194_194 = internal dso_local global [65 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_file_name_195_195 = internal dso_local global [73 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_195_195 = internal dso_local global [65 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_file_name_196_196 = internal dso_local global [73 x i8] zeroinitializer, align 16
+@_XamarinAndroidBundledAssembly_name_196_196 = internal dso_local global [65 x i8] zeroinitializer, align 16
 
 ; Bundled assembly name buffers, all 65 bytes long
-@bundled_assemblies = dso_local local_unnamed_addr global [405 x %struct.XamarinAndroidBundledAssembly] [
+@bundled_assemblies = dso_local local_unnamed_addr global [407 x %struct.XamarinAndroidBundledAssembly] [
 	%struct.XamarinAndroidBundledAssembly {
 		i32 -1, ; int32_t file_fd
 		ptr @_XamarinAndroidBundledAssembly_file_name_0_0, ; char* file_name
@@ -4900,7 +4932,25 @@ target triple = "x86_64-unknown-linux-android21"
 		ptr null, ; uint8_t* data
 		i32 65, ; uint32_t name_length
 		ptr @_XamarinAndroidBundledAssembly_name_194_194; char* name
-	} ; 404
+	}, ; 404
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t file_fd
+		ptr @_XamarinAndroidBundledAssembly_file_name_195_195, ; char* file_name
+		i32 0, ; uint32_t data_offset
+		i32 0, ; uint32_t data_size
+		ptr null, ; uint8_t* data
+		i32 65, ; uint32_t name_length
+		ptr @_XamarinAndroidBundledAssembly_name_195_195; char* name
+	}, ; 405
+	%struct.XamarinAndroidBundledAssembly {
+		i32 -1, ; int32_t file_fd
+		ptr @_XamarinAndroidBundledAssembly_file_name_196_196, ; char* file_name
+		i32 0, ; uint32_t data_offset
+		i32 0, ; uint32_t data_size
+		ptr null, ; uint8_t* data
+		i32 65, ; uint32_t name_length
+		ptr @_XamarinAndroidBundledAssembly_name_196_196; char* name
+	} ; 406
 ], align 16
 
 @assembly_store_bundled_assemblies = dso_local local_unnamed_addr global [0 x %struct.AssemblyStoreSingleAssemblyRuntimeData] zeroinitializer, align 8
@@ -4938,13 +4988,14 @@ target triple = "x86_64-unknown-linux-android21"
 @.DSOCacheEntry.8_name = private unnamed_addr constant [19 x i8] c"libmonosgen-2.0.so\00", align 16
 @.DSOCacheEntry.9_name = private unnamed_addr constant [16 x i8] c"libmonodroid.so\00", align 16
 @.DSOCacheEntry.10_name = private unnamed_addr constant [31 x i8] c"libxamarin-debug-app-helper.so\00", align 16
+@.DSOCacheEntry.11_name = private unnamed_addr constant [16 x i8] c"libSkiaSharp.so\00", align 16
 
 ; Metadata
 !llvm.module.flags = !{!0, !1}
 !0 = !{i32 1, !"wchar_size", i32 4}
 !1 = !{i32 7, !"PIC Level", i32 2}
 !llvm.ident = !{!2}
-!2 = !{!".NET for Android remotes/origin/release/9.0.1xx @ 0ccdc57cf7fc59bd3f6cbf900c9cdbebadfe4609"}
+!2 = !{!".NET for Android remotes/origin/release/9.0.1xx @ 1719a35b8a0348a4a8dd0061cfc4dd7fe6612a3c"}
 !3 = !{!4, !4, i64 0}
 !4 = !{!"any pointer", !5, i64 0}
 !5 = !{!"omnipotent char", !6, i64 0}

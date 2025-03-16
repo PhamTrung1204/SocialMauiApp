@@ -32,6 +32,7 @@
                     WidthRequest="70">
                     <Image
                         HorizontalOptions="Center"
+                        Aspect="AspectFill"
                         Source="{Binding User.Photo}"
                         VerticalOptions="Center"
                         HeightRequest="60"
