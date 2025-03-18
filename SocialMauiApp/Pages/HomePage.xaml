@@ -4,33 +4,29 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
-   
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     x:DataType="vm:HomeViewModel"
-    BackgroundColor="{StaticResource Gray100}"
-    Shell.BackgroundColor="{StaticResource Primary}">
+    BackgroundColor="{DynamicResource Gray100}"
+    Shell.BackgroundColor="{DynamicResource Primary}">
 
     <!--  TitleView của Shell  -->
     <Shell.TitleView>
         <Grid Padding="10" ColumnDefinitions="Auto,*,Auto">
-            <!--  Tiêu đề  -->
             <Label
                 Grid.Column="0"
                 FontAttributes="Bold"
                 FontSize="25"
                 Text="Social App Maui"
-                TextColor="White"
+                TextColor="{DynamicResource White}"
                 VerticalOptions="Center" />
 
-            <!--  Các icon hành động  -->
             <Grid
                 Grid.Column="2"
                 Margin="0,0,15,0"
                 ColumnDefinitions="Auto,Auto,Auto"
                 ColumnSpacing="20"
                 VerticalOptions="Center">
-                <!--  Icon Thêm bài viết  -->
                 <controls:WhiteImage
                     Grid.Column="0"
                     HeightRequest="20"
@@ -40,7 +36,7 @@
                         <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
                     </controls:WhiteImage.GestureRecognizers>
                 </controls:WhiteImage>
-                <!--  Icon Thông báo  -->
+
                 <Grid Grid.Column="1">
                     <controls:WhiteImage
                         HeightRequest="20"
@@ -56,7 +52,7 @@
                         <TapGestureRecognizer Tapped="GoToNotification" />
                     </Grid.GestureRecognizers>
                 </Grid>
-                <!--  Icon Trang cá nhân  -->
+
                 <controls:WhiteImage
                     Grid.Column="2"
                     HeightRequest="20"
@@ -70,10 +66,8 @@
         </Grid>
     </Shell.TitleView>
 
-    <!--  Nội dung chính  -->
     <RefreshView Command="{Binding RefreshPostsCommand}" IsRefreshing="{Binding IsRefreshing}">
         <Grid>
-            <!--  CollectionView hiển thị danh sách bài viết  -->
             <CollectionView
                 ItemTemplate="{StaticResource postDataTemplateSelector}"
                 ItemsSource="{Binding Posts}"
@@ -82,12 +76,11 @@
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout ItemSpacing="15" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
-
             </CollectionView>
-            <!--  Floating Action Button (FAB)  -->
+
             <Border
                 Margin="15"
-                BackgroundColor="{StaticResource Primary}"
+                BackgroundColor="{DynamicResource Primary}"
                 HeightRequest="45"
                 HorizontalOptions="End"
                 StrokeShape="RoundRectangle 15"
@@ -105,12 +98,10 @@
                 </Border.GestureRecognizers>
             </Border>
 
-            <!--  ActivityIndicator khi đang tải dữ liệu  -->
             <ActivityIndicator
                 HorizontalOptions="Center"
                 IsRunning="{Binding IsBusy}"
                 VerticalOptions="Center" />
         </Grid>
     </RefreshView>
-
 </ContentPage>

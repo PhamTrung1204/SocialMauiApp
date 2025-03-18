@@ -19,8 +19,10 @@
             <controls:NoBorderEditor
                 Grid.Row="1"
                 BackgroundColor="LightGoldenrodYellow"
-                Placeholder="Start typing..."
-                Text="{Binding Content}" />
+                Placeholder="Start typing..." 
+                PlaceholderColor="Black"
+                Text="{Binding Content}"
+                TextColor="Black"/>
             <!-- Image display area -->
             <Grid Grid.Row="2">
                 <Border

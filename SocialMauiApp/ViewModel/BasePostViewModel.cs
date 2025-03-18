@@ -10,7 +10,7 @@ namespace SocialMauiApp.ViewModel
         {
             PostsApi = postApi;
         }
-        private bool IsInDetailPage = false;
+        
         public IPostApi PostsApi { get; }
         protected virtual bool SkipGoToDetailsCommandAction { get; set; }
 

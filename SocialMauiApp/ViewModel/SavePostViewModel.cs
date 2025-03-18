@@ -99,7 +99,6 @@ namespace SocialMauiApp.ViewModel
             {
                 await stream.CopyToAsync(fileStream);
             }
-            // Log đường dẫn file và kiểm tra file tồn tại
             Console.WriteLine($"[PickFromDeviceAsync] File saved at: {tempFile}, exists: {File.Exists(tempFile)}");
             PhotoPath = tempFile;
         }
@@ -138,21 +137,19 @@ namespace SocialMauiApp.ViewModel
             IsBusy = true;
             try
             {
-                Console.WriteLine("SavePostAsync called.");
+                // Kiểm tra nội dung và ảnh hợp lệ
                 if (string.IsNullOrWhiteSpace(Content) && string.IsNullOrWhiteSpace(PhotoPath))
                 {
-                    Console.WriteLine("Validation failed: No content or photo.");
                     await ToastAsync("Either content or photo is required");
                     return;
                 }
 
                 await MakeApiCall(async () =>
                 {
-                    // Nếu có ảnh, tạo StreamPart để upload
+                    // Xử lý ảnh nếu có (tạo StreamPart)
                     StreamPart? photoStreamPart = null;
                     if (!string.IsNullOrWhiteSpace(PhotoPath) && File.Exists(PhotoPath) && _existingPhotoUrl != PhotoPath)
                     {
-                        Console.WriteLine("Processing photo: " + PhotoPath);
                         var fileName = Path.GetFileName(PhotoPath);
                         var fileStream = File.OpenRead(PhotoPath);
                         photoStreamPart = new StreamPart(fileStream, fileName);
@@ -164,38 +161,41 @@ namespace SocialMauiApp.ViewModel
                         PostId = Post?.PostId ?? default
                     };
 
-                    // Nếu không còn ảnh nhưng trước đó có ảnh, đánh dấu rằng ảnh cũ đã bị loại bỏ
+                    // Nếu không có ảnh mới nhưng trước đó có ảnh thì đánh dấu ảnh cũ đã bị loại bỏ
                     if (string.IsNullOrWhiteSpace(PhotoPath) && !string.IsNullOrWhiteSpace(_existingPhotoUrl))
                     {
                         dto.IsExistingPhotoRemoved = true;
                     }
 
                     var serializedDto = JsonSerializer.Serialize(dto);
-                    Console.WriteLine("Serialized DTO: " + serializedDto);
-
                     var result = await _postApi.SavePostAsync(photoStreamPart, serializedDto);
                     if (!result.IsSuccess)
                     {
-                        Console.WriteLine("API call failed: " + result.Error);
                         await ShowErrorAlertAsync(result.Error);
                         return;
                     }
 
-                    Console.WriteLine("Post saved successfully!");
-                    await ToastAsync("Post saved");
-
-                    // Lấy thông tin post đã lưu từ API
                     var savedPost = PostModel.FromDto(result.Data, _postApi);
-
-                    // Thay vì reset PhotoPath thành rỗng, cập nhật lại với URL từ server (nếu có)
                     Content = string.Empty;
                     PhotoPath = !string.IsNullOrWhiteSpace(savedPost.PhotoUrl) ? savedPost.PhotoUrl : string.Empty;
 
-                    // Điều hướng đến trang chi tiết hoặc cập nhật giao diện theo nhu cầu
-                    await NavigateAsync("..", new Dictionary<string, object>
+                    // Phân biệt giữa sửa bài và đăng bài mới
+                    if (Post != null && Post.PostId != default)
                     {
-                        [nameof(DetailsViewModel.Post)] = savedPost
-                    });
+                        // Trường hợp sửa bài: quay lại trang DetailPostPage
+                        await NavigateAsync("..", new Dictionary<string, object>
+                        {
+                            [nameof(DetailsViewModel.Post)] = savedPost
+                        });
+                    }
+                    else
+                    {
+                        // Trường hợp đăng bài mới: điều hướng về HomePage kèm bài đăng mới
+                        await NavigateAsync("//HomePage", new Dictionary<string, object>
+                        {
+                            ["newPost"] = savedPost
+                        });
+                    }
                 });
             }
             finally
@@ -203,7 +203,6 @@ namespace SocialMauiApp.ViewModel
                 IsBusy = false;
             }
         }
-
 
         partial void OnPostChanged(PostModel? value)
         {

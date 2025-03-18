@@ -25,8 +25,8 @@ namespace SocialMauiApp.ViewModel
             _authService = authService;
             _realtimeUpdatesService = realtimeUpdatesService;
             Notifications = new ObservableCollection<NotificationDto>();
-            // Khởi chạy lệnh fetch notifications khi khởi tạo
-            FetchNotificationCommand.Execute(null);
+
+            // Loại bỏ việc tự động gọi fetch notifications trong constructor.
         }
 
         public ObservableCollection<NotificationDto> Notifications { get; set; }
@@ -65,39 +65,42 @@ namespace SocialMauiApp.ViewModel
         }
 
         // Cập nhật UI trên main thread khi có thông báo mới từ SignalR
-        private async void OnNotificationGenerated(NotificationDto dto)
+        private void OnNotificationGenerated(NotificationDto dto)
         {
-            if (dto.ForUserId == _authService.User.Id)
+            MainThread.InvokeOnMainThreadAsync(() =>
             {
-                await Shell.Current.Dispatcher.DispatchAsync(() =>
+                if (dto.ForUserId == _authService.User.Id)
                 {
-                    ToastAsync("New Notification");
                     Notifications.Insert(0, dto);
-                });
-            }
+                }
+            });
         }
 
         public void ConfigureRealtimeUpdates()
         {
             _realtimeUpdatesService.AddNotificationGeneratedHandler(nameof(NotificationViewModel), OnNotificationGenerated);
         }
-
         [RelayCommand]
         private async Task OpenPostAsync(Guid? postId)
         {
-            if (postId.HasValue && postId != default)
+            if (postId == null || postId == Guid.Empty)
             {
-                await MakeApiCall(async () =>
-                {
-                    var post = await PostsApi.GetPostAsync(postId.Value);
-                    if (post == null)
-                    {
-                        await ToastAsync("Post no longer exists");
-                        return;
-                    }
-                    GoToDetailsPageCommand.Execute(PostModel.FromDto(post, PostsApi));
-                });
+                await ToastAsync("Post not available");
+                return;
             }
+            await MakeApiCall(async () =>
+            {
+                var post = await PostsApi.GetPostAsync(postId.Value);
+                if (post == null)
+                {
+                    await ToastAsync("Post no longer exists");
+                    return;
+                }
+                await NavigateAsync(nameof(PostDetailsPage), new Dictionary<string, object>
+                {
+                    [nameof(DetailsViewModel.Post)] = PostModel.FromDto(post, PostsApi)
+                });
+            });
         }
     }
 }

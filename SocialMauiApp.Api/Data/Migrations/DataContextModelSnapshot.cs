@@ -187,7 +187,7 @@ namespace SocialMauiApp.Api.Data.Migrations
                     b.Property<int>("IsLiked")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ModifiedOn")
+                    b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PhotoUrl")
@@ -196,7 +196,7 @@ namespace SocialMauiApp.Api.Data.Migrations
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("PostedOn")
+                    b.Property<DateTime?>("PostedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserId")
@@ -209,7 +209,9 @@ namespace SocialMauiApp.Api.Data.Migrations
                     b.Property<string>("UserPhotoUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("PostDto");
+                    b.ToTable((string)null);
+
+                    b.ToView(null, (string)null);
                 });
 
             modelBuilder.Entity("SocialMauiApp.Api.Data.Entities.Bookmarks", b =>

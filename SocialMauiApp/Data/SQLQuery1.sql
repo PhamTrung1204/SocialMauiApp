@@ -1,6 +1,4 @@
-SELECT * FROM Posts
-SELECT * FROM Likes
-SELECT * FROM Bookmarks
+﻿
 /*
 public Guid PostId { get; set; }
 public Guid UserId { get; set; }
@@ -12,6 +10,14 @@ public bool IsLiked { get; set; }
 public bool IsBookmarked { get; set; }
 --- int startIndex, int pageSize, Guid currentUserId
 */
+SELECT * FROM Posts
+SELECT * FROM Likes
+SELECT * FROM Bookmarks
+GO
+
+DROP PROC IF EXISTS GetPosts
+GO
+
 CREATE OR ALTER PROC GetPosts
     @StartIndex INT,
     @PageSize INT,
@@ -27,8 +33,8 @@ BEGIN
         p.PhotoUrl,
         p.PostedOn,
         p.ModifiedOn,
-        CASE WHEN l.UserId IS NOT NULL THEN 1 ELSE 0 END AS IsLiked,
-        CASE WHEN b.UserId IS NOT NULL THEN 1 ELSE 0 END AS IsBookmarked
+        CASE WHEN l.UserId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsLiked,
+        CASE WHEN b.UserId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsBookmarked
     FROM Posts p
     INNER JOIN Users u ON p.UserId = u.Id
     LEFT JOIN Likes l ON p.Id = l.PostId AND l.UserId = @CurrentUserId
@@ -37,4 +43,6 @@ BEGIN
     OFFSET @StartIndex ROWS
     FETCH NEXT @PageSize ROWS ONLY
 END
+
+
 DROP PROC IF EXISTS GetPosts

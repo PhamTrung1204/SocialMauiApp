@@ -19,12 +19,12 @@ namespace SocialMauiApp.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            // Cấu hình SignalR và cập nhật UI trên main thread
             Shell.Current.Dispatcher.DispatchAsync(() =>
             {
                 _homeViewModel.ConfigureRealtimeUpdates();
             });
         }
+
 
         protected override void OnDisappearing()
         {

@@ -1997,15 +1997,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -6775,15 +6766,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -11464,15 +11446,6 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -16157,15 +16130,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -20845,15 +20809,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -25531,15 +25486,6 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -30247,15 +30193,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -33377,15 +33314,6 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -36627,15 +36555,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -39873,15 +39792,6 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -43126,15 +43036,6 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -46384,15 +46285,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -49593,15 +49485,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -52746,15 +52629,6 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -55963,15 +55837,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -59178,15 +59043,6 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -62388,15 +62244,6 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -65609,15 +65456,6 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -68999,15 +68837,6 @@
           }
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -72351,15 +72180,6 @@
         "build": {
           "buildTransitive/Microsoft.WindowsAppSDK.props": {},
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -75753,15 +75573,6 @@
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -79153,15 +78964,6 @@
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -82548,15 +82350,6 @@
         "build": {
           "buildTransitive/Microsoft.WindowsAppSDK.props": {},
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -85960,15 +85753,6 @@
         "build": {
           "buildTransitive/Microsoft.WindowsAppSDK.props": {},
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
-        }
-      },
-      "Mono.HttpUtility/1.0.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Mono.HttpUtility.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {}
         }
       },
       "Mono.TextTemplating/3.0.0": {
@@ -91739,18 +91523,6 @@
         "tools/x86/GenXbf.dll"
       ]
     },
-    "Mono.HttpUtility/1.0.0.1": {
-      "sha512": "YoM2U1plMphxw4KF8PttXka5ZFfC+4hOD8jnXoGvcA6MhJvPFLNN/Zxxsx3+OMBBROSvINq2qUSkrf42ZjXUpA==",
-      "type": "package",
-      "path": "mono.httputility/1.0.0.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net40/Mono.HttpUtility.dll",
-        "mono.httputility.1.0.0.1.nupkg.sha512",
-        "mono.httputility.nuspec"
-      ]
-    },
     "Mono.TextTemplating/3.0.0": {
       "sha512": "YqueG52R/Xej4VVbKuRIodjiAhV0HR/XVbLbNrJhCZnzjnSjgMJ/dCdV0akQQxavX6hp/LC6rqLGLcXeQYU7XA==",
       "type": "package",
@@ -97251,7 +97023,6 @@
       "Microsoft.Maui.Controls >= 9.0.40",
       "Microsoft.NET.ILLink.Tasks >= 9.0.3",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
-      "Mono.HttpUtility >= 1.0.0.1",
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
       "SkiaSharp >= 3.116.1",
@@ -97278,7 +97049,6 @@
       "Microsoft.Maui.Controls >= 9.0.40",
       "Microsoft.NET.ILLink.Tasks >= 9.0.3",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
-      "Mono.HttpUtility >= 1.0.0.1",
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
       "SkiaSharp >= 3.116.1",
@@ -97303,7 +97073,6 @@
       "Microsoft.Maui.Controls >= 9.0.40",
       "Microsoft.NET.ILLink.Tasks >= 9.0.3",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
-      "Mono.HttpUtility >= 1.0.0.1",
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
       "SkiaSharp >= 3.116.1",
@@ -97327,7 +97096,6 @@
       "Microsoft.Extensions.Logging.Debug >= 9.0.2",
       "Microsoft.Maui.Controls >= 9.0.40",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
-      "Mono.HttpUtility >= 1.0.0.1",
       "Refit.HttpClientFactory >= 8.0.0",
       "SQLitePCLRaw.bundle_green >= 2.1.10",
       "SkiaSharp >= 3.116.1",
@@ -97484,10 +97252,6 @@
             "target": "Package",
             "version": "[2.2.0, )"
           },
-          "Mono.HttpUtility": {
-            "target": "Package",
-            "version": "[1.0.0.1, )"
-          },
           "Refit.HttpClientFactory": {
             "target": "Package",
             "version": "[8.0.0, )"
@@ -97609,10 +97373,6 @@
             "target": "Package",
             "version": "[2.2.0, )"
           },
-          "Mono.HttpUtility": {
-            "target": "Package",
-            "version": "[1.0.0.1, )"
-          },
           "Refit.HttpClientFactory": {
             "target": "Package",
             "version": "[8.0.0, )"
@@ -97726,10 +97486,6 @@
             "target": "Package",
             "version": "[2.2.0, )"
           },
-          "Mono.HttpUtility": {
-            "target": "Package",
-            "version": "[1.0.0.1, )"
-          },
           "Refit.HttpClientFactory": {
             "target": "Package",
             "version": "[8.0.0, )"
@@ -97838,10 +97594,6 @@
             "target": "Package",
             "version": "[2.2.0, )"
           },
-          "Mono.HttpUtility": {
-            "target": "Package",
-            "version": "[1.0.0.1, )"
-          },
           "Refit.HttpClientFactory": {
             "target": "Package",
             "version": "[8.0.0, )"
@@ -97912,17 +97664,5 @@
         "#import": []
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Mono.HttpUtility 1.0.0.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net9.0-android35.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Mono.HttpUtility",
-      "targetGraphs": [
-        "net9.0-android35.0"
-      ]
-    }
-  ]
+  }
 }

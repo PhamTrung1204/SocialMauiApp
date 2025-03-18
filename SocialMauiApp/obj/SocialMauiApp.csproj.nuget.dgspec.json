@@ -147,10 +147,6 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
-            "Mono.HttpUtility": {
-              "target": "Package",
-              "version": "[1.0.0.1, )"
-            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -272,10 +268,6 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
-            "Mono.HttpUtility": {
-              "target": "Package",
-              "version": "[1.0.0.1, )"
-            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -389,10 +381,6 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
-            "Mono.HttpUtility": {
-              "target": "Package",
-              "version": "[1.0.0.1, )"
-            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -500,10 +488,6 @@
             "Microsoft.Windows.CsWinRT": {
               "target": "Package",
               "version": "[2.2.0, )"
-            },
-            "Mono.HttpUtility": {
-              "target": "Package",
-              "version": "[1.0.0.1, )"
             },
             "Refit.HttpClientFactory": {
               "target": "Package",

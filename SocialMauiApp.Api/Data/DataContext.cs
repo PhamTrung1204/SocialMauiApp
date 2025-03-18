@@ -27,24 +27,23 @@ namespace SocialMauiApp.Api.Data
 
             //Cấu hình PostDto là keyless entity, ánh xạ đến view "PostDto"
             modelBuilder.Entity<PostDto>()
-      .HasNoKey()
-     ;
+        .HasNoKey().ToView(null);
 
-            // Cấu hình chuyển đổi cho IsLiked
-            modelBuilder.Entity<PostDto>()
-                .Property(p => p.IsLiked)
-                .HasConversion(
-                    v => v ? 1 : 0,
-                    v => v == 1
-                );
+            //// Cấu hình chuyển đổi cho IsLiked
+            //modelBuilder.Entity<PostDto>()
+            //    .Property(p => p.IsLiked)
+            //    .HasConversion(
+            //        v => v ? 1 : 0,
+            //        v => v == 1
+            //    );
 
-            // Cấu hình tương tự cho IsBookmarked
-            modelBuilder.Entity<PostDto>()
-                .Property(p => p.IsBookmarked)
-                .HasConversion(
-                    v => v ? 1 : 0,
-                    v => v == 1
-                );
+            //// Cấu hình tương tự cho IsBookmarked
+            //modelBuilder.Entity<PostDto>()
+            //    .Property(p => p.IsBookmarked)
+            //    .HasConversion(
+            //        v => v ? 1 : 0,
+            //        v => v == 1
+            //    );
 
 
             modelBuilder.Entity<Bookmarks>(e =>

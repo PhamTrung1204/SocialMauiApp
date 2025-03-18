@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.NotificationPage"
     x:Name="notificationPageRoot"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:dtos="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     Title="Notification"
@@ -15,27 +13,25 @@
 
     <RefreshView Command="{Binding RefreshNotificationsCommand}" IsRefreshing="{Binding IsRefreshing}">
         <Grid>
-            <CollectionView
-                ItemsSource="{Binding Notifications}"
-                RemainingItemsThreshold="10"
-                RemainingItemsThresholdReachedCommand="{Binding FetchNotificationCommand}">
+            <CollectionView ItemsSource="{Binding Notifications}"
+                            RemainingItemsThreshold="10"
+                            RemainingItemsThresholdReachedCommand="{Binding FetchNotificationCommand}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="dtos:NotificationDto">
-                        <Border
-                            Margin="0,5"
-                            Padding="10"
-                            BackgroundColor="White"
-                            StrokeThickness="0">
+                        <Border Margin="0,5"
+                                Padding="10"
+                                BackgroundColor="White"
+                                StrokeThickness="0">
                             <VerticalStackLayout Spacing="5">
-                                <Label
-                                    FontSize="12"
-                                    Text="{Binding When, StringFormat='{0:hh mm tt | dd MMM yyyy}'}"
-                                    TextColor="DarkGray" />
-                                <Label Text="{Binding Text}" />
+                                <Label FontSize="12"
+                                       Text="{Binding When, StringFormat='{0:hh:mm tt | dd MMM yyyy}'}"
+                                       TextColor="DarkGray" />
+                                <Label Text="{Binding Text}" TextColor="DarkGray"/>
                             </VerticalStackLayout>
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer 
-                                    Command="{Binding Source={x:Reference notificationPageRoot}, Path=BindingContext.OpenPostCommand}" 
+                                <!-- Đảm bảo x:DataType được vô hiệu trên TapGestureRecognizer -->
+                                <TapGestureRecognizer x:DataType="{x:Null}"
+                                    Command="{Binding Source={x:Reference notificationPageRoot}, Path=BindingContext.OpenPostCommand}"
                                     CommandParameter="{Binding PostId}" />
                             </Border.GestureRecognizers>
                         </Border>

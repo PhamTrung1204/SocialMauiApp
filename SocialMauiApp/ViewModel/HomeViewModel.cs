@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel; // Đảm bảo namespace này có MainThread
+using Microsoft.Maui.ApplicationModel; // Đảm bảo có MainThread
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
 using SocialMauiApp.Services;
@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace SocialMauiApp.ViewModel
 {
+    [QueryProperty(nameof(NewPost), "newPost")]
     public partial class HomeViewModel : BasePostViewModel
     {
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
@@ -26,17 +27,31 @@ namespace SocialMauiApp.ViewModel
             _realtimeUpdatesService = realtimeUpdatesService;
             _authService = authService;
 
-            // Khởi tạo danh sách posts
             Posts = new ObservableCollection<PostModel>();
 
-            // Gọi load dữ liệu ban đầu
             _ = FetchPostsAsync();
 
-            // Cấu hình cập nhật realtime qua SignalR
             ConfigureRealtimeUpdates();
         }
 
         public ObservableCollection<PostModel> Posts { get; set; }
+
+        [ObservableProperty]
+        private PostModel? newPost;
+
+        // Phương thức partial xử lý thay đổi NewPost (CommunityToolkit.Mvvm 8.0+ dùng 2 tham số)
+        partial void OnNewPostChanged(PostModel? oldValue, PostModel? newValue)
+        {
+            if (newValue != null)
+            {
+                var existing = Posts.FirstOrDefault(p => p.PostId == newValue.PostId);
+                if (existing == null)
+                {
+                    // Chèn bài đăng mới nhất vào đầu danh sách
+                    Posts.Insert(0, newValue);
+                }
+            }
+        }
 
         [RelayCommand]
         private async Task FetchPostsAsync()
@@ -46,18 +61,25 @@ namespace SocialMauiApp.ViewModel
                 var posts = await PostsApi.GetPostsAsync(_startIndex, PageSize);
                 if (posts.Length > 0)
                 {
-                    if (_startIndex == 0 && Posts.Any())
+                    if (_startIndex == 0)
                     {
+                        // Nếu đang làm mới, xoá danh sách cũ để tránh trùng lặp
                         Posts.Clear();
                     }
                     _startIndex += posts.Length;
-                    foreach (var p in posts)
+                    foreach (var p in posts.OrderByDescending(p=>p.PostedOn))
                     {
-                        Posts.Add(PostModel.FromDto(p, PostsApi));
+                        var postModel = PostModel.FromDto(p, PostsApi);
+                        // Kiểm tra nếu bài đã có trong danh sách thì bỏ qua
+                        if (!Posts.Any(existing => existing.PostId == postModel.PostId))
+                        {
+                            Posts.Add(postModel);
+                        }
                     }
                 }
             });
         }
+
 
         [ObservableProperty]
         private bool isRefreshing;
@@ -78,20 +100,26 @@ namespace SocialMauiApp.ViewModel
 
         private void OnPostChanged(PostDto post)
         {
-            _ = MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.InvokeOnMainThreadAsync(() =>
             {
                 var currentPost = Posts.FirstOrDefault(p => p.PostId == post.PostId);
                 if (currentPost != null)
                 {
+                    currentPost.IsLiked = post.IsLiked;
+                    currentPost.IsBookmarked = post.IsBookmarked;
                     currentPost.PhotoUrl = post.PhotoUrl;
                     currentPost.Content = post.Content;
+                }
+                else
+                {
+                    Posts.Insert(0, PostModel.FromDto(post, PostsApi));
                 }
             });
         }
 
         private void OnPostDeleted(Guid postId)
         {
-            _ = MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.InvokeOnMainThreadAsync(() =>
             {
                 var currentPost = Posts.FirstOrDefault(p => p.PostId == postId);
                 if (currentPost != null)
@@ -104,7 +132,7 @@ namespace SocialMauiApp.ViewModel
 
         private void OnUserPhotoChanged(UserPhotoChangedDto dto)
         {
-            _ = MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.InvokeOnMainThreadAsync(() =>
             {
                 foreach (var post in Posts.Where(p => p.UserId == dto.UserId))
                 {
@@ -115,7 +143,7 @@ namespace SocialMauiApp.ViewModel
 
         private void OnNotificationGenerated(NotificationDto dto)
         {
-            _ = MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.InvokeOnMainThreadAsync(() =>
             {
                 if (dto.ForUserId == _authService.User.Id)
                 {

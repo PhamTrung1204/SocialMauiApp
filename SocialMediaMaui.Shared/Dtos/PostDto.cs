@@ -10,11 +10,10 @@ namespace SocialMediaMaui.Shared.Dtos
         public string? UserPhotoUrl { get; set; }
         public string? Content { get; set; }
         public string? PhotoUrl { get; set; }
-
-        public DateTime PostedOn { get; set; }
-        public DateTime? ModifiedOn { get; set; }
+        public DateTime? PostedOn { get; set; }
+        public DateTime ModifiedOn { get; set; }
         [JsonIgnore]
-        public DateTime PostedOnDisplay => ModifiedOn ?? PostedOn;
+        public DateTime PostedOnDisplay => PostedOn ?? ModifiedOn;
         public bool IsLiked { get; set; }
         
   

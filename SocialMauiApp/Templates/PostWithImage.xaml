@@ -46,18 +46,21 @@
                     <Label
                         Grid.Column="0"
                         FontAttributes="Bold"
-                        Text="{Binding UserName}" />
+                        Text="{Binding UserName}"
+                        TextColor="Black"/>
                     <Label
                         Grid.Column="1"
                         Margin="0,-7,0,0"
                         FontAttributes="Bold"
                         FontSize="14"
                         Text="."
+                        TextColor="Gray"
                         VerticalOptions="Center" />
                     <Label
                         Grid.Column="2"
                         FontSize="12"
                         Text="{Binding PostedOnDisplay, StringFormat='{0:dd MMM yyyy}'}"
+                        TextColor="Gray"
                         VerticalOptions="Center" />
                 </Grid>
             </Grid>
@@ -98,7 +101,8 @@
                         <Label
                             FontSize="12"
                             Text="Like"
-                            VerticalOptions="Center" />
+                            VerticalOptions="Center" 
+                            TextColor="{StaticResource Primary}"/>
                         <HorizontalStackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleLikeCommand}" CommandParameter="{Binding}" />
 
@@ -109,11 +113,13 @@
                             HeightRequest="20"
                             Source="comment.png"
                             VerticalOptions="Center"
-                            WidthRequest="20" />
+                            WidthRequest="20" 
+                           />
                         <Label
                             FontSize="12"
                             Text="Comment"
-                            VerticalOptions="Center" />
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Primary}"/>
                         <HorizontalStackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
 
@@ -128,7 +134,8 @@
                         <Label
                             FontSize="12"
                             Text="Save"
-                            VerticalOptions="Center" />
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Primary}"/>
                         <HorizontalStackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleBookmarkCommand}" CommandParameter="{Binding}" />
 
@@ -143,7 +150,8 @@
                         <Label
                             FontSize="12"
                             Text="Share"
-                            VerticalOptions="Center" />
+                            VerticalOptions="Center" 
+                            TextColor="{StaticResource Primary}"/>
                         <HorizontalStackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=SharePostCommand}" CommandParameter="{Binding}" />
                         </HorizontalStackLayout.GestureRecognizers>

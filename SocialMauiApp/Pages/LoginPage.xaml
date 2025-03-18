@@ -9,7 +9,8 @@
     Padding="20"
     x:DataType="vm:LoginViewModel"
     Shell.BackgroundColor="{StaticResource Primary}"
-    Shell.TitleColor="White">
+    Shell.TitleColor="White"
+    BackgroundColor="SkyBlue">
     <Grid>
         <ScrollView>
             <Grid
@@ -33,7 +34,8 @@
                         BackgroundColor="LightGoldenrodYellow"
                         Keyboard="Email"
                         Placeholder="Enter Username"
-                        Text="{Binding Email}" />
+                        Text="{Binding Email}"
+                        TextColor="Black"/>
                     <controls:Spacer />
 
                     <Label Text="Password" />
@@ -41,7 +43,8 @@
                         BackgroundColor="LightGoldenrodYellow"
                         IsPassword="True"
                         Placeholder="Enter Password"
-                        Text="{Binding Password}" />
+                        Text="{Binding Password}"
+                        TextColor="Black"/>
                     <controls:Spacer />
 
                     <!--<Button

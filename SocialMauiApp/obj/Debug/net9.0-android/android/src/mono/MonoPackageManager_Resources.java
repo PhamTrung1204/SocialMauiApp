@@ -81,7 +81,6 @@ public class MonoPackageManager_Resources {
 		"Microsoft.SqlServer.Server.dll",
 		"Microsoft.Win32.SystemEvents.dll",
 		"WinRT.Runtime.dll",
-		"Mono.HttpUtility.dll",
 		"Refit.dll",
 		"Refit.HttpClientFactory.dll",
 		"SkiaSharp.dll",

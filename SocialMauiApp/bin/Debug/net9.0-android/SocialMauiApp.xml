@@ -121,11 +121,20 @@
             <inheritdoc/>
             <inheritdoc/>
         </member>
+        <member name="P:SocialMauiApp.ViewModel.HomeViewModel.NewPost">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel.newPost"/>
+        </member>
         <member name="P:SocialMauiApp.ViewModel.HomeViewModel.IsRefreshing">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel.isRefreshing"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.HomeViewModel.IsThereNewNotification">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel.isThereNewNotification"/>
+        </member>
+        <member name="M:SocialMauiApp.ViewModel.HomeViewModel.OnNewPostChanged(SocialMauiApp.Models.PostModel,SocialMauiApp.Models.PostModel)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.NewPost"/> just changed.</summary>
+            <param name="oldValue">The previous property value that was replaced.</param>
+            <param name="newValue">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.NewPost"/> is changed.</remarks>
         </member>
         <member name="F:SocialMauiApp.ViewModel.HomeViewModel.fetchPostsCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.FetchPostsCommand"/>.</summary>
@@ -485,6 +494,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Comment">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Comment" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewPost" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRefreshing">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRefreshing" generated properties.</summary>
         </member>
@@ -553,6 +565,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Comment">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Comment" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewPost" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRefreshing">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRefreshing" generated properties.</summary>

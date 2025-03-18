@@ -23,7 +23,6 @@
           "Microsoft.Extensions.Logging.Debug": "9.0.2",
           "Microsoft.Maui.Controls": "9.0.40",
           "Microsoft.Windows.CsWinRT": "2.2.0",
-          "Mono.HttpUtility": "1.0.0.1",
           "Refit.HttpClientFactory": "8.0.0",
           "SQLitePCLRaw.bundle_green": "2.1.10",
           "SkiaSharp": "3.116.1",
@@ -1578,14 +1577,6 @@
           }
         }
       },
-      "Mono.HttpUtility/1.0.0.1": {
-        "runtime": {
-          "lib/net40/Mono.HttpUtility.dll": {
-            "assemblyVersion": "1.0.0.1",
-            "fileVersion": "1.0.0.1"
-          }
-        }
-      },
       "Mono.TextTemplating/3.0.0": {
         "dependencies": {
           "System.CodeDom": "6.0.0"
@@ -2897,13 +2888,6 @@
       "sha512": "sha512-dOJ3oFeHnehVBAR98lR6YfX0JgDJkrehLqwZQqQE/iZgyye1c1TZu9oj3MBbgWP9xFApWUrb0G49KKnQWEZLtA==",
       "path": "microsoft.windowsappsdk/1.6.250108002",
       "hashPath": "microsoft.windowsappsdk.1.6.250108002.nupkg.sha512"
-    },
-    "Mono.HttpUtility/1.0.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-YoM2U1plMphxw4KF8PttXka5ZFfC+4hOD8jnXoGvcA6MhJvPFLNN/Zxxsx3+OMBBROSvINq2qUSkrf42ZjXUpA==",
-      "path": "mono.httputility/1.0.0.1",
-      "hashPath": "mono.httputility.1.0.0.1.nupkg.sha512"
     },
     "Mono.TextTemplating/3.0.0": {
       "type": "package",

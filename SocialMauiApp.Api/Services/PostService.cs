@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SocialMauiApp.Api.Data;
 using SocialMauiApp.Api.Data.Entities;
 using SocialMediaMaui.Shared.Dtos;
 using SocialMediaMaui.Shared.Hubs;
+using System.Collections.Immutable;
 
 namespace SocialMauiApp.Api.Services
 {
@@ -105,20 +107,41 @@ namespace SocialMauiApp.Api.Services
         public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize, Guid currentUserId)
         {
             var posts = await _context.Set<PostDto>()
-                .FromSqlInterpolated($"EXEC GetPosts @StartIndex={startIndex},@PageSize={pageSize},@CurrentUserId={currentUserId}")
+                .FromSqlRaw("EXEC GetPosts @StartIndex, @PageSize, @CurrentUserId",
+                    new SqlParameter("@StartIndex", startIndex),
+                    new SqlParameter("@PageSize", pageSize),
+                    new SqlParameter("@CurrentUserId", currentUserId))
                 .ToArrayAsync();
             return posts;
         }
+
+
         public async Task<PostDto?> GetPostAsync(Guid postId, Guid currentUserId)
         {
-            var posts = await _context.Set<PostDto>()
-                .FromSqlInterpolated($@"EXEC GetPostById @PostId={postId}, @CurrentUserId={currentUserId}")
-                .ToArrayAsync();
+            // Bước 1: Lấy dữ liệu bất đồng bộ từ Stored Procedure
+            var rawPosts = await _context.Set<PostDto>()
+                .FromSqlRaw("EXEC GetPostById @PostId, @CurrentUserId",
+                    new SqlParameter("@PostId", postId),
+                    new SqlParameter("@CurrentUserId", currentUserId))
+                .ToListAsync();
 
-            if (posts.Length == 0)
-                return null;
+            // Bước 2: Chuyển đổi kết quả (projection) trên client
+            var posts = rawPosts.Select(p => new PostDto
+            {
+                PostId = p.PostId,
+                UserId = p.UserId,
+                UserName = p.UserName,
+                UserPhotoUrl = p.UserPhotoUrl,
+                Content = p.Content,
+                PhotoUrl = p.PhotoUrl,
+                PostedOn = p.PostedOn,
+                ModifiedOn = p.ModifiedOn,
+                // Ép kiểu từ int sang bool
+                IsLiked = Convert.ToBoolean(p.IsLiked),
+                IsBookmarked = Convert.ToBoolean(p.IsBookmarked)
+            }).ToList();
 
-            return posts[0];
+            return posts.FirstOrDefault();
         }
 
 

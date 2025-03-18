@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "O9ZTuHkuL08=",
+  "dgSpecHash": "d/QYPP2bKhc=",
   "success": true,
   "projectFilePath": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp\\SocialMauiApp.csproj",
   "expectedPackageFiles": [
@@ -108,7 +108,6 @@
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.windows.cswinrt\\2.2.0\\microsoft.windows.cswinrt.2.2.0.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.windows.sdk.buildtools\\10.0.22621.756\\microsoft.windows.sdk.buildtools.10.0.22621.756.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.windowsappsdk\\1.6.250108002\\microsoft.windowsappsdk.1.6.250108002.nupkg.sha512",
-    "C:\\Users\\PhamTrung\\.nuget\\packages\\mono.httputility\\1.0.0.1\\mono.httputility.1.0.0.1.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\refit\\8.0.0\\refit.8.0.0.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\refit.httpclientfactory\\8.0.0\\refit.httpclientfactory.8.0.0.nupkg.sha512",
@@ -305,16 +304,5 @@
     "C:\\Users\\PhamTrung\\.nuget\\packages\\xamarin.kotlinx.serialization.core.jvm\\1.7.3.2\\xamarin.kotlinx.serialization.core.jvm.1.7.3.2.nupkg.sha512",
     "C:\\Users\\PhamTrung\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Mono.HttpUtility 1.0.0.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net9.0-android35.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Mono.HttpUtility",
-      "targetGraphs": [
-        "net9.0-android35.0"
-      ]
-    }
-  ]
+  "logs": []
 }

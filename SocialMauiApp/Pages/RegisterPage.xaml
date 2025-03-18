@@ -9,7 +9,8 @@
     Padding="20"
     x:DataType="vm:RegisterViewModel"
     Shell.BackgroundColor="{StaticResource Primary}"
-    Shell.TitleColor="White">
+    Shell.TitleColor="White"
+    BackgroundColor="SkyBlue">
     <Grid>
         <ScrollView VerticalScrollBarVisibility="Never">
             <Grid
@@ -48,7 +49,8 @@
                     <controls:NoBorderEntry
                         BackgroundColor="LightGoldenrodYellow"
                         Placeholder="Enter Name"
-                        Text="{Binding Name}" />
+                        Text="{Binding Name}"
+                        TextColor="Black" />
                     <controls:Spacer />
 
                     <Label Text="Email" />
@@ -57,7 +59,8 @@
                         IsPassword="True"
                         Keyboard="Email"
                         Placeholder="Email"
-                        Text="{Binding Email}" />
+                        Text="{Binding Email}"
+                        TextColor="Black" />
                     <controls:Spacer />
 
                     <Label Text="Password" />
@@ -65,7 +68,8 @@
                         BackgroundColor="LightGoldenrodYellow"
                         IsPassword="True"
                         Placeholder="Enter Password"
-                        Text="{Binding Password}" />
+                        Text="{Binding Password}"
+                        TextColor="Black" />
                     <controls:Spacer />
 
                     <Button

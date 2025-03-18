@@ -26,8 +26,9 @@ BEGIN
         p.PhotoUrl,
         p.PostedOn,
         p.ModifiedOn,
-        CASE WHEN l.UserId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsLiked,
-        CASE WHEN b.UserId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsBookmarked
+       CASE WHEN l.UserId IS NOT NULL THEN CONVERT(BIT, 1) ELSE CONVERT(BIT, 0) END AS IsLiked,
+CASE WHEN b.UserId IS NOT NULL THEN CONVERT(BIT, 1) ELSE CONVERT(BIT, 0) END AS IsBookmarked
+
     FROM Posts p
     INNER JOIN Users u ON p.UserId = u.Id
     LEFT JOIN Likes l ON p.Id = l.PostId AND l.UserId = @CurrentUserId
