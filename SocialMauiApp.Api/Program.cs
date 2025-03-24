@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -47,6 +47,17 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false
     };
 });
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // Tăng giới hạn tổng kích thước header lên 32KB (32768 bytes)
+    options.Limits.MaxRequestHeadersTotalSize = 32768;
+});
+// Cấu hình Logging (ví dụ thêm Debug logger cho môi trường Development)
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+#if DEBUG
+builder.Logging.AddDebug();
+#endif
 
 builder.Services.AddAuthorization();
 builder.Services.AddSignalR();

@@ -22,7 +22,7 @@ namespace SocialMauiApp.ViewModel
         private const int PageSize = 7;
 
         public HomeViewModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
-            : base(postApi)
+            : base(postApi, realtimeUpdatesService)
         {
             _realtimeUpdatesService = realtimeUpdatesService;
             _authService = authService;
@@ -69,7 +69,7 @@ namespace SocialMauiApp.ViewModel
                     _startIndex += posts.Length;
                     foreach (var p in posts.OrderByDescending(p=>p.PostedOn))
                     {
-                        var postModel = PostModel.FromDto(p, PostsApi);
+                        var postModel = PostModel.FromDto(p, PostsApi, _realtimeUpdatesService);
                         // Kiểm tra nếu bài đã có trong danh sách thì bỏ qua
                         if (!Posts.Any(existing => existing.PostId == postModel.PostId))
                         {
@@ -112,7 +112,7 @@ namespace SocialMauiApp.ViewModel
                 }
                 else
                 {
-                    Posts.Insert(0, PostModel.FromDto(post, PostsApi));
+                    Posts.Insert(0, PostModel.FromDto(post, PostsApi, _realtimeUpdatesService));
                 }
             });
         }

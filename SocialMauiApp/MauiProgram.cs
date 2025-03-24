@@ -58,7 +58,7 @@ namespace SocialMauiApp
 
         private static void ConfigureRefit(IServiceCollection services)
         {
-            //var baseApiUrl = "https://8tdthlzc-7022.asse.devtunnels.ms";
+            //var baseApiUrl = "https://r2dpzmzp-7022.asse.devtunnels.ms";
             services.AddRefitClient<IAuthApi>()
                 .ConfigureHttpClient(SetHttpClient);
             services.AddRefitClient<IPostApi>(GetRefitSettings)

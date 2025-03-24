@@ -49,6 +49,7 @@
                     <controls:NoBorderEntry
                         BackgroundColor="LightGoldenrodYellow"
                         Placeholder="Enter Name"
+                        PlaceholderColor="LightGray"
                         Text="{Binding Name}"
                         TextColor="Black" />
                     <controls:Spacer />
@@ -59,6 +60,7 @@
                         IsPassword="True"
                         Keyboard="Email"
                         Placeholder="Email"
+                        PlaceholderColor="LightGray"
                         Text="{Binding Email}"
                         TextColor="Black" />
                     <controls:Spacer />
@@ -68,6 +70,7 @@
                         BackgroundColor="LightGoldenrodYellow"
                         IsPassword="True"
                         Placeholder="Enter Password"
+                        PlaceholderColor="LightGray"
                         Text="{Binding Password}"
                         TextColor="Black" />
                     <controls:Spacer />

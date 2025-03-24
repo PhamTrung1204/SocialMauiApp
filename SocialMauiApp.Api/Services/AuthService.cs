@@ -6,6 +6,7 @@ using SocialMauiApp.Api.Data.Entities;
 using SocialMediaMaui.Shared.Dtos;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace SocialMauiApp.Api.Services
 {
@@ -16,16 +17,19 @@ namespace SocialMauiApp.Api.Services
 
         private readonly PhotoUploadService _photoUploadService;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthService> _logger;
 
         public AuthService(DataContext context,
             IPasswordHasher<User> passwordHasher,
             PhotoUploadService photoUploadService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ILogger<AuthService> logger)
         {
             _context = context;
             _passwordHasher = passwordHasher;
             _photoUploadService = photoUploadService;
             _configuration = configuration;
+            _logger = logger;
         }
         public async Task<ApiResult<Guid>> RegisterAsync(RegisterDto dto)
         {
@@ -88,23 +92,38 @@ namespace SocialMauiApp.Api.Services
         private string GenerateJwtToken(User user)
         {
             var claims = new[]
-{
-    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-    new Claim(ClaimTypes.Name, user.Name),
-    new Claim(ClaimTypes.Email, user.Email),
-    new Claim("UserPhotoUrl", user.PhotoUrl ?? string.Empty)
-};
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email),
+            };
 
             var secretKey = _configuration.GetValue<string>("Jwt:SecretKey");
-            var securityKey = System.Text.Encoding.UTF8.GetBytes(secretKey);
+            if (string.IsNullOrWhiteSpace(secretKey))
+            {
+                throw new InvalidOperationException("JWT SecretKey is not configured.");
+            }
+
+            var securityKey = Encoding.UTF8.GetBytes(secretKey);
             var symmetricKey = new SymmetricSecurityKey(securityKey);
             var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
-            var jwtSecurityToken = new JwtSecurityToken(signingCredentials: signingCredentials,
-                issuer: _configuration.GetValue<string>("Jwt:Issuer"),
-                expires: DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpireInMinutes")),
-                claims: claims);
-            var jwt = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            return jwt;
+
+            var issuer = _configuration.GetValue<string>("Jwt:Issuer") ?? "default-issuer";
+            var expireInMinutes = _configuration.GetValue<int>("Jwt:ExpireInMinutes", 720);
+
+            var jwtSecurityToken = new JwtSecurityToken(
+                issuer: issuer,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(expireInMinutes),
+                signingCredentials: signingCredentials);
+
+            var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+            // Sử dụng ILogger để log token (chỉ nên log trong môi trường Development)
+            _logger.LogDebug("Generated JWT Token: {Token}", token);
+
+            return token;
         }
+
     }
 }

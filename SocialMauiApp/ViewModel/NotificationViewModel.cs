@@ -6,7 +6,9 @@ using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Maui.ApplicationModel;
 
 namespace SocialMauiApp.ViewModel
 {
@@ -19,7 +21,7 @@ namespace SocialMauiApp.ViewModel
         private const int PageSize = 50;
 
         public NotificationViewModel(IUserApi userApi, AuthService authService, RealtimeUpdatesService realtimeUpdatesService, IPostApi postsApi)
-            : base(postsApi)
+            : base(postsApi, realtimeUpdatesService)
         {
             _userApi = userApi;
             _authService = authService;
@@ -80,6 +82,7 @@ namespace SocialMauiApp.ViewModel
         {
             _realtimeUpdatesService.AddNotificationGeneratedHandler(nameof(NotificationViewModel), OnNotificationGenerated);
         }
+
         [RelayCommand]
         private async Task OpenPostAsync(Guid? postId)
         {
@@ -96,9 +99,10 @@ namespace SocialMauiApp.ViewModel
                     await ToastAsync("Post no longer exists");
                     return;
                 }
+                // Sửa lại: truyền thêm realtimeUpdatesService cho PostModel.FromDto để hỗ trợ realtime toggle cập nhật icon ngay lập tức
                 await NavigateAsync(nameof(PostDetailsPage), new Dictionary<string, object>
                 {
-                    [nameof(DetailsViewModel.Post)] = PostModel.FromDto(post, PostsApi)
+                    [nameof(DetailsViewModel.Post)] = PostModel.FromDto(post, PostsApi, _realtimeUpdatesService)
                 });
             });
         }

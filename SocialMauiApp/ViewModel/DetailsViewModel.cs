@@ -23,7 +23,7 @@ namespace SocialMauiApp.ViewModel
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
 
         public DetailsViewModel(AuthService authService, IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
-            : base(postApi)
+            : base(postApi, realtimeUpdatesService)
         {
             _authService = authService;
             _realtimeUpdatesService = realtimeUpdatesService;

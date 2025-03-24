@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SocialMauiApp.Apis;
+using SocialMauiApp.Services;
 using SocialMauiApp.ViewModel;
 using SocialMediaMaui.Shared.Dtos;
 using System;
@@ -17,7 +18,7 @@ namespace SocialMauiApp.Models
         [ObservableProperty]
         private string? _userPhotoUrl;
 
-        // Computed property: nếu UserPhotoUrl rỗng, trả về "personal.png"
+        // Nếu UserPhotoUrl rỗng, trả về "personal.png"
         public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
 
         [ObservableProperty]
@@ -41,12 +42,15 @@ namespace SocialMauiApp.Models
         public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
 
-        public PostModel(IPostApi postApi) : base(postApi)
+        // Constructor mới: cần truyền IPostApi và RealtimeUpdatesService
+        public PostModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
+            : base(postApi, realtimeUpdatesService)
         {
         }
 
-        public static PostModel FromDto(PostDto dto, IPostApi postApi) =>
-            new PostModel(postApi)
+        // Phương thức tiện lợi để tạo PostModel từ DTO, nhớ truyền thêm RealtimeUpdatesService
+        public static PostModel FromDto(PostDto dto, IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService) =>
+            new PostModel(postApi, realtimeUpdatesService)
             {
                 PostId = dto.PostId,
                 Content = dto.Content,

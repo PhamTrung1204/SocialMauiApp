@@ -8,7 +8,6 @@ using SocialMauiApp.Models;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
 using SocialMediaMaui.Shared.Hubs;
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,13 +23,21 @@ namespace SocialMauiApp.ViewModel
         private readonly AuthService _authService;
         private readonly IUserApi _userApi;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
-       
-        public ProfileViewModel(IPostApi postsApi, AuthService authService, IUserApi userApi, RealtimeUpdatesService realtimeUpdatesService) : base(postsApi)
+
+        public ProfileViewModel(
+            IPostApi postsApi,
+            AuthService authService,
+            IUserApi userApi,
+            RealtimeUpdatesService realtimeUpdatesService)
+            : base(postsApi, realtimeUpdatesService)
         {
             User = authService.User!;
             _authService = authService;
             _userApi = userApi;
             _realtimeUpdatesService = realtimeUpdatesService;
+
+            // Đăng ký các handler realtime riêng của ProfileViewModel
+            ConfigureRealtimeUpdates();
         }
 
         [ObservableProperty]
@@ -51,11 +58,11 @@ namespace SocialMauiApp.ViewModel
         public bool IsBookmarksTabSelected => !IsMyPostsTabSelected;
 
         private int _myPostsStartIndex = 0;
-        public ObservableCollection<PostModel> MyPosts { get; set; } = [];
+        public ObservableCollection<PostModel> MyPosts { get; set; } = new ObservableCollection<PostModel>();
         private int _bookmarkedPostsStartIndex = 0;
-        public ObservableCollection<PostModel> BookmarkedPosts { get; set; } = [];
+        public ObservableCollection<PostModel> BookmarkedPosts { get; set; } = new ObservableCollection<PostModel>();
         private const int PageSize = 4;
-        
+
         [RelayCommand]
         private async Task SelectMyPostsTabAsync()
         {
@@ -82,11 +89,12 @@ namespace SocialMauiApp.ViewModel
 
                 if (posts.Length > 0)
                 {
-                    if (_myPostsStartIndex == 0) MyPosts.Clear();
+                    if (_myPostsStartIndex == 0)
+                        MyPosts.Clear();
                     _myPostsStartIndex += posts.Length;
                     foreach (var p in posts)
                     {
-                        MyPosts.Add(PostModel.FromDto(p, PostsApi));
+                        MyPosts.Add(PostModel.FromDto(p, PostsApi,_realtimeUpdatesService));
                     }
                 }
             });
@@ -102,11 +110,12 @@ namespace SocialMauiApp.ViewModel
 
                 if (posts.Length > 0)
                 {
-                    if (_bookmarkedPostsStartIndex == 0) BookmarkedPosts.Clear();
+                    if (_bookmarkedPostsStartIndex == 0)
+                        BookmarkedPosts.Clear();
                     _bookmarkedPostsStartIndex += posts.Length;
                     foreach (var p in posts)
                     {
-                        BookmarkedPosts.Add(PostModel.FromDto(p, PostsApi));
+                        BookmarkedPosts.Add(PostModel.FromDto(p, PostsApi, _realtimeUpdatesService));
                     }
                 }
             });
@@ -148,6 +157,9 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
+        /// <summary>
+        /// Đăng ký các handler realtime cho ProfileViewModel.
+        /// </summary>
         public void ConfigureRealtimeUpdates()
         {
             _realtimeUpdatesService.AddPostChangedHandler(nameof(ProfileViewModel), OnPostChanged);
@@ -157,22 +169,40 @@ namespace SocialMauiApp.ViewModel
 
         private void OnPostChanged(PostDto post)
         {
+            // Cập nhật bài viết trong danh sách MyPosts nếu có thay đổi nội dung hay ảnh
             var myPost = MyPosts.FirstOrDefault(p => p.PostId == post.PostId);
             if (myPost != null)
             {
                 myPost.Content = post.Content;
                 myPost.PhotoUrl = post.PhotoUrl;
             }
+            // Ngoài ra, nếu bài viết trong danh sách BookmarkedPosts cũng có thay đổi thì cập nhật
+            var bookmarkedPost = BookmarkedPosts.FirstOrDefault(p => p.PostId == post.PostId);
+            if (bookmarkedPost != null)
+            {
+                bookmarkedPost.Content = post.Content;
+                bookmarkedPost.PhotoUrl = post.PhotoUrl;
+            }
         }
 
         private void OnPostDeleted(Guid postId)
         {
-            MyPosts.Remove(MyPosts.FirstOrDefault(p => p.PostId == postId));
-            BookmarkedPosts.Remove(BookmarkedPosts.FirstOrDefault(p => p.PostId == postId));
+            // Xóa bài viết bị xóa khỏi cả MyPosts và BookmarkedPosts
+            var postToRemove = MyPosts.FirstOrDefault(p => p.PostId == postId);
+            if (postToRemove != null)
+            {
+                MyPosts.Remove(postToRemove);
+            }
+            postToRemove = BookmarkedPosts.FirstOrDefault(p => p.PostId == postId);
+            if (postToRemove != null)
+            {
+                BookmarkedPosts.Remove(postToRemove);
+            }
         }
 
         private void OnUserPhotoChanged(UserPhotoChangedDto dto)
         {
+            // Cập nhật lại ảnh đại diện của người dùng cho các bài viết
             if (dto.UserId == User.Id)
             {
                 foreach (var post in MyPosts)

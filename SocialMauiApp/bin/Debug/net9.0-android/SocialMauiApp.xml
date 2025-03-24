@@ -206,6 +206,11 @@
             <inheritdoc/>
             <inheritdoc/>
         </member>
+        <member name="M:SocialMauiApp.ViewModel.ProfileViewModel.ConfigureRealtimeUpdates">
+            <summary>
+            Đăng ký các handler realtime cho ProfileViewModel.
+            </summary>
+        </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.User">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._user"/>
         </member>

@@ -107,11 +107,8 @@ namespace SocialMauiApp.Api.Services
         public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize, Guid currentUserId)
         {
             var posts = await _context.Set<PostDto>()
-                .FromSqlRaw("EXEC GetPosts @StartIndex, @PageSize, @CurrentUserId",
-                    new SqlParameter("@StartIndex", startIndex),
-                    new SqlParameter("@PageSize", pageSize),
-                    new SqlParameter("@CurrentUserId", currentUserId))
-                .ToArrayAsync();
+              .FromSqlInterpolated($"EXEC GetPosts @StartIndex={startIndex},@PageSize={pageSize},@CurrentUserId={currentUserId}")
+              .ToArrayAsync();
             return posts;
         }
 

@@ -11,6 +11,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Media;
 using Microsoft.Maui.Devices;
+using SocialMauiApp.Services;
 
 namespace SocialMauiApp.ViewModel
 {
@@ -18,7 +19,7 @@ namespace SocialMauiApp.ViewModel
     public partial class SavePostViewModel : BaseViewModel
     {
         private readonly IPostApi _postApi;
-
+        private readonly RealtimeUpdatesService _realtimeUpdatesService;
         public SavePostViewModel(IPostApi postApi)
         {
             _postApi = postApi;
@@ -175,7 +176,7 @@ namespace SocialMauiApp.ViewModel
                         return;
                     }
 
-                    var savedPost = PostModel.FromDto(result.Data, _postApi);
+                    var savedPost = PostModel.FromDto(result.Data, _postApi, _realtimeUpdatesService);
                     Content = string.Empty;
                     PhotoPath = !string.IsNullOrWhiteSpace(savedPost.PhotoUrl) ? savedPost.PhotoUrl : string.Empty;
 

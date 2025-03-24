@@ -34,6 +34,7 @@
                         BackgroundColor="LightGoldenrodYellow"
                         Keyboard="Email"
                         Placeholder="Enter Username"
+                        PlaceholderColor="LightGray"
                         Text="{Binding Email}"
                         TextColor="Black"/>
                     <controls:Spacer />
@@ -43,6 +44,7 @@
                         BackgroundColor="LightGoldenrodYellow"
                         IsPassword="True"
                         Placeholder="Enter Password"
+                        PlaceholderColor="LightGray"
                         Text="{Binding Password}"
                         TextColor="Black"/>
                     <controls:Spacer />
