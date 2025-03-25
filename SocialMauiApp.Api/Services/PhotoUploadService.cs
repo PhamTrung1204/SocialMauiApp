@@ -24,34 +24,59 @@ namespace SocialMauiApp.Api.Services
 
         public async Task<(string PhotoPath, string PhotoUrl)> SavePhotoAsync(IFormFile photo, params string[] folderPaths)
         {
-            // 1. Xây dựng đường dẫn vật lý để lưu file
+            // Kiểm tra file có tồn tại và tên hợp lệ hay không
+            if (photo == null || string.IsNullOrEmpty(photo.FileName))
+                throw new ArgumentNullException(nameof(photo), "Photo file is null or invalid.");
+
+            // Kiểm tra folderPaths có hợp lệ không
+            if (folderPaths == null || !folderPaths.Any())
+                throw new ArgumentNullException(nameof(folderPaths), "Folder paths cannot be null or empty.");
+
+            // Kiểm tra WebRootPath đã được thiết lập chưa
+            if (string.IsNullOrEmpty(_webHostEnvironment?.WebRootPath))
+                throw new InvalidOperationException("WebRootPath is not set.");
+
+            // Validate extension: chuyển về chữ thường để so sánh
+            var extension = Path.GetExtension(photo.FileName).ToLower();
+            if (!_allowedExtensions.Contains(extension))
+                throw new InvalidOperationException($"Invalid file type. Allowed types are: {string.Join(", ", _allowedExtensions)}");
+
+            // Validate kích thước file
+            if (photo.Length > _maxFileSize)
+                throw new InvalidOperationException($"File size exceeds the limit of {_maxFileSize / (1024 * 1024)} MB.");
+
+            // Xây dựng đường dẫn vật lý để lưu file
             var physicalPaths = new List<string> { _webHostEnvironment.WebRootPath };
             physicalPaths.AddRange(folderPaths);
             var targetFolderPath = Path.Combine(physicalPaths.ToArray());
 
+            // Tạo thư mục nếu chưa tồn tại
             if (!Directory.Exists(targetFolderPath))
-            {
                 Directory.CreateDirectory(targetFolderPath);
-            }
 
-            // 2. Tạo tên file mới (dùng GUID để đảm bảo duy nhất)
-            var extension = Path.GetExtension(photo.FileName);
+            // Tạo tên file mới duy nhất
             var newPhotoName = $"{Guid.NewGuid()}_{DateTime.UtcNow.Ticks}{extension}";
             var fullPhotoPath = Path.Combine(targetFolderPath, newPhotoName);
 
-            // 3. Lưu file ảnh vào đường dẫn vật lý
+            // Lưu file ảnh vào đường dẫn vật lý
             using (var fs = new FileStream(fullPhotoPath, FileMode.Create))
             {
                 await photo.CopyToAsync(fs);
             }
 
-            // 4. Tạo URL công khai cho ảnh
+            // Lấy domain từ cấu hình
             var domainUrl = _configuration.GetValue<string>("Domain")?.TrimEnd('/');
-            var relativePath = Path.Combine(folderPaths).Replace("\\", "/"); // Đảm bảo URL đúng
+            if (string.IsNullOrEmpty(domainUrl))
+                throw new InvalidOperationException("Domain is not configured properly.");
+
+            // Tạo URL công khai cho ảnh
+            var relativePath = Path.Combine(folderPaths).Replace("\\", "/").Trim('/');
             var photoUrl = $"{domainUrl}/{relativePath}/{newPhotoName}";
 
-            return (fullPhotoPath, photoUrl); // Chỉ trả về 2 giá trị, đúng với phương thức gọi nó
-        }
+            Console.WriteLine($"\ud83d\udcf8 Full Photo Path: {fullPhotoPath}");
+            Console.WriteLine($"\ud83c\udf10 Public Photo URL: {photoUrl}");
 
+            return (fullPhotoPath, photoUrl);
+        }
     }
 }

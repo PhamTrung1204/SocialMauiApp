@@ -61,6 +61,7 @@
                         Grid.Column="2"
                         FontSize="12"
                         Text="{Binding PostedOnDisplay, StringFormat='{0:dd MMM yyyy}'}"
+                        TextColor="Gray"
                         VerticalOptions="Center" />
                 </Grid>
             </Grid>

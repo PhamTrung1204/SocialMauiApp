@@ -70,6 +70,26 @@ namespace SocialMauiApp.Api.Endpoints
               Results.Ok(await postService.GetPostAsync(postId, principal.GetUserId())))
               .Produces<PostDto>()
               .WithName("GetPostById");
+            // Endpoint upload ảnh riêng biệt, sử dụng PhotoUploadService
+            postsGroup.MapPost("/upload-photo", async ([FromForm] IFormFile? photo, PhotoUploadService photoUploadService) =>
+            {
+                if (photo == null || photo.Length == 0)
+                    return Results.BadRequest("No file uploaded.");
+
+                try
+                {
+                    // Lưu file ảnh vào thư mục "Uploads/Photos"
+                    var (photoPath, photoUrl) = await photoUploadService.SavePhotoAsync(photo, "Uploads", "Photos");
+                    return Results.Ok(new { PhotoUrl = photoUrl });
+                }
+                catch (Exception ex)
+                {
+                    return Results.Problem($"Internal Server Error: {ex.Message}");
+                }
+            })
+            .DisableAntiforgery()
+            .Produces<ApiResult<object>>() // Thay object bằng DTO cụ thể nếu có
+            .WithName("UploadPhoto");
             return app;
         }
     }

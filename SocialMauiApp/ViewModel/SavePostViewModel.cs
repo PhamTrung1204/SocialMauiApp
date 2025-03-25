@@ -147,9 +147,9 @@ namespace SocialMauiApp.ViewModel
 
                 await MakeApiCall(async () =>
                 {
-                    // Xử lý ảnh nếu có (tạo StreamPart)
+                    // Xử lý ảnh: chỉ tạo StreamPart nếu PhotoPath là file cục bộ (không bắt đầu bằng "http")
                     StreamPart? photoStreamPart = null;
-                    if (!string.IsNullOrWhiteSpace(PhotoPath) && File.Exists(PhotoPath) && _existingPhotoUrl != PhotoPath)
+                    if (!string.IsNullOrWhiteSpace(PhotoPath) && File.Exists(PhotoPath) && !PhotoPath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                     {
                         var fileName = Path.GetFileName(PhotoPath);
                         var fileStream = File.OpenRead(PhotoPath);
@@ -178,6 +178,7 @@ namespace SocialMauiApp.ViewModel
 
                     var savedPost = PostModel.FromDto(result.Data, _postApi, _realtimeUpdatesService);
                     Content = string.Empty;
+                    // Cập nhật PhotoPath thành URL công khai trả về từ API nếu có
                     PhotoPath = !string.IsNullOrWhiteSpace(savedPost.PhotoUrl) ? savedPost.PhotoUrl : string.Empty;
 
                     // Phân biệt giữa sửa bài và đăng bài mới

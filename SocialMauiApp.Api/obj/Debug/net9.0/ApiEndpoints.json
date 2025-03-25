@@ -338,6 +338,34 @@
     "EndpointName": "SavePost"
   },
   {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_8",
+    "RelativePath": "api/posts/upload-photo",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "photo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Posts"
+    ],
+    "EndpointName": "UploadPhoto"
+  },
+  {
     "ContainingType": "SocialMauiApp.Api.Endpoints.UserEndpoints\u002B\u003C\u003Ec",
     "Method": "\u003CMapUserEndpoints\u003Eb__0_2",
     "RelativePath": "api/user/bookmarked-posts",

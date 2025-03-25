@@ -39,7 +39,6 @@ namespace SocialMauiApp.ViewModel
         [ObservableProperty]
         private PostModel? newPost;
 
-        // Phương thức partial xử lý thay đổi NewPost (CommunityToolkit.Mvvm 8.0+ dùng 2 tham số)
         partial void OnNewPostChanged(PostModel? oldValue, PostModel? newValue)
         {
             if (newValue != null)
