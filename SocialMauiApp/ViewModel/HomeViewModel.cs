@@ -97,24 +97,27 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task GoToAddPostAsync() => await NavigateAsync(nameof(AddPostPage));
 
-        private void OnPostChanged(PostDto post)
+        private void OnPostChanged(PostDto updatedPost)
         {
-            MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                var currentPost = Posts.FirstOrDefault(p => p.PostId == post.PostId);
-                if (currentPost != null)
+                var post = Posts.FirstOrDefault(p => p.PostId == updatedPost.PostId);
+                if (post != null)
                 {
-                    currentPost.IsLiked = post.IsLiked;
-                    currentPost.IsBookmarked = post.IsBookmarked;
-                    currentPost.PhotoUrl = post.PhotoUrl;
-                    currentPost.Content = post.Content;
+                    // Cập nhật các thuộc tính cần thiết
+                    post.IsLiked = updatedPost.IsLiked;
+                    
+                    post.IsBookmarked = updatedPost.IsBookmarked;
+          
+                   
                 }
                 else
                 {
-                    Posts.Insert(0, PostModel.FromDto(post, PostsApi, _realtimeUpdatesService));
+                    // Nếu bài đăng chưa có, có thể thêm mới vào danh sách
+                    Posts.Insert(0, PostModel.FromDto(updatedPost, PostsApi, _realtimeUpdatesService));
                 }
             });
-        }
+        }     
 
         private void OnPostDeleted(Guid postId)
         {

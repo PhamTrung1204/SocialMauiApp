@@ -135,9 +135,6 @@ namespace SocialMauiApp.ViewModel
             };
             await NavigateAsync(nameof(AddPostPage), param);
         }
-
-        // ---------------------- SIGNALR HANDLERS ----------------------
-
         private void OnPostChanged(PostDto changedPost)
         {
             _ = MainThread.InvokeOnMainThreadAsync(() =>
@@ -149,7 +146,6 @@ namespace SocialMauiApp.ViewModel
                 }
             });
         }
-
         private void OnPostDeleted(Guid postId)
         {
             _ = MainThread.InvokeOnMainThreadAsync(async () =>

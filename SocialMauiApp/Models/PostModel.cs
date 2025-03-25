@@ -47,6 +47,30 @@ namespace SocialMauiApp.Models
             : base(postApi, realtimeUpdatesService)
         {
         }
+        partial void OnIsLikedChanged(bool oldValue, bool newValue)
+        {
+            // Nếu cần cập nhật trên MainThread, bạn có thể gọi như sau:
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                OnPropertyChanged(nameof(IsLikeIcon));
+            });
+        }
+        public void NotifyIsLikeIconChanged()
+        {
+            OnPropertyChanged(nameof(IsLikeIcon));
+        }
+        partial void OnIsBookmarkedChanged(bool oldValue, bool newValue)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                OnPropertyChanged(nameof(IsBookmarkIcon));
+            });
+        }
+
+        public void NotifyIsBookmarkIconChanged()
+        {
+            OnPropertyChanged(nameof(IsBookmarkIcon));
+        }
 
         // Phương thức tiện lợi để tạo PostModel từ DTO, nhớ truyền thêm RealtimeUpdatesService
         public static PostModel FromDto(PostDto dto, IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService) =>

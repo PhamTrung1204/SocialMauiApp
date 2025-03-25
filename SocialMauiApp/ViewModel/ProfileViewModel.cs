@@ -184,8 +184,7 @@ namespace SocialMauiApp.ViewModel
             {
                 myPost.Content = post.Content;
                 myPost.PhotoUrl = post.PhotoUrl;
-                myPost.IsLiked = post.IsLiked;
-                myPost.IsBookmarked = post.IsBookmarked;
+               
             }
             // Ngoài ra, nếu bài viết trong danh sách BookmarkedPosts cũng có thay đổi thì cập nhật
             var bookmarkedPost = BookmarkedPosts.FirstOrDefault(p => p.PostId == post.PostId);
@@ -193,8 +192,7 @@ namespace SocialMauiApp.ViewModel
             {
                 bookmarkedPost.Content = post.Content;
                 bookmarkedPost.PhotoUrl = post.PhotoUrl;
-                bookmarkedPost.IsLiked = post.IsLiked;
-                bookmarkedPost.IsBookmarked = post.IsBookmarked;
+                
             }
         }
 

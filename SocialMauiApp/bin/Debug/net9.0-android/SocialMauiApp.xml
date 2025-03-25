@@ -25,6 +25,18 @@
         <member name="P:SocialMauiApp.Models.PostModel.IsBookmarked">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isBookmarked"/>
         </member>
+        <member name="M:SocialMauiApp.Models.PostModel.OnIsLikedChanged(System.Boolean,System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.Models.PostModel.IsLiked"/> just changed.</summary>
+            <param name="oldValue">The previous property value that was replaced.</param>
+            <param name="newValue">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.Models.PostModel.IsLiked"/> is changed.</remarks>
+        </member>
+        <member name="M:SocialMauiApp.Models.PostModel.OnIsBookmarkedChanged(System.Boolean,System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.Models.PostModel.IsBookmarked"/> just changed.</summary>
+            <param name="oldValue">The previous property value that was replaced.</param>
+            <param name="newValue">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.Models.PostModel.IsBookmarked"/> is changed.</remarks>
+        </member>
         <member name="M:SocialMauiApp.Services.AuthService.Login(SocialMediaMaui.Shared.Dtos.LoginResponseDto)">
             <summary>
             Thực hiện đăng nhập, lưu thông tin người dùng và token vào Preferences.

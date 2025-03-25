@@ -100,6 +100,7 @@ namespace SocialMauiApp.Services
                 _hubConnection.SendAsync("UpdatePostStatus", postId);
             }
         }
+
         public void RemoveHandlers(string key)
         {
             if (_postChangedActions.ContainsKey(key))

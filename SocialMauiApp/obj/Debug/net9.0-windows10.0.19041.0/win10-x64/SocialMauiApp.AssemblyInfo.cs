@@ -18,7 +18,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SocialMauiApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+595a96e3623e1ffecde42c7f396afea3af5708d7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+71cccf16f359a86f4e6a0336272b0f8af57d652b")]
 [assembly: System.Reflection.AssemblyProductAttribute("SocialMauiApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SocialMauiApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

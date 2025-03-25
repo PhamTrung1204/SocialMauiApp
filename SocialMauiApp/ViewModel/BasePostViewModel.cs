@@ -35,16 +35,17 @@ namespace SocialMauiApp.ViewModel
             await NavigateAsync(nameof(PostDetailsPage), param);
         }
 
-        // Toggle Like: Cập nhật ngay thuộc tính và gọi API, nếu thành công thông báo realtime
+        // Toggle Like: cập nhật UI ngay và gọi API, sau đó gửi thông báo realtime
         [RelayCommand]
         private async Task ToggleLikeAsync(PostModel post)
         {
             await MakeApiCall(async () =>
             {
-                // Cập nhật trạng thái UI ngay lập tức
+                // Lưu trạng thái ban đầu để rollback nếu lỗi
                 var originalStatus = post.IsLiked;
                 post.IsLiked = !post.IsLiked;
 
+                // Gọi API cập nhật trạng thái like
                 var result = await PostsApi.ToggleLikeAsync(post.PostId);
                 if (!result.IsSuccess)
                 {
@@ -53,7 +54,10 @@ namespace SocialMauiApp.ViewModel
                     return;
                 }
 
-                // Sau khi API thành công, gửi thông báo realtime
+                // Gọi phương thức thông báo cập nhật icon ngay
+                post.NotifyIsLikeIconChanged();
+
+                // Gửi thông báo realtime để các client khác cập nhật
                 _realtimeUpdatesService.NotifyPostChanged(post.PostId);
             });
         }
@@ -64,7 +68,7 @@ namespace SocialMauiApp.ViewModel
             await Task.CompletedTask;
         }
 
-        // Toggle Bookmark: Cập nhật trạng thái UI ngay lập tức
+        // Toggle Bookmark: cập nhật trạng thái UI ngay và gọi API
         [RelayCommand]
         private async Task ToggleBookmarkAsync(PostModel post)
         {
@@ -82,12 +86,11 @@ namespace SocialMauiApp.ViewModel
                 }
 
                 OnToggleBookmarkAsync(post);
-                // Sau khi API thành công, gửi thông báo realtime
+                post.NotifyIsBookmarkIconChanged();
                 _realtimeUpdatesService.NotifyPostChanged(post.PostId);
             });
         }
 
-        // Phương thức SharePostAsync được giữ nguyên (nếu dùng)
         [RelayCommand]
         private async Task SharePostAsync(PostModel post)
         {
