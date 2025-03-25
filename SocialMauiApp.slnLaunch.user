@@ -4,8 +4,7 @@
     "Projects": [
       {
         "Path": "SocialMauiApp\\SocialMauiApp.csproj",
-        "Action": "Start",
-        "DebugTarget": "Xiaomi 2201117SG (Android 13.0 - API 33)"
+        "Action": "Start"
       },
       {
         "Path": "SocialMauiApp.Api\\SocialMauiApp.Api.csproj",

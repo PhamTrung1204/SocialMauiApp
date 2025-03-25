@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+
 using Refit;
 using SocialMediaMaui.Shared.Dtos;
 using System;

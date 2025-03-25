@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Refit;
 using SocialMauiApp.Apis;
@@ -92,9 +91,9 @@ namespace SocialMauiApp.ViewModel
                     if (_myPostsStartIndex == 0)
                         MyPosts.Clear();
                     _myPostsStartIndex += posts.Length;
-                    foreach (var p in posts.OrderByDescending(p=>p.PostedOn))
+                    foreach (var p in posts.OrderByDescending(p => p.PostedOn))
                     {
-                        MyPosts.Add(PostModel.FromDto(p, PostsApi,_realtimeUpdatesService));
+                        MyPosts.Add(PostModel.FromDto(p, PostsApi, _realtimeUpdatesService));
                     }
                 }
             });
@@ -110,14 +109,12 @@ namespace SocialMauiApp.ViewModel
 
                 if (posts.Length > 0)
                 {
-                    // Nếu đang load trang đầu tiên, xoá danh sách cũ để tránh trùng
                     if (_bookmarkedPostsStartIndex == 0)
                         BookmarkedPosts.Clear();
 
                     _bookmarkedPostsStartIndex += posts.Length;
                     foreach (var p in posts.OrderByDescending(p => p.PostedOn))
                     {
-                        // Tạo model từ DTO
                         var newPost = PostModel.FromDto(p, PostsApi, _realtimeUpdatesService);
                         // Kiểm tra nếu bài đăng chưa có trong danh sách thì mới thêm
                         if (!BookmarkedPosts.Any(existing => existing.PostId == newPost.PostId))
@@ -184,21 +181,24 @@ namespace SocialMauiApp.ViewModel
             {
                 myPost.Content = post.Content;
                 myPost.PhotoUrl = post.PhotoUrl;
-               
+                myPost.IsBookmarked = post.IsBookmarked;
+                myPost.IsLiked = post.IsLiked;
             }
+
             // Ngoài ra, nếu bài viết trong danh sách BookmarkedPosts cũng có thay đổi thì cập nhật
             var bookmarkedPost = BookmarkedPosts.FirstOrDefault(p => p.PostId == post.PostId);
             if (bookmarkedPost != null)
             {
                 bookmarkedPost.Content = post.Content;
                 bookmarkedPost.PhotoUrl = post.PhotoUrl;
-                
+                bookmarkedPost.IsBookmarked = post.IsBookmarked;
+                bookmarkedPost.IsLiked = post.IsLiked;
             }
         }
 
+        // Xóa bài viết bị xóa khỏi cả MyPosts và BookmarkedPosts
         private void OnPostDeleted(Guid postId)
         {
-            // Xóa bài viết bị xóa khỏi cả MyPosts và BookmarkedPosts
             var postToRemove = MyPosts.FirstOrDefault(p => p.PostId == postId);
             if (postToRemove != null)
             {
@@ -211,9 +211,9 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
+        // Cập nhật lại ảnh đại diện của người dùng cho các bài viết
         private void OnUserPhotoChanged(UserPhotoChangedDto dto)
         {
-            // Cập nhật lại ảnh đại diện của người dùng cho các bài viết
             if (dto.UserId == User.Id)
             {
                 foreach (var post in MyPosts)

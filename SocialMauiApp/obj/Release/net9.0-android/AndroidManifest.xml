@@ -15,9 +15,6 @@
   <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
   <uses-feature android:name="android.hardware.camera" />
   <application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:name="crc6450d00504b1424cab.MainApplication" android:label="SocialMauiApp" android:extractNativeLibs="true">
-    <activity android:exported="true" android:name="crc648316b0a9aa8cfd61.BrowserTabActivity" />
-    <activity android:exported="true" android:name="microsoft.identity.client.AuthenticationActivity" />
-    <activity android:configChanges="orientation|screenSize" android:exported="false" android:name="crc64ed1888fb4925e3b7.AuthenticationAgentActivity" />
     <activity android:configChanges="orientation|screenSize" android:exported="false" android:name="crc6468b6408a11370c2f.WebAuthenticatorIntermediateActivity" />
     <provider android:authorities="com.companyname.socialmauiapp.fileProvider" android:exported="false" android:grantUriPermissions="true" android:name="microsoft.maui.essentials.fileProvider">
       <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/microsoft_maui_essentials_fileprovider_file_paths" />

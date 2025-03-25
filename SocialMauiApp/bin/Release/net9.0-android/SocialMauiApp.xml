@@ -25,6 +25,18 @@
         <member name="P:SocialMauiApp.Models.PostModel.IsBookmarked">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isBookmarked"/>
         </member>
+        <member name="M:SocialMauiApp.Models.PostModel.OnIsLikedChanged(System.Boolean,System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.Models.PostModel.IsLiked"/> just changed.</summary>
+            <param name="oldValue">The previous property value that was replaced.</param>
+            <param name="newValue">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.Models.PostModel.IsLiked"/> is changed.</remarks>
+        </member>
+        <member name="M:SocialMauiApp.Models.PostModel.OnIsBookmarkedChanged(System.Boolean,System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.Models.PostModel.IsBookmarked"/> just changed.</summary>
+            <param name="oldValue">The previous property value that was replaced.</param>
+            <param name="newValue">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.Models.PostModel.IsBookmarked"/> is changed.</remarks>
+        </member>
         <member name="M:SocialMauiApp.Services.AuthService.Login(SocialMediaMaui.Shared.Dtos.LoginResponseDto)">
             <summary>
             Thực hiện đăng nhập, lưu thông tin người dùng và token vào Preferences.
@@ -84,13 +96,13 @@
             <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.Post">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._post"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.post"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.IsOwnPost">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._isOwnPost"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.isOwnPost"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.Comment">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._comment"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.comment"/>
         </member>
         <member name="M:SocialMauiApp.ViewModel.DetailsViewModel.OnPostChanged(SocialMauiApp.Models.PostModel)">
             <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.Post"/> just changed.</summary>
@@ -121,11 +133,20 @@
             <inheritdoc/>
             <inheritdoc/>
         </member>
+        <member name="P:SocialMauiApp.ViewModel.HomeViewModel.NewPost">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel.newPost"/>
+        </member>
         <member name="P:SocialMauiApp.ViewModel.HomeViewModel.IsRefreshing">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel._isRefreshing"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel.isRefreshing"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.HomeViewModel.IsThereNewNotification">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel._isThereNewNotification"/>
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel.isThereNewNotification"/>
+        </member>
+        <member name="M:SocialMauiApp.ViewModel.HomeViewModel.OnNewPostChanged(SocialMauiApp.Models.PostModel,SocialMauiApp.Models.PostModel)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.NewPost"/> just changed.</summary>
+            <param name="oldValue">The previous property value that was replaced.</param>
+            <param name="newValue">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.NewPost"/> is changed.</remarks>
         </member>
         <member name="F:SocialMauiApp.ViewModel.HomeViewModel.fetchPostsCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.FetchPostsCommand"/>.</summary>
@@ -196,6 +217,11 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+        </member>
+        <member name="M:SocialMauiApp.ViewModel.ProfileViewModel.ConfigureRealtimeUpdates">
+            <summary>
+            Đăng ký các handler realtime cho ProfileViewModel.
+            </summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.User">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._user"/>
@@ -485,6 +511,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Comment">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Comment" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewPost" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRefreshing">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRefreshing" generated properties.</summary>
         </member>
@@ -553,6 +582,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Comment">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Comment" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewPost" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRefreshing">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRefreshing" generated properties.</summary>
