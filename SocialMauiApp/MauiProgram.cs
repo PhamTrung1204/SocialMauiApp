@@ -35,10 +35,6 @@ namespace SocialMauiApp
                 })
                 .ConfigureSyncfusionCore();
 
-#if DEBUG
-            builder.Logging.AddDebug();
-            builder.Services.AddLogging(configure => configure.AddDebug());
-#endif
 
             builder.Services.AddSingleton<AuthService>();
       

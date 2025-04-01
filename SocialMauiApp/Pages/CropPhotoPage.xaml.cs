@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
+using Syncfusion.Maui.ImageEditor;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -18,7 +19,6 @@ namespace SocialMauiApp.Pages
                 {
                     _imagePath = value;
                     OnPropertyChanged(nameof(ImagePath));
-                    UpdatePhotoSource();
                 }
             }
         }
@@ -32,57 +32,40 @@ namespace SocialMauiApp.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            UpdatePhotoSource();
-        }
-
-        private void UpdatePhotoSource()
-        {
-            try
+            // Nếu ImagePath không hợp lệ, sử dụng ảnh placeholder
+            if (string.IsNullOrWhiteSpace(ImagePath) || !File.Exists(ImagePath))
             {
-                if (!string.IsNullOrWhiteSpace(_imagePath) && File.Exists(_imagePath))
-                {
-                    // Sử dụng FromFile để load ảnh từ đường dẫn trên thiết bị thật
-                    PhotoImage.Source = ImageSource.FromFile(_imagePath);
-                }
-                else
-                {
-                    // Nếu file không tồn tại, có thể hiển thị ảnh placeholder
-                    PhotoImage.Source = "placeholder.png";
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error updating photo source: " + ex.ToString());
+                ImagePath = "placeholder.png";
             }
         }
 
         private async void OnCropPhotoClicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(_imagePath))
+            if (string.IsNullOrEmpty(_imagePath) || !File.Exists(_imagePath))
             {
-                await DisplayAlert("Lỗi", "Không tìm thấy ảnh để cắt", "OK");
-                return;
-            }
-
-            if (!File.Exists(_imagePath))
-            {
-                await DisplayAlert("Lỗi", "Ảnh gốc không tồn tại", "OK");
+                await DisplayAlert("Error", "Original image not found.", "OK");
                 return;
             }
 
             try
             {
-                // Giả lập crop ảnh: copy file gốc sang file mới trong thư mục CacheDirectory
+                
+
+                // Tạo tên file và đường dẫn cho ảnh đã crop
                 var croppedFileName = $"{Guid.NewGuid()}_cropped.jpg";
                 var croppedPath = Path.Combine(FileSystem.CacheDirectory, croppedFileName);
-                File.Copy(_imagePath, croppedPath, true);
+                // Áp dụng crop theo kiểu Square (vuông)
+                PhotoEditor.Crop(ImageCropType.Square);
 
-                // Điều hướng quay lại trang đăng ký với query parameter chứa đường dẫn ảnh đã cắt
+                // Gọi Save() với kiểu file Jpeg và đường dẫn file
+                PhotoEditor.Save(ImageFileType.Jpeg, croppedPath);
+
+                // Điều hướng về trang trước với query parameter chứa đường dẫn ảnh đã crop
                 await Shell.Current.GoToAsync($"..?new-src={Uri.EscapeDataString(croppedPath)}");
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Lỗi", $"Không thể cắt ảnh: {ex.Message}", "OK");
+                await DisplayAlert("Error", $"Unable to crop image: {ex.Message}", "OK");
             }
         }
     }

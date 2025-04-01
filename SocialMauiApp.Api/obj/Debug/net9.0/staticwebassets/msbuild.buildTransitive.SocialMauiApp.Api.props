@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\SocialMauiApp.Api.props" />
-</Project>
