@@ -26,6 +26,8 @@ BEGIN
         p.PhotoUrl,
         p.PostedOn,
         p.ModifiedOn,
+(SELECT COUNT(*) FROM Comments c WHERE c.PostId = p.Id) AS CommentCount,
+(SELECT COUNT(*) FROM Likes c WHERE c.PostId = p.Id) AS LikeCount,
         CASE WHEN l.UserId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsLiked,
         CASE WHEN b.UserId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsBookmarked
     FROM Posts p
@@ -55,6 +57,8 @@ BEGIN
         p.PhotoUrl,
         p.PostedOn,
         p.ModifiedOn,
+(SELECT COUNT(*) FROM Comments c WHERE c.PostId = p.Id) AS CommentCount,
+(SELECT COUNT(*) FROM Likes c WHERE c.PostId = p.Id) AS LikeCount,
        CASE WHEN l.UserId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsLiked,
         CASE WHEN b.UserId IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS IsBookmarked
 

@@ -128,7 +128,7 @@ namespace SocialMauiApp.ViewModel
 
 
         [RelayCommand]
-        private async Task ChangePhotoAsync()
+        public async Task ChangePhotoAsync()
         {
             var selectedPhotoSource = await ChoosePhotoAsync();
             if (!string.IsNullOrWhiteSpace(selectedPhotoSource))
