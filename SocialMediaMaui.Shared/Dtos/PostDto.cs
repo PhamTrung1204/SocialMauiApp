@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SocialMediaMaui.Shared.Dtos
 {
@@ -15,8 +15,8 @@ namespace SocialMediaMaui.Shared.Dtos
         [JsonIgnore]
         public DateTime PostedOnDisplay => PostedOn ?? ModifiedOn;
         public bool IsLiked { get; set; }
-        
-  
+        public int LikeCount { get; set; }
+        public int CommentCount { get; set; }
         public bool IsBookmarked { get; set; }
         [JsonIgnore]
         public string PostTemplateContentViewName
