@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Controls.PlatformConfiguration;
 using Refit;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
@@ -35,12 +34,14 @@ namespace SocialMauiApp.ViewModel
             _userApi = userApi;
             _realtimeUpdatesService = realtimeUpdatesService;
 
-            // Đăng ký các handler realtime riêng của ProfileViewModel
             ConfigureRealtimeUpdates();
         }
 
         [ObservableProperty]
         private LoggedInUser _user;
+
+        [ObservableProperty]
+        private bool _isUploading;
 
         [RelayCommand]
         private async Task LogoutAsync()
@@ -116,7 +117,6 @@ namespace SocialMauiApp.ViewModel
                     foreach (var p in posts.OrderByDescending(p => p.PostedOn))
                     {
                         var newPost = PostModel.FromDto(p, PostsApi, _realtimeUpdatesService);
-                        // Kiểm tra nếu bài đăng chưa có trong danh sách thì mới thêm
                         if (!BookmarkedPosts.Any(existing => existing.PostId == newPost.PostId))
                         {
                             BookmarkedPosts.Add(newPost);
@@ -125,7 +125,6 @@ namespace SocialMauiApp.ViewModel
                 }
             });
         }
-
 
         [RelayCommand]
         public async Task ChangePhotoAsync()
@@ -142,12 +141,36 @@ namespace SocialMauiApp.ViewModel
 
         async partial void OnCroppedPhotoSourceChanged(string? oldValue, string? newValue)
         {
-            if (!string.IsNullOrWhiteSpace(newValue))
+            if (string.IsNullOrWhiteSpace(newValue) || !File.Exists(newValue))
             {
-                await MakeApiCall(async () =>
+                await ShowErrorAlertAsync("Cropped image is invalid or does not exist.");
+                return;
+            }
+
+            var confirm = await Shell.Current.DisplayAlert("Confirm", "Use this photo as your new profile picture?", "Yes", "No");
+            if (!confirm)
+            {
+                // Xóa file tạm nếu không upload
+                try
+                {
+                    File.Delete(newValue);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to delete temp file: {ex.Message}");
+                }
+                return;
+            }
+
+            IsUploading = true;
+            await MakeApiCall(async () =>
+            {
+                try
                 {
                     using var fs = File.OpenRead(newValue);
-                    var photoStreamPart = new StreamPart(fs, Path.GetFileName(newValue));
+                    var fileName = Path.GetFileName(newValue);
+                    var photoStreamPart = new StreamPart(fs, fileName, "image/jpeg");
+
                     var token = "Bearer " + _authService.Token;
                     var result = await _userApi.ChangePhotoAsync(token, photoStreamPart);
 
@@ -157,15 +180,31 @@ namespace SocialMauiApp.ViewModel
                         return;
                     }
 
+                    // Cập nhật User với URL ảnh mới
                     User = User with { PhotoUrl = result.Data };
                     _authService.Login(new LoginResponseDto(User, _authService.Token));
-                });
-            }
+
+                    // Xóa file tạm sau khi upload thành công
+                    try
+                    {
+                        File.Delete(newValue);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed to delete temp file: {ex.Message}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await ShowErrorAlertAsync($"Failed to upload photo: {ex.Message}");
+                }
+                finally
+                {
+                    IsUploading = false;
+                }
+            });
         }
 
-        /// <summary>
-        /// Đăng ký các handler realtime cho ProfileViewModel.
-        /// </summary>
         public void ConfigureRealtimeUpdates()
         {
             _realtimeUpdatesService.AddPostChangedHandler(nameof(ProfileViewModel), OnPostChanged);
@@ -175,7 +214,6 @@ namespace SocialMauiApp.ViewModel
 
         private void OnPostChanged(PostDto post)
         {
-            // Cập nhật bài viết trong danh sách MyPosts nếu có thay đổi nội dung hay ảnh
             var myPost = MyPosts.FirstOrDefault(p => p.PostId == post.PostId);
             if (myPost != null)
             {
@@ -185,7 +223,6 @@ namespace SocialMauiApp.ViewModel
                 myPost.IsLiked = post.IsLiked;
             }
 
-            // Ngoài ra, nếu bài viết trong danh sách BookmarkedPosts cũng có thay đổi thì cập nhật
             var bookmarkedPost = BookmarkedPosts.FirstOrDefault(p => p.PostId == post.PostId);
             if (bookmarkedPost != null)
             {
@@ -196,7 +233,6 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
-        // Xóa bài viết bị xóa khỏi cả MyPosts và BookmarkedPosts
         private void OnPostDeleted(Guid postId)
         {
             var postToRemove = MyPosts.FirstOrDefault(p => p.PostId == postId);
@@ -211,11 +247,11 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
-        // Cập nhật lại ảnh đại diện của người dùng cho các bài viết
         private void OnUserPhotoChanged(UserPhotoChangedDto dto)
         {
             if (dto.UserId == User.Id)
             {
+                User = User with { PhotoUrl = dto.PhotoUrl };
                 foreach (var post in MyPosts)
                 {
                     post.UserPhotoUrl = dto.PhotoUrl;

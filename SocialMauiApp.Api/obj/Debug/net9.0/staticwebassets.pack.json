@@ -9,10 +9,6 @@
       "PackagePath": "staticwebassets\\uploads\\images\\users\\526749fd-83b9-4906-b561-710060ba879d_638776640127461838.jpg"
     },
     {
-      "Id": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\62c3c198-c73a-4d38-aa5c-8e98097b7cd9_638784691990236434.jpg",
-      "PackagePath": "staticwebassets\\uploads\\images\\users\\62c3c198-c73a-4d38-aa5c-8e98097b7cd9_638784691990236434.jpg"
-    },
-    {
       "Id": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\6a006d11-7c11-4b05-ffe2-08dd54718e99\\posts\\0404fdf0-d2ca-4015-89c8-a28cc6778418_638762229844449185.jpg",
       "PackagePath": "staticwebassets\\uploads\\images\\users\\6a006d11-7c11-4b05-ffe2-08dd54718e99\\posts\\0404fdf0-d2ca-4015-89c8-a28cc6778418_638762229844449185.jpg"
     },
@@ -145,6 +141,10 @@
       "PackagePath": "staticwebassets\\uploads\\images\\users\\6a006d11-7c11-4b05-ffe2-08dd54718e99\\posts\\cbad6183-6bf0-458c-8775-e2b67beab5cf_638760717520871838.jpg"
     },
     {
+      "Id": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\6a006d11-7c11-4b05-ffe2-08dd54718e99\\posts\\ccff9864-5356-43f7-906a-eed39f00c4fd_638799390237676909.jpg",
+      "PackagePath": "staticwebassets\\uploads\\images\\users\\6a006d11-7c11-4b05-ffe2-08dd54718e99\\posts\\ccff9864-5356-43f7-906a-eed39f00c4fd_638799390237676909.jpg"
+    },
+    {
       "Id": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\6a006d11-7c11-4b05-ffe2-08dd54718e99\\posts\\ce8cef12-94f5-476a-b988-63a2ff64c30d_638760717520948561.jpg",
       "PackagePath": "staticwebassets\\uploads\\images\\users\\6a006d11-7c11-4b05-ffe2-08dd54718e99\\posts\\ce8cef12-94f5-476a-b988-63a2ff64c30d_638760717520948561.jpg"
     },
@@ -177,12 +177,24 @@
       "PackagePath": "staticwebassets\\uploads\\images\\users\\910285e7-234b-4dce-62b8-08dd62cbc642\\posts\\ffe8a152-6500-4a82-82ce-7f5df6f0dce4_638784723460567106.jpg"
     },
     {
+      "Id": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\9422ba9a-fa6f-4844-9cb3-08dd5a15836f\\posts\\630ca9a3-be32-4bde-8d9c-479dc5b17267_638799334803959672.jpg",
+      "PackagePath": "staticwebassets\\uploads\\images\\users\\9422ba9a-fa6f-4844-9cb3-08dd5a15836f\\posts\\630ca9a3-be32-4bde-8d9c-479dc5b17267_638799334803959672.jpg"
+    },
+    {
       "Id": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\9422ba9a-fa6f-4844-9cb3-08dd5a15836f\\posts\\a1608ec6-81c7-4f7e-b9fd-f6ab073b2463_638765771551340950.jpg",
       "PackagePath": "staticwebassets\\uploads\\images\\users\\9422ba9a-fa6f-4844-9cb3-08dd5a15836f\\posts\\a1608ec6-81c7-4f7e-b9fd-f6ab073b2463_638765771551340950.jpg"
     },
     {
+      "Id": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\9422ba9a-fa6f-4844-9cb3-08dd5a15836f\\posts\\ede8b094-47c8-4dd6-bc3b-90cd5c4c8b31_638799334879293385.jpg",
+      "PackagePath": "staticwebassets\\uploads\\images\\users\\9422ba9a-fa6f-4844-9cb3-08dd5a15836f\\posts\\ede8b094-47c8-4dd6-bc3b-90cd5c4c8b31_638799334879293385.jpg"
+    },
+    {
       "Id": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\e11492d6-e536-4f45-80de-0532a99559b8_638784727318559390.jpg",
       "PackagePath": "staticwebassets\\uploads\\images\\users\\e11492d6-e536-4f45-80de-0532a99559b8_638784727318559390.jpg"
+    },
+    {
+      "Id": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\fd139306-6f8d-4418-a0a6-cdf34f8e9dc6_638799387959827791.jpeg",
+      "PackagePath": "staticwebassets\\uploads\\images\\users\\fd139306-6f8d-4418-a0a6-cdf34f8e9dc6_638799387959827791.jpeg"
     },
     {
       "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.SocialMauiApp.Api.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",

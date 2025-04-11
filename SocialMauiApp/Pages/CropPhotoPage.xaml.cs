@@ -19,6 +19,7 @@ namespace SocialMauiApp.Pages
                 {
                     _imagePath = value;
                     OnPropertyChanged(nameof(ImagePath));
+                    LoadImage();
                 }
             }
         }
@@ -26,17 +27,45 @@ namespace SocialMauiApp.Pages
         public CropPhotoPage()
         {
             InitializeComponent();
-            BindingContext = this; // Đảm bảo BindingContext được đặt chính xác
+            BindingContext = this;
+
+            // Register the image saving completed event handler
+            PhotoEditor.ImageSaved += PhotoEditor_ImageSaved;
+        }
+
+        private void LoadImage()
+        {
+            if (!string.IsNullOrWhiteSpace(_imagePath) && File.Exists(_imagePath))
+            {
+                try
+                {
+                    // Load the image from path into the editor
+                    PhotoEditor.Source = ImageSource.FromFile(_imagePath);
+                }
+                catch (Exception ex)
+                {
+                    DisplayAlert("Error", $"Failed to load image: {ex.Message}", "OK");
+                }
+            }
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            // Nếu ImagePath không hợp lệ, sử dụng ảnh placeholder
+
+            // If ImagePath is invalid, use placeholder image
             if (string.IsNullOrWhiteSpace(ImagePath) || !File.Exists(ImagePath))
             {
                 ImagePath = "placeholder.png";
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            // Unregister event handlers to prevent memory leaks
+            PhotoEditor.ImageSaved -= PhotoEditor_ImageSaved;
         }
 
         private async void OnCropPhotoClicked(object sender, EventArgs e)
@@ -51,22 +80,27 @@ namespace SocialMauiApp.Pages
             {
                 
 
-                // Tạo tên file và đường dẫn cho ảnh đã crop
+                // Create a path for the cropped image
                 var croppedFileName = $"{Guid.NewGuid()}_cropped.jpg";
                 var croppedPath = Path.Combine(FileSystem.CacheDirectory, croppedFileName);
-                // Áp dụng crop theo kiểu Square (vuông)
-                PhotoEditor.Crop(ImageCropType.Square);
 
-                // Gọi Save() với kiểu file Jpeg và đường dẫn file
+                // Save the image to the specified path
                 PhotoEditor.Save(ImageFileType.Jpeg, croppedPath);
 
-                // Điều hướng về trang trước với query parameter chứa đường dẫn ảnh đã crop
-                await Shell.Current.GoToAsync($"..?new-src={Uri.EscapeDataString(croppedPath)}");
+                // Note: The actual navigation will happen in the ImageSaved event handler
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"Unable to crop image: {ex.Message}", "OK");
             }
+        }
+
+        private async void PhotoEditor_ImageSaved(object sender, ImageSavedEventArgs e)
+        {
+
+            // When image saving is successful, navigate back with the cropped image path
+            string croppedPath = e.Location;
+            await Shell.Current.GoToAsync($"..?new-src={Uri.EscapeDataString(croppedPath)}");
         }
     }
 }
