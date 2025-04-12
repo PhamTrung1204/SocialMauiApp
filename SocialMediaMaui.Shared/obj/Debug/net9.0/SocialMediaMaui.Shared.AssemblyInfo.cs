@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SocialMediaMaui.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+105c5ee71d81bc3cd4ec8b6568f524349f0c6404")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1143856f4f34e624d597994a400595f5979e05e5")]
 [assembly: System.Reflection.AssemblyProductAttribute("SocialMediaMaui.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SocialMediaMaui.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -100,6 +100,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.Post">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.post"/>
@@ -114,6 +115,12 @@
             <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.Post"/> just changed.</summary>
             <param name="value">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.Post"/> is changed.</remarks>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.fetchCommentsCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.FetchCommentsCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.FetchCommentsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.FetchCommentsAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.addCommentCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand"/>.</summary>
@@ -131,7 +138,7 @@
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.EditPostCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.EditPostCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.EditPostAsync(SocialMauiApp.Models.PostModel)"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.EditPostAsync"/>.</summary>
         </member>
         <member name="T:SocialMauiApp.ViewModel.HomeViewModel">
             <inheritdoc/>

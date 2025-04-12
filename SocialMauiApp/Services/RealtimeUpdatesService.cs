@@ -89,14 +89,13 @@ namespace SocialMauiApp.Services
             }
             catch (Exception ex)
             {
-                // Có thể ghi log hoặc thiết lập lại kết nối sau một thời gian nhất định
+
             }
         }
         public void NotifyPostChanged(Guid postId)
         {
             if (_hubConnection != null && _hubConnection.State == HubConnectionState.Connected)
             {
-                // Gửi thông báo đến phương thức "UpdatePostStatus" trên server
                 _hubConnection.SendAsync("UpdatePostStatus", postId);
             }
         }

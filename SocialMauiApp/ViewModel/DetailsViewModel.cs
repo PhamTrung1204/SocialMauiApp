@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
-using Microsoft.Maui.ApplicationModel; // Để gọi MainThread
+using Microsoft.Maui.ApplicationModel;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
+using SocialMauiApp.Pages;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
 using SocialMediaMaui.Shared.Hubs;
@@ -19,47 +19,59 @@ namespace SocialMauiApp.ViewModel
     public partial class DetailsViewModel : BasePostViewModel
     {
         private readonly AuthService _authService;
-        private readonly IPostApi _postApi;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
+        private bool _isPageActive = false;
 
         public DetailsViewModel(AuthService authService, IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
             : base(postApi, realtimeUpdatesService)
         {
             _authService = authService;
             _realtimeUpdatesService = realtimeUpdatesService;
-            _postApi = postApi;
-            SkipGoToDetailsCommandAction = true;
-            ConfigureRealtimeUpdates();
+            SkipGoToDetailsCommandAction = true; // Prevent navigation loop
+            Comments = new ObservableCollection<CommentDto>();
         }
 
-        // Post có thể null (do QueryProperty) => cần nullable
+        // Post can be null (due to QueryProperty) => needs to be nullable
         [ObservableProperty]
         private PostModel? post;
 
         [ObservableProperty]
         private bool isOwnPost;
 
-        public ObservableCollection<CommentDto> Comments { get; set; } = new();
+        public ObservableCollection<CommentDto> Comments { get; set; }
 
-        // Gọi khi Post thay đổi (QueryProperty)
+        // Called when Post changes (QueryProperty)
         async partial void OnPostChanged(PostModel? value)
         {
             if (value is null) return;
 
             IsOwnPost = value.UserId == _authService.User?.Id;
+
+            // Reset comments when post changes
+            _startIndex = 0;
+            Comments.Clear();
             await FetchCommentsAsync();
+
+            if (!_isPageActive)
+            {
+                _isPageActive = true;
+                ConfigureRealtimeUpdates();
+            }
         }
 
         private int _startIndex = 0;
         private const int PageSize = 10;
 
+        [RelayCommand]
         private async Task FetchCommentsAsync()
         {
             if (Post is null) return;
+            if (IsBusy) return;
 
-            await MakeApiCall(async () =>
+            IsBusy = true;
+            try
             {
-                var comments = await _postApi.GetPostsCommentAsync(Post.PostId, _startIndex, PageSize);
+                var comments = await PostsApi.GetPostsCommentAsync(Post.PostId, _startIndex, PageSize);
                 if (comments.Length > 0)
                 {
                     _startIndex += comments.Length;
@@ -68,7 +80,15 @@ namespace SocialMauiApp.ViewModel
                         Comments.Add(c);
                     }
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                await ShowErrorAlertAsync($"Error loading comments: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         [ObservableProperty]
@@ -83,27 +103,34 @@ namespace SocialMauiApp.ViewModel
                 return;
             }
 
-            await MakeApiCall(async () =>
+            if (IsBusy) return;
+            IsBusy = true;
+
+            try
             {
                 var dto = new SaveCommentDto
                 {
                     PostId = Post!.PostId,
                     Content = Comment
                 };
-                var result = await _postApi.SaveCommentAsync(Post.PostId, dto);
+                var result = await PostsApi.SaveCommentAsync(Post.PostId, dto);
                 if (!result.IsSuccess)
                 {
                     await ShowErrorAlertAsync(result.Error);
                     return;
                 }
-                // Nếu muốn thêm comment ngay (trước khi SignalR bắn sự kiện), có thể làm ở đây:
-                //var newComment = result.Data;
-                //Comments.Insert(0, newComment);
-                //OnPropertyChanged(nameof(Comments));
 
-                // Xóa text sau khi thêm thành công
+                // Clear text after successful addition
                 Comment = string.Empty;
-            });
+            }
+            catch (Exception ex)
+            {
+                await ShowErrorAlertAsync($"Error adding comment: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         [RelayCommand]
@@ -113,7 +140,10 @@ namespace SocialMauiApp.ViewModel
 
             if (await Shell.Current.DisplayAlert("Confirm?", "Are you sure, you want to delete this post?", "Yes", "No"))
             {
-                await MakeApiCall(async () =>
+                if (IsBusy) return;
+                IsBusy = true;
+
+                try
                 {
                     var result = await PostsApi.DeletePostAsync(Post.PostId);
                     if (!result.IsSuccess)
@@ -121,52 +151,68 @@ namespace SocialMauiApp.ViewModel
                         await ShowErrorAlertAsync(result.Error);
                         return;
                     }
-                    await NavigateAsync("..");
-                });
+
+                    await Shell.Current.GoToAsync("..");
+                }
+                catch (Exception ex)
+                {
+                    await ShowErrorAlertAsync($"Error deleting post: {ex.Message}");
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
             }
         }
 
         [RelayCommand]
-        private async Task EditPostAsync(PostModel post)
+        private async Task EditPostAsync()
         {
+            if (Post == null) return;
+
             var param = new Dictionary<string, object>
             {
-                [nameof(SavePostViewModel.Post)] = post
+                [nameof(SavePostViewModel.Post)] = Post
             };
-            await NavigateAsync(nameof(AddPostPage), param);
+            await Shell.Current.GoToAsync(nameof(AddPostPage), true, param);
         }
+
         private void OnPostChanged(PostDto changedPost)
         {
-            _ = MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 if (Post is not null && Post.PostId == changedPost.PostId)
                 {
                     Post.Content = changedPost.Content;
                     Post.PhotoUrl = changedPost.PhotoUrl;
+                    Post.IsLiked = changedPost.IsLiked;
+                    Post.IsBookmarked = changedPost.IsBookmarked;
                 }
             });
         }
+
         private void OnPostDeleted(Guid postId)
         {
-            _ = MainThread.InvokeOnMainThreadAsync(async () =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 if (Post is not null && Post.PostId == postId)
                 {
-                    await NavigateBackAsync();
+                    await Shell.Current.GoToAsync("..");
                 }
             });
         }
 
         private void OnUserPhotoChanged(UserPhotoChangedDto dto)
         {
-            _ = MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                // Cập nhật ảnh user cho Post
+                // Update user photo for Post
                 if (Post is not null && Post.UserId == dto.UserId)
                 {
                     Post.UserPhotoUrl = dto.PhotoUrl;
                 }
-                // Cập nhật ảnh user cho các comment
+
+                // Update user photo for comments
                 foreach (var comment in Comments.Where(c => c.UserId == dto.UserId))
                 {
                     comment.UserPhotoUrl = dto.PhotoUrl;
@@ -176,23 +222,37 @@ namespace SocialMauiApp.ViewModel
 
         private void OnCommentAdded(CommentDto dto)
         {
-            _ = MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 if (Post is not null && dto.PostId == Post.PostId)
                 {
-                    // Thêm comment mới lên đầu danh sách
+                    // Add new comment at the top of the list
                     Comments.Insert(0, dto);
-                    OnPropertyChanged(nameof(Comments));
                 }
             });
         }
 
         public void ConfigureRealtimeUpdates()
         {
+            // Clean existing handlers first to prevent duplicates
+            RemoveRealtimeHandlers();
+
             _realtimeUpdatesService.AddPostChangedHandler(nameof(DetailsViewModel), OnPostChanged);
             _realtimeUpdatesService.AddPostDeletedHandler(nameof(DetailsViewModel), OnPostDeleted);
             _realtimeUpdatesService.AddUserPhotoChangedHandler(nameof(DetailsViewModel), OnUserPhotoChanged);
             _realtimeUpdatesService.AddCommentAddedHandler(nameof(DetailsViewModel), OnCommentAdded);
+        }
+
+        public void RemoveRealtimeHandlers()
+        {
+            _realtimeUpdatesService.RemoveHandlers(nameof(DetailsViewModel));
+            _isPageActive = false;
+        }
+
+        // Make sure to call this when the page disappears
+        public void Cleanup()
+        {
+            RemoveRealtimeHandlers();
         }
     }
 }

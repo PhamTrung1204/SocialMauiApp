@@ -219,8 +219,6 @@ namespace SocialMauiApp.ViewModel
             {
                 myPost.Content = post.Content;
                 myPost.PhotoUrl = post.PhotoUrl;
-                myPost.IsBookmarked = post.IsBookmarked;
-                myPost.IsLiked = post.IsLiked;
             }
 
             var bookmarkedPost = BookmarkedPosts.FirstOrDefault(p => p.PostId == post.PostId);
@@ -228,8 +226,6 @@ namespace SocialMauiApp.ViewModel
             {
                 bookmarkedPost.Content = post.Content;
                 bookmarkedPost.PhotoUrl = post.PhotoUrl;
-                bookmarkedPost.IsBookmarked = post.IsBookmarked;
-                bookmarkedPost.IsLiked = post.IsLiked;
             }
         }
 

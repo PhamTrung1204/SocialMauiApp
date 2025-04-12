@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
+using SocialMauiApp.Pages;
 using SocialMauiApp.Services;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,20 @@ namespace SocialMauiApp.ViewModel
 {
     public partial class BasePostViewModel : BaseViewModel, IDisposable
     {
-        private readonly RealtimeUpdatesService _realtimeUpdatesService;
+        private readonly RealtimeUpdatesService? _realtimeUpdatesService;
 
-        // Constructor yêu cầu cả IPostApi và RealtimeUpdatesService
+        // Constructor with both dependencies
         public BasePostViewModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
         {
             PostsApi = postApi;
             _realtimeUpdatesService = realtimeUpdatesService;
+        }
+
+        // Alternative constructor for scenarios where RealtimeUpdatesService isn't needed
+        public BasePostViewModel(IPostApi postApi)
+        {
+            PostsApi = postApi;
+            _realtimeUpdatesService = null;
         }
 
         public IPostApi PostsApi { get; }
@@ -28,24 +36,34 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task GoToDetailsPageAsync(PostModel post)
         {
+            if (SkipGoToDetailsCommandAction) return;
+
+            // Check if we're already on the details page
+            var currentRoute = Shell.Current.CurrentState.Location.OriginalString;
+            if (currentRoute.EndsWith(nameof(PostDetailsPage), StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
             var param = new Dictionary<string, object>
             {
                 [nameof(DetailsViewModel.Post)] = post
             };
-            await NavigateAsync(nameof(PostDetailsPage), param);
+
+            await Shell.Current.GoToAsync(nameof(PostDetailsPage), true, param);
         }
 
-        // Toggle Like: cập nhật UI ngay và gọi API, sau đó gửi thông báo realtime
+        // Toggle Like: update UI immediately and call API, then send realtime notification
         [RelayCommand]
         private async Task ToggleLikeAsync(PostModel post)
         {
             await MakeApiCall(async () =>
             {
-                // Lưu trạng thái ban đầu để rollback nếu lỗi
+                // Save original status for rollback if error
                 var originalStatus = post.IsLiked;
                 post.IsLiked = !post.IsLiked;
 
-                // Gọi API cập nhật trạng thái like
+                // Call API to update like status
                 var result = await PostsApi.ToggleLikeAsync(post.PostId);
                 if (!result.IsSuccess)
                 {
@@ -54,21 +72,21 @@ namespace SocialMauiApp.ViewModel
                     return;
                 }
 
-                // Gọi phương thức thông báo cập nhật icon ngay
+                // Notify icon update immediately
                 post.NotifyIsLikeIconChanged();
 
-                // Gửi thông báo realtime để các client khác cập nhật
-                _realtimeUpdatesService.NotifyPostChanged(post.PostId);
+                // Send realtime notification for other clients
+                _realtimeUpdatesService?.NotifyPostChanged(post.PostId);
             });
         }
 
         protected virtual async void OnToggleBookmarkAsync(PostModel post)
         {
-            // Nếu cần xử lý bổ sung sau khi bookmark, override ở lớp con.
+            // Can be overridden in child classes for additional processing after bookmark
             await Task.CompletedTask;
         }
 
-        // Toggle Bookmark: cập nhật trạng thái UI ngay và gọi API
+        // Toggle Bookmark: update UI status immediately and call API
         [RelayCommand]
         private async Task ToggleBookmarkAsync(PostModel post)
         {
@@ -87,7 +105,7 @@ namespace SocialMauiApp.ViewModel
 
                 OnToggleBookmarkAsync(post);
                 post.NotifyIsBookmarkIconChanged();
-                _realtimeUpdatesService.NotifyPostChanged(post.PostId);
+                _realtimeUpdatesService?.NotifyPostChanged(post.PostId);
             });
         }
 

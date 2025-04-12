@@ -12,6 +12,8 @@ namespace SocialMediaMaui.Shared.Hubs
         Task PostChanged(PostDto post);
         Task PostDeleted(Guid postId);
         Task CommentAddedToThePost(CommentDto comment);
+        Task CommentUpdated(CommentDto comment);
+        Task CommentDeleted(Guid commentId);
         Task UserPhotoChanged(UserPhotoChangedDto userPhotoChangedDto);
         Task NotificationGenerated(NotificationDto notification);
     }
