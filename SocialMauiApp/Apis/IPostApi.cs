@@ -15,6 +15,10 @@ public interface IPostApi
     Task<ApiResult<CommentDto>> SaveCommentAsync(Guid postId, SaveCommentDto dto);
     [Get("/api/posts/{postId}/comments")]
     Task<CommentDto[]> GetPostsCommentAsync(Guid postId, int startIndex, int pageSize);
+    [Put("/api/posts/comments/{commentId}")]
+    Task<ApiResult<CommentDto>> UpdateCommentAsync(Guid commentId, [Body] string updatedContent);
+    [Delete("/api/posts/comments/{commentId}")]
+    Task<ApiResult> DeleteCommentAsync(Guid commentId);
     [Post("/api/posts/{postId}/toggle-like")]
     Task<ApiResult> ToggleLikeAsync(Guid postId);
     [Post("/api/posts/{postId}/toggle-bookmark")]

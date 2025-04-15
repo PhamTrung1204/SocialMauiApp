@@ -206,6 +206,70 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<CommentDto>.Fail(ex.Message);
             }
         }
+        public async Task<ApiResult> DeleteCommentAsync(Guid commentId, LoggedInUser currentUser)
+        {
+            var comment = await _context.Comments.FindAsync(commentId);
+            if (comment is null)
+            {
+                return ApiResult.Fail("Comment not found");
+            }
+
+            if (comment.UserId != currentUser.Id)
+            {
+                return ApiResult.Fail("You can only delete your own comment");
+            }
+
+            try
+            {
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+                return ApiResult.Success();
+            }
+            catch (Exception ex)
+            {
+                return ApiResult.Fail(ex.Message);
+            }
+        }
+        public async Task<ApiResult<CommentDto>> UpdateCommentAsync(Guid commentId, string updatedContent, LoggedInUser currentUser)
+        {
+            var comment = await _context.Comments.FindAsync(commentId);
+            if (comment is null)
+            {
+                return ApiResult<CommentDto>.Fail("Comment not found");
+            }
+
+            if (comment.UserId != currentUser.Id)
+            {
+                return ApiResult<CommentDto>.Fail("You can only edit your own comment");
+            }
+
+            comment.Content = updatedContent;
+            comment.AddedOn = DateTime.UtcNow;
+
+            try
+            {
+                _context.Comments.Update(comment);
+                await _context.SaveChangesAsync();
+
+                var commentDto = new CommentDto
+                {
+                    CommentId = comment.Id,
+                    Content = comment.Content,
+                    PostId = comment.PostId,
+                    UserId = currentUser.Id,
+                    UserName = currentUser.Name,
+                    UserPhotoUrl = currentUser.PhotoUrl,
+                    AddedOn = comment.AddedOn
+                };
+
+                return ApiResult<CommentDto>.Success(commentDto);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<CommentDto>.Fail(ex.Message);
+            }
+        }
+
         public async Task<CommentDto[]> GetPostsCommentAsync(Guid postId, int startIndex, int pageSize) =>
             await _context.Comments
             .Where(c => c.PostId == postId)

@@ -4,19 +4,21 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
     xmlns:models="clr-namespace:SocialMauiApp.Models"
     xmlns:templates="clr-namespace:SocialMauiApp.Templates"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
+    xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
+    x:Name="PageRoot"
     x:DataType="vm:DetailsViewModel"
     BackgroundColor="{StaticResource Gray100}"
     Shell.PresentationMode="ModalAnimated">
 
     <ContentPage.Behaviors>
-        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Primary}" StatusBarStyle="LightContent"/>
+        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Primary}" StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
-    <Grid RowDefinitions="Auto,*,Auto" Margin="0,-10,0,0">
+
+    <Grid Margin="0,-10,0,0" RowDefinitions="Auto,*,Auto">
         <!--  Header  -->
         <Grid
             Grid.Row="0"
@@ -49,7 +51,7 @@
             <!--  Spacer  -->
             <Grid Grid.Column="1" />
 
-            <!--  Edit Button (hiển thị nếu IsOwnPost = true)  -->
+            <!--  Edit Post Button  -->
             <Border
                 Grid.Column="2"
                 BackgroundColor="White"
@@ -68,11 +70,11 @@
                     <Shadow Brush="Gray" Radius="10" />
                 </Border.Shadow>
                 <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding EditPostCommand}" CommandParameter="{Binding Post}" />
+                    <TapGestureRecognizer Command="{Binding EditPostCommand}" />
                 </Border.GestureRecognizers>
             </Border>
 
-            <!--  Delete Button (hiển thị nếu IsOwnPost = true)  -->
+            <!--  Delete Post Button  -->
             <Border
                 Grid.Column="3"
                 BackgroundColor="White"
@@ -96,10 +98,10 @@
             </Border>
         </Grid>
 
-        <!--  Nội dung chính  -->
+        <!--  Main Content  -->
         <ScrollView Grid.Row="1">
             <Grid RowDefinitions="Auto,*" RowSpacing="10">
-                <!--  ControlTemplate hiển thị bài viết  -->
+                <!--  Post Display  -->
                 <ContentView Grid.Row="0" BindingContext="{Binding Post}">
                     <ContentView.Resources>
                         <ControlTemplate x:Key="withImage">
@@ -137,9 +139,15 @@
                     </ContentView.Triggers>
                 </ContentView>
 
-                <!--  Phần bình luận  -->
-                <VerticalStackLayout Grid.Row="1" Spacing="10" Padding="5">
-                    <CollectionView ItemsSource="{Binding Comments}">
+                <!--  Comments Section  -->
+                <VerticalStackLayout
+                    Grid.Row="1"
+                    Padding="5"
+                    Spacing="10">
+                    <CollectionView
+                        ItemsSource="{Binding Comments}"
+                        RemainingItemsThreshold="1"
+                        RemainingItemsThresholdReached="CollectionView_RemainingItemsThresholdReached">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
@@ -148,25 +156,15 @@
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="dto:CommentDto">
-                                <!--  Border để bo góc, có nền trắng, tạo cảm giác tách biệt giữa các comment  -->
                                 <Border
-                                    
                                     Padding="5"
                                     BackgroundColor="White"
                                     StrokeShape="RoundRectangle 10">
-                                    <!--  Grid 2 hàng, 2 cột  -->
-                                    <Grid
-                                        ColumnDefinitions="Auto,*"
-                                        ColumnSpacing="10"
-                                        RowDefinitions="Auto,Auto"
-                                        RowSpacing="5">
-
-                                        <!--  Ảnh đại diện (avatar)  -->
-                                        <!--  Gán RowSpan="2" để avatar trải dài 2 hàng (thông tin user + nội dung comment)  -->
+                                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
+                                        <!--  Avatar  -->
                                         <Border
-                                            Grid.RowSpan="2"
+                                            Grid.Column="0"
                                             HeightRequest="40"
-                                            HorizontalOptions="Start"
                                             StrokeShape="RoundRectangle 20"
                                             VerticalOptions="Start"
                                             WidthRequest="40">
@@ -177,61 +175,109 @@
                                                 WidthRequest="40" />
                                         </Border>
 
-                                        <!--  Hàng 0, Cột 1: Thông tin người dùng (tên + thời gian)  -->
-                                        <StackLayout
+                                        <!--  Comment Content and Actions  -->
+                                        <Grid
                                             Grid.Column="1"
-                                            Orientation="Horizontal"
-                                            Spacing="2">
-                                            <Label
-                                                FontAttributes="Bold"
-                                                FontSize="14"
-                                                Text="{Binding UserName}"
-                                                VerticalOptions="Center" 
-                                                TextColor="Black"/>
-                                            <Label
-                                                FontSize="14"
-                                                Text="·"
-                                                VerticalOptions="Center" />
-                                            <Label
-                                                FontSize="12"
-                                                Text="{Binding AddedOn, StringFormat='{0:hh:mm tt | dd MMM yyyy}'}"
-                                                TextColor="Gray"
-                                                VerticalOptions="Center" />
-                                        </StackLayout>
+                                            Padding="5,0,0,0"
+                                            RowDefinitions="Auto,*"
+                                            RowSpacing="3">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <!--  User Info  -->
+                                                <StackLayout
+                                                    Grid.Column="0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="2">
+                                                    <Label
+                                                        FontAttributes="Bold"
+                                                        FontSize="14"
+                                                        Text="{Binding UserName}"
+                                                        TextColor="Black" />
+                                                    <Label FontSize="14" Text="·" />
+                                                    <Label
+                                                        FontSize="12"
+                                                        Text="{Binding AddedOn, StringFormat='{0:hh:mm tt | dd MMM yyyy}'}"
+                                                        TextColor="Gray" />
+                                                </StackLayout>
 
-                                        <!--  Hàng 1, Cột 1: Nội dung bình luận  -->
-                                        <Label
-                                            
-                                            Grid.Row="1"
-                                            Grid.Column="1"
-                                            FontSize="14"
-                                            LineBreakMode="WordWrap"
-                                            Text="{Binding Content}"
-                                            TextColor="Black"
-                                            VerticalOptions="Start" />
+                                                <!--  Edit and Delete buttons (hiển thị khi comment thuộc về user hiện tại)  -->
+                                                <StackLayout
+                                                    Grid.Column="1"
+                                                    HorizontalOptions="End"
+                                                    IsVisible="{Binding IsOwnComment}"
+                                                    Orientation="Horizontal"
+                                                    Spacing="10">
+                                                    <Image
+                                                        HeightRequest="16"
+                                                        Source="pencil.png"
+                                                        WidthRequest="16">
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.EditCommentCommand}" CommandParameter="{Binding .}" />
+                                                        </Image.GestureRecognizers>
+                                                    </Image>
+                                                    <Image
+                                                        HeightRequest="16"
+                                                        Source="trash.png"
+                                                        WidthRequest="16">
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.DeleteCommentCommand}" CommandParameter="{Binding .}" />
+                                                        </Image.GestureRecognizers>
+                                                    </Image>
+                                                </StackLayout>
+                                            </Grid>
+                                            <!--  Comment Text  -->
+                                            <Label
+                                                Grid.Row="1"
+                                                FontSize="14"
+                                                LineBreakMode="WordWrap"
+                                                Text="{Binding Content}"
+                                                TextColor="Black" />
+                                        </Grid>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </VerticalStackLayout>
-
             </Grid>
         </ScrollView>
 
-        <!--  Khung nhập bình luận  -->
+        <!--  Comment Input Box  -->
         <Grid
             Grid.Row="2"
             Padding="15,10,15,15"
             BackgroundColor="White"
             ColumnDefinitions="*,Auto"
             ColumnSpacing="10">
+            <!--  Editing Indicator  -->
+            <StackLayout
+                Grid.ColumnSpan="2"
+                Margin="0,-20,0,0"
+                HorizontalOptions="Start"
+                IsVisible="{Binding IsEditing}"
+                Orientation="Horizontal"
+                Spacing="5">
+                <Label
+                    FontSize="12"
+                    Text="Editing comment..."
+                    TextColor="{StaticResource Primary}"
+                    VerticalOptions="Center" />
+                <ImageButton
+                    BackgroundColor="Transparent"
+                    Command="{Binding CancelEditCommand}"
+                    HeightRequest="16"
+                    Source="x.png"
+                    WidthRequest="16" />
+            </StackLayout>
+
+            <!--  Input Field  -->
             <controls:NoBorderEntry
                 Grid.Column="0"
                 Placeholder="Enter comment..."
                 PlaceholderColor="Black"
-                TextColor="Black"
-                Text="{Binding Comment}" />
+                Text="{Binding Comment}"
+                TextColor="Black" />
+
+            <!--  Send/Update Button  -->
             <Border
                 Grid.Column="1"
                 BackgroundColor="{StaticResource Primary}"
@@ -239,7 +285,7 @@
                 StrokeShape="RoundRectangle 8"
                 WidthRequest="44">
                 <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding AddCommentCommand}"/>
+                    <TapGestureRecognizer Command="{Binding AddCommentCommand}" />
                 </Border.GestureRecognizers>
                 <controls:WhiteImage
                     HeightRequest="24"
@@ -250,7 +296,7 @@
 
         <!--  Activity Indicator  -->
         <ActivityIndicator
-            Grid.Row="3"
+            Grid.RowSpan="3"
             HorizontalOptions="Center"
             IsRunning="{Binding IsBusy}"
             VerticalOptions="Center" />

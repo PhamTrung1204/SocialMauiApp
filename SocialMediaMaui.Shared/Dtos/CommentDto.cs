@@ -10,5 +10,7 @@
         public string? UserPhotoUrl { get; set; }
         public DateTime AddedOn { get; set; }
         public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
+        // ➕ Thêm thuộc tính này
+        public bool IsOwnComment { get; set; }
     }
 }

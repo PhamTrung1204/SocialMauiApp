@@ -49,6 +49,20 @@ namespace SocialMauiApp.Api.Endpoints
                .Produces<CommentDto[]>()
                .WithName("GetPostComments");
 
+            // Cập nhật bình luận
+            postsGroup.MapPut("/comments/{commentId:guid}",
+                async (Guid commentId, [FromBody] string updatedContent, PostService postService, ClaimsPrincipal principal) =>
+                Results.Ok(await postService.UpdateCommentAsync(commentId, updatedContent, principal.GetUser())))
+                .Produces<ApiResult<CommentDto>>()
+                .WithName("UpdateComment");
+
+            // Xoá bình luận
+            postsGroup.MapDelete("/comments/{commentId:guid}",
+                async (Guid commentId, PostService postService, ClaimsPrincipal principal) =>
+                Results.Ok(await postService.DeleteCommentAsync(commentId, principal.GetUser())))
+                .Produces<ApiResult>()
+                .WithName("DeleteComment");
+
             postsGroup.MapPost("/{postId:guid}/toggle-like",
                 async (Guid postId, PostService postService, ClaimsPrincipal principal) =>
                 Results.Ok(await postService.ToggleLikeAsync(postId, principal.GetUser())))

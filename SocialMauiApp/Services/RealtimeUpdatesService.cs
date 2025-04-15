@@ -18,6 +18,9 @@ namespace SocialMauiApp.Services
         private readonly Dictionary<string, Action<CommentDto>> _commentAddedActions = new Dictionary<string, Action<CommentDto>>();
         private readonly Dictionary<string, Action<UserPhotoChangedDto>> _userPhotoChangedActions = new Dictionary<string, Action<UserPhotoChangedDto>>();
         private readonly Dictionary<string, Action<NotificationDto>> _notificationGeneratedActions = new Dictionary<string, Action<NotificationDto>>();
+        private readonly Dictionary<string, Action<CommentDto>> _commentUpdatedActions = new();
+        private readonly Dictionary<string, Action<Guid>> _commentDeletedActions = new();
+
 
         public RealtimeUpdatesService()
         {
@@ -39,6 +42,10 @@ namespace SocialMauiApp.Services
 
         public void AddNotificationGeneratedHandler(string key, Action<NotificationDto> handler) =>
             _notificationGeneratedActions[key] = handler;
+        public void AddCommentUpdatedHandler(string key, Action<CommentDto> handler) =>
+    _commentUpdatedActions[key] = handler;
+        public void AddCommentDeletedHandler(string key, Action<Guid> handler) =>
+            _commentDeletedActions[key] = handler;
 
         private async Task ConfigureRealtimeUpdates()
         {
@@ -84,6 +91,23 @@ namespace SocialMauiApp.Services
                         try { action.Invoke(notificationDto); } catch { }
                     }
                 });
+                _hubConnection.On<CommentDto>(nameof(ISocialHubClient.CommentUpdated), comment =>
+                {
+                    foreach (var action in _commentUpdatedActions.Values)
+                    {
+                        try { action.Invoke(comment); }
+                        catch { /* Xử lý exception nếu cần */ }
+                    }
+                });
+
+                _hubConnection.On<Guid>(nameof(ISocialHubClient.CommentDeleted), commentId =>
+                {
+                    foreach (var action in _commentDeletedActions.Values)
+                    {
+                        try { action.Invoke(commentId); }
+                        catch { /* Xử lý exception nếu cần */ }
+                    }
+                });
 
                 await _hubConnection.StartAsync();
             }
@@ -108,6 +132,13 @@ namespace SocialMauiApp.Services
                 _postDeletedActions.Remove(key);
             if (_commentAddedActions.ContainsKey(key))
                 _commentAddedActions.Remove(key);
+            // Handler cho comment cập nhật/sửa
+            if (_commentUpdatedActions.ContainsKey(key))
+                _commentUpdatedActions.Remove(key);
+
+            // Handler cho comment xoá
+            if (_commentDeletedActions.ContainsKey(key))
+                _commentDeletedActions.Remove(key);
             if (_userPhotoChangedActions.ContainsKey(key))
                 _userPhotoChangedActions.Remove(key);
             if (_notificationGeneratedActions.ContainsKey(key))

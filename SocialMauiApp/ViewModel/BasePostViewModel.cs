@@ -15,35 +15,31 @@ namespace SocialMauiApp.ViewModel
     public partial class BasePostViewModel : BaseViewModel, IDisposable
     {
         private readonly RealtimeUpdatesService? _realtimeUpdatesService;
+        private readonly Dictionary<string, string> _downloadedPhotos = new();
+        private HttpClient? _httpClient;
 
-        // Constructor with both dependencies
+        public IPostApi PostsApi { get; }
+
+        protected virtual bool SkipGoToDetailsCommandAction { get; set; }
+
         public BasePostViewModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
         {
             PostsApi = postApi;
             _realtimeUpdatesService = realtimeUpdatesService;
         }
 
-        // Alternative constructor for scenarios where RealtimeUpdatesService isn't needed
         public BasePostViewModel(IPostApi postApi)
         {
             PostsApi = postApi;
-            _realtimeUpdatesService = null;
         }
-
-        public IPostApi PostsApi { get; }
-        protected virtual bool SkipGoToDetailsCommandAction { get; set; }
 
         [RelayCommand]
         private async Task GoToDetailsPageAsync(PostModel post)
         {
             if (SkipGoToDetailsCommandAction) return;
 
-            // Check if we're already on the details page
             var currentRoute = Shell.Current.CurrentState.Location.OriginalString;
-            if (currentRoute.EndsWith(nameof(PostDetailsPage), StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
+            if (currentRoute.EndsWith(nameof(PostDetailsPage), StringComparison.OrdinalIgnoreCase)) return;
 
             var param = new Dictionary<string, object>
             {
@@ -53,61 +49,53 @@ namespace SocialMauiApp.ViewModel
             await Shell.Current.GoToAsync(nameof(PostDetailsPage), true, param);
         }
 
-        // Toggle Like: update UI immediately and call API, then send realtime notification
         [RelayCommand]
         private async Task ToggleLikeAsync(PostModel post)
         {
             await MakeApiCall(async () =>
             {
-                // Save original status for rollback if error
                 var originalStatus = post.IsLiked;
-                post.IsLiked = !post.IsLiked;
+                post.IsLiked = !originalStatus;
 
-                // Call API to update like status
                 var result = await PostsApi.ToggleLikeAsync(post.PostId);
                 if (!result.IsSuccess)
                 {
-                    await ShowErrorAlertAsync(result.Error);
                     post.IsLiked = originalStatus;
+                    await ShowErrorAlertAsync(result.Error);
                     return;
                 }
 
-                // Notify icon update immediately
                 post.NotifyIsLikeIconChanged();
-
-                // Send realtime notification for other clients
+                await OnPostLikedAsync(post);
                 _realtimeUpdatesService?.NotifyPostChanged(post.PostId);
             });
         }
 
-        protected virtual async void OnToggleBookmarkAsync(PostModel post)
-        {
-            // Can be overridden in child classes for additional processing after bookmark
-            await Task.CompletedTask;
-        }
+        protected virtual Task OnPostLikedAsync(PostModel post) => Task.CompletedTask;
 
-        // Toggle Bookmark: update UI status immediately and call API
         [RelayCommand]
         private async Task ToggleBookmarkAsync(PostModel post)
         {
             await MakeApiCall(async () =>
             {
                 var originalStatus = post.IsBookmarked;
-                post.IsBookmarked = !post.IsBookmarked;
+                post.IsBookmarked = !originalStatus;
 
                 var result = await PostsApi.ToggleBookmarkAsync(post.PostId);
                 if (!result.IsSuccess)
                 {
-                    await ShowErrorAlertAsync(result.Error);
                     post.IsBookmarked = originalStatus;
+                    await ShowErrorAlertAsync(result.Error);
                     return;
                 }
 
-                OnToggleBookmarkAsync(post);
                 post.NotifyIsBookmarkIconChanged();
+                await OnPostBookmarkedAsync(post);
                 _realtimeUpdatesService?.NotifyPostChanged(post.PostId);
             });
         }
+
+        protected virtual Task OnPostBookmarkedAsync(PostModel post) => Task.CompletedTask;
 
         [RelayCommand]
         private async Task SharePostAsync(PostModel post)
@@ -132,29 +120,25 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
-        private Dictionary<string, string> _downloadedPhotos = new();
-        private HttpClient? _httpClient;
         private async Task<string?> DownloadPhotoAsync(string photoUrl)
         {
-            if (_downloadedPhotos.TryGetValue(photoUrl, out var localPhotoUrl))
-            {
-                return localPhotoUrl;
-            }
+            if (_downloadedPhotos.TryGetValue(photoUrl, out var localPath) && File.Exists(localPath))
+                return localPath;
+
             IsBusy = true;
             try
             {
                 _httpClient ??= new HttpClient();
                 var photoBytes = await _httpClient.GetByteArrayAsync(photoUrl);
 
-                var localPath = Path.Combine(FileSystem.CacheDirectory, "share");
-                if (!Directory.Exists(localPath))
-                    Directory.CreateDirectory(localPath);
-                var photoName = Path.GetFileName(photoUrl);
-                var localPhotoPath = Path.Combine(localPath, photoName);
-                File.WriteAllBytes(localPhotoPath, photoBytes);
+                var cacheFolder = Path.Combine(FileSystem.CacheDirectory, "share");
+                Directory.CreateDirectory(cacheFolder);
+                var fileName = Path.GetFileName(photoUrl);
+                var filePath = Path.Combine(cacheFolder, fileName);
+                File.WriteAllBytes(filePath, photoBytes);
 
-                _downloadedPhotos[photoUrl] = localPhotoPath;
-                return localPhotoPath;
+                _downloadedPhotos[photoUrl] = filePath;
+                return filePath;
             }
             catch (Exception ex)
             {
@@ -170,10 +154,10 @@ namespace SocialMauiApp.ViewModel
         public void Dispose()
         {
             _httpClient?.Dispose();
-            foreach (var (_, localPhotoPath) in _downloadedPhotos)
+            foreach (var path in _downloadedPhotos.Values)
             {
-                if (File.Exists(localPhotoPath))
-                    File.Delete(localPhotoPath);
+                if (File.Exists(path))
+                    File.Delete(path);
             }
         }
     }

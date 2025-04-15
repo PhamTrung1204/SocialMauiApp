@@ -23,9 +23,14 @@ public partial class PostDetailsPage : ContentPage
     {
         base.OnDisappearing();
         _realtimeUpdatesService.RemoveHandlers(nameof(DetailsViewModel));
+        _detailsViewModel.Cleanup();
     }
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         await Shell.Current.GoToAsync("..", animate: true);
+    }
+    private void CollectionView_RemainingItemsThresholdReached(object sender, EventArgs e)
+    {
+        _detailsViewModel.FetchCommentsCommand.Execute(null);
     }
 }
