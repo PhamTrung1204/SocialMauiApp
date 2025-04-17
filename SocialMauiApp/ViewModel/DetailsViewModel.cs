@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Dispatching;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
-using SocialMauiApp.Pages;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
 using SocialMediaMaui.Shared.Hubs;
@@ -20,34 +20,30 @@ namespace SocialMauiApp.ViewModel
         private readonly AuthService _authService;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
         private bool _isPageActive = false;
+        private int _startIndex = 0;
+        private const int PageSize = 10;
 
         public DetailsViewModel(AuthService authService, IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
             : base(postApi, realtimeUpdatesService)
         {
             _authService = authService;
             _realtimeUpdatesService = realtimeUpdatesService;
-            SkipGoToDetailsCommandAction = true; // Prevent navigation loop
+            SkipGoToDetailsCommandAction = true;
             Comments = new ObservableCollection<CommentDto>();
         }
 
-        // Post có thể null do dùng QueryProperty
         [ObservableProperty]
         private PostModel? post;
 
-        // Xác định xem bài đăng có thuộc về người dùng hiện tại hay không (tính từ Post)
         [ObservableProperty]
         private bool isOwnPost;
 
-        // Danh sách bình luận
-        public ObservableCollection<CommentDto> Comments { get; set; }
+        public ObservableCollection<CommentDto> Comments { get; }
 
-        // Khi Post thay đổi, cập nhật IsOwnPost và load lại bình luận
         async partial void OnPostChanged(PostModel? value)
         {
-            if (value is null)
-                return;
+            if (value is null) return;
 
-            // Xác định quyền sở hữu bài đăng
             IsOwnPost = value.UserId == _authService.User?.Id;
             _startIndex = 0;
             Comments.Clear();
@@ -60,16 +56,10 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
-        private int _startIndex = 0;
-        private const int PageSize = 10;
-
         [RelayCommand]
         private async Task FetchCommentsAsync()
         {
-            if (Post is null)
-                return;
-            if (IsBusy)
-                return;
+            if (Post is null || IsBusy) return;
 
             IsBusy = true;
             try
@@ -78,17 +68,19 @@ namespace SocialMauiApp.ViewModel
                 if (comments.Length > 0)
                 {
                     _startIndex += comments.Length;
-                    // Tính toán thuộc tính IsOwnComment cho mỗi comment
                     foreach (var c in comments)
                     {
                         c.IsOwnComment = c.UserId == _authService.User?.Id;
-                        Comments.Add(c);
+                        if (!Comments.Any(x => x.CommentId == c.CommentId))
+                            Comments.Add(c);
                     }
+                    
+                    System.Diagnostics.Debug.WriteLine($"Fetched {comments.Length} comments, total: {Comments.Count}");
                 }
             }
             catch (Exception ex)
             {
-                await ShowErrorAlertAsync($"Error loading comments: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error fetching comments: {ex.Message}");
             }
             finally
             {
@@ -99,15 +91,12 @@ namespace SocialMauiApp.ViewModel
         [ObservableProperty]
         private string? comment;
 
-        // Thêm biến để theo dõi trạng thái chỉnh sửa
         [ObservableProperty]
         private bool isEditing;
 
-        // Lưu trữ comment đang được chỉnh sửa
         [ObservableProperty]
         private CommentDto? commentBeingEdited;
 
-        // Command thêm hoặc cập nhật bình luận
         [RelayCommand]
         private async Task AddCommentAsync()
         {
@@ -116,59 +105,58 @@ namespace SocialMauiApp.ViewModel
                 await ToastAsync("Please enter comment");
                 return;
             }
-
-            if (IsBusy)
-                return;
+            if (IsBusy) return;
 
             IsBusy = true;
             try
             {
-                // Nếu đang chỉnh sửa bình luận
+                // Check connection before proceeding
+                await _realtimeUpdatesService.EnsureConnectedAsync();
+
                 if (IsEditing && CommentBeingEdited != null)
                 {
-                    var result = await PostsApi.UpdateCommentAsync(CommentBeingEdited.CommentId, Comment);
+                    System.Diagnostics.Debug.WriteLine($"Updating comment: {CommentBeingEdited.CommentId}");
+
+                    var updateDto = new UpdateCommentDto { Content = Comment };
+                    var result = await PostsApi.UpdateCommentAsync(CommentBeingEdited.CommentId, updateDto);
                     if (!result.IsSuccess)
                     {
                         await ShowErrorAlertAsync(result.Error);
                         return;
                     }
 
-                    int index = Comments.IndexOf(CommentBeingEdited);
-                    if (index >= 0)
+                    System.Diagnostics.Debug.WriteLine($"Comment updated successfully: {result.Data.CommentId}");
+
+                    // Update local comment with server response
+                    var idx = Comments.IndexOf(CommentBeingEdited);
+                    if (idx >= 0)
                     {
-                        Comments[index].Content = Comment;
+                        Comments[idx] = result.Data; // Use server response to update all properties
                     }
 
-                    // Reset trạng thái chỉnh sửa
                     IsEditing = false;
                     CommentBeingEdited = null;
                     Comment = string.Empty;
+                    
                     await ToastAsync("Comment updated");
                 }
-                // Thêm bình luận mới
                 else
                 {
-                    var dto = new SaveCommentDto
-                    {
-                        PostId = Post!.PostId,
-                        Content = Comment
-                    };
+                    var dto = new SaveCommentDto { PostId = Post!.PostId, Content = Comment };
                     var result = await PostsApi.SaveCommentAsync(Post.PostId, dto);
                     if (!result.IsSuccess)
                     {
                         await ShowErrorAlertAsync(result.Error);
                         return;
                     }
-
-                    // Người dùng vừa tạo comment nên chắc chắn thuộc về họ: gán IsOwnComment = true
-                    result.Data.IsOwnComment = true;
-                    Comments.Insert(0, result.Data);
+                    
                     Comment = string.Empty;
                     await ToastAsync("Comment added");
                 }
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Error processing comment: {ex.Message}");
                 await ShowErrorAlertAsync($"Error with comment: {ex.Message}");
             }
             finally
@@ -177,40 +165,35 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
-        // Command sửa bình luận - giờ hiển thị comment trong khung input
         [RelayCommand]
         private async Task EditCommentAsync(CommentDto commentDto)
         {
-            // Kiểm tra quyền: nếu không phải của người dùng hiện tại thì dừng
-            if (commentDto.UserId != _authService.User?.Id)
+            if (commentDto == null || IsBusy) return;
+            if (_authService.User == null || commentDto.UserId != _authService.User.Id)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "You can only edit your own comments.", "OK");
                 return;
-
-            // Đặt nội dung comment vào trường nhập liệu
+            }
+            System.Diagnostics.Debug.WriteLine($"Editing comment: {commentDto.CommentId}");
             Comment = commentDto.Content;
             IsEditing = true;
             CommentBeingEdited = commentDto;
+            await ToastAsync("You are now editing a comment");
         }
 
-        // Thêm command hủy chỉnh sửa
-        [RelayCommand]
-        private void CancelEditAsync()
-        {
-            Comment = string.Empty;
-            IsEditing = false;
-            CommentBeingEdited = null;
-        }
-
-        // Command xóa bình luận
         [RelayCommand]
         private async Task DeleteCommentAsync(CommentDto commentDto)
         {
-            if (commentDto.UserId != _authService.User?.Id)
+            if (commentDto == null || IsBusy) return;
+            if (_authService.User == null || commentDto.UserId != _authService.User.Id)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "You can only delete your own comments.", "OK");
                 return;
+            }
+            bool confirm = await Shell.Current.DisplayAlert("Confirm Delete", "Are you sure?", "Yes", "No");
+            if (!confirm) return;
 
-            bool confirm = await Shell.Current.DisplayAlert("Confirm Delete", "Are you sure you want to delete this comment?", "Yes", "No");
-            if (!confirm)
-                return;
-
+            IsBusy = true;
             try
             {
                 var result = await PostsApi.DeleteCommentAsync(commentDto.CommentId);
@@ -219,89 +202,46 @@ namespace SocialMauiApp.ViewModel
                     await ShowErrorAlertAsync(result.Error);
                     return;
                 }
-
-                // Nếu comment đang được chỉnh sửa bị xóa, reset trạng thái chỉnh sửa
                 if (IsEditing && CommentBeingEdited?.CommentId == commentDto.CommentId)
                 {
                     IsEditing = false;
                     CommentBeingEdited = null;
                     Comment = string.Empty;
                 }
-
                 Comments.Remove(commentDto);
                 await ToastAsync("Comment deleted");
             }
-            catch (Exception ex)
+            finally
             {
-                await ShowErrorAlertAsync("Error deleting comment: " + ex.Message);
+                IsBusy = false;
             }
         }
 
-        [RelayCommand]
-        private async Task DeletePostAsync()
-        {
-            if (Post is null)
-                return;
-
-            if (await Shell.Current.DisplayAlert("Confirm?", "Are you sure you want to delete this post?", "Yes", "No"))
-            {
-                if (IsBusy)
-                    return;
-                IsBusy = true;
-                try
-                {
-                    var result = await PostsApi.DeletePostAsync(Post.PostId);
-                    if (!result.IsSuccess)
-                    {
-                        await ShowErrorAlertAsync(result.Error);
-                        return;
-                    }
-                    await Shell.Current.GoToAsync("..");
-                }
-                catch (Exception ex)
-                {
-                    await ShowErrorAlertAsync($"Error deleting post: {ex.Message}");
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
-            }
-        }
-
-        [RelayCommand]
-        private async Task EditPostAsync()
-        {
-            if (Post == null)
-                return;
-            var param = new Dictionary<string, object>
-            {
-                [nameof(SavePostViewModel.Post)] = Post
-            };
-            await Shell.Current.GoToAsync(nameof(AddPostPage), true, param);
-        }
-
-        // Các handler cho realtime updates (SignalR)
         private void OnPostChanged(PostDto changedPost)
         {
+            System.Diagnostics.Debug.WriteLine($"Received PostChanged event: {changedPost.PostId}");
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (Post is not null && Post.PostId == changedPost.PostId)
+                if (Post?.PostId == changedPost.PostId)
                 {
                     Post.Content = changedPost.Content;
                     Post.PhotoUrl = changedPost.PhotoUrl;
                     Post.IsLiked = changedPost.IsLiked;
                     Post.IsBookmarked = changedPost.IsBookmarked;
+                    System.Diagnostics.Debug.WriteLine("Updated post in UI");
                 }
+
             });
         }
 
         private void OnPostDeleted(Guid postId)
         {
+            System.Diagnostics.Debug.WriteLine($"Received PostDeleted event: {postId}");
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                if (Post is not null && Post.PostId == postId)
+                if (Post?.PostId == postId)
                 {
+                    System.Diagnostics.Debug.WriteLine("Navigating back due to post deletion");
                     await Shell.Current.GoToAsync("..");
                 }
             });
@@ -309,36 +249,117 @@ namespace SocialMauiApp.ViewModel
 
         private void OnUserPhotoChanged(UserPhotoChangedDto dto)
         {
+            System.Diagnostics.Debug.WriteLine($"Received UserPhotoChanged event: {dto.UserId}");
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (Post is not null && Post.UserId == dto.UserId)
+                if (Post?.UserId == dto.UserId)
                 {
                     Post.UserPhotoUrl = dto.PhotoUrl;
+                    System.Diagnostics.Debug.WriteLine("Updated post user photo");
                 }
-                foreach (var comment in Comments.Where(c => c.UserId == dto.UserId))
+
+                int updatedComments = 0;
+                foreach (var c in Comments.Where(x => x.UserId == dto.UserId))
                 {
-                    comment.UserPhotoUrl = dto.PhotoUrl;
+                    c.UserPhotoUrl = dto.PhotoUrl;
+                    updatedComments++;
+                }
+
+                if (updatedComments > 0)
+                    System.Diagnostics.Debug.WriteLine($"Updated {updatedComments} comment photos");
+            });
+        }
+
+        private void OnCommentAdded(CommentDto comment)
+        {
+            System.Diagnostics.Debug.WriteLine($"Received CommentAdded event: {comment.CommentId} for post {comment.PostId}");
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (Post != null && comment.PostId == Post.PostId && !Comments.Any(c => c.CommentId == comment.CommentId))
+                {
+                    comment.IsOwnComment = comment.UserId == _authService.User?.Id;
+                    Comments.Insert(0, comment);
+                    System.Diagnostics.Debug.WriteLine($"Added new comment to UI: {comment.CommentId}");
+                }
+            });
+        }
+
+        private void OnCommentUpdated(CommentDto comment)
+        {
+            System.Diagnostics.Debug.WriteLine($"Received CommentUpdated event: {comment.CommentId} for post {comment.PostId}");
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (Post != null && comment.PostId == Post.PostId)
+                {
+                    var existing = Comments.FirstOrDefault(c => c.CommentId == comment.CommentId);
+                    if (existing != null)
+                    {
+                        // Update the comment properties
+                        existing.Content = comment.Content;
+                        existing.AddedOn = comment.AddedOn;
+                        System.Diagnostics.Debug.WriteLine($"Updated comment in UI: {comment.CommentId}");
+
+                        // Force UI refresh by replacing the comment
+                        int index = Comments.IndexOf(existing);
+                        if (index >= 0)
+                        {
+                            Comments.RemoveAt(index);
+                            comment.IsOwnComment = comment.UserId == _authService.User?.Id;
+                            Comments.Insert(index, comment);
+                            System.Diagnostics.Debug.WriteLine($"Replaced comment in collection to force UI update");
+                        }
+                    }
+                    else
+                    {
+                        // If comment doesn't exist yet, add it
+                        comment.IsOwnComment = comment.UserId == _authService.User?.Id;
+                        Comments.Add(comment);
+                        System.Diagnostics.Debug.WriteLine($"Added newly updated comment to UI: {comment.CommentId}");
+                    }
+                }
+            });
+        }
+
+        private void OnCommentDeleted(Guid commentId)
+        {
+            System.Diagnostics.Debug.WriteLine($"Received CommentDeleted event: {commentId}");
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                var existing = Comments.FirstOrDefault(c => c.CommentId == commentId);
+                if (existing != null)
+                {
+                    Comments.Remove(existing);
+                    System.Diagnostics.Debug.WriteLine($"Removed comment from UI: {commentId}");
+
+                    // If this was the comment being edited, clear the edit state
+                    if (IsEditing && CommentBeingEdited?.CommentId == commentId)
+                    {
+                        IsEditing = false;
+                        CommentBeingEdited = null;
+                        Comment = string.Empty;
+                        System.Diagnostics.Debug.WriteLine("Cleared edit state due to deleted comment");
+                    }
                 }
             });
         }
 
         public void ConfigureRealtimeUpdates()
         {
+            System.Diagnostics.Debug.WriteLine("Configuring realtime updates for DetailsViewModel");
             _realtimeUpdatesService.RemoveHandlers(nameof(DetailsViewModel));
             _realtimeUpdatesService.AddPostChangedHandler(nameof(DetailsViewModel), OnPostChanged);
             _realtimeUpdatesService.AddPostDeletedHandler(nameof(DetailsViewModel), OnPostDeleted);
             _realtimeUpdatesService.AddUserPhotoChangedHandler(nameof(DetailsViewModel), OnUserPhotoChanged);
-        }
-
-        public void RemoveRealtimeHandlers()
-        {
-            _realtimeUpdatesService.RemoveHandlers(nameof(DetailsViewModel));
-            _isPageActive = false;
+            _realtimeUpdatesService.AddCommentAddedHandler(nameof(DetailsViewModel), OnCommentAdded);
+            _realtimeUpdatesService.AddCommentUpdatedHandler(nameof(DetailsViewModel), OnCommentUpdated);
+            _realtimeUpdatesService.AddCommentDeletedHandler(nameof(DetailsViewModel), OnCommentDeleted);
         }
 
         public void Cleanup()
         {
-            RemoveRealtimeHandlers();
+            System.Diagnostics.Debug.WriteLine("Cleaning up DetailsViewModel realtime handlers");
+            _realtimeUpdatesService.RemoveHandlers(nameof(DetailsViewModel));
+            _isPageActive = false;
         }
     }
 }

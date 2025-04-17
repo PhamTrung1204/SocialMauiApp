@@ -223,6 +223,7 @@ namespace SocialMauiApp.Api.Services
             {
                 _context.Comments.Remove(comment);
                 await _context.SaveChangesAsync();
+                await _hubContext.Clients.All.CommentDeleted(commentId);
                 return ApiResult.Success();
             }
             catch (Exception ex)
@@ -230,7 +231,7 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult.Fail(ex.Message);
             }
         }
-        public async Task<ApiResult<CommentDto>> UpdateCommentAsync(Guid commentId, string updatedContent, LoggedInUser currentUser)
+        public async Task<ApiResult<CommentDto>> UpdateCommentAsync(Guid commentId, UpdateCommentDto dto, LoggedInUser currentUser)
         {
             var comment = await _context.Comments.FindAsync(commentId);
             if (comment is null)
@@ -243,8 +244,8 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<CommentDto>.Fail("You can only edit your own comment");
             }
 
-            comment.Content = updatedContent;
-            comment.AddedOn = DateTime.UtcNow;
+            comment.Content = dto.Content;
+            comment.AddedOn = DateTime.UtcNow; // Cập nhật thời gian chỉnh sửa
 
             try
             {
@@ -259,8 +260,11 @@ namespace SocialMauiApp.Api.Services
                     UserId = currentUser.Id,
                     UserName = currentUser.Name,
                     UserPhotoUrl = currentUser.PhotoUrl,
-                    AddedOn = comment.AddedOn
+                    AddedOn = comment.AddedOn // Thời gian mới
                 };
+
+                // Gửi thông báo qua SignalR đến tất cả client
+                await _hubContext.Clients.All.CommentUpdated(commentDto);
 
                 return ApiResult<CommentDto>.Success(commentDto);
             }

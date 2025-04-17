@@ -21,7 +21,7 @@ namespace SocialMauiApp.Api.Endpoints
             //    .WithName("SavePost");
             postsGroup.MapPost("/save", async ([FromForm] IFormFile? photo, [FromForm] string serializedSavePostDto, PostService postService, ClaimsPrincipal principal) =>
                {
-                   if (string.IsNullOrWhiteSpace(serializedSavePostDto)) 
+                   if (string.IsNullOrWhiteSpace(serializedSavePostDto))
                        return Results.BadRequest("Missing data");
 
                    SavePostDto dto = JsonSerializer.Deserialize<SavePostDto>(serializedSavePostDto)!;
@@ -51,10 +51,20 @@ namespace SocialMauiApp.Api.Endpoints
 
             // Cập nhật bình luận
             postsGroup.MapPut("/comments/{commentId:guid}",
-                async (Guid commentId, [FromBody] string updatedContent, PostService postService, ClaimsPrincipal principal) =>
-                Results.Ok(await postService.UpdateCommentAsync(commentId, updatedContent, principal.GetUser())))
-                .Produces<ApiResult<CommentDto>>()
-                .WithName("UpdateComment");
+     async (Guid commentId,
+            [FromBody] UpdateCommentDto dto,
+            PostService postService,
+            ClaimsPrincipal principal) =>
+     {
+         var result = await postService.UpdateCommentAsync(
+             commentId,
+             dto,
+             principal.GetUser());
+         return Results.Ok(result);
+     })
+     .Accepts<UpdateCommentDto>("application/json")
+     .Produces<ApiResult<CommentDto>>()
+     .WithName("UpdateComment");
 
             // Xoá bình luận
             postsGroup.MapDelete("/comments/{commentId:guid}",

@@ -318,8 +318,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedContent",
-        "Type": "System.String",
+        "Name": "dto",
+        "Type": "SocialMediaMaui.Shared.Dtos.UpdateCommentDto",
         "IsRequired": true
       }
     ],
