@@ -23,7 +23,6 @@ namespace SocialMauiApp.Services
 
         public RealtimeUpdatesService()
         {
-            // Gọi bất đồng bộ để cấu hình kết nối SignalR
             _ = ConfigureRealtimeUpdates();
         }
 

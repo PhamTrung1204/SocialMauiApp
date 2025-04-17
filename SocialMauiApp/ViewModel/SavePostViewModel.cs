@@ -34,7 +34,7 @@ namespace SocialMauiApp.ViewModel
         [ObservableProperty]
         private string _photoPath = string.Empty;
 
-        // Lưu lại đường dẫn ảnh cũ để so sánh khi lưu bài đăng (nếu cần)
+       
         private string? _existingPhotoUrl;
 
         [RelayCommand]
@@ -147,7 +147,7 @@ namespace SocialMauiApp.ViewModel
 
                 await MakeApiCall(async () =>
                 {
-                    // Xử lý ảnh: chỉ tạo StreamPart nếu PhotoPath là file cục bộ (không bắt đầu bằng "http")
+                   
                     StreamPart? photoStreamPart = null;
                     if (!string.IsNullOrWhiteSpace(PhotoPath) && File.Exists(PhotoPath) && !PhotoPath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                     {
@@ -162,7 +162,7 @@ namespace SocialMauiApp.ViewModel
                         PostId = Post?.PostId ?? default
                     };
 
-                    // Nếu không có ảnh mới nhưng trước đó có ảnh thì đánh dấu ảnh cũ đã bị loại bỏ
+                   
                     if (string.IsNullOrWhiteSpace(PhotoPath) && !string.IsNullOrWhiteSpace(_existingPhotoUrl))
                     {
                         dto.IsExistingPhotoRemoved = true;
@@ -178,21 +178,22 @@ namespace SocialMauiApp.ViewModel
 
                     var savedPost = PostModel.FromDto(result.Data, _postApi, _realtimeUpdatesService);
                     Content = string.Empty;
-                    // Cập nhật PhotoPath thành URL công khai trả về từ API nếu có
+                    
                     PhotoPath = !string.IsNullOrWhiteSpace(savedPost.PhotoUrl) ? savedPost.PhotoUrl : string.Empty;
 
-                    // Phân biệt giữa sửa bài và đăng bài mới
+                    
                     if (Post != null && Post.PostId != default)
                     {
-                        // Trường hợp sửa bài: quay lại trang DetailPostPage
+                        
                         await NavigateAsync("..", new Dictionary<string, object>
                         {
                             [nameof(DetailsViewModel.Post)] = savedPost
                         });
+                        OnPropertyChanged(nameof(Post));
                     }
                     else
                     {
-                        // Trường hợp đăng bài mới: điều hướng về HomePage kèm bài đăng mới
+                        
                         await NavigateAsync("//HomePage", new Dictionary<string, object>
                         {
                             ["newPost"] = savedPost

@@ -241,7 +241,7 @@ target triple = "x86_64-unknown-linux-android21"
 		ptr @__compressedAssemblyData_43; uint8_t* data
 	}, ; 43: Microsoft.AspNetCore.SignalR.Client
 	%struct.CompressedAssemblyDescriptor {
-		i32 147968, ; uint32_t uncompressed_file_size
+		i32 148992, ; uint32_t uncompressed_file_size
 		i1 false, ; bool loaded
 		ptr @__compressedAssemblyData_44; uint8_t* data
 	}, ; 44: Microsoft.AspNetCore.SignalR.Client.Core
@@ -541,7 +541,7 @@ target triple = "x86_64-unknown-linux-android21"
 		ptr @__compressedAssemblyData_103; uint8_t* data
 	}, ; 103: SocialMediaMaui.Shared
 	%struct.CompressedAssemblyDescriptor {
-		i32 752128, ; uint32_t uncompressed_file_size
+		i32 759296, ; uint32_t uncompressed_file_size
 		i1 false, ; bool loaded
 		ptr @__compressedAssemblyData_104; uint8_t* data
 	}, ; 104: SocialMauiApp
@@ -916,7 +916,7 @@ target triple = "x86_64-unknown-linux-android21"
 @__compressedAssemblyData_41 = internal dso_local global [13312 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_42 = internal dso_local global [33168 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_43 = internal dso_local global [9216 x i8] zeroinitializer, align 16
-@__compressedAssemblyData_44 = internal dso_local global [147968 x i8] zeroinitializer, align 16
+@__compressedAssemblyData_44 = internal dso_local global [148992 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_45 = internal dso_local global [24064 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_46 = internal dso_local global [23040 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_47 = internal dso_local global [14848 x i8] zeroinitializer, align 16
@@ -976,7 +976,7 @@ target triple = "x86_64-unknown-linux-android21"
 @__compressedAssemblyData_101 = internal dso_local global [17408 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_102 = internal dso_local global [88576 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_103 = internal dso_local global [22528 x i8] zeroinitializer, align 16
-@__compressedAssemblyData_104 = internal dso_local global [752128 x i8] zeroinitializer, align 16
+@__compressedAssemblyData_104 = internal dso_local global [759296 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_105 = internal dso_local global [28672 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_106 = internal dso_local global [23552 x i8] zeroinitializer, align 16
 @__compressedAssemblyData_107 = internal dso_local global [18432 x i8] zeroinitializer, align 16

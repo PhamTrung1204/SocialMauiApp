@@ -38,25 +38,16 @@ public partial class PostDetailsPage : ContentPage
     }
     private async void OnMoreOptionsTapped(object sender, EventArgs e)
     {
-        // Hiển thị ActionSheet với các tùy chọn Edit và Delete
-        string action = await Shell.Current.DisplayActionSheet("Chọn thao tác", "Cancel", null, "Sửa", "Xóa");
+        string action = await Shell.Current.DisplayActionSheet("Chọn thao tác", "Cancel", null, "Edit", "Delete");
 
-        // Lấy đối tượng comment từ BindingContext của sender (tùy thuộc cách bạn tổ chức DataTemplate)
-        // Ví dụ, nếu sender là Image, bạn có thể lấy Parent rồi BindingContext.
-        // Trong trường hợp đơn giản, nếu bạn đã bind CommandParameter vào comment, có thể tổ chức lại code theo MVVM.
-
-        if (action == "Sửa")
+        if (action == "Edit")
         {
-            // Gọi command Edit (bạn có thể truyền thông qua EventToCommandBehavior hoặc 
-            // gán xử lý trực tiếp ở đây nếu đã lấy được comment được chọn)
-            // Giả sử bạn có phương thức EditComment được truyền commentDto:
             if (sender is VisualElement element && element.BindingContext is CommentDto commentDto)
             {
-                // Giả sử _detailsViewModel là ViewModel đã được khởi tạo và set BindingContext cho trang
-                await _detailsViewModel.EditCommentCommand.ExecuteAsync(commentDto);
+               await _detailsViewModel.EditCommentCommand.ExecuteAsync(commentDto);
             }
         }
-        else if (action == "Xóa")
+        else if (action == "Delete")
         {
             if (sender is VisualElement element && element.BindingContext is CommentDto commentDto)
             {

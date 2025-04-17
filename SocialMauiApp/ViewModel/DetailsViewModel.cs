@@ -110,7 +110,7 @@ namespace SocialMauiApp.ViewModel
             IsBusy = true;
             try
             {
-                // Check connection before proceeding
+                
                 await _realtimeUpdatesService.EnsureConnectedAsync();
 
                 if (IsEditing && CommentBeingEdited != null)
@@ -127,11 +127,11 @@ namespace SocialMauiApp.ViewModel
 
                     System.Diagnostics.Debug.WriteLine($"Comment updated successfully: {result.Data.CommentId}");
 
-                    // Update local comment with server response
+                   
                     var idx = Comments.IndexOf(CommentBeingEdited);
                     if (idx >= 0)
                     {
-                        Comments[idx] = result.Data; // Use server response to update all properties
+                        Comments[idx] = result.Data; 
                     }
 
                     IsEditing = false;
@@ -216,7 +216,50 @@ namespace SocialMauiApp.ViewModel
                 IsBusy = false;
             }
         }
+        [RelayCommand]
+        private async Task EditPostAsync()
+        {
+            if (Post == null)
+                return;
+            var param = new Dictionary<string, object>
+            {
+                [nameof(SavePostViewModel.Post)] = Post
+            };
+           
+            await Shell.Current.GoToAsync(nameof(AddPostPage), true, param);
+        }
 
+        [RelayCommand]
+        private async Task DeletePostAsync()
+        {
+            if (Post is null)
+                return;
+
+            if (await Shell.Current.DisplayAlert("Confirm?", "Are you sure you want to delete this post?", "Yes", "No"))
+            {
+                if (IsBusy)
+                    return;
+                IsBusy = true;
+                try
+                {
+                    var result = await PostsApi.DeletePostAsync(Post.PostId);
+                    if (!result.IsSuccess)
+                    {
+                        await ShowErrorAlertAsync(result.Error);
+                        return;
+                    }
+                    await Shell.Current.GoToAsync("..");
+                }
+                catch (Exception ex)
+                {
+                    await ShowErrorAlertAsync($"Error deleting post: {ex.Message}");
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+        }
         private void OnPostChanged(PostDto changedPost)
         {
             System.Diagnostics.Debug.WriteLine($"Received PostChanged event: {changedPost.PostId}");

@@ -33,7 +33,6 @@ namespace SocialMauiApp.ViewModel
 
             ConfigureRealtimeUpdates();
         }
-
         public ObservableCollection<PostModel> Posts { get; set; }
 
         [ObservableProperty]
@@ -99,21 +98,19 @@ namespace SocialMauiApp.ViewModel
 
         private void OnPostChanged(PostDto updatedPost)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 var post = Posts.FirstOrDefault(p => p.PostId == updatedPost.PostId);
                 if (post != null)
                 {
-                    // Cập nhật các thuộc tính cần thiết
                     post.IsLiked = updatedPost.IsLiked;
-                    
+                    post.Content = updatedPost.Content;
+                    post.PhotoUrl = updatedPost.PhotoUrl;
                     post.IsBookmarked = updatedPost.IsBookmarked;
-          
-                   
+                    _realtimeUpdatesService.NotifyPostChanged(post.PostId);
                 }
                 else
                 {
-                    // Nếu bài đăng chưa có, có thể thêm mới vào danh sách
                     Posts.Insert(0, PostModel.FromDto(updatedPost, PostsApi, _realtimeUpdatesService));
                 }
             });
