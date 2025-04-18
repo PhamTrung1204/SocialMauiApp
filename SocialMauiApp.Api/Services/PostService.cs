@@ -22,6 +22,7 @@ namespace SocialMauiApp.Api.Services
             _photoUploadService = photoUploadService;
             _hubContext = hubContext;
         }
+        //Lưu post
         public async Task<ApiResult<PostDto>> SavePostAsync(SavePostDto dto, LoggedInUser user)
         {
             string? _existingPhotoPath = null;
@@ -104,6 +105,7 @@ namespace SocialMauiApp.Api.Services
             }
 
         }
+        //Lấy danh sách tất cả các bài post
         public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize, Guid currentUserId)
         {
             var posts = await _context.Set<PostDto>()
@@ -114,7 +116,7 @@ namespace SocialMauiApp.Api.Services
             return posts;
         }
 
-
+        //Lấy 1 bài post 
         public async Task<PostDto?> GetPostAsync(Guid postId, Guid currentUserId)
         {
             // Bước 1: Lấy dữ liệu bất đồng bộ từ Stored Procedure
@@ -142,8 +144,21 @@ namespace SocialMauiApp.Api.Services
 
             return posts.FirstOrDefault();
         }
+        //Thông báo đếm số lượt bình luận
+        private async Task NotifyCountsAsync(Guid postId)
+        {
+            var likeCount = await _context.Likes.CountAsync(l => l.PostId == postId);
+            var commentCount = await _context.Comments.CountAsync(c => c.PostId == postId);
 
-
+            var dto = new PostDto
+            {
+                PostId = postId,
+                LikeCount = likeCount,
+                CommentCount = commentCount
+            };
+            await _hubContext.Clients.All.PostCountsUpdated(dto);
+        }
+        //Lưu bình luận
         public async Task<ApiResult<CommentDto>> SaveCommentAsync(SaveCommentDto dto, LoggedInUser currentUser)
         {
             var postOwnerId = await _context.Posts.Where(p => p.Id == dto.PostId).Select(p => p.UserId).FirstOrDefaultAsync();
@@ -199,6 +214,7 @@ namespace SocialMauiApp.Api.Services
                     await SaveNotificationAsync(notificationDto);
                     await _hubContext.Clients.All.CommentAddedToThePost(commentDto);
                 }
+                await NotifyCountsAsync(commentDto.PostId);
                 return ApiResult<CommentDto>.Success(commentDto);
             }
             catch (Exception ex)
@@ -223,6 +239,7 @@ namespace SocialMauiApp.Api.Services
             {
                 _context.Comments.Remove(comment);
                 await _context.SaveChangesAsync();
+                await NotifyCountsAsync(comment.PostId);
                 await _hubContext.Clients.All.CommentDeleted(commentId);
                 return ApiResult.Success();
             }
@@ -322,6 +339,7 @@ namespace SocialMauiApp.Api.Services
                     var notificationDto = new NotificationDto(postOwnerId,$"{currentUser.Name} liked your post", DateTime.Now, postId);
                     await _hubContext.Clients.All.NotificationGenerated(notificationDto);
                 }
+                await NotifyCountsAsync(postId);
                 return ApiResult.Success();
             }
             catch (Exception ex)

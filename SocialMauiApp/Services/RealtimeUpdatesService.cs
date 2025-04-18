@@ -20,6 +20,7 @@ namespace SocialMauiApp.Services
         private readonly Dictionary<string, Action<NotificationDto>> _notificationGeneratedActions = new Dictionary<string, Action<NotificationDto>>();
         private readonly Dictionary<string, Action<CommentDto>> _commentUpdatedActions = new Dictionary<string, Action<CommentDto>>();
         private readonly Dictionary<string, Action<Guid>> _commentDeletedActions = new Dictionary<string, Action<Guid>>();
+        private readonly Dictionary<string, Action<PostDto>> _postCountsUpdatedActions = new();
 
         public RealtimeUpdatesService()
         {
@@ -46,7 +47,8 @@ namespace SocialMauiApp.Services
 
         public void AddCommentDeletedHandler(string key, Action<Guid> handler) =>
             _commentDeletedActions[key] = handler;
-
+        public void AddPostCountsUpdatedHandler(string key, Action<PostDto> handler) =>
+            _postCountsUpdatedActions[key] = handler;
         private async Task ConfigureRealtimeUpdates()
         {
             try
@@ -117,6 +119,11 @@ namespace SocialMauiApp.Services
                     {
                         try { action.Invoke(notificationDto); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in NotificationGenerated handler: {ex.Message}"); }
                     }
+                });
+                _hubConnection.On<PostDto>(nameof(ISocialHubClient.PostCountsUpdated), counts =>
+                {
+                    foreach (var action in _postCountsUpdatedActions.Values)
+                        try { action.Invoke(counts); } catch { }
                 });
 
                 // Try different possible method names for comment updates

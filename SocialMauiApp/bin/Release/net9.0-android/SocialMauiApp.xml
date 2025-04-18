@@ -372,6 +372,11 @@
         <member name="P:SocialMauiApp.ViewModel.SavePostViewModel.PhotoPath">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.SavePostViewModel._photoPath"/>
         </member>
+        <member name="M:SocialMauiApp.ViewModel.SavePostViewModel.OnPostChanged(SocialMauiApp.Models.PostModel)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.SavePostViewModel.Post"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.SavePostViewModel.Post"/> is changed.</remarks>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.SavePostViewModel.selectPhotoCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.SavePostViewModel.SelectPhotoCommand"/>.</summary>
         </member>

@@ -33,21 +33,19 @@ namespace SocialMauiApp.ViewModel
 
             ConfigureRealtimeUpdates();
         }
-        public ObservableCollection<PostModel> Posts { get; set; }
+
+        public ObservableCollection<PostModel> Posts { get; }
 
         [ObservableProperty]
         private PostModel? newPost;
 
-        partial void OnNewPostChanged(PostModel? oldValue, PostModel? newValue)
+        partial void OnNewPostChanged(PostModel? oldValue, PostModel? value)
         {
-            if (newValue != null)
+            if (value != null && Posts.All(p => p.PostId != value.PostId))
             {
-                var existing = Posts.FirstOrDefault(p => p.PostId == newValue.PostId);
-                if (existing == null)
-                {
-                    // Chèn bài đăng mới nhất vào đầu danh sách
-                    Posts.Insert(0, newValue);
-                }
+                // Chèn bài đăng mới nhất vào đầu danh sách
+                Posts.Insert(0, value);
+                _startIndex++;
             }
         }
 
@@ -59,25 +57,18 @@ namespace SocialMauiApp.ViewModel
                 var posts = await PostsApi.GetPostsAsync(_startIndex, PageSize);
                 if (posts.Length > 0)
                 {
-                    if (_startIndex == 0)
-                    {
-                        // Nếu đang làm mới, xoá danh sách cũ để tránh trùng lặp
-                        Posts.Clear();
-                    }
+                    if (_startIndex == 0) Posts.Clear();
                     _startIndex += posts.Length;
-                    foreach (var p in posts.OrderByDescending(p=>p.PostedOn))
+                    foreach (var dto in posts.OrderByDescending(p => p.PostedOn))
                     {
-                        var postModel = PostModel.FromDto(p, PostsApi, _realtimeUpdatesService);
-                        // Kiểm tra nếu bài đã có trong danh sách thì bỏ qua
-                        if (!Posts.Any(existing => existing.PostId == postModel.PostId))
+                        if (!Posts.Any(p => p.PostId == dto.PostId))
                         {
-                            Posts.Add(postModel);
+                            Posts.Add(PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService));
                         }
                     }
                 }
             });
         }
-
 
         [ObservableProperty]
         private bool isRefreshing;
@@ -96,58 +87,78 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task GoToAddPostAsync() => await NavigateAsync(nameof(AddPostPage));
 
-        private void OnPostChanged(PostDto updatedPost)
+        // Xử lý khi một Post được thay đổi (like/unlike/chỉnh sửa)
+        private void OnPostChanged(PostDto updated)
         {
-            MainThread.BeginInvokeOnMainThread(async () =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                var post = Posts.FirstOrDefault(p => p.PostId == updatedPost.PostId);
-                if (post != null)
+                var postModel = Posts.FirstOrDefault(p => p.PostId == updated.PostId);
+                if (postModel != null)
                 {
-                    post.IsLiked = updatedPost.IsLiked;
-                    post.Content = updatedPost.Content;
-                    post.PhotoUrl = updatedPost.PhotoUrl;
-                    post.IsBookmarked = updatedPost.IsBookmarked;
-                    _realtimeUpdatesService.NotifyPostChanged(post.PostId);
+                    // Cập nhật tất cả trạng thái tương tác
+                    postModel.IsLiked = updated.IsLiked;
+                    postModel.NotifyIsLikeIconChanged();
+
+                    postModel.IsBookmarked = updated.IsBookmarked;
+                    postModel.NotifyIsBookmarkIconChanged();
+
+                    postModel.Content = updated.Content;
+                    postModel.PhotoUrl = updated.PhotoUrl;
                 }
                 else
                 {
-                    Posts.Insert(0, PostModel.FromDto(updatedPost, PostsApi, _realtimeUpdatesService));
+                    // Nếu chưa tồn tại, thêm mới vào đầu danh sách
+                    Posts.Insert(0, PostModel.FromDto(updated, PostsApi, _realtimeUpdatesService));
+                    _startIndex++;
                 }
             });
-        }     
+        }
 
+        // Xử lý khi Post bị xóa
         private void OnPostDeleted(Guid postId)
         {
-            MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                var currentPost = Posts.FirstOrDefault(p => p.PostId == postId);
-                if (currentPost != null)
+                var removed = Posts.FirstOrDefault(p => p.PostId == postId);
+                if (removed != null)
                 {
-                    Posts.Remove(currentPost);
+                    Posts.Remove(removed);
                     _startIndex--;
+                }
+            });
+        }
+
+        // Xử lý khi số counts cập nhật
+        private void OnPostCountsUpdated(PostDto dto)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                var model = Posts.FirstOrDefault(p => p.PostId == dto.PostId);
+                if (model != null)
+                {
+                    model.LikeCount = dto.LikeCount;
+                    model.CommentCount = dto.CommentCount;
                 }
             });
         }
 
         private void OnUserPhotoChanged(UserPhotoChangedDto dto)
         {
-            MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                foreach (var post in Posts.Where(p => p.UserId == dto.UserId))
+                foreach (var p in Posts.Where(p => p.UserId == dto.UserId))
                 {
-                    post.UserPhotoUrl = dto.PhotoUrl;
+                    p.UserPhotoUrl = dto.PhotoUrl;
                 }
             });
         }
 
         private void OnNotificationGenerated(NotificationDto dto)
         {
-            MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 if (dto.ForUserId == _authService.User.Id)
-                {
                     IsThereNewNotification = true;
-                }
             });
         }
 
@@ -155,6 +166,7 @@ namespace SocialMauiApp.ViewModel
         {
             _realtimeUpdatesService.AddPostChangedHandler(nameof(HomeViewModel), OnPostChanged);
             _realtimeUpdatesService.AddPostDeletedHandler(nameof(HomeViewModel), OnPostDeleted);
+            _realtimeUpdatesService.AddPostCountsUpdatedHandler(nameof(HomeViewModel), OnPostCountsUpdated);
             _realtimeUpdatesService.AddUserPhotoChangedHandler(nameof(HomeViewModel), OnUserPhotoChanged);
             _realtimeUpdatesService.AddNotificationGeneratedHandler(nameof(HomeViewModel), OnNotificationGenerated);
         }

@@ -270,7 +270,9 @@ namespace SocialMauiApp.ViewModel
                     Post.Content = changedPost.Content;
                     Post.PhotoUrl = changedPost.PhotoUrl;
                     Post.IsLiked = changedPost.IsLiked;
+                    Post.NotifyIsLikeIconChanged();
                     Post.IsBookmarked = changedPost.IsBookmarked;
+                    Post.NotifyIsBookmarkIconChanged();
                     System.Diagnostics.Debug.WriteLine("Updated post in UI");
                 }
 
@@ -385,7 +387,18 @@ namespace SocialMauiApp.ViewModel
                 }
             });
         }
-
+        private void OnPostCountsUpdated(PostDto dto)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                // Nếu đang xem chi tiết bài này
+                if (Post is not null && Post.PostId == dto.PostId)
+                {
+                    Post.LikeCount = dto.LikeCount;
+                    Post.CommentCount = dto.CommentCount;
+                }
+            });
+        }
         public void ConfigureRealtimeUpdates()
         {
             System.Diagnostics.Debug.WriteLine("Configuring realtime updates for DetailsViewModel");
@@ -396,6 +409,7 @@ namespace SocialMauiApp.ViewModel
             _realtimeUpdatesService.AddCommentAddedHandler(nameof(DetailsViewModel), OnCommentAdded);
             _realtimeUpdatesService.AddCommentUpdatedHandler(nameof(DetailsViewModel), OnCommentUpdated);
             _realtimeUpdatesService.AddCommentDeletedHandler(nameof(DetailsViewModel), OnCommentDeleted);
+            _realtimeUpdatesService.AddPostCountsUpdatedHandler(nameof(DetailsViewModel), OnPostCountsUpdated);
         }
 
         public void Cleanup()

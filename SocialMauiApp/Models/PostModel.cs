@@ -40,11 +40,11 @@ namespace SocialMauiApp.Models
 
         [ObservableProperty]
         private int _likeCount;
-
+      
         [ObservableProperty]
         private int _commentCount;
+       
 
-     
         public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
 

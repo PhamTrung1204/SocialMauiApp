@@ -144,7 +144,10 @@ namespace SocialMauiApp.ViewModel
                     await ToastAsync("Either content or photo is required");
                     return;
                 }
-
+                var originalLikeCount = Post?.LikeCount ?? 0;
+                var originalCommentCount = Post?.CommentCount ?? 0;
+                var originalIsLiked = Post?.IsLiked ?? false;
+                var originalIsBookmarked = Post?.IsBookmarked ?? false;
                 await MakeApiCall(async () =>
                 {
                    
@@ -176,28 +179,27 @@ namespace SocialMauiApp.ViewModel
                         return;
                     }
 
-                    var savedPost = PostModel.FromDto(result.Data, _postApi, _realtimeUpdatesService);
+                    // Tạo instance mới và gán lại counts gốc nếu edit
+                    var saved = PostModel.FromDto(result.Data, _postApi, _realtimeUpdatesService);
+                    saved.LikeCount = originalLikeCount;
+                    saved.CommentCount = originalCommentCount;
+                    saved.IsLiked = originalIsLiked;
+                    saved.IsBookmarked = originalIsBookmarked;
+                    saved.NotifyIsLikeIconChanged();
+                    saved.NotifyIsBookmarkIconChanged();
                     Content = string.Empty;
-                    
-                    PhotoPath = !string.IsNullOrWhiteSpace(savedPost.PhotoUrl) ? savedPost.PhotoUrl : string.Empty;
+                    PhotoPath = string.IsNullOrWhiteSpace(saved.PhotoUrl) ? string.Empty : saved.PhotoUrl;
 
-                    
                     if (Post != null && Post.PostId != default)
                     {
-                        
-                        await NavigateAsync("..", new Dictionary<string, object>
-                        {
-                            [nameof(DetailsViewModel.Post)] = savedPost
-                        });
+                        // Đang edit
+                        await NavigateAsync("..", new Dictionary<string, object> { [nameof(DetailsViewModel.Post)] = saved });
                         OnPropertyChanged(nameof(Post));
                     }
                     else
                     {
-                        
-                        await NavigateAsync("//HomePage", new Dictionary<string, object>
-                        {
-                            ["newPost"] = savedPost
-                        });
+                        // Tạo mới
+                        await NavigateAsync("//HomePage", new Dictionary<string, object> { ["newPost"] = saved });
                     }
                 });
             }
