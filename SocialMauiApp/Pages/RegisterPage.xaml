@@ -8,9 +8,9 @@
     Title="Register"
     Padding="20"
     x:DataType="vm:RegisterViewModel"
+    BackgroundColor="SkyBlue"
     Shell.BackgroundColor="{StaticResource Primary}"
-    Shell.TitleColor="White"
-    BackgroundColor="SkyBlue">
+    Shell.TitleColor="White">
     <Grid>
         <ScrollView VerticalScrollBarVisibility="Never">
             <Grid
@@ -28,22 +28,46 @@
                     HorizontalOptions="Center"
                     Text="Register" />
                 <VerticalStackLayout Grid.Row="2" Spacing="2">
-                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <Grid HeightRequest="100" WidthRequest="100">
+
+                        <!--  Avatar bo tròn, ảnh fill kín khung 100×100  -->
                         <Border
-                            HeightRequest="80"
-                            StrokeShape="RoundRectangle 40"
-                            WidthRequest="80">
+                            BackgroundColor="White"
+                            HeightRequest="100"
+                            StrokeShape="RoundRectangle 50"
+                            StrokeThickness="2"
+                            WidthRequest="100">
                             <Image
                                 Aspect="AspectFill"
-                                HeightRequest="80"
+                                HeightRequest="100"
                                 Source="{Binding PhotoImageSource}"
-                                WidthRequest="80" />
+                                WidthRequest="100" />
                         </Border>
-                        <Button
-                            Command="{Binding SelectPhotoCommand}"
-                            Text="Choose Photo"
-                            VerticalOptions="Center" />
-                    </HorizontalStackLayout>
+
+                        <!--  Badge chỉnh sửa, luôn nằm trên cùng  -->
+                        <Border
+                            Margin="0,0,4,-10"
+                            BackgroundColor="White"
+                            HeightRequest="55"
+                            HorizontalOptions="End"
+                            StrokeShape="Ellipse"
+                            StrokeThickness="2"
+                            VerticalOptions="End"
+                            WidthRequest="55">
+
+                            <ImageButton
+                                Aspect="AspectFit"
+                                BackgroundColor="Transparent"
+                                Command="{Binding SelectPhotoCommand}"
+                                HeightRequest="24"
+                                HorizontalOptions="Center"
+                                Source="camera.png"
+                                VerticalOptions="Center"
+                                WidthRequest="24" />
+                        </Border>
+
+
+                    </Grid>
 
                     <Label Style="{StaticResource formLabel}" Text="Enter Name" />
                     <controls:NoBorderEntry
@@ -54,7 +78,7 @@
                         TextColor="Black" />
                     <controls:Spacer />
 
-                    <Label Text="Email" />
+                    <Label Style="{StaticResource formLabel}" Text="Email" />
                     <controls:NoBorderEntry
                         BackgroundColor="LightGoldenrodYellow"
                         IsPassword="True"
@@ -65,13 +89,23 @@
                         TextColor="Black" />
                     <controls:Spacer />
 
-                    <Label Text="Password" />
+                    <Label Style="{StaticResource formLabel}" Text="Password" />
                     <controls:NoBorderEntry
                         BackgroundColor="LightGoldenrodYellow"
                         IsPassword="True"
                         Placeholder="Enter Password"
                         PlaceholderColor="LightGray"
                         Text="{Binding Password}"
+                        TextColor="Black" />
+                    <controls:Spacer />
+
+                    <Label Style="{StaticResource formLabel}" Text="Confirm Password" />
+                    <controls:NoBorderEntry
+                        BackgroundColor="LightGoldenrodYellow"
+                        IsPassword="True"
+                        Placeholder="Confirm Password"
+                        PlaceholderColor="LightGray"
+                        Text="{Binding RepeatPassword}"
                         TextColor="Black" />
                     <controls:Spacer />
 

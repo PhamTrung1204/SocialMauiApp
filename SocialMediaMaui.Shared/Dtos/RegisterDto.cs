@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace SocialMediaMaui.Shared.Dtos
 {
-    public record RegisterDto(string Name, string Email, string Password);
+    public record RegisterDto(string Name, string Email, string Password, string RepeatPassword);
 }

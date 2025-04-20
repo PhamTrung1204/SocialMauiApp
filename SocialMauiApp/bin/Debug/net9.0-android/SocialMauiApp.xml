@@ -334,6 +334,9 @@
         <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.Password">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._password"/>
         </member>
+        <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.RepeatPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._repeatPassword"/>
+        </member>
         <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.PhotoImageSource">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._photoImageSource"/>
         </member>
@@ -602,6 +605,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Name">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Name" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RepeatPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RepeatPassword" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PhotoImageSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PhotoImageSource" generated properties.</summary>
         </member>
@@ -688,6 +694,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Name">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Name" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RepeatPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RepeatPassword" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PhotoImageSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoImageSource" generated properties.</summary>

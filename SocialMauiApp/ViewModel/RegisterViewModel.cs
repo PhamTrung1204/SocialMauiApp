@@ -22,26 +22,33 @@ namespace SocialMauiApp.ViewModel
         [ObservableProperty] private string _name;
         [ObservableProperty] private string _email;
         [ObservableProperty] private string _password;
-        [ObservableProperty] private string _photoImageSource = "personal.png";
+        [ObservableProperty] private string _repeatPassword;
+        [ObservableProperty] private string _photoImageSource = "user.png";
 
         [RelayCommand]
         private async Task RegisterAsync()
         {
-            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(RepeatPassword))
             {
                 await ToastAsync("All fields are required");
                 return;
             }
-
+            if (Password.ToString() != RepeatPassword.ToString())
+            {
+                await ShowErrorAlertAsync("Confirmed password incorrect");
+                return;
+            }
             await MakeApiCall(async () =>
             {
-                var registerDto = new RegisterDto(Name, Email, Password);
+                var registerDto = new RegisterDto(Name, Email, Password, RepeatPassword);
                 var result = await _authApi.RegisterAsync(registerDto);
+                
                 if (!result.IsSuccess)
                 {
                     await ShowErrorAlertAsync(result.Error);
                     return;
                 }
+               
 
                 var userId = result.Data;
                 if (!string.IsNullOrWhiteSpace(PhotoImageSource) && PhotoImageSource != "personal.png")

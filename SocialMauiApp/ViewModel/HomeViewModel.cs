@@ -87,7 +87,6 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task GoToAddPostAsync() => await NavigateAsync(nameof(AddPostPage));
 
-        // Xử lý khi một Post được thay đổi (like/unlike/chỉnh sửa)
         private void OnPostChanged(PostDto updated)
         {
             MainThread.BeginInvokeOnMainThread(() =>
