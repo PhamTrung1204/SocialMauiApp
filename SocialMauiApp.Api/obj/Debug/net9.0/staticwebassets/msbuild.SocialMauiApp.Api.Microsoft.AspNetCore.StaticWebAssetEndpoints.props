@@ -1,5 +1,17 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/SocialMauiApp.Api/uploads/images/users/36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.go6n2ixlkv.jpeg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"go6n2ixlkv"},{"Name":"integrity","Value":"sha256-kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg="},{"Name":"label","Value":"_content/SocialMauiApp.Api/uploads/images/users/36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"3368783"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg=\u0022"},{"Name":"Last-Modified","Value":"Mon, 21 Apr 2025 01:40:36 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/SocialMauiApp.Api/uploads/images/users/36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"3368783"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg=\u0022"},{"Name":"Last-Modified","Value":"Mon, 21 Apr 2025 01:40:36 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/SocialMauiApp.Api/uploads/images/users/526749fd-83b9-4906-b561-710060ba879d_638776640127461838.ialt589mf7.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\526749fd-83b9-4906-b561-710060ba879d_638776640127461838.jpg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>

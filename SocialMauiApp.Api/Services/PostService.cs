@@ -144,7 +144,7 @@ namespace SocialMauiApp.Api.Services
 
             return posts.FirstOrDefault();
         }
-        //Thông báo đếm số lượt bình luận
+        //Thông báo đếm số lượt thích, bình luận
         private async Task NotifyCountsAsync(Guid postId)
         {
             var likeCount = await _context.Likes.CountAsync(l => l.PostId == postId);
@@ -337,6 +337,7 @@ namespace SocialMauiApp.Api.Services
                 if (sendNotification)
                 {
                     var notificationDto = new NotificationDto(postOwnerId,$"{currentUser.Name} liked your post", DateTime.Now, postId);
+                    await SaveNotificationAsync(notificationDto);
                     await _hubContext.Clients.All.NotificationGenerated(notificationDto);
                 }
                 await NotifyCountsAsync(postId);
@@ -408,7 +409,6 @@ namespace SocialMauiApp.Api.Services
                     }
                     catch (Exception exFile)
                     {
-                        // Log lỗi nếu không xóa được file ảnh, nhưng không nên dừng transaction
                         Console.WriteLine("Error deleting file: " + exFile.ToString());
                     }
                 }
@@ -417,7 +417,7 @@ namespace SocialMauiApp.Api.Services
                 _context.Comments.RemoveRange(_context.Comments.Where(c => c.PostId == postId));
                 _context.Likes.RemoveRange(_context.Likes.Where(l => l.PostId == postId));
                 _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.PostId == postId));
-                _context.Notifications.RemoveRange(_context.Notifications.Where(n => n.PostId == postId)); // Thêm dòng này
+                _context.Notifications.RemoveRange(_context.Notifications.Where(n => n.PostId == postId));
 
                 // Hard delete bài post
                 _context.Posts.Remove(post);

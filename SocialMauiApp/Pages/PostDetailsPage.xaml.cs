@@ -38,7 +38,7 @@ public partial class PostDetailsPage : ContentPage
     }
     private async void OnMoreOptionsTapped(object sender, EventArgs e)
     {
-        string action = await Shell.Current.DisplayActionSheet("Chọn thao tác", "Cancel", null, "Edit", "Delete");
+        string action = await Shell.Current.DisplayActionSheet("Select action", "Cancel", null, "Edit", "Delete");
 
         if (action == "Edit")
         {

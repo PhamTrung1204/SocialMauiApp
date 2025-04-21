@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "yik9385erqxhRr3HFOi6zjMpJxFMvST0EasG83pBWVE=",
+  "Hash": "zRsP8VjSqXSWcfdzOdN8XgSFQ28X5IcTC7P5z37w6jY=",
   "Source": "SocialMauiApp.Api",
   "BasePath": "_content/SocialMauiApp.Api",
   "Mode": "Default",
@@ -16,6 +16,27 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg",
+      "SourceId": "SocialMauiApp.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\",
+      "BasePath": "_content/SocialMauiApp.Api",
+      "RelativePath": "uploads/images/users/36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527#[.{fingerprint}]?.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "go6n2ixlkv",
+      "Integrity": "kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\images\\users\\36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg"
+    },
     {
       "Identity": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\526749fd-83b9-4906-b561-710060ba879d_638776640127461838.jpg",
       "SourceId": "SocialMauiApp.Api",
@@ -1068,6 +1089,88 @@
     }
   ],
   "Endpoints": [
+    {
+      "Route": "uploads/images/users/36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.go6n2ixlkv.jpeg",
+      "AssetFile": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3368783"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 21 Apr 2025 01:40:36 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "go6n2ixlkv"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/images/users/36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/images/users/36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg",
+      "AssetFile": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3368783"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 21 Apr 2025 01:40:36 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg="
+        }
+      ]
+    },
     {
       "Route": "uploads/images/users/526749fd-83b9-4906-b561-710060ba879d_638776640127461838.ialt589mf7.jpg",
       "AssetFile": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\526749fd-83b9-4906-b561-710060ba879d_638776640127461838.jpg",
