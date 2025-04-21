@@ -100,6 +100,10 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "Plugin.Fingerprint": {
+              "target": "Package",
+              "version": "[2.1.5, )"
+            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -163,6 +167,10 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "Plugin.Fingerprint": {
+              "target": "Package",
+              "version": "[2.1.5, )"
+            },
             "Refit.HttpClientFactory": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -219,6 +227,10 @@
             "Microsoft.Windows.CsWinRT": {
               "target": "Package",
               "version": "[2.2.0, )"
+            },
+            "Plugin.Fingerprint": {
+              "target": "Package",
+              "version": "[2.1.5, )"
             },
             "Refit.HttpClientFactory": {
               "target": "Package",

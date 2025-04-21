@@ -22,8 +22,11 @@
   </queries>
   <permission android:name="com.companyname.socialmauiapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" android:protectionLevel="signature" />
   <uses-permission android:name="com.companyname.socialmauiapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+  <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+  <!-- suppress DeprecatedClassUsageInspection -->
+  <uses-permission android:name="android.permission.USE_FINGERPRINT" />
   <application android:name="crc6450d00504b1424cab.MainApplication" android:allowBackup="true" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:debuggable="true" android:extractNativeLibs="true" android:icon="@mipmap/appicon" android:label="SocialMauiApp" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true">
-    <activity android:name="crc6450d00504b1424cab.MainActivity" android:configChanges="density|orientation|smallestScreenSize|screenLayout|screenSize|uiMode" android:exported="true" android:launchMode="singleTop" android:theme="@style/Maui.SplashTheme">
+    <activity android:name="crc6450d00504b1424cab.MainActivity" android:configChanges="orientation|smallestScreenSize|screenLayout|screenSize|uiMode" android:exported="true" android:theme="@style/Maui.SplashTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

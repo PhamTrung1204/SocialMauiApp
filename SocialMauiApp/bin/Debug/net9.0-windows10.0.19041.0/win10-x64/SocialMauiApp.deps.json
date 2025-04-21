@@ -14,6 +14,7 @@
           "Microsoft.AspNetCore.SignalR.Client": "9.0.2",
           "Microsoft.Maui.Controls": "9.0.14",
           "Microsoft.Windows.CsWinRT": "2.2.0",
+          "Plugin.Fingerprint": "2.1.5",
           "Refit.HttpClientFactory": "8.0.0",
           "SocialMediaMaui.Shared": "1.0.0",
           "Syncfusion.Maui.ImageEditor": "28.1.38",
@@ -645,6 +646,14 @@
           }
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "assemblyVersion": "2.1.5.0",
+            "fileVersion": "2.1.5.0"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "runtime": {
           "lib/net8.0/Refit.dll": {
@@ -1078,6 +1087,13 @@
       "sha512": "sha512-7PfOz2scXU+AAM/GYge+f6s7k3DVI+R1P8MNPZQr56GOPCGw+csvcg3S5KZg47z/o04kNvWH3GKtWT1ML9tpZw==",
       "path": "microsoft.windowsappsdk/1.6.240923002",
       "hashPath": "microsoft.windowsappsdk.1.6.240923002.nupkg.sha512"
+    },
+    "Plugin.Fingerprint/2.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+EyrBLC4a4JCgixgqSfI77Gf/pRMs/pe/LLoGBr1iyfwYFRfu7bjlHbO37ie8G5g/wV/gu9haMU26BneI4AAfg==",
+      "path": "plugin.fingerprint/2.1.5",
+      "hashPath": "plugin.fingerprint.2.1.5.nupkg.sha512"
     },
     "Refit/8.0.0": {
       "type": "package",

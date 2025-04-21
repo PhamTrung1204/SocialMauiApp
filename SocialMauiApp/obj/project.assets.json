@@ -729,6 +729,22 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Biometric": "1.1.0"
+        },
+        "compile": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -1185,6 +1201,27 @@
         },
         "build": {
           "buildTransitive/net8.0-android34.0/Xamarin.AndroidX.Arch.Core.Runtime.targets": {}
+        }
+      },
+      "Xamarin.AndroidX.Biometric/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Annotation": "1.1.0.8",
+          "Xamarin.AndroidX.Core": "1.3.2.1",
+          "Xamarin.AndroidX.Fragment": "1.2.5.5"
+        },
+        "compile": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "build": {
+          "buildTransitive/monoandroid90/Xamarin.AndroidX.Biometric.targets": {}
         }
       },
       "Xamarin.AndroidX.Browser/1.8.0.6": {
@@ -3594,6 +3631,22 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Biometric": "1.1.0"
+        },
+        "compile": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -4050,6 +4103,27 @@
         },
         "build": {
           "buildTransitive/net8.0-android34.0/Xamarin.AndroidX.Arch.Core.Runtime.targets": {}
+        }
+      },
+      "Xamarin.AndroidX.Biometric/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Annotation": "1.1.0.8",
+          "Xamarin.AndroidX.Core": "1.3.2.1",
+          "Xamarin.AndroidX.Fragment": "1.2.5.5"
+        },
+        "compile": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "build": {
+          "buildTransitive/monoandroid90/Xamarin.AndroidX.Biometric.targets": {}
         }
       },
       "Xamarin.AndroidX.Browser/1.8.0.6": {
@@ -6459,6 +6533,22 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Biometric": "1.1.0"
+        },
+        "compile": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -6915,6 +7005,27 @@
         },
         "build": {
           "buildTransitive/net8.0-android34.0/Xamarin.AndroidX.Arch.Core.Runtime.targets": {}
+        }
+      },
+      "Xamarin.AndroidX.Biometric/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Annotation": "1.1.0.8",
+          "Xamarin.AndroidX.Core": "1.3.2.1",
+          "Xamarin.AndroidX.Fragment": "1.2.5.5"
+        },
+        "compile": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "build": {
+          "buildTransitive/monoandroid90/Xamarin.AndroidX.Biometric.targets": {}
         }
       },
       "Xamarin.AndroidX.Browser/1.8.0.6": {
@@ -9324,6 +9435,22 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Biometric": "1.1.0"
+        },
+        "compile": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -9780,6 +9907,27 @@
         },
         "build": {
           "buildTransitive/net8.0-android34.0/Xamarin.AndroidX.Arch.Core.Runtime.targets": {}
+        }
+      },
+      "Xamarin.AndroidX.Biometric/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Annotation": "1.1.0.8",
+          "Xamarin.AndroidX.Core": "1.3.2.1",
+          "Xamarin.AndroidX.Fragment": "1.2.5.5"
+        },
+        "compile": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "build": {
+          "buildTransitive/monoandroid90/Xamarin.AndroidX.Biometric.targets": {}
         }
       },
       "Xamarin.AndroidX.Browser/1.8.0.6": {
@@ -12189,6 +12337,22 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Biometric": "1.1.0"
+        },
+        "compile": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -12645,6 +12809,27 @@
         },
         "build": {
           "buildTransitive/net8.0-android34.0/Xamarin.AndroidX.Arch.Core.Runtime.targets": {}
+        }
+      },
+      "Xamarin.AndroidX.Biometric/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.AndroidX.Annotation": "1.1.0.8",
+          "Xamarin.AndroidX.Core": "1.3.2.1",
+          "Xamarin.AndroidX.Fragment": "1.2.5.5"
+        },
+        "compile": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll": {
+            "related": ".pdb"
+          }
+        },
+        "build": {
+          "buildTransitive/monoandroid90/Xamarin.AndroidX.Biometric.targets": {}
         }
       },
       "Xamarin.AndroidX.Browser/1.8.0.6": {
@@ -15027,6 +15212,19 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -15903,6 +16101,19 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
+        }
+      },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
       "Refit/8.0.0": {
@@ -16783,6 +16994,19 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -17661,6 +17885,19 @@
           "build/Microsoft.Windows.CsWinRT.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -18537,6 +18774,19 @@
         "build": {
           "build/Microsoft.Windows.CsWinRT.props": {},
           "build/Microsoft.Windows.CsWinRT.targets": {}
+        }
+      },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
       "Refit/8.0.0": {
@@ -19628,6 +19878,19 @@
           }
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -20696,6 +20959,19 @@
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -21758,6 +22034,19 @@
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
         }
       },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Refit/8.0.0": {
         "type": "package",
         "compile": {
@@ -22818,6 +23107,19 @@
         "build": {
           "buildTransitive/Microsoft.WindowsAppSDK.props": {},
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
+        }
+      },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
       "Refit/8.0.0": {
@@ -23889,6 +24191,19 @@
         "build": {
           "buildTransitive/Microsoft.WindowsAppSDK.props": {},
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
+        }
+      },
+      "Plugin.Fingerprint/2.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Fingerprint.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
       "Refit/8.0.0": {
@@ -26607,6 +26922,47 @@
         "tools/x86/GenXbf.dll"
       ]
     },
+    "Plugin.Fingerprint/2.1.5": {
+      "sha512": "+EyrBLC4a4JCgixgqSfI77Gf/pRMs/pe/LLoGBr1iyfwYFRfu7bjlHbO37ie8G5g/wV/gu9haMU26BneI4AAfg==",
+      "type": "package",
+      "path": "plugin.fingerprint/2.1.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/monoandroid90/Plugin.Fingerprint.dll",
+        "lib/monoandroid90/Plugin.Fingerprint.pdb",
+        "lib/monoandroid90/Plugin.Fingerprint.xml",
+        "lib/net45/Plugin.Fingerprint.dll",
+        "lib/net45/Plugin.Fingerprint.pdb",
+        "lib/net45/Plugin.Fingerprint.xml",
+        "lib/netstandard2.0/Plugin.Fingerprint.dll",
+        "lib/netstandard2.0/Plugin.Fingerprint.pdb",
+        "lib/netstandard2.0/Plugin.Fingerprint.xml",
+        "lib/tizen40/Plugin.Fingerprint.dll",
+        "lib/tizen40/Plugin.Fingerprint.pdb",
+        "lib/tizen40/Plugin.Fingerprint.xml",
+        "lib/uap10.0.19041/Plugin.Fingerprint.dll",
+        "lib/uap10.0.19041/Plugin.Fingerprint.pdb",
+        "lib/uap10.0.19041/Plugin.Fingerprint.pri",
+        "lib/uap10.0.19041/Plugin.Fingerprint.xml",
+        "lib/xamarinios10/Plugin.Fingerprint.dll",
+        "lib/xamarinios10/Plugin.Fingerprint.pdb",
+        "lib/xamarinios10/Plugin.Fingerprint.xml",
+        "lib/xamarinmac20/Plugin.Fingerprint.dll",
+        "lib/xamarinmac20/Plugin.Fingerprint.pdb",
+        "lib/xamarinmac20/Plugin.Fingerprint.xml",
+        "lib/xamarintvos10/Plugin.Fingerprint.dll",
+        "lib/xamarintvos10/Plugin.Fingerprint.pdb",
+        "lib/xamarintvos10/Plugin.Fingerprint.xml",
+        "lib/xamarinwatchos10/Plugin.Fingerprint.dll",
+        "lib/xamarinwatchos10/Plugin.Fingerprint.pdb",
+        "lib/xamarinwatchos10/Plugin.Fingerprint.xml",
+        "plugin.fingerprint.2.1.5.nupkg.sha512",
+        "plugin.fingerprint.nuspec",
+        "readme.txt",
+        "xamarin_fingerprint.png"
+      ]
+    },
     "Refit/8.0.0": {
       "sha512": "gXRmIy3Va0mwwr8usnqVRQFoFIJaJGlWTTXBlwxIkHB/xwXnq1Ybs1YNA2BM1O4G46JLLlGjg6YOwrTZusuY3Q==",
       "type": "package",
@@ -27298,6 +27654,24 @@
         "readme.md",
         "xamarin.androidx.arch.core.runtime.2.2.0.13.nupkg.sha512",
         "xamarin.androidx.arch.core.runtime.nuspec"
+      ]
+    },
+    "Xamarin.AndroidX.Biometric/1.1.0": {
+      "sha512": "JN9q/vk0OmHIp6B8khaZofTW9Ei9qJiTnKMgm6bvYCJobxp/kz4txRvED3TpRAlR9BIk5VS1gnMhRHuxS2Us+w==",
+      "type": "package",
+      "path": "xamarin.androidx.biometric/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "aar/androidx.biometric.biometric.aar",
+        "build/monoandroid90/Xamarin.AndroidX.Biometric.targets",
+        "buildTransitive/monoandroid90/Xamarin.AndroidX.Biometric.targets",
+        "lib/monoandroid90/Xamarin.AndroidX.Biometric.dll",
+        "lib/monoandroid90/Xamarin.AndroidX.Biometric.pdb",
+        "proguard/proguard.txt",
+        "xamarin.androidx.biometric.1.1.0.nupkg.sha512",
+        "xamarin.androidx.biometric.nuspec"
       ]
     },
     "Xamarin.AndroidX.Browser/1.8.0.6": {
@@ -28942,6 +29316,7 @@
       "Microsoft.Maui.Controls >= 9.0.14",
       "Microsoft.NET.ILLink.Tasks >= 9.0.3",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
+      "Plugin.Fingerprint >= 2.1.5",
       "Refit.HttpClientFactory >= 8.0.0",
       "SocialMediaMaui.Shared >= 1.0.0",
       "Syncfusion.Maui.ImageEditor >= 28.1.38",
@@ -28954,6 +29329,7 @@
       "Microsoft.Maui.Controls >= 9.0.14",
       "Microsoft.NET.ILLink.Tasks >= 9.0.3",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
+      "Plugin.Fingerprint >= 2.1.5",
       "Refit.HttpClientFactory >= 8.0.0",
       "SocialMediaMaui.Shared >= 1.0.0",
       "Syncfusion.Maui.ImageEditor >= 28.1.38",
@@ -28965,6 +29341,7 @@
       "Microsoft.AspNetCore.SignalR.Client >= 9.0.2",
       "Microsoft.Maui.Controls >= 9.0.14",
       "Microsoft.Windows.CsWinRT >= 2.2.0",
+      "Plugin.Fingerprint >= 2.1.5",
       "Refit.HttpClientFactory >= 8.0.0",
       "SocialMediaMaui.Shared >= 1.0.0",
       "Syncfusion.Maui.ImageEditor >= 28.1.38",
@@ -29071,6 +29448,10 @@
             "target": "Package",
             "version": "[2.2.0, )"
           },
+          "Plugin.Fingerprint": {
+            "target": "Package",
+            "version": "[2.1.5, )"
+          },
           "Refit.HttpClientFactory": {
             "target": "Package",
             "version": "[8.0.0, )"
@@ -29134,6 +29515,10 @@
             "target": "Package",
             "version": "[2.2.0, )"
           },
+          "Plugin.Fingerprint": {
+            "target": "Package",
+            "version": "[2.1.5, )"
+          },
           "Refit.HttpClientFactory": {
             "target": "Package",
             "version": "[8.0.0, )"
@@ -29190,6 +29575,10 @@
           "Microsoft.Windows.CsWinRT": {
             "target": "Package",
             "version": "[2.2.0, )"
+          },
+          "Plugin.Fingerprint": {
+            "target": "Package",
+            "version": "[2.1.5, )"
           },
           "Refit.HttpClientFactory": {
             "target": "Package",

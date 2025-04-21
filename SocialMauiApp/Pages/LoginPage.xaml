@@ -6,83 +6,117 @@
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     Title="Login"
-    Padding="20"
     x:DataType="vm:LoginViewModel"
-    Shell.BackgroundColor="{StaticResource Primary}"
-    Shell.TitleColor="White"
-    BackgroundColor="SkyBlue">
-    <Grid>
-        <ScrollView>
-            <Grid
-                RowDefinitions="Auto, Auto, Auto"
-                RowSpacing="20"
-                VerticalOptions="Center">
+    BackgroundColor="{StaticResource Primary}"
+    Shell.TitleColor="{StaticResource Primary}"
+    Padding="0">
+
+    <!-- Center nội dung chính theo chiều dọc -->
+    <Grid RowDefinitions="*, Auto, *" BackgroundColor="{StaticResource Primary}">
+        <!-- Thẻ Border bo góc thay cho Frame -->
+        <Border
+      Grid.Row="1"
+      Margin="20"
+      Padding="30"
+      BackgroundColor="White"
+      Stroke="#DDDDDD"
+      StrokeThickness="1"
+      >
+
+            <VerticalStackLayout Spacing="25">
+
+                <!-- Logo -->
                 <Image
-                    Grid.Row="0"
-                    HeightRequest="200"
-                    Source="social_media.png" />
+          Source="social_media.png"
+          HeightRequest="100"
+          HorizontalOptions="Center" />
+
+                <!-- Tiêu đề -->
                 <Label
-                    Grid.Row="1"
-                    FontAttributes="Bold"
-                    FontSize="25"
-                    HorizontalOptions="Center"
-                    Text="Login" />
-                <VerticalStackLayout Grid.Row="2" Spacing="2">
-                    <Label Style="{StaticResource formLabel}" Text="Username" />
+          Text="Welcome Back"
+          FontSize="26"
+          FontAttributes="Bold"
+          HorizontalOptions="Center"
+          TextColor="{StaticResource Primary}" />
 
+                <!-- Form nhập liệu -->
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Username" Style="{StaticResource formLabel}" />
                     <controls:NoBorderEntry
-                        BackgroundColor="LightGoldenrodYellow"
-                        Keyboard="Email"
-                        Placeholder="Enter Username"
-                        PlaceholderColor="LightGray"
-                        Text="{Binding Email}"
-                        TextColor="Black"/>
-                    <controls:Spacer />
+            Keyboard="Email"
+            Placeholder="Enter your email"
+            BackgroundColor="#F2F2F2"
+            PlaceholderColor="#A0A0A0"
+            Text="{Binding Email}"
+            HeightRequest="45"
+             />
 
-                    <Label Text="Password" />
+                    <Label Text="Password" Style="{StaticResource formLabel}" />
                     <controls:NoBorderEntry
-                        BackgroundColor="LightGoldenrodYellow"
-                        IsPassword="True"
-                        Placeholder="Enter Password"
-                        PlaceholderColor="LightGray"
-                        Text="{Binding Password}"
-                        TextColor="Black"/>
-                    <controls:Spacer />
-
-                    <!--<Button
-                 x:Name="btnLogin"
-                 Clicked="Login_Clicked"
-                 Style="{StaticResource rounded}"
-                 Text="Login" />-->
-                    <Button
-                        x:Name="btnLogin"
-                        Command="{Binding LoginCommand}"
-                        Style="{StaticResource rounded}"
-                        Text="Login" />
-                    <controls:Spacer />
-                    <Grid ColumnDefinitions="*, Auto, *" ColumnSpacing="5">
-                        <BoxView Grid.Column="0" Style="{StaticResource fadedLine}" />
-                        <Label
-                            Grid.Column="1"
-                            HorizontalOptions="Center"
-                            Text="New User ?"
-                            TextColor="{StaticResource Primary}" />
-                        <BoxView Grid.Column="2" Style="{StaticResource fadedLine}" />
-                    </Grid>
-                    <controls:Spacer />
-                    <Button
-                        x:Name="btnRegister"
-                        Clicked="Register_Clicked"
-                        Style="{StaticResource rounded}"
-                        Text="Register" />
-
+            IsPassword="True"
+            Placeholder="Enter your password"
+            BackgroundColor="#F2F2F2"
+            PlaceholderColor="#A0A0A0"
+            Text="{Binding Password}"
+            HeightRequest="45"
+             />
                 </VerticalStackLayout>
-            </Grid>
-        </ScrollView>
-        <ActivityIndicator
-            HorizontalOptions="Center"
-            IsRunning="{Binding IsBusy}"
-            VerticalOptions="Center" />
-    </Grid>
 
+                <!-- Nút Login và fingerprint -->
+                <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                    <Button
+            Text="Login"
+            Command="{Binding LoginCommand}"
+            CornerRadius="8"
+            WidthRequest="200"
+            HeightRequest="45"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="White"
+            FontAttributes="Bold" />
+
+                    <ImageButton
+            Source="fingerprint.png"
+            Command="{Binding BiometricLoginCommand}"
+            IsVisible="{Binding IsBiometricAvailable}"
+            WidthRequest="45"
+            HeightRequest="45"
+            BackgroundColor="#EEEEEE"
+            CornerRadius="8" />
+                </HorizontalStackLayout>
+
+                <!-- Phân cách và link Register -->
+                <Grid ColumnDefinitions="*, Auto, *" VerticalOptions="Center" Margin="0,10">
+                    <BoxView Grid.Column="0" HeightRequest="1" BackgroundColor="#DDDDDD" />
+                    <Label
+                        Grid.Column="1"
+            Text="New here?"
+            Padding="15,0"
+            TextColor="{StaticResource Primary}"
+            FontAttributes="Bold" />
+                    <BoxView Grid.Column="2" HeightRequest="1" BackgroundColor="#DDDDDD" />
+                </Grid>
+
+                <Button
+          Text="Register"
+          Clicked="Register_Clicked"
+          CornerRadius="8"
+          HeightRequest="45"
+          BackgroundColor="White"
+          TextColor="{StaticResource Primary}"
+          BorderColor="{StaticResource Primary}"
+          BorderWidth="1"
+          FontAttributes="Bold" />
+
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- ActivityIndicator overlay khi IsBusy -->
+        <ActivityIndicator
+      Grid.RowSpan="3"
+      IsRunning="{Binding IsBusy}"
+      IsVisible="{Binding IsBusy}"
+      Color="White"
+      VerticalOptions="Center"
+      HorizontalOptions="Center" />
+    </Grid>
 </ContentPage>

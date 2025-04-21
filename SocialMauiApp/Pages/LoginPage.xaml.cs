@@ -9,10 +9,7 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
         BindingContext = loginViewModel;
     }
-    //private async void Login_Clicked(object sender, EventArgs e)
-    //{
-    //    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
-    //}
+ 
     private async void Register_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(RegisterPage));
