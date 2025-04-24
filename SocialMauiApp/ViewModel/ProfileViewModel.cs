@@ -12,6 +12,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Plugin.Fingerprint;
+using Plugin.Fingerprint.Abstractions;
 
 namespace SocialMauiApp.ViewModel
 {
@@ -21,18 +23,26 @@ namespace SocialMauiApp.ViewModel
         private readonly AuthService _authService;
         private readonly IUserApi _userApi;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
+        private readonly IFingerprint _fingerprint;
+        private readonly IPreferencesService _preferencesService;
 
         public ProfileViewModel(
             IPostApi postsApi,
             AuthService authService,
             IUserApi userApi,
-            RealtimeUpdatesService realtimeUpdatesService)
+            RealtimeUpdatesService realtimeUpdatesService,
+            IPreferencesService preferencesService)
             : base(postsApi, realtimeUpdatesService)
         {
             User = authService.User!;
             _authService = authService;
             _userApi = userApi;
             _realtimeUpdatesService = realtimeUpdatesService;
+            _fingerprint = CrossFingerprint.Current;
+            _preferencesService = preferencesService;
+
+            // Load fingerprint auth setting
+            IsFingerprintEnabled = _preferencesService.GetBool("FingerprintAuthEnabled", false);
 
             ConfigureRealtimeUpdates();
         }
@@ -42,6 +52,63 @@ namespace SocialMauiApp.ViewModel
 
         [ObservableProperty]
         private bool _isUploading;
+
+        [ObservableProperty]
+        private bool _isFingerprintEnabled;
+
+        partial void OnIsFingerprintEnabledChanged(bool value)
+        {
+            _preferencesService.SetBool("FingerprintAuthEnabled", value);
+        }
+
+        [RelayCommand]
+        private async Task ShowFingerprintSettingsAsync()
+        {
+            var canAuthenticate = await _fingerprint.IsAvailableAsync();
+
+            if (!canAuthenticate)
+            {
+                await Shell.Current.DisplayAlert("Not Available",
+                    "Fingerprint authentication is not available on this device.", "OK");
+                IsFingerprintEnabled = false;
+                return;
+            }
+
+            // If enabling fingerprint, verify first with a fingerprint check
+            if (!IsFingerprintEnabled)
+            {
+                var result = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
+                    "Enable Fingerprint Login",
+                    "Verify your fingerprint to enable fingerprint login")
+                {
+                    AllowAlternativeAuthentication = true,
+                    CancelTitle = "Cancel"
+                });
+
+                if (result.Authenticated)
+                {
+                    IsFingerprintEnabled = true;
+                    await Shell.Current.DisplayAlert("Success",
+                        "Fingerprint login has been enabled successfully.", "OK");
+                }
+                else
+                {
+                    IsFingerprintEnabled = false;
+                }
+            }
+            else
+            {
+                var confirm = await Shell.Current.DisplayAlert("Disable Fingerprint",
+                    "Are you sure you want to disable fingerprint login?", "Yes", "No");
+
+                if (confirm)
+                {
+                    IsFingerprintEnabled = false;
+                    await Shell.Current.DisplayAlert("Success",
+                        "Fingerprint login has been disabled.", "OK");
+                }
+            }
+        }
 
         [RelayCommand]
         private async Task LogoutAsync()

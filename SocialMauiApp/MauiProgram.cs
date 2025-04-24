@@ -39,6 +39,7 @@ namespace SocialMauiApp
             builder.Services.AddSingleton<AuthService>();
       
             builder.Services.AddTransient<LoginViewModel>().AddTransient<LoginPage>();
+            builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 
             builder.Services.AddTransient<RegisterViewModel>().AddTransient<RegisterPage>();
             builder.Services.AddTransient<SavePostViewModel>().AddTransient<AddPostPage>();

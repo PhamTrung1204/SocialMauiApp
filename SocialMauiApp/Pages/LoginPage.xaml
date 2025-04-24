@@ -6,117 +6,194 @@
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     Title="Login"
+    Padding="0"
     x:DataType="vm:LoginViewModel"
     BackgroundColor="{StaticResource Primary}"
-    Shell.TitleColor="{StaticResource Primary}"
-    Padding="0">
+    Shell.TitleColor="{StaticResource Primary}">
 
-    <!-- Center nội dung chính theo chiều dọc -->
-    <Grid RowDefinitions="*, Auto, *" BackgroundColor="{StaticResource Primary}">
-        <!-- Thẻ Border bo góc thay cho Frame -->
+    <Grid BackgroundColor="{StaticResource Primary}" RowDefinitions="*, Auto, *">
         <Border
-      Grid.Row="1"
-      Margin="20"
-      Padding="30"
-      BackgroundColor="White"
-      Stroke="#DDDDDD"
-      StrokeThickness="1"
-      >
+            Grid.Row="1"
+            Margin="20"
+            Padding="30"
+            BackgroundColor="White"
+            Stroke="#DDDDDD"
+            StrokeThickness="1">
 
-            <VerticalStackLayout Spacing="25">
+            <Grid>
+                <!-- LAYOUT A: avatar + welcome + password + fingerprint + switch -->
+                <VerticalStackLayout
+                    Spacing="25"
+                    IsVisible="{Binding ShowFingerprintOption}"
+                    HorizontalOptions="Center">
 
-                <!-- Logo -->
-                <Image
-          Source="social_media.png"
-          HeightRequest="100"
-          HorizontalOptions="Center" />
+                    <!-- Avatar tròn -->
+                    <Border
+                        WidthRequest="100"
+                        HeightRequest="100"
+                        Stroke="{StaticResource Primary}"
+                        StrokeThickness="2"
+                       
+                        HorizontalOptions="Center">
+                        <Image
+                            Source="{Binding Username, StringFormat='https://yourcdn.com/avatars/{0}.png'}"
+                            Aspect="AspectFill"
+                            WidthRequest="100"
+                            HeightRequest="100">
+                            <Image.Clip>
+                                <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
+                            </Image.Clip>
+                        </Image>
+                    </Border>
 
-                <!-- Tiêu đề -->
-                <Label
-          Text="Welcome Back"
-          FontSize="26"
-          FontAttributes="Bold"
-          HorizontalOptions="Center"
-          TextColor="{StaticResource Primary}" />
+                    <!-- Welcome, Username -->
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="26"
+                        HorizontalOptions="Center"
+                        Text="{Binding Username, StringFormat='Welcome, {0}'}"
+                        TextColor="{StaticResource Primary}" />
 
-                <!-- Form nhập liệu -->
-                <VerticalStackLayout Spacing="15">
-                    <Label Text="Username" Style="{StaticResource formLabel}" />
-                    <controls:NoBorderEntry
-            Keyboard="Email"
-            Placeholder="Enter your email"
-            BackgroundColor="#F2F2F2"
-            PlaceholderColor="#A0A0A0"
-            Text="{Binding Email}"
-            HeightRequest="45"
-             />
+                    <!-- Chỉ ô Password -->
+                    <VerticalStackLayout Spacing="15">
+                        <Label Style="{StaticResource formLabel}" Text="Password" />
+                        <controls:NoBorderEntry
+                            BackgroundColor="#F2F2F2"
+                            HeightRequest="45"
+                            IsPassword="True"
+                            Placeholder="Enter your password"
+                            PlaceholderColor="#A0A0A0"
+                            Text="{Binding Password}" />
+                    </VerticalStackLayout>
 
-                    <Label Text="Password" Style="{StaticResource formLabel}" />
-                    <controls:NoBorderEntry
-            IsPassword="True"
-            Placeholder="Enter your password"
-            BackgroundColor="#F2F2F2"
-            PlaceholderColor="#A0A0A0"
-            Text="{Binding Password}"
-            HeightRequest="45"
-             />
+                    <!-- Buttons Login + Fingerprint -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
+                        <Button
+                            BackgroundColor="{StaticResource Primary}"
+                            Command="{Binding LoginCommand}"
+                            CornerRadius="8"
+                            FontAttributes="Bold"
+                            HeightRequest="45"
+                           
+                            Text="Login"
+                            TextColor="White"
+                            WidthRequest="230" />
+
+                        <ImageButton
+                            BackgroundColor="#EEEEEE"
+                            Command="{Binding LoginWithFingerprintCommand}"
+                            CornerRadius="8"
+                            HeightRequest="45"
+                            Source="fingerprint.png"
+                            WidthRequest="45" />
+                    </HorizontalStackLayout>
+
+                    <!-- Login with another account -->
+                    <Button
+                        BackgroundColor="White"
+                        BorderColor="{StaticResource Primary}"
+                        BorderWidth="1"
+                        Command="{Binding SwitchAccountCommand}"
+                        CornerRadius="8"
+                        FontAttributes="Bold"
+                        HeightRequest="45"
+                        Text="Login with another account"
+                        TextColor="{StaticResource Primary}" />
+
                 </VerticalStackLayout>
 
-                <!-- Nút Login và fingerprint -->
-                <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                <!-- LAYOUT B: nhập email + password + login + register -->
+                <VerticalStackLayout
+                    Spacing="25"
+                    IsVisible="{Binding ShowFingerprintOption, Converter={StaticResource InverseBooleanConverter}}">
+
+                    <Image
+                        HeightRequest="100"
+                        HorizontalOptions="Center"
+                        Source="social_media.png" />
+
+                    <VerticalStackLayout Spacing="15">
+                        <Label Style="{StaticResource formLabel}" Text="Username" />
+                        <controls:NoBorderEntry
+                            BackgroundColor="#F2F2F2"
+                            HeightRequest="45"
+                            Keyboard="Email"
+                            Placeholder="Enter your email"
+                            PlaceholderColor="#A0A0A0"
+                            Text="{Binding Email}" />
+
+                        <Label Style="{StaticResource formLabel}" Text="Password" />
+                        <controls:NoBorderEntry
+                            BackgroundColor="#F2F2F2"
+                            HeightRequest="45"
+                            IsPassword="True"
+                            Placeholder="Enter your password"
+                            PlaceholderColor="#A0A0A0"
+                            Text="{Binding Password}" />
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
+                        <Button
+                            BackgroundColor="{StaticResource Primary}"
+                            Command="{Binding LoginCommand}"
+                            CornerRadius="8"
+                            FontAttributes="Bold"
+                            HeightRequest="45"
+                            Text="Login"
+                            TextColor="White"
+                            WidthRequest="290" />
+
+                        <ImageButton
+                            BackgroundColor="#EEEEEE"
+                            Command="{Binding LoginWithFingerprintCommand}"
+                            CornerRadius="8"
+                            HeightRequest="45"
+                            IsVisible="False"
+                            Source="fingerprint.png"
+                            WidthRequest="45" />
+                    </HorizontalStackLayout>
+
+                    <Grid
+                        Margin="0,10"
+                        ColumnDefinitions="*, Auto, *"
+                        VerticalOptions="Center">
+                        <BoxView
+                            Grid.Column="0"
+                            BackgroundColor="#DDDDDD"
+                            HeightRequest="1" />
+                        <Label
+                            Grid.Column="1"
+                            Padding="15,0"
+                            FontAttributes="Bold"
+                            Text="New here?"
+                            TextColor="{StaticResource Primary}" />
+                        <BoxView
+                            Grid.Column="2"
+                            BackgroundColor="#DDDDDD"
+                            HeightRequest="1" />
+                    </Grid>
+
                     <Button
-            Text="Login"
-            Command="{Binding LoginCommand}"
-            CornerRadius="8"
-            WidthRequest="200"
-            HeightRequest="45"
-            BackgroundColor="{StaticResource Primary}"
-            TextColor="White"
-            FontAttributes="Bold" />
+                        BackgroundColor="White"
+                        BorderColor="{StaticResource Primary}"
+                        BorderWidth="1"
+                        Clicked="Register_Clicked"
+                        CornerRadius="8"
+                        FontAttributes="Bold"
+                        HeightRequest="45"
+                        Text="Register"
+                        TextColor="{StaticResource Primary}" />
 
-                    <ImageButton
-            Source="fingerprint.png"
-            Command="{Binding BiometricLoginCommand}"
-            IsVisible="{Binding IsBiometricAvailable}"
-            WidthRequest="45"
-            HeightRequest="45"
-            BackgroundColor="#EEEEEE"
-            CornerRadius="8" />
-                </HorizontalStackLayout>
-
-                <!-- Phân cách và link Register -->
-                <Grid ColumnDefinitions="*, Auto, *" VerticalOptions="Center" Margin="0,10">
-                    <BoxView Grid.Column="0" HeightRequest="1" BackgroundColor="#DDDDDD" />
-                    <Label
-                        Grid.Column="1"
-            Text="New here?"
-            Padding="15,0"
-            TextColor="{StaticResource Primary}"
-            FontAttributes="Bold" />
-                    <BoxView Grid.Column="2" HeightRequest="1" BackgroundColor="#DDDDDD" />
-                </Grid>
-
-                <Button
-          Text="Register"
-          Clicked="Register_Clicked"
-          CornerRadius="8"
-          HeightRequest="45"
-          BackgroundColor="White"
-          TextColor="{StaticResource Primary}"
-          BorderColor="{StaticResource Primary}"
-          BorderWidth="1"
-          FontAttributes="Bold" />
-
-            </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Grid>
         </Border>
 
-        <!-- ActivityIndicator overlay khi IsBusy -->
         <ActivityIndicator
-      Grid.RowSpan="3"
-      IsRunning="{Binding IsBusy}"
-      IsVisible="{Binding IsBusy}"
-      Color="White"
-      VerticalOptions="Center"
-      HorizontalOptions="Center" />
+            Grid.RowSpan="3"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="White" />
     </Grid>
 </ContentPage>

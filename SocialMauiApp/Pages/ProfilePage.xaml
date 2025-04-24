@@ -16,7 +16,6 @@
             IconImageSource="power_off.png"
             Order="Primary"
             Text="Logout" />
-
     </ContentPage.ToolbarItems>
 
     <Grid RowDefinitions="Auto,*">
@@ -24,73 +23,132 @@
             Grid.Row="0"
             Padding="15,10,15,8"
             Spacing="5">
+            <!--  Profile Header Section  -->
             <Grid>
                 <Border
                     BackgroundColor="White"
-                    HeightRequest="70"
-                    StrokeShape="RoundRectangle 35"
-                    WidthRequest="70">
+                    HeightRequest="100"
+                    HorizontalOptions="Center"
+                    StrokeShape="RoundRectangle 50"
+                    WidthRequest="100">
                     <Image
                         Aspect="AspectFill"
-                        HeightRequest="60"
+                        HeightRequest="90"
                         HorizontalOptions="Center"
                         Source="{Binding User.Photo}"
                         VerticalOptions="Center"
-                        WidthRequest="60">
+                        WidthRequest="90">
                         <Image.Clip>
                             <EllipseGeometry
-                                Center="30,30"
-                                RadiusX="30"
-                                RadiusY="30" />
+                                Center="45,45"
+                                RadiusX="45"
+                                RadiusY="45" />
                         </Image.Clip>
                     </Image>
                 </Border>
                 <Border
-                    Margin="0,0,-50,0"
+                    Margin="50,50,-5,-20"
                     BackgroundColor="{StaticResource Primary}"
-                    HeightRequest="24"
-                    StrokeShape="RoundRectangle 12"
-                    VerticalOptions="End"
-                    WidthRequest="24">
+                    HeightRequest="28"
+                    HorizontalOptions="Center"
+                    StrokeShape="RoundRectangle 14"
+                    VerticalOptions="Center"
+                    WidthRequest="28">
                     <controls:WhiteImage
-                        HeightRequest="12"
+                        HeightRequest="14"
                         HorizontalOptions="Center"
                         Source="pencil.png"
                         VerticalOptions="Center"
-                        WidthRequest="12" />
+                        WidthRequest="14" />
                     <Border.Shadow>
-                        <Shadow />
+                        <Shadow
+                            Brush="{StaticResource Primary}"
+                            Opacity="0.5"
+                            Radius="4"
+                            Offset="0,2" />
                     </Border.Shadow>
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ChangePhotoCommand}" />
                     </Border.GestureRecognizers>
                 </Border>
             </Grid>
+
             <controls:Spacer Space="10" />
+
+            <!--  User Information  -->
             <Label
                 Margin="0,10,0,0"
                 FontAttributes="Bold"
-                FontSize="18"
+                FontSize="20"
                 HorizontalOptions="Center"
                 Text="{Binding User.Name}" />
             <Label
                 FontSize="16"
                 HorizontalOptions="Center"
-                Text="{Binding User.Email}" />
-            <BoxView Margin="0,10" Style="{StaticResource fadedLine}" />
+                Text="{Binding User.Email}"
+                TextColor="{StaticResource Gray600}" />
 
+            <!--  Fingerprint Settings Section  -->
             <Border
-                HeightRequest="30"
+                Margin="0,15,0,10"
+                Padding="15,12"
+                BackgroundColor="White"
+                Stroke="{StaticResource Gray200}"
+                StrokeShape="RoundRectangle 10"
+                StrokeThickness="1">
+                <Grid
+                    ColumnDefinitions="Auto,*,Auto"
+                    ColumnSpacing="15"
+                    RowSpacing="0">
+                    <Image
+                        Grid.Column="0"
+                        HeightRequest="24"
+                        Source="fingerprint.png"
+                        VerticalOptions="Center"
+                        WidthRequest="24" />
+                    <VerticalStackLayout Grid.Column="1" Spacing="2">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            Text="Fingerprint Login"
+                            TextColor="{StaticResource Primary}"
+                            VerticalOptions="Center" />
+                        <Label
+                            FontSize="12"
+                            Text="Use fingerprint to quickly log into your account"
+                            TextColor="{StaticResource Gray600}" />
+                    </VerticalStackLayout>
+                    <Switch
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        IsToggled="{Binding IsFingerprintEnabled}"
+                        OnColor="{StaticResource Primary}"
+                        ThumbColor="White"
+                        VerticalOptions="Center">
+                        <Switch.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ShowFingerprintSettingsCommand}" />
+                        </Switch.GestureRecognizers>
+                    </Switch>
+                </Grid>
+            </Border>
+
+            <!--  Post Selection Tabs  -->
+            <Border
+                Margin="0,5,0,0"
+                HeightRequest="40"
                 Stroke="{StaticResource Primary}"
-                StrokeShape="RoundRectangle 15"
-                StrokeThickness="0.5">
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="1">
                 <Grid ColumnDefinitions="*,*">
                     <Border
                         Grid.Column="0"
                         BackgroundColor="{StaticResource White}"
+                        StrokeShape="RoundRectangle 20,0,0,20"
                         StrokeThickness="0">
                         <Label
                             x:Name="myPostsLabel"
+                            FontAttributes="Bold"
+                            FontSize="14"
                             HorizontalOptions="Center"
                             Text="My Posts"
                             TextColor="{StaticResource Primary}"
@@ -100,7 +158,6 @@
                                 Binding="{Binding IsMyPostsTabSelected}"
                                 TargetType="Border"
                                 Value="true">
-
                                 <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
                                 <Setter TargetName="myPostsLabel" Property="Label.TextColor" Value="White" />
                             </DataTrigger>
@@ -112,9 +169,12 @@
                     <Border
                         Grid.Column="1"
                         BackgroundColor="{StaticResource White}"
+                        StrokeShape="RoundRectangle 0,20,20,0"
                         StrokeThickness="0">
                         <Label
                             x:Name="bookmarkedLabel"
+                            FontAttributes="Bold"
+                            FontSize="14"
                             HorizontalOptions="Center"
                             Text="Bookmarked"
                             TextColor="{StaticResource Primary}"
@@ -124,7 +184,6 @@
                                 Binding="{Binding IsBookmarksTabSelected}"
                                 TargetType="Border"
                                 Value="true">
-
                                 <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
                                 <Setter TargetName="bookmarkedLabel" Property="Label.TextColor" Value="White" />
                             </DataTrigger>
@@ -136,8 +195,8 @@
                 </Grid>
             </Border>
         </VerticalStackLayout>
-        
-      
+
+        <!--  Posts Collections  -->
         <CollectionView
             Grid.Row="1"
             IsVisible="{Binding IsMyPostsTabSelected}"

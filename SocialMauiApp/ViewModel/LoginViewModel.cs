@@ -1,110 +1,128 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Storage;
 using Plugin.Fingerprint;
 using Plugin.Fingerprint.Abstractions;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
-using System.Text.Json;
+using System.Threading.Tasks;
 
-namespace SocialMauiApp.ViewModel
+namespace SocialMauiApp.ViewModel;
+
+public partial class LoginViewModel : BaseViewModel
 {
-    public partial class LoginViewModel : BaseViewModel
+    private readonly IAuthApi _authApi;
+    private readonly AuthService _authService;
+    private readonly IPreferencesService _pref;
+    private readonly IFingerprint _fingerprint;
+
+    public LoginViewModel(
+        IAuthApi authApi,
+        AuthService authService,
+        IPreferencesService preferencesService)
     {
-        private readonly IAuthApi _authApi;
-        private readonly AuthService _authService;
+        _authApi = authApi;
+        _authService = authService;
+        _pref = preferencesService;
+        _fingerprint = CrossFingerprint.Current;
 
-        public LoginViewModel(IAuthApi authApi, AuthService authService)
+        Task.Run(InitializeAsync);
+    }
+
+    [ObservableProperty] private string email = string.Empty;
+    [ObservableProperty] private string password = string.Empty;
+    [ObservableProperty] private string username = string.Empty;
+    [ObservableProperty] private bool showFingerprintOption;
+
+    private async Task InitializeAsync()
+    {
+        var bioEnabled = _pref.GetBool("FingerprintAuthEnabled");
+        var savedEmail = _pref.GetString("LastEmail");
+        var savedUser = _pref.GetString("Username");
+
+        if (bioEnabled && !string.IsNullOrEmpty(savedEmail))
         {
-            _authApi = authApi;
-            _authService = authService;
-            _ = CheckBiometricAvailabilityAsync();
-        }
-
-        [ObservableProperty]
-        private string _email;
-        [ObservableProperty]
-        private string _password;
-        [ObservableProperty]
-        private bool _isBiometricAvailable;
-        [RelayCommand]
-        private async Task LoginAsync()
-        {
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
-            {
-                await ToastAsync("All fields are required");
-                return;
-            }
-
-            await MakeApiCall(async () =>
-            {
-
-                var loginDto = new LoginDto(Email, Password);
-                var result = await _authApi.LoginAsync(loginDto);
-                if (!result.IsSuccess)
-                {
-                    await ShowErrorAlertAsync(result.Error);
-                    return;
-                }
-                LoginResponseDto loginResponse = result.Data;
-                _authService.Login(loginResponse);
-                await NavigateAsync($"//{nameof(HomePage)}");
-            });
-        }
-        private async Task CheckBiometricAvailabilityAsync()
-        {
-            var res = await CrossFingerprint.Current.IsAvailableAsync(true);
-            IsBiometricAvailable = res;
-        }
-
-        [RelayCommand]
-        private async Task BiometricLoginAsync()
-        {
-            // gọi dialog hệ thống
-            var authConfig = new AuthenticationRequestConfiguration(
-                "Xác thực",
-                "Xác thực vân tay/Face ID để đăng nhập")
-            {
-                CancelTitle = "Huỷ",
-                FallbackTitle = "Mật khẩu"
-            };
-
-            var result = await CrossFingerprint.Current.AuthenticateAsync(authConfig);
-            if (!result.Authenticated)
-            {
-                await ToastAsync("Không thể xác thực sinh trắc học");
-                return;
-            }
-
-            // lấy lại token & user từ SecureStorage
-            try
-            {
-                var token = await SecureStorage.GetAsync("auth_token");
-                var userJson = await SecureStorage.GetAsync("auth_user");
-                if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userJson))
-                {
-                    await ToastAsync("Chưa có thông tin đăng nhập trước đó");
-                    return;
-                }
-
-                var user = JsonSerializer.Deserialize<LoggedInUser>(userJson);
-                if (user is null)
-                {
-                    await ToastAsync("Lỗi dữ liệu người dùng");
-                    return;
-                }
-
-                // Tạo đúng thứ tự: (User, Token)
-                var loginResponse = new LoginResponseDto(user, token);
-
-                // Đẩy vào AuthService và chuyển trang
-                _authService.Login(loginResponse);
-                await NavigateAsync($"//{nameof(HomePage)}");
-            }
-            catch (Exception)
-            {
-                await ToastAsync("Lỗi khi đọc thông tin đăng nhập");
-            }
+            Email = savedEmail;
+            Username = savedUser;
+            ShowFingerprintOption = await _fingerprint.IsAvailableAsync();
         }
     }
+
+    [RelayCommand]
+    private async Task LoginAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+        {
+            await ShowErrorAlertAsync("Email & Password required.");
+            return;
+        }
+
+        await MakeApiCall(async () =>
+        {
+            var resp = await _authApi.LoginAsync(new LoginDto(Email, Password));
+            if (!resp.IsSuccess)
+            {
+                await ShowErrorAlertAsync(resp.Error ?? "Login failed");
+                return;
+            }
+
+            _authService.Login(resp.Data);
+
+            // Lưu để biometric
+            _pref.SetBool("FingerprintAuthEnabled", true);
+            _pref.SetString("LastEmail", resp.Data.User.Email);
+            _pref.SetString("Username", resp.Data.User.Name);
+            await SecureStorage.SetAsync("AuthToken", resp.Data.Token);
+
+            await NavigateAsync($"//{nameof(HomePage)}");
+        });
+    }
+
+    [RelayCommand]
+    private async Task LoginWithFingerprintAsync()
+    {
+        var result = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
+            "Login", "Use fingerprint to login"));
+
+        if (!result.Authenticated) return;
+
+        var token = await SecureStorage.GetAsync("AuthToken");
+        var email = _pref.GetString("LastEmail");
+        var user = _pref.GetString("Username");
+
+        if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+        {
+            await ShowErrorAlertAsync("Please login with password first.");
+            return;
+        }
+
+        await MakeApiCall(async () =>
+        {
+            var v = await _authApi.ValidateTokenAsync($"Bearer {token}");
+            if (v.IsSuccess && v.Data is not null)
+            {
+                _authService.Login(new LoginResponseDto(v.Data, token));
+                Username = user;
+                await NavigateAsync($"//{nameof(HomePage)}");
+            }
+            else
+            {
+                await ShowErrorAlertAsync("Session expired, please login again.");
+            }
+        });
+    }
+
+    [RelayCommand]
+    private async Task SwitchAccountAsync()
+    {
+        _pref.SetBool("FingerprintAuthEnabled", false);
+        _pref.SetString("LastEmail", "");
+        _pref.SetString("Username", "");
+        SecureStorage.Remove("AuthToken");
+        ShowFingerprintOption = false;
+
+        await NavigateAsync($"//{nameof(LoginPage)}");
+    }
+    
 }

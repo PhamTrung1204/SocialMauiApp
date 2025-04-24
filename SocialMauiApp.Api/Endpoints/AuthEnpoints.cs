@@ -26,7 +26,21 @@ namespace SocialMauiApp.Api.Endpoints
             Results.Ok(await authService.LoginAsync(dto)))
                 .Produces<ApiResult<LoginResponseDto>>()
                 .WithName("Auth-Login");
+            authGroup.MapGet("/validate", async (HttpContext context, AuthService authService) =>
+            {
+                // Extract token from Authorization header
+                var authHeader = context.Request.Headers["Authorization"].ToString();
+                if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                    return Results.Unauthorized();
 
+                var token = authHeader.Substring("Bearer ".Length).Trim();
+
+                // Call a new method in AuthService to validate the token
+                var result = await authService.ValidateTokenAsync(token);
+                return Results.Ok(result);
+            })
+.Produces<ApiResult<LoggedInUser>>()
+.WithName("Auth-ValidateToken");
             return app;
         }
     }

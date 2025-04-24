@@ -97,6 +97,7 @@
                 <HorizontalStackLayout
                     Grid.Column="0"
                     HorizontalOptions="Start"
+                    BackgroundColor="Transparent"
                     Spacing="6">
                     <Image
                         HeightRequest="18"
@@ -114,12 +115,16 @@
                         Text="likes"
                         TextColor="Gray"
                         VerticalOptions="Center" />
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
+                    </HorizontalStackLayout.GestureRecognizers>
                 </HorizontalStackLayout>
 
                 <!--  Comments  -->
                 <HorizontalStackLayout
                     Grid.Column="1"
                     HorizontalOptions="End"
+                    BackgroundColor="Transparent"
                     Spacing="6">
                     <Image
                         HeightRequest="18"
@@ -137,6 +142,9 @@
                         Text="comments"
                         TextColor="Gray"
                         VerticalOptions="Center" />
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
+                    </HorizontalStackLayout.GestureRecognizers>
                 </HorizontalStackLayout>
             </Grid>
             <!--  Phần hành động: Like, Comment, Save, Share  -->

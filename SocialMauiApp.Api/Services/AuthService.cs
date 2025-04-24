@@ -89,6 +89,60 @@ namespace SocialMauiApp.Api.Services
             var loginResponse = new LoginResponseDto(loggedInuser, jwt);
             return ApiResult<LoginResponseDto>.Success(loginResponse);
         }
+        public async Task<ApiResult<LoggedInUser>> ValidateTokenAsync(string token)
+        {
+            try
+            {
+                var secretKey = _configuration.GetValue<string>("Jwt:SecretKey");
+                if (string.IsNullOrEmpty(secretKey))
+                    return ApiResult<LoggedInUser>.Fail("JWT configuration missing");
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes(secretKey);
+
+                // Set token validation parameters
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = _configuration.GetValue<string>("Jwt:Issuer") ?? "default-issuer",
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                // Validate token and extract principal
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+
+                // Extract user ID claim
+                var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+                    return ApiResult<LoggedInUser>.Fail("Invalid token");
+
+                // Get user from database
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null)
+                    return ApiResult<LoggedInUser>.Fail("User not found");
+
+                // Return user info
+                var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl);
+                return ApiResult<LoggedInUser>.Success(loggedInUser);
+            }
+            catch (SecurityTokenExpiredException)
+            {
+                return ApiResult<LoggedInUser>.Fail("Token expired");
+            }
+            catch (SecurityTokenValidationException)
+            {
+                return ApiResult<LoggedInUser>.Fail("Invalid token");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error validating token");
+                return ApiResult<LoggedInUser>.Fail("Authentication error");
+            }
+        }
         private string GenerateJwtToken(User user)
         {
             var claims = new[]
