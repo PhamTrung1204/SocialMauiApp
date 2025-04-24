@@ -15,7 +15,7 @@ namespace SocialMauiApp.Converters
             {
                 return isExpanded ? -1 : (double.TryParse(parameter?.ToString(), out double maxHeight) ? maxHeight : 100); // -1 để tự động mở rộng
             }
-            return 100; // Giá trị mặc định
+            return 100; 
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -12,6 +12,8 @@ namespace SocialMauiApp.ViewModel;
 
 public partial class LoginViewModel : BaseViewModel
 {
+    private const string FailKey = "FingerprintFailCount";
+
     private readonly IAuthApi _authApi;
     private readonly AuthService _authService;
     private readonly IPreferencesService _pref;
@@ -67,12 +69,14 @@ public partial class LoginViewModel : BaseViewModel
                 return;
             }
 
+            // Đăng nhập thành công
             _authService.Login(resp.Data);
 
             // Lưu để biometric
             _pref.SetBool("FingerprintAuthEnabled", true);
             _pref.SetString("LastEmail", resp.Data.User.Email);
             _pref.SetString("Username", resp.Data.User.Name);
+            _pref.SetInt(FailKey, 0);                     
             await SecureStorage.SetAsync("AuthToken", resp.Data.Token);
 
             await NavigateAsync($"//{nameof(HomePage)}");
@@ -82,11 +86,39 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     private async Task LoginWithFingerprintAsync()
     {
+        // Lấy số lần thất bại hiện tại
+        int failCount = _pref.GetInt(FailKey, 0);
+
+        if (failCount >= 3)
+        {
+            // Quá 3 lần, buộc dùng mật khẩu
+            await ShowErrorAlertAsync("Too many failed attempts. Please login with your password.");
+            return;
+        }
+
         var result = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
             "Login", "Use fingerprint to login"));
 
-        if (!result.Authenticated) return;
+        if (!result.Authenticated)
+        {
+            // Tăng bộ đếm và lưu
+            failCount++;
+            _pref.SetInt(FailKey, failCount);
 
+            if (failCount >= 3)
+            {
+                // Ẩn tuỳ chọn vân tay, buộc nhập lại mật khẩu
+                ShowFingerprintOption = false;
+                _pref.SetBool("FingerprintAuthEnabled", true);
+                await ShowErrorAlertAsync("Too many failed attempts. Please login with your password.");
+            }
+            return;
+        }
+
+        // Thành công reset bộ đếm
+        _pref.SetInt(FailKey, 0);
+
+        // Tiếp tục flow
         var token = await SecureStorage.GetAsync("AuthToken");
         var email = _pref.GetString("LastEmail");
         var user = _pref.GetString("Username");
@@ -119,10 +151,10 @@ public partial class LoginViewModel : BaseViewModel
         _pref.SetBool("FingerprintAuthEnabled", false);
         _pref.SetString("LastEmail", "");
         _pref.SetString("Username", "");
+        _pref.SetInt(FailKey, 0);                        
         SecureStorage.Remove("AuthToken");
         ShowFingerprintOption = false;
 
         await NavigateAsync($"//{nameof(LoginPage)}");
     }
-    
 }

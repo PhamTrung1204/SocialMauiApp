@@ -33,5 +33,10 @@ namespace SocialMauiApp.Services
         {
             return Preferences.Default.ContainsKey(key);
         }
+        public int GetInt(string key, int defaultValue = 0) =>
+        Preferences.Default.Get(key, defaultValue);
+
+        public void SetInt(string key, int value) =>
+        Preferences.Default.Set(key, value);
     }
 }

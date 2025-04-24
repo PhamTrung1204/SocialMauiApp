@@ -14,5 +14,7 @@ namespace SocialMauiApp.Services
         void SetString(string key, string value);
         void Remove(string key);
         bool ContainsKey(string key);
+        int GetInt(string key, int defaultValue = 0);
+        void SetInt(string key, int value);
     }
 }
