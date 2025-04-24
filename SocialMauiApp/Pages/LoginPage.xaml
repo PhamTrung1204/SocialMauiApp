@@ -21,32 +21,46 @@
             StrokeThickness="1">
 
             <Grid>
-                <!-- LAYOUT A: avatar + welcome + password + fingerprint + switch -->
+                <!--  LAYOUT A: avatar + welcome + password + fingerprint + switch  -->
                 <VerticalStackLayout
-                    Spacing="25"
+                    HorizontalOptions="Center"
                     IsVisible="{Binding ShowFingerprintOption}"
-                    HorizontalOptions="Center">
+                    Spacing="25">
 
-                    <!-- Avatar tròn -->
-                    <Border
-                        WidthRequest="100"
-                        HeightRequest="100"
-                        Stroke="{StaticResource Primary}"
-                        StrokeThickness="2"
-                       
-                        HorizontalOptions="Center">
+                    <!-- Avatar tròn với viền màu Primary và nền trắng -->
+                    <Grid
+                        WidthRequest="104"
+                        HeightRequest="104"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        BackgroundColor="White">
+
+                        <!-- Viền màu Primary -->
+                        <BoxView
+                            Color="{StaticResource Primary}"
+                            WidthRequest="104"
+                            HeightRequest="104"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+                            <BoxView.Clip>
+                                <EllipseGeometry Center="52,52" RadiusX="52" RadiusY="52" />
+                            </BoxView.Clip>
+                        </BoxView>
+
+                        <!-- Ảnh bo tròn bên trong -->
                         <Image
-                            Source="{Binding Username, StringFormat='https://yourcdn.com/avatars/{0}.png'}"
-                            Aspect="AspectFill"
+                            Source="dotnet_bot.png"
                             WidthRequest="100"
-                            HeightRequest="100">
+                            HeightRequest="100"
+                            Aspect="AspectFill"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
                             <Image.Clip>
                                 <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
                             </Image.Clip>
                         </Image>
-                    </Border>
-
-                    <!-- Welcome, Username -->
+                    </Grid>
+                    <!--  Welcome, Username  -->
                     <Label
                         FontAttributes="Bold"
                         FontSize="26"
@@ -54,7 +68,7 @@
                         Text="{Binding Username, StringFormat='Welcome, {0}'}"
                         TextColor="{StaticResource Primary}" />
 
-                    <!-- Chỉ ô Password -->
+                    <!--  Chỉ ô Password  -->
                     <VerticalStackLayout Spacing="15">
                         <Label Style="{StaticResource formLabel}" Text="Password" />
                         <controls:NoBorderEntry
@@ -66,7 +80,7 @@
                             Text="{Binding Password}" />
                     </VerticalStackLayout>
 
-                    <!-- Buttons Login + Fingerprint -->
+                    <!--  Buttons Login + Fingerprint  -->
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
                         <Button
                             BackgroundColor="{StaticResource Primary}"
@@ -74,7 +88,6 @@
                             CornerRadius="8"
                             FontAttributes="Bold"
                             HeightRequest="45"
-                           
                             Text="Login"
                             TextColor="White"
                             WidthRequest="230" />
@@ -88,7 +101,7 @@
                             WidthRequest="45" />
                     </HorizontalStackLayout>
 
-                    <!-- Login with another account -->
+                    <!--  Login with another account  -->
                     <Button
                         BackgroundColor="White"
                         BorderColor="{StaticResource Primary}"
@@ -102,10 +115,8 @@
 
                 </VerticalStackLayout>
 
-                <!-- LAYOUT B: nhập email + password + login + register -->
-                <VerticalStackLayout
-                    Spacing="25"
-                    IsVisible="{Binding ShowFingerprintOption, Converter={StaticResource InverseBooleanConverter}}">
+                <!--  LAYOUT B: nhập email + password + login + register  -->
+                <VerticalStackLayout IsVisible="{Binding ShowFingerprintOption, Converter={StaticResource InverseBooleanConverter}}" Spacing="25">
 
                     <Image
                         HeightRequest="100"
@@ -147,10 +158,10 @@
                             BackgroundColor="#EEEEEE"
                             Command="{Binding LoginWithFingerprintCommand}"
                             CornerRadius="8"
-                            HeightRequest="45"
+                            HeightRequest="60"
                             IsVisible="False"
                             Source="fingerprint.png"
-                            WidthRequest="45" />
+                            WidthRequest="60" />
                     </HorizontalStackLayout>
 
                     <Grid

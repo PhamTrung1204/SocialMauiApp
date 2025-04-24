@@ -6,11 +6,16 @@ namespace SocialMauiApp.Pages
         {
             InitializeComponent();
         }
-        private async void Button_Clicked(object sender, EventArgs e)
+
+        protected override async void OnAppearing()
         {
-            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            base.OnAppearing();
+
+            await MainContent.FadeTo(1, 1000, Easing.CubicIn);
+            await Task.Delay(500);
+
             Preferences.Default.Set(InitPage.FirstRunKey, true);
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
     }
 }
-
