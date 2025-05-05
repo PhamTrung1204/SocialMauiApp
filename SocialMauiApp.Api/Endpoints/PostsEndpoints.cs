@@ -94,6 +94,23 @@ namespace SocialMauiApp.Api.Endpoints
               Results.Ok(await postService.GetPostAsync(postId, principal.GetUserId())))
               .Produces<PostDto>()
               .WithName("GetPostById");
+            postsGroup.MapPost("/{postId:guid}/upload-photo",
+    async (Guid postId,
+           [FromForm(Name = "photo")] IFormFile? photo,
+           [FromForm(Name = "serializedCommentDto")] string serializedCommentDto,
+           PostService postService,
+           ClaimsPrincipal user) =>
+    {
+        var dto = JsonSerializer.Deserialize<SaveCommentDto>(serializedCommentDto)!;
+        dto.Photo = photo;
+        var result = await postService.SaveCommentAsync(dto, user.GetUser());
+        return Results.Ok(result);
+    })
+    .DisableAntiforgery()
+    .Accepts<IFormFile>("multipart/form-data")
+    .Produces<ApiResult<CommentDto>>();
+
+
             // Endpoint upload ảnh riêng biệt, sử dụng PhotoUploadService
             postsGroup.MapPost("/upload-photo", async ([FromForm] IFormFile? photo, PhotoUploadService photoUploadService) =>
             {

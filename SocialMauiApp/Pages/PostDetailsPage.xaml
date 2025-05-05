@@ -14,10 +14,10 @@
     BackgroundColor="{StaticResource Gray100}"
     Shell.PresentationMode="ModalAnimated">
 
-    <!--  Các Resource dùng chung  -->
+    <!--  Resources  -->
     <ContentPage.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        <!--  MenuFlyout vẫn được định nghĩa ở đây nếu cần sử dụng trong binding hoặc tái sử dụng  -->
+        <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
         <MenuFlyout x:Key="CommentOptionsMenu">
             <MenuFlyoutItem
                 Command="{Binding BindingContext.EditCommentCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
@@ -37,6 +37,7 @@
     </ContentPage.Behaviors>
 
     <Grid Margin="0,-10,0,0" RowDefinitions="Auto,*,Auto">
+
         <!--  Header  -->
         <Grid
             Grid.Row="0"
@@ -44,7 +45,7 @@
             BackgroundColor="{StaticResource Primary}"
             ColumnDefinitions="Auto,*,Auto,Auto"
             ColumnSpacing="10">
-            <!--  Close Button  -->
+            <!--  Close  -->
             <Border
                 Grid.Column="0"
                 BackgroundColor="White"
@@ -67,14 +68,13 @@
             </Border>
             <!--  Spacer  -->
             <Grid Grid.Column="1" />
-            <!--  Edit Post Button  -->
+            <!--  Edit  -->
             <Border
                 Grid.Column="2"
                 BackgroundColor="White"
                 HeightRequest="30"
                 IsVisible="{Binding IsOwnPost}"
                 StrokeShape="RoundRectangle 8"
-                StrokeThickness="0"
                 WidthRequest="30">
                 <Image
                     HeightRequest="24"
@@ -89,14 +89,13 @@
                     <TapGestureRecognizer Command="{Binding EditPostCommand}" />
                 </Border.GestureRecognizers>
             </Border>
-            <!--  Delete Post Button  -->
+            <!--  Delete  -->
             <Border
                 Grid.Column="3"
                 BackgroundColor="White"
                 HeightRequest="30"
                 IsVisible="{Binding IsOwnPost}"
                 StrokeShape="RoundRectangle 8"
-                StrokeThickness="0"
                 WidthRequest="30">
                 <Image
                     HeightRequest="18"
@@ -113,7 +112,7 @@
             </Border>
         </Grid>
 
-        <!--  Main Content  -->
+        <!--  Content  -->
         <ScrollView Grid.Row="1">
             <Grid RowDefinitions="Auto,*" RowSpacing="10">
                 <!--  Post Display  -->
@@ -153,93 +152,124 @@
                         </DataTrigger>
                     </ContentView.Triggers>
                 </ContentView>
-                <!--  Comments Section  -->
+
+                <!--  Comments List  -->
                 <VerticalStackLayout
                     Grid.Row="1"
-                    Padding="5"
-                    Spacing="10">
+                    Padding="10"
+                    BackgroundColor="White"
+                    Spacing="8">
                     <CollectionView
                         ItemsSource="{Binding Comments}"
                         RemainingItemsThreshold="1"
                         RemainingItemsThresholdReached="CollectionView_RemainingItemsThresholdReached">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                            <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.EmptyView>
-                            <Label HorizontalOptions="Center" Text="No comments here." />
+                            <Label
+                                FontSize="16"
+                                HorizontalOptions="Center"
+                                Text="No comments yet."
+                                TextColor="Gray" />
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="dto:CommentDto">
-                                <Border
-                                    Padding="5"
-                                    BackgroundColor="White"
-                                    StrokeShape="RoundRectangle 10">
-                                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
-                                        <!--  Avatar  -->
-                                        <Border
-                                            Grid.Column="0"
+                                <Grid
+                                    Margin="5,0,5,0"
+                                    ColumnDefinitions="Auto,*"
+                                    ColumnSpacing="8"
+                                    RowDefinitions="Auto">
+                                    <!--  Avatar  -->
+                                    <Border
+                                        Grid.Column="0"
+                                        HeightRequest="40"
+                                        StrokeShape="RoundRectangle 20"
+                                        VerticalOptions="Start"
+                                        WidthRequest="40">
+                                        <Image
+                                            Aspect="AspectFill"
                                             HeightRequest="40"
-                                            StrokeShape="RoundRectangle 20"
-                                            VerticalOptions="Start"
-                                            WidthRequest="40">
-                                            <Image
-                                                Aspect="AspectFill"
-                                                HeightRequest="40"
-                                                Source="{Binding UserPhoto}"
-                                                WidthRequest="40" />
-                                        </Border>
-                                        <!--  Comment Content and Actions  -->
+                                            Source="{Binding UserPhoto}"
+                                            WidthRequest="40" />
+                                    </Border>
+                                    <!--  Comment Content  -->
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="10"
+                                        BackgroundColor="#F5F5F5"
+                                        StrokeShape="RoundRectangle 12"
+                                        VerticalOptions="Start">
+                                        <Border.Shadow>
+                                            <Shadow
+                                                Brush="#DDDDDD"
+                                                Radius="4"
+                                                Offset="2,2" />
+                                        </Border.Shadow>
                                         <Grid
-                                            Grid.Column="1"
-                                            Padding="5,0,0,0"
-                                            RowDefinitions="Auto,*"
-                                            RowSpacing="3">
-                                            <Grid ColumnDefinitions="*,Auto">
-                                                <!--  User Info  -->
-                                                <StackLayout
-                                                    Grid.Column="0"
-                                                    Orientation="Horizontal"
-                                                    Spacing="2">
-                                                    <Label
-                                                        FontAttributes="Bold"
-                                                        FontSize="14"
-                                                        Text="{Binding UserName}"
-                                                        TextColor="Black" />
-                                                    <Label FontSize="14" Text="·" />
-                                                    <Label
-                                                        FontSize="12"
-                                                        Text="{Binding AddedOn, StringFormat='{0:hh:mm tt | dd MMM yyyy}'}"
-                                                        TextColor="Gray" />
-                                                </StackLayout>
-                                                <!--  More Options Button  -->
-                                                <Border
-                                                    Grid.Column="1"
-                                                    Padding="2"
-                                                    BackgroundColor="Transparent"
-                                                    HeightRequest="16"
-                                                    IsVisible="{Binding IsOwnComment}"
-                                                    StrokeThickness="0"
-                                                    WidthRequest="16">
-                                                    <Image
-                                                        HeightRequest="16"
-                                                        Source="more.png"
-                                                        WidthRequest="16">
-                                                        <Image.GestureRecognizers>
-                                                            <TapGestureRecognizer Tapped="OnMoreOptionsTapped" />
-                                                        </Image.GestureRecognizers>
-                                                    </Image>
-                                                </Border>
-                                            </Grid>
-                                            <!--  Comment Text  -->
+                                            ColumnDefinitions="*,Auto"
+                                            RowDefinitions="Auto,Auto,Auto"
+                                            RowSpacing="6">
+                                            <!--  Username and Timestamp  -->
+                                            <StackLayout
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Orientation="Horizontal"
+                                                Spacing="5"
+                                                VerticalOptions="Start">
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    FontSize="15"
+                                                    Text="{Binding UserName}"
+                                                    TextColor="#1C2526" />
+                                                <Label
+                                                    FontSize="13"
+                                                    Text="{Binding AddedOn, StringFormat='{0:hh:mm tt · dd MMM yyyy}'}"
+                                                    TextColor="#65676B"
+                                                    VerticalOptions="Center" />
+                                            </StackLayout>
+                                            <!--  More Options  -->
+                                            <Border
+                                                Grid.Row="0"
+                                                Grid.Column="1"
+                                                Padding="4"
+                                                BackgroundColor="Transparent"
+                                                HeightRequest="24"
+                                                IsVisible="{Binding IsOwnComment}"
+                                                VerticalOptions="Start"
+                                                WidthRequest="24">
+                                                <Image
+                                                    HeightRequest="20"
+                                                    Source="more.png"
+                                                    WidthRequest="20">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnMoreOptionsTapped" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                            </Border>
+                                            <!--  Content  -->
                                             <Label
                                                 Grid.Row="1"
-                                                FontSize="14"
+                                                Grid.Column="0"
+                                                Grid.ColumnSpan="2"
+                                                FontSize="15"
                                                 LineBreakMode="WordWrap"
                                                 Text="{Binding Content}"
-                                                TextColor="Black" />
+                                                TextColor="#1C2526" />
+                                            <!--  Comment Image  -->
+                                            <Image
+                                                Grid.Row="2"
+                                                Grid.Column="0"
+                                                Grid.ColumnSpan="2"
+                                                Margin="0,8,0,0"
+                                                Aspect="AspectFit"
+                                                HeightRequest="120"
+                                                HorizontalOptions="Start"
+                                                IsVisible="{Binding PhotoUrl, Converter={StaticResource StringToBoolConverter}}"
+                                                Source="{Binding PhotoUrl}" />
                                         </Grid>
-                                    </Grid>
-                                </Border>
+                                    </Border>
+                                </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
@@ -247,36 +277,81 @@
             </Grid>
         </ScrollView>
 
-        <!--  Comment Input Box  -->
+        <!--  Comment Input + Image Preview  -->
         <Grid
             Grid.Row="2"
-            Padding="15,10,15,15"
+            Padding="10,5,10,10"
             BackgroundColor="White"
-            ColumnDefinitions="*,Auto"
-            ColumnSpacing="10">
-            <!--  Input Field  -->
-            <controls:NoBorderEntry
+            ColumnDefinitions="Auto,*,Auto"
+            ColumnSpacing="8"
+            RowDefinitions="Auto,Auto">
+            <!--  Pick Image Button  -->
+            <Button
+                Grid.Row="0"
                 Grid.Column="0"
-                Placeholder="Enter comment..."
-                PlaceholderColor="Black"
-                Text="{Binding Comment}"
-                TextColor="Black" />
-            <!--  Send/Update Button  -->
-            <Border
+                Command="{Binding SelectPhotoCommand}"
+                FontSize="20"
+                HeightRequest="40"
+                Text="📷"
+                VerticalOptions="Center"
+                WidthRequest="40" />
+            <!--  Comment Entry  -->
+            <controls:NoBorderEntry
+                Grid.Row="0"
                 Grid.Column="1"
+                Placeholder="Write a comment..."
+                Text="{Binding Comment, Mode=TwoWay}"
+                TextColor="Black"
+                VerticalOptions="Center" />
+            <!--  Send Button  -->
+            <Border
+                Grid.Row="0"
+                Grid.Column="2"
                 BackgroundColor="{StaticResource Primary}"
-                HeightRequest="44"
+                HeightRequest="40"
                 IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
                 StrokeShape="RoundRectangle 8"
-                WidthRequest="44">
+                WidthRequest="40">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding AddCommentCommand}" />
                 </Border.GestureRecognizers>
                 <controls:WhiteImage
-                    HeightRequest="24"
+                    HeightRequest="20"
                     Source="send.png"
-                    WidthRequest="24" />
+                    WidthRequest="20" />
             </Border>
+            <!--  Selected Images Preview  -->
+            <CollectionView
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                IsVisible="{Binding HasSelectedImages}"
+                ItemsLayout="HorizontalList"
+                ItemsSource="{Binding SelectedImagePreviews}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Margin="5,0,5,0"
+                            HeightRequest="60"
+                            WidthRequest="60">
+                            <Image Aspect="AspectFill" Source="{Binding .}" />
+                            <Button
+                                BackgroundColor="#CC000000"
+                                Command="{Binding BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                CommandParameter="{Binding .}"
+                                CornerRadius="8"
+                                FontSize="10"
+                                HeightRequest="16"
+                                HorizontalOptions="End"
+                                Text="✕"
+                                TextColor="White"
+                                VerticalOptions="Start"
+                                WidthRequest="16" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </Grid>
 
         <!--  Activity Indicator  -->

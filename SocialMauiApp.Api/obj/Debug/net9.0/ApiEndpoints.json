@@ -328,6 +328,43 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_10",
+    "RelativePath": "api/posts/{postId:guid}/upload-photo",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "photo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "serializedCommentDto",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[SocialMediaMaui.Shared.Dtos.CommentDto, SocialMediaMaui.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Posts"
+    ]
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
     "Method": "\u003CMapPostsEndpoints\u003Eb__0_4",
     "RelativePath": "api/posts/comments/{commentId:guid}",
     "HttpMethod": "PUT",
@@ -422,7 +459,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapPostsEndpoints\u003Eb__0_10",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_11",
     "RelativePath": "api/posts/upload-photo",
     "HttpMethod": "POST",
     "IsController": false,

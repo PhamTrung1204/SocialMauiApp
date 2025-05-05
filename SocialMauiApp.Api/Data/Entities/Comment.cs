@@ -9,8 +9,12 @@ namespace SocialMauiApp.Api.Data.Entities
         public Guid PostId { get; set; }
         public virtual Post Post { get; set; }
         public string Content { get; set; }
+        public string? PhotoPath { get; set; }
+        public string? PhotoUrl { get; set; }
         public Guid UserId { get; set; }
         public virtual User User { get; set; }
         public DateTime AddedOn { get; set; }
+        public Guid? ParentCommentId { get; set; }
+        public List<Comment> Replies { get; set; } = new List<Comment>();  
     }
 }

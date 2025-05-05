@@ -46,8 +46,20 @@ namespace SocialMauiApp.Api.Data.Migrations
                     b.Property<DateTime>("AddedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Content")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ParentCommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PhotoPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotoUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("PostId")
@@ -57,6 +69,8 @@ namespace SocialMauiApp.Api.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
 
                     b.HasIndex("PostId");
 
@@ -114,11 +128,17 @@ namespace SocialMauiApp.Api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("CommentCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -178,13 +198,19 @@ namespace SocialMauiApp.Api.Data.Migrations
 
             modelBuilder.Entity("SocialMediaMaui.Shared.Dtos.PostDto", b =>
                 {
+                    b.Property<int>("CommentCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IsBookmarked")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsBookmarked")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("IsLiked")
+                    b.Property<bool>("IsLiked")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LikeCount")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ModifiedOn")
@@ -235,6 +261,10 @@ namespace SocialMauiApp.Api.Data.Migrations
 
             modelBuilder.Entity("SocialMauiApp.Api.Data.Entities.Comment", b =>
                 {
+                    b.HasOne("SocialMauiApp.Api.Data.Entities.Comment", null)
+                        .WithMany("Replies")
+                        .HasForeignKey("CommentId");
+
                     b.HasOne("SocialMauiApp.Api.Data.Entities.Post", "Post")
                         .WithMany()
                         .HasForeignKey("PostId")
@@ -298,6 +328,11 @@ namespace SocialMauiApp.Api.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SocialMauiApp.Api.Data.Entities.Comment", b =>
+                {
+                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,7 @@ public interface IPostApi
 {
     [Multipart]
     [Post("/api/posts/save")]
-    Task<ApiResult<PostDto>> SavePostAsync(StreamPart? photo,string serializedSavePostDto);
+    Task<ApiResult<PostDto>> SavePostAsync(StreamPart? photo, string serializedSavePostDto);
     [Get("/api/posts")]
     Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize);
     [Post("/api/posts/{postId}/comments")]
@@ -19,6 +19,24 @@ public interface IPostApi
     Task<ApiResult<CommentDto>> UpdateCommentAsync(Guid commentId, [Body] UpdateCommentDto dto);
     [Delete("/api/posts/comments/{commentId}")]
     Task<ApiResult> DeleteCommentAsync(Guid commentId);
+    
+    [Multipart]
+    [Post("/api/posts/{postId}/upload-photo")]
+    Task<ApiResult<CommentDto>> SaveCommentWithImagesAsync(
+    Guid postId,
+    [AliasAs("photo")] StreamPart? image,
+    [AliasAs("serializedCommentDto")] string serializedCommentDto
+);
+    [Multipart]
+    [Put("/api/posts/comments/{commentId}/upload-photo")]
+    Task<ApiResult<CommentDto>> UpdateCommentWithImagesAsync(
+    Guid commentId,
+    [AliasAs("photo")] StreamPart? image,
+    [AliasAs("serializedCommentDto")] string serializedCommentDto
+);
+
+
+
     [Post("/api/posts/{postId}/toggle-like")]
     Task<ApiResult> ToggleLikeAsync(Guid postId);
     [Post("/api/posts/{postId}/toggle-bookmark")]

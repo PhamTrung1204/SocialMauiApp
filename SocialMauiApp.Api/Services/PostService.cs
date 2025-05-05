@@ -158,7 +158,7 @@ namespace SocialMauiApp.Api.Services
             };
             await _hubContext.Clients.All.PostCountsUpdated(dto);
         }
-        //Lưu bình luận
+        // Lưu bình luận (bao gồm reply)
         public async Task<ApiResult<CommentDto>> SaveCommentAsync(SaveCommentDto dto, LoggedInUser currentUser)
         {
             var postOwnerId = await _context.Posts.Where(p => p.Id == dto.PostId).Select(p => p.UserId).FirstOrDefaultAsync();
@@ -166,35 +166,63 @@ namespace SocialMauiApp.Api.Services
             {
                 return ApiResult<CommentDto>.Fail("Post not found");
             }
+
             Comment? comment = null;
             bool sendNotification = false;
+
             if (dto.CommentId == Guid.Empty)
             {
                 comment = new Comment
                 {
+                    Id = Guid.NewGuid(),
                     PostId = dto.PostId,
                     UserId = currentUser.Id,
                     Content = dto.Content,
-                    AddedOn = DateTime.UtcNow
+                    AddedOn = DateTime.UtcNow,
+                    ParentCommentId = dto.ParentCommentId // Hỗ trợ reply
                 };
+                if (dto.Photo != null)
+                {
+                    (comment.PhotoPath, comment.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", currentUser.Id.ToString(), "comments");
+                }
                 _context.Comments.Add(comment);
                 sendNotification = true;
             }
             else
             {
-                comment = await _context.Comments.FindAsync(dto.CommentId); // comment = await _context.Comments.FindAsync(currentUser.Id);
-
+                comment = await _context.Comments.FindAsync(dto.CommentId);
                 if (comment is null)
                 {
                     return ApiResult<CommentDto>.Fail("Comment not found");
                 }
                 if (comment.UserId != currentUser.Id)
                 {
-                    return ApiResult<CommentDto>.Fail($"You can modify your own comments only");
+                    return ApiResult<CommentDto>.Fail("You can modify your own comments only");
                 }
                 comment.Content = dto.Content;
+                comment.AddedOn = DateTime.UtcNow;
+                if (dto.Photo != null)
+                {
+                    var existingPhotoPath = comment.PhotoPath;
+                    (comment.PhotoPath, comment.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", currentUser.Id.ToString(), "comments");
+                    if (!string.IsNullOrEmpty(existingPhotoPath) && File.Exists(existingPhotoPath))
+                    {
+                        File.Delete(existingPhotoPath);
+                    }
+                }
+                else if (dto.IsExistingPhotoRemoved)
+                {
+                    var existingPhotoPath = comment.PhotoPath;
+                    comment.PhotoPath = null;
+                    comment.PhotoUrl = null;
+                    if (!string.IsNullOrEmpty(existingPhotoPath) && File.Exists(existingPhotoPath))
+                    {
+                        File.Delete(existingPhotoPath);
+                    }
+                }
                 _context.Comments.Update(comment);
             }
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -206,14 +234,18 @@ namespace SocialMauiApp.Api.Services
                     PostId = comment.PostId,
                     UserId = currentUser.Id,
                     UserName = currentUser.Name,
-                    UserPhotoUrl = currentUser.PhotoUrl
+                    UserPhotoUrl = currentUser.PhotoUrl,
+                    PhotoUrl = comment.PhotoUrl,
+                    ParentCommentId = comment.ParentCommentId
                 };
-                if(sendNotification)
+
+                if (sendNotification)
                 {
-                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} commented on your post",DateTime.Now,dto.PostId);
+                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} commented on your post", DateTime.Now, dto.PostId);
                     await SaveNotificationAsync(notificationDto);
                     await _hubContext.Clients.All.CommentAddedToThePost(commentDto);
                 }
+
                 await NotifyCountsAsync(commentDto.PostId);
                 return ApiResult<CommentDto>.Success(commentDto);
             }
@@ -291,23 +323,42 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        public async Task<CommentDto[]> GetPostsCommentAsync(Guid postId, int startIndex, int pageSize) =>
-            await _context.Comments
-            .Where(c => c.PostId == postId)
-            .OrderByDescending(c => c.AddedOn)
-            .Skip(startIndex)
-            .Take(pageSize)
-            .Select(c => new CommentDto
-            {
-                AddedOn = c.AddedOn,
-                CommentId = c.Id,
-                Content = c.Content,
-                PostId = postId,
-                UserId = c.UserId,
-                UserName = c.User.Name,
-                UserPhotoUrl = c.User.PhotoUrl
-            })
-            .ToArrayAsync();
+        // Lấy bình luận và replies
+        public async Task<CommentDto[]> GetPostsCommentAsync(Guid postId, int startIndex, int pageSize)
+        {
+            var comments = await _context.Comments
+                .Where(c => c.PostId == postId && c.ParentCommentId == null) // Chỉ lấy bình luận cấp cao
+                .OrderByDescending(c => c.AddedOn)
+                .Skip(startIndex)
+                .Take(pageSize)
+                .Select(c => new CommentDto
+                {
+                    AddedOn = c.AddedOn,
+                    CommentId = c.Id,
+                    Content = c.Content,
+                    PostId = c.PostId,
+                    UserId = c.UserId,
+                    UserName = c.User.Name,
+                    UserPhotoUrl = c.User.PhotoUrl,
+                    PhotoUrl = c.PhotoUrl,
+                    ParentCommentId = c.ParentCommentId,
+                    Replies = c.Replies.Select(r => new CommentDto
+                    {
+                        AddedOn = r.AddedOn,
+                        CommentId = r.Id,
+                        Content = r.Content,
+                        PostId = r.PostId,
+                        UserId = r.UserId,
+                        UserName = r.User.Name,
+                        UserPhotoUrl = r.User.PhotoUrl,
+                        PhotoUrl = r.PhotoUrl,
+                        ParentCommentId = r.ParentCommentId
+                    }).ToList()
+                })
+                .ToArrayAsync();
+
+            return comments;
+        }
         public async Task<ApiResult> ToggleLikeAsync(Guid postId, LoggedInUser currentUser)
         {
             var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p=>p.UserId).FirstOrDefaultAsync();
