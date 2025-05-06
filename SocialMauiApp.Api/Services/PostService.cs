@@ -15,19 +15,21 @@ namespace SocialMauiApp.Api.Services
     {
         private readonly DataContext _context;
         private readonly PhotoUploadService _photoUploadService;
-        private readonly IHubContext<SocialHub,ISocialHubClient> _hubContext;
+        private readonly IHubContext<SocialHub, ISocialHubClient> _hubContext;
+
         public PostService(DataContext context, PhotoUploadService photoUploadService, IHubContext<SocialHub, ISocialHubClient> hubContext)
         {
             _context = context;
             _photoUploadService = photoUploadService;
             _hubContext = hubContext;
         }
-        //Lưu post
+
+        // Lưu post
         public async Task<ApiResult<PostDto>> SavePostAsync(SavePostDto dto, LoggedInUser user)
         {
             string? _existingPhotoPath = null;
             Post? post = null;
-            bool sendNotification = false; 
+            bool sendNotification = false;
             if (dto.PostId == default)
             {
                 post = new Post
@@ -59,7 +61,6 @@ namespace SocialMauiApp.Api.Services
                 {
                     _existingPhotoPath = post.PhotoPath;
                     (post.PhotoPath, post.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", user.Id.ToString(), "posts");
-
                 }
                 else
                 {
@@ -69,7 +70,6 @@ namespace SocialMauiApp.Api.Services
                         post.PhotoPath = null;
                         post.PhotoUrl = null;
                     }
-
                 }
                 _context.Posts.Update(post);
                 sendNotification = true;
@@ -77,7 +77,6 @@ namespace SocialMauiApp.Api.Services
             try
             {
                 await _context.SaveChangesAsync();
-                
                 if (!string.IsNullOrEmpty(_existingPhotoPath) && File.Exists(_existingPhotoPath))
                 {
                     File.Delete(_existingPhotoPath);
@@ -103,30 +102,25 @@ namespace SocialMauiApp.Api.Services
             {
                 return ApiResult<PostDto>.Fail(ex.Message);
             }
-
         }
-        //Lấy danh sách tất cả các bài post
+
+        // Lấy danh sách tất cả các bài post
         public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize, Guid currentUserId)
         {
             var posts = await _context.Set<PostDto>()
                 .FromSqlInterpolated($"EXEC GetPosts @StartIndex={startIndex}, @PageSize={pageSize}, @CurrentUserId={currentUserId}")
-           
                 .ToArrayAsync();
-
             return posts;
         }
 
-        //Lấy 1 bài post 
+        // Lấy 1 bài post 
         public async Task<PostDto?> GetPostAsync(Guid postId, Guid currentUserId)
         {
-            // Bước 1: Lấy dữ liệu bất đồng bộ từ Stored Procedure
             var rawPosts = await _context.Set<PostDto>()
                 .FromSqlRaw("EXEC GetPostById @PostId, @CurrentUserId",
                     new SqlParameter("@PostId", postId),
                     new SqlParameter("@CurrentUserId", currentUserId))
                 .ToListAsync();
-
-            // Bước 2: Chuyển đổi kết quả (projection) trên client
             var posts = rawPosts.Select(p => new PostDto
             {
                 PostId = p.PostId,
@@ -134,22 +128,20 @@ namespace SocialMauiApp.Api.Services
                 UserName = p.UserName,
                 UserPhotoUrl = p.UserPhotoUrl,
                 Content = p.Content,
-                PhotoUrl = p.PhotoUrl,
+                PhotoUrl = p.UserPhotoUrl,
                 PostedOn = p.PostedOn,
                 ModifiedOn = p.ModifiedOn,
-                // Ép kiểu từ int sang bool
                 IsLiked = Convert.ToBoolean(p.IsLiked),
                 IsBookmarked = Convert.ToBoolean(p.IsBookmarked)
             }).ToList();
-
             return posts.FirstOrDefault();
         }
-        //Thông báo đếm số lượt thích, bình luận
+
+        // Thông báo đếm số lượt thích, bình luận
         private async Task NotifyCountsAsync(Guid postId)
         {
             var likeCount = await _context.Likes.CountAsync(l => l.PostId == postId);
             var commentCount = await _context.Comments.CountAsync(c => c.PostId == postId);
-
             var dto = new PostDto
             {
                 PostId = postId,
@@ -158,6 +150,7 @@ namespace SocialMauiApp.Api.Services
             };
             await _hubContext.Clients.All.PostCountsUpdated(dto);
         }
+
         // Lưu bình luận (bao gồm reply)
         public async Task<ApiResult<CommentDto>> SaveCommentAsync(SaveCommentDto dto, LoggedInUser currentUser)
         {
@@ -166,10 +159,8 @@ namespace SocialMauiApp.Api.Services
             {
                 return ApiResult<CommentDto>.Fail("Post not found");
             }
-
             Comment? comment = null;
             bool sendNotification = false;
-
             if (dto.CommentId == Guid.Empty)
             {
                 comment = new Comment
@@ -179,7 +170,7 @@ namespace SocialMauiApp.Api.Services
                     UserId = currentUser.Id,
                     Content = dto.Content,
                     AddedOn = DateTime.UtcNow,
-                    ParentCommentId = dto.ParentCommentId // Hỗ trợ reply
+                    ParentCommentId = dto.ParentCommentId
                 };
                 if (dto.Photo != null)
                 {
@@ -222,7 +213,6 @@ namespace SocialMauiApp.Api.Services
                 }
                 _context.Comments.Update(comment);
             }
-
             try
             {
                 await _context.SaveChangesAsync();
@@ -238,14 +228,12 @@ namespace SocialMauiApp.Api.Services
                     PhotoUrl = comment.PhotoUrl,
                     ParentCommentId = comment.ParentCommentId
                 };
-
                 if (sendNotification)
                 {
                     var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} commented on your post", DateTime.Now, dto.PostId);
                     await SaveNotificationAsync(notificationDto);
                     await _hubContext.Clients.All.CommentAddedToThePost(commentDto);
                 }
-
                 await NotifyCountsAsync(commentDto.PostId);
                 return ApiResult<CommentDto>.Success(commentDto);
             }
@@ -254,6 +242,64 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<CommentDto>.Fail(ex.Message);
             }
         }
+
+        // Cập nhật bình luận với ảnh
+        public async Task<ApiResult<CommentDto>> UpdateCommentWithImageAsync(Guid commentId, UpdateCommentDto dto, LoggedInUser currentUser)
+        {
+            var comment = await _context.Comments.FindAsync(commentId);
+            if (comment is null)
+            {
+                return ApiResult<CommentDto>.Fail("Comment not found");
+            }
+            if (comment.UserId != currentUser.Id)
+            {
+                return ApiResult<CommentDto>.Fail("You can only edit your own comment");
+            }
+            comment.Content = dto.Content;
+            comment.AddedOn = DateTime.UtcNow;
+            string? existingPhotoPath = null;
+            if (dto.Photo != null)
+            {
+                existingPhotoPath = comment.PhotoPath;
+                (comment.PhotoPath, comment.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", currentUser.Id.ToString(), "comments");
+            }
+            else if (dto.IsExistingPhotoRemoved)
+            {
+                existingPhotoPath = comment.PhotoPath;
+                comment.PhotoPath = null;
+                comment.PhotoUrl = null;
+            }
+            try
+            {
+                _context.Comments.Update(comment);
+                await _context.SaveChangesAsync();
+                if (!string.IsNullOrEmpty(existingPhotoPath) && File.Exists(existingPhotoPath))
+                {
+                    File.Delete(existingPhotoPath);
+                }
+                var commentDto = new CommentDto
+                {
+                    CommentId = comment.Id,
+                    Content = comment.Content,
+                    PostId = comment.PostId,
+                    UserId = currentUser.Id,
+                    UserName = currentUser.Name,
+                    UserPhotoUrl = currentUser.PhotoUrl,
+                    PhotoUrl = comment.PhotoUrl,
+                    AddedOn = comment.AddedOn,
+                    ParentCommentId = comment.ParentCommentId
+                };
+                await _hubContext.Clients.All.CommentUpdated(commentDto);
+                await NotifyCountsAsync(comment.PostId);
+                return ApiResult<CommentDto>.Success(commentDto);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult<CommentDto>.Fail(ex.Message);
+            }
+        }
+
+        // Xóa bình luận
         public async Task<ApiResult> DeleteCommentAsync(Guid commentId, LoggedInUser currentUser)
         {
             var comment = await _context.Comments.FindAsync(commentId);
@@ -261,12 +307,10 @@ namespace SocialMauiApp.Api.Services
             {
                 return ApiResult.Fail("Comment not found");
             }
-
             if (comment.UserId != currentUser.Id)
             {
                 return ApiResult.Fail("You can only delete your own comment");
             }
-
             try
             {
                 _context.Comments.Remove(comment);
@@ -280,6 +324,8 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult.Fail(ex.Message);
             }
         }
+
+        // Cập nhật bình luận (không ảnh)
         public async Task<ApiResult<CommentDto>> UpdateCommentAsync(Guid commentId, UpdateCommentDto dto, LoggedInUser currentUser)
         {
             var comment = await _context.Comments.FindAsync(commentId);
@@ -287,20 +333,16 @@ namespace SocialMauiApp.Api.Services
             {
                 return ApiResult<CommentDto>.Fail("Comment not found");
             }
-
             if (comment.UserId != currentUser.Id)
             {
                 return ApiResult<CommentDto>.Fail("You can only edit your own comment");
             }
-
             comment.Content = dto.Content;
-            comment.AddedOn = DateTime.UtcNow; // Cập nhật thời gian chỉnh sửa
-
+            comment.AddedOn = DateTime.UtcNow;
             try
             {
                 _context.Comments.Update(comment);
                 await _context.SaveChangesAsync();
-
                 var commentDto = new CommentDto
                 {
                     CommentId = comment.Id,
@@ -309,12 +351,11 @@ namespace SocialMauiApp.Api.Services
                     UserId = currentUser.Id,
                     UserName = currentUser.Name,
                     UserPhotoUrl = currentUser.PhotoUrl,
-                    AddedOn = comment.AddedOn // Thời gian mới
+                    AddedOn = comment.AddedOn,
+                    PhotoUrl = comment.PhotoUrl,
+                    ParentCommentId = comment.ParentCommentId
                 };
-
-                // Gửi thông báo qua SignalR đến tất cả client
                 await _hubContext.Clients.All.CommentUpdated(commentDto);
-
                 return ApiResult<CommentDto>.Success(commentDto);
             }
             catch (Exception ex)
@@ -327,7 +368,7 @@ namespace SocialMauiApp.Api.Services
         public async Task<CommentDto[]> GetPostsCommentAsync(Guid postId, int startIndex, int pageSize)
         {
             var comments = await _context.Comments
-                .Where(c => c.PostId == postId && c.ParentCommentId == null) // Chỉ lấy bình luận cấp cao
+                .Where(c => c.PostId == postId && c.ParentCommentId == null)
                 .OrderByDescending(c => c.AddedOn)
                 .Skip(startIndex)
                 .Take(pageSize)
@@ -356,12 +397,13 @@ namespace SocialMauiApp.Api.Services
                     }).ToList()
                 })
                 .ToArrayAsync();
-
             return comments;
         }
+
+        // Thích bài post
         public async Task<ApiResult> ToggleLikeAsync(Guid postId, LoggedInUser currentUser)
         {
-            var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p=>p.UserId).FirstOrDefaultAsync();
+            var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p => p.UserId).FirstOrDefaultAsync();
             if (postOwnerId == default)
             {
                 return ApiResult.Fail("Post not found");
@@ -387,7 +429,7 @@ namespace SocialMauiApp.Api.Services
                 await _context.SaveChangesAsync();
                 if (sendNotification)
                 {
-                    var notificationDto = new NotificationDto(postOwnerId,$"{currentUser.Name} liked your post", DateTime.Now, postId);
+                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} liked your post", DateTime.Now, postId);
                     await SaveNotificationAsync(notificationDto);
                     await _hubContext.Clients.All.NotificationGenerated(notificationDto);
                 }
@@ -399,9 +441,10 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult.Fail(ex.Message);
             }
         }
+
+        // Lưu bài post
         public async Task<ApiResult> ToggleBookmarkAsync(Guid postId, LoggedInUser currentUser)
         {
-
             var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p => p.UserId).FirstOrDefaultAsync();
             if (postOwnerId == default)
             {
@@ -439,6 +482,8 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult.Fail(ex.Message);
             }
         }
+
+        // Xóa bài post
         public async Task<ApiResult> DeletePostAsync(Guid postId, Guid currentUserId)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -447,11 +492,8 @@ namespace SocialMauiApp.Api.Services
                 var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
                 if (post is null)
                     return ApiResult.Fail("Post not found");
-
                 if (post.UserId != currentUserId)
                     return ApiResult.Fail("You can delete your own posts only");
-
-                // Xóa ảnh nếu có
                 if (!string.IsNullOrEmpty(post.PhotoPath) && File.Exists(post.PhotoPath))
                 {
                     try
@@ -463,19 +505,13 @@ namespace SocialMauiApp.Api.Services
                         Console.WriteLine("Error deleting file: " + exFile.ToString());
                     }
                 }
-
-                // Xóa dữ liệu liên quan
                 _context.Comments.RemoveRange(_context.Comments.Where(c => c.PostId == postId));
                 _context.Likes.RemoveRange(_context.Likes.Where(l => l.PostId == postId));
                 _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.PostId == postId));
                 _context.Notifications.RemoveRange(_context.Notifications.Where(n => n.PostId == postId));
-
-                // Hard delete bài post
                 _context.Posts.Remove(post);
-
                 int result = await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
-
                 if (result > 0)
                 {
                     await _hubContext.Clients.All.PostDeleted(postId);
@@ -491,7 +527,7 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-
+        // Lưu thông báo
         public async Task SaveNotificationAsync(NotificationDto dto)
         {
             try
@@ -508,10 +544,8 @@ namespace SocialMauiApp.Api.Services
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine("Error in SaveNotificationAsync: " + ex.ToString());
             }
         }
     }
 }
-
-    

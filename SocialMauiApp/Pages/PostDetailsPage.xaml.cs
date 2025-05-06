@@ -44,7 +44,7 @@ public partial class PostDetailsPage : ContentPage
         {
             if (sender is VisualElement element && element.BindingContext is CommentDto commentDto)
             {
-               await _detailsViewModel.EditCommentCommand.ExecuteAsync(commentDto);
+               await _detailsViewModel.EditAndUpdateCommentCommand.ExecuteAsync(commentDto);
             }
         }
         else if (action == "Delete")

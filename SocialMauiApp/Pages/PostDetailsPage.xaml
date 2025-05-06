@@ -20,7 +20,7 @@
         <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
         <MenuFlyout x:Key="CommentOptionsMenu">
             <MenuFlyoutItem
-                Command="{Binding BindingContext.EditCommentCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                Command="{Binding BindingContext.EditAndUpdateCommentCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
                 CommandParameter="{Binding .}"
                 IconImageSource="pencil.png"
                 Text="Edit" />
@@ -278,82 +278,96 @@
         </ScrollView>
 
         <!--  Comment Input + Image Preview  -->
+        <!-- Comment Input + Image Preview -->
         <Grid
-            Grid.Row="2"
-            Padding="10,5,10,10"
-            BackgroundColor="White"
-            ColumnDefinitions="Auto,*,Auto"
-            ColumnSpacing="8"
-            RowDefinitions="Auto,Auto">
-            <!--  Pick Image Button  -->
-            <Button
-                Grid.Row="0"
-                Grid.Column="0"
-                Command="{Binding SelectPhotoCommand}"
-                FontSize="20"
-                HeightRequest="40"
-                Text="📷"
-                VerticalOptions="Center"
-                WidthRequest="40" />
-            <!--  Comment Entry  -->
-            <controls:NoBorderEntry
-                Grid.Row="0"
-                Grid.Column="1"
-                Placeholder="Write a comment..."
-                Text="{Binding Comment, Mode=TwoWay}"
-                TextColor="Black"
-                VerticalOptions="Center" />
-            <!--  Send Button  -->
+    Grid.Row="2"
+    Padding="10,5,10,10"
+    BackgroundColor="White"
+    ColumnDefinitions="Auto,*,Auto"
+    ColumnSpacing="8"
+    RowDefinitions="Auto,Auto">
+            <!-- Pick Image Button -->
             <Border
-                Grid.Row="0"
-                Grid.Column="2"
-                BackgroundColor="{StaticResource Primary}"
-                HeightRequest="40"
-                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
-                StrokeShape="RoundRectangle 8"
-                WidthRequest="40">
+        Grid.Row="0"
+        Grid.Column="0"
+        Padding="10,5"
+        Stroke="{StaticResource Primary}"
+        StrokeShape="RoundRectangle 5"
+        IsVisible="{Binding IsPhotoButtonVisible}">
+                <controls:PrimaryColorImage
+            HeightRequest="25"
+            Source="photo.png"
+            VerticalOptions="Center"
+            WidthRequest="25" />
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectPhotoCommand}" />
+                </Border.GestureRecognizers>
+            </Border>
+            <!-- Comment Entry -->
+            <controls:NoBorderEntry
+        Grid.Row="0"
+        Grid.Column="1"
+        Placeholder="Write a comment..."
+        Text="{Binding Comment, Mode=TwoWay}"
+        TextColor="Black"
+        VerticalOptions="Center" />
+            <!-- Send Button -->
+            <Border
+        Grid.Row="0"
+        Grid.Column="2"
+        BackgroundColor="{StaticResource Primary}"
+        HeightRequest="40"
+        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+        StrokeShape="RoundRectangle 8"
+        WidthRequest="40">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding AddCommentCommand}" />
                 </Border.GestureRecognizers>
                 <controls:WhiteImage
-                    HeightRequest="20"
-                    Source="send.png"
-                    WidthRequest="20" />
+            HeightRequest="20"
+            Source="send.png"
+            WidthRequest="20" />
             </Border>
-            <!--  Selected Images Preview  -->
+            <!-- Selected Images Preview -->
             <CollectionView
-                Grid.Row="1"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                IsVisible="{Binding HasSelectedImages}"
-                ItemsLayout="HorizontalList"
-                ItemsSource="{Binding SelectedImagePreviews}"
-                SelectionMode="None">
+        Grid.Row="1"
+        Grid.Column="0"
+        Grid.ColumnSpan="3"
+        IsVisible="{Binding HasSelectedImages}"
+        ItemsLayout="HorizontalList"
+        ItemsSource="{Binding SelectedImagePreviews}"
+        SelectionMode="None">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="models:ImagePreview">
                         <Grid
-                            Margin="5,0,5,0"
-                            HeightRequest="60"
-                            WidthRequest="60">
-                            <Image Aspect="AspectFill" Source="{Binding .}" />
-                            <Button
-                                BackgroundColor="#CC000000"
+                    Margin="5,0,5,0"
+                    HeightRequest="60"
+                    WidthRequest="60">
+                            <Image Aspect="AspectFill" Source="{Binding Source}" />
+                            <Border
+                        BackgroundColor="#CC000000"
+                        HeightRequest="20"
+                        HorizontalOptions="End"
+                        StrokeShape="RoundRectangle 10"
+                        VerticalOptions="Start"
+                        WidthRequest="20">
+                                <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="✕"
+                            TextColor="White"
+                            VerticalOptions="Center" />
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
                                 Command="{Binding BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
-                                CommandParameter="{Binding .}"
-                                CornerRadius="8"
-                                FontSize="10"
-                                HeightRequest="16"
-                                HorizontalOptions="End"
-                                Text="✕"
-                                TextColor="White"
-                                VerticalOptions="Start"
-                                WidthRequest="16" />
+                                CommandParameter="{Binding Id}" />
+                                </Border.GestureRecognizers>
+                            </Border>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
-
         <!--  Activity Indicator  -->
         <ActivityIndicator
             Grid.RowSpan="3"

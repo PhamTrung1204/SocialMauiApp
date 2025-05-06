@@ -56,7 +56,7 @@ namespace SocialMauiApp.ViewModel
                 }
                 if (permissionStatus != PermissionStatus.Granted)
                 {
-                    await ToastAsync("Quyền truy cập ảnh không được cấp");
+                    await ToastAsync("Photo access not granted");
                     return;
                 }
 

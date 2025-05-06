@@ -122,7 +122,6 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
-            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.IsEditing">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._isEditing"/>
@@ -138,6 +137,9 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.HasSelectedImages">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._hasSelectedImages"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.IsPhotoButtonVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._isPhotoButtonVisible"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.Comment">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.comment"/>
@@ -163,7 +165,7 @@
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhotoCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhotoCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhoto(Microsoft.Maui.Controls.ImageSource)"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhoto(System.String)"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.clearPhotosCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.ClearPhotosCommand"/>.</summary>
@@ -177,23 +179,17 @@
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentAsync"/>.</summary>
         </member>
-        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.updateCommentCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.UpdateCommentCommand"/>.</summary>
+        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.editAndUpdateCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.EditAndUpdateCommentCommand"/>.</summary>
         </member>
-        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.UpdateCommentCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.UpdateCommentAsync"/>.</summary>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.EditAndUpdateCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.EditAndUpdateCommentAsync(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.cancelEditCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelEditCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelEditCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.CancelEdit"/>.</summary>
-        </member>
-        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.editCommentCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.EditCommentCommand"/>.</summary>
-        </member>
-        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.EditCommentCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.EditCommentAsync(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.deleteCommentCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.DeleteCommentCommand"/>.</summary>
@@ -681,6 +677,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasSelectedImages">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasSelectedImages" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsPhotoButtonVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsPhotoButtonVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Comment">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Comment" generated properties.</summary>
         </member>
@@ -791,6 +790,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasSelectedImages">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasSelectedImages" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPhotoButtonVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPhotoButtonVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Comment">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Comment" generated properties.</summary>

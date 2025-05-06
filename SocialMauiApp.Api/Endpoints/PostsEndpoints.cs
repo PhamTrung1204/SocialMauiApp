@@ -15,20 +15,16 @@ namespace SocialMauiApp.Api.Endpoints
                 .RequireAuthorization()
                 .WithTags("Posts");
 
-            //postsGroup.MapPost("/save", async (SavePostDto dto, PostService postService, ClaimsPrincipal principal) =>
-            //    Results.Ok(await postService.SavePostAsync(dto, principal.GetUserId())))
-            //    .Produces<ApiResult>()
-            //    .WithName("SavePost");
             postsGroup.MapPost("/save", async ([FromForm] IFormFile? photo, [FromForm] string serializedSavePostDto, PostService postService, ClaimsPrincipal principal) =>
-               {
-                   if (string.IsNullOrWhiteSpace(serializedSavePostDto))
-                       return Results.BadRequest("Missing data");
+            {
+                if (string.IsNullOrWhiteSpace(serializedSavePostDto))
+                    return Results.BadRequest("Missing data");
 
-                   SavePostDto dto = JsonSerializer.Deserialize<SavePostDto>(serializedSavePostDto)!;
-                   dto.Photo = photo;
+                SavePostDto dto = JsonSerializer.Deserialize<SavePostDto>(serializedSavePostDto)!;
+                dto.Photo = photo;
 
-                   return Results.Ok(await postService.SavePostAsync(dto, principal.GetUser()));
-               })
+                return Results.Ok(await postService.SavePostAsync(dto, principal.GetUser()));
+            })
                 .DisableAntiforgery()
                 .Produces<ApiResult<PostDto>>()
                 .WithName("SavePost");
@@ -45,28 +41,50 @@ namespace SocialMauiApp.Api.Endpoints
                 .WithName("SaveComment");
 
             postsGroup.MapGet("/{postId:guid}/comments", async (Guid postId, int startIndex, int pageSize, PostService postService) =>
-               Results.Ok(await postService.GetPostsCommentAsync(postId, startIndex, pageSize)))
-               .Produces<CommentDto[]>()
-               .WithName("GetPostComments");
+                Results.Ok(await postService.GetPostsCommentAsync(postId, startIndex, pageSize)))
+                .Produces<CommentDto[]>()
+                .WithName("GetPostComments");
 
-            // Cập nhật bình luận
             postsGroup.MapPut("/comments/{commentId:guid}",
-     async (Guid commentId,
-            [FromBody] UpdateCommentDto dto,
-            PostService postService,
-            ClaimsPrincipal principal) =>
-     {
-         var result = await postService.UpdateCommentAsync(
-             commentId,
-             dto,
-             principal.GetUser());
-         return Results.Ok(result);
-     })
-     .Accepts<UpdateCommentDto>("application/json")
-     .Produces<ApiResult<CommentDto>>()
-     .WithName("UpdateComment");
+                async (Guid commentId, [FromBody] UpdateCommentDto dto, PostService postService, ClaimsPrincipal principal) =>
+                {
+                    var result = await postService.UpdateCommentAsync(commentId, dto, principal.GetUser());
+                    return Results.Ok(result);
+                })
+                .Accepts<UpdateCommentDto>("application/json")
+                .Produces<ApiResult<CommentDto>>()
+                .WithName("UpdateComment");
 
-            // Xoá bình luận
+            postsGroup.MapPut("/comments/{commentId:guid}/upload-photo",
+                async (Guid commentId, [FromForm(Name = "photo")] IFormFile? photo, [FromForm(Name = "serializedCommentDto")] string serializedCommentDto, PostService postService, ClaimsPrincipal principal) =>
+                {
+                    if (string.IsNullOrWhiteSpace(serializedCommentDto))
+                        return Results.BadRequest("Missing comment data");
+
+                    try
+                    {
+                        var dto = JsonSerializer.Deserialize<UpdateCommentDto>(serializedCommentDto);
+                        if (dto == null)
+                            return Results.BadRequest("Invalid comment data");
+
+                        dto.Photo = photo;
+                        var result = await postService.UpdateCommentWithImageAsync(commentId, dto, principal.GetUser());
+                        return Results.Ok(result);
+                    }
+                    catch (JsonException ex)
+                    {
+                        return Results.BadRequest($"Invalid JSON format: {ex.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        return Results.Problem($"Internal Server Error: {ex.Message}");
+                    }
+                })
+                .DisableAntiforgery()
+                .Accepts<IFormFile>("multipart/form-data")
+                .Produces<ApiResult<CommentDto>>()
+                .WithName("UpdateCommentWithImages");
+
             postsGroup.MapDelete("/comments/{commentId:guid}",
                 async (Guid commentId, PostService postService, ClaimsPrincipal principal) =>
                 Results.Ok(await postService.DeleteCommentAsync(commentId, principal.GetUser())))
@@ -90,28 +108,25 @@ namespace SocialMauiApp.Api.Endpoints
                 Results.Ok(await postService.DeletePostAsync(postId, principal.GetUserId())))
                 .Produces<ApiResult>()
                 .WithName("DeletePost");
+
             postsGroup.MapGet("/{postId:guid}", async (Guid postId, PostService postService, ClaimsPrincipal principal) =>
-              Results.Ok(await postService.GetPostAsync(postId, principal.GetUserId())))
-              .Produces<PostDto>()
-              .WithName("GetPostById");
+                Results.Ok(await postService.GetPostAsync(postId, principal.GetUserId())))
+                .Produces<PostDto>()
+                .WithName("GetPostById");
+
             postsGroup.MapPost("/{postId:guid}/upload-photo",
-    async (Guid postId,
-           [FromForm(Name = "photo")] IFormFile? photo,
-           [FromForm(Name = "serializedCommentDto")] string serializedCommentDto,
-           PostService postService,
-           ClaimsPrincipal user) =>
-    {
-        var dto = JsonSerializer.Deserialize<SaveCommentDto>(serializedCommentDto)!;
-        dto.Photo = photo;
-        var result = await postService.SaveCommentAsync(dto, user.GetUser());
-        return Results.Ok(result);
-    })
-    .DisableAntiforgery()
-    .Accepts<IFormFile>("multipart/form-data")
-    .Produces<ApiResult<CommentDto>>();
+                async (Guid postId, [FromForm(Name = "photo")] IFormFile? photo, [FromForm(Name = "serializedCommentDto")] string serializedCommentDto, PostService postService, ClaimsPrincipal user) =>
+                {
+                    var dto = JsonSerializer.Deserialize<SaveCommentDto>(serializedCommentDto)!;
+                    dto.Photo = photo;
+                    var result = await postService.SaveCommentAsync(dto, user.GetUser());
+                    return Results.Ok(result);
+                })
+                .DisableAntiforgery()
+                .Accepts<IFormFile>("multipart/form-data")
+                .Produces<ApiResult<CommentDto>>()
+                .WithName("SaveCommentWithImages");
 
-
-            // Endpoint upload ảnh riêng biệt, sử dụng PhotoUploadService
             postsGroup.MapPost("/upload-photo", async ([FromForm] IFormFile? photo, PhotoUploadService photoUploadService) =>
             {
                 if (photo == null || photo.Length == 0)
@@ -119,7 +134,6 @@ namespace SocialMauiApp.Api.Endpoints
 
                 try
                 {
-                    // Lưu file ảnh vào thư mục "Uploads/Photos"
                     var (photoPath, photoUrl) = await photoUploadService.SavePhotoAsync(photo, "Uploads", "Photos");
                     return Results.Ok(new { PhotoUrl = photoUrl });
                 }
@@ -128,9 +142,10 @@ namespace SocialMauiApp.Api.Endpoints
                     return Results.Problem($"Internal Server Error: {ex.Message}");
                 }
             })
-            .DisableAntiforgery()
-            .Produces<ApiResult<object>>() // Thay object bằng DTO cụ thể nếu có
-            .WithName("UploadPhoto");
+                .DisableAntiforgery()
+                .Produces<ApiResult<object>>()
+                .WithName("UploadPhoto");
+
             return app;
         }
     }
