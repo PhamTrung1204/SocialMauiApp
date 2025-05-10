@@ -89,6 +89,28 @@
     "EndpointName": "Auth-AddPhoto-to-User"
   },
   {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.AuthEnpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapAuthEndpoints\u003Eb__0_3",
+    "RelativePath": "api/auth/validate",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[SocialMediaMaui.Shared.Dtos.LoggedInUser, SocialMediaMaui.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Auth"
+    ],
+    "EndpointName": "Auth-ValidateToken"
+  },
+  {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
     "Method": "\u003CMapPostsEndpoints\u003Eb__0_1",
     "RelativePath": "api/posts/",
@@ -123,7 +145,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapPostsEndpoints\u003Eb__0_8",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_9",
     "RelativePath": "api/posts/{postId:guid}",
     "HttpMethod": "DELETE",
     "IsController": false,
@@ -151,7 +173,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapPostsEndpoints\u003Eb__0_9",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_10",
     "RelativePath": "api/posts/{postId:guid}",
     "HttpMethod": "GET",
     "IsController": false,
@@ -250,7 +272,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapPostsEndpoints\u003Eb__0_7",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_8",
     "RelativePath": "api/posts/{postId:guid}/toggle-bookmark",
     "HttpMethod": "POST",
     "IsController": false,
@@ -278,7 +300,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapPostsEndpoints\u003Eb__0_6",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_7",
     "RelativePath": "api/posts/{postId:guid}/toggle-like",
     "HttpMethod": "POST",
     "IsController": false,
@@ -303,6 +325,44 @@
       "Posts"
     ],
     "EndpointName": "ToggleLike"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_11",
+    "RelativePath": "api/posts/{postId:guid}/upload-photo",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "photo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "serializedCommentDto",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[SocialMediaMaui.Shared.Dtos.CommentDto, SocialMediaMaui.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Posts"
+    ],
+    "EndpointName": "SaveCommentWithImages"
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
@@ -339,7 +399,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapPostsEndpoints\u003Eb__0_5",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_6",
     "RelativePath": "api/posts/comments/{commentId:guid}",
     "HttpMethod": "DELETE",
     "IsController": false,
@@ -364,6 +424,44 @@
       "Posts"
     ],
     "EndpointName": "DeleteComment"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_5",
+    "RelativePath": "api/posts/comments/{commentId:guid}/upload-photo",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "photo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "serializedCommentDto",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[SocialMediaMaui.Shared.Dtos.CommentDto, SocialMediaMaui.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Posts"
+    ],
+    "EndpointName": "UpdateCommentWithImages"
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
@@ -400,7 +498,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapPostsEndpoints\u003Eb__0_10",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_12",
     "RelativePath": "api/posts/upload-photo",
     "HttpMethod": "POST",
     "IsController": false,

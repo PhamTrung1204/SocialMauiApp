@@ -23,7 +23,10 @@ namespace SocialMediaMaui.Shared.Dtos
 
         public Guid UserId { get; set; }
         public string UserName { get; set; }
-
+        public List<CommentDto> Replies { get; set; } = new List<CommentDto>();
+        public DateTime AddedOn { get; set; }
+        public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
+        public int Level { get; set; }
         public string? UserPhotoUrl
         {
             get => _userPhotoUrl;
@@ -36,17 +39,12 @@ namespace SocialMediaMaui.Shared.Dtos
             set => SetProperty(ref _photoUrl, value);
         }
 
-        public DateTime AddedOn { get; set; }
-
-        public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
 
         public bool IsOwnComment
         {
             get => _isOwnComment;
             set => SetProperty(ref _isOwnComment, value);
         }
-
-        public List<CommentDto> Replies { get; set; } = new List<CommentDto>();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

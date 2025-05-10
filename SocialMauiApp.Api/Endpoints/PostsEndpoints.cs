@@ -75,10 +75,6 @@ namespace SocialMauiApp.Api.Endpoints
                     {
                         return Results.BadRequest($"Invalid JSON format: {ex.Message}");
                     }
-                    catch (Exception ex)
-                    {
-                        return Results.Problem($"Internal Server Error: {ex.Message}");
-                    }
                 })
                 .DisableAntiforgery()
                 .Accepts<IFormFile>("multipart/form-data")
@@ -127,24 +123,18 @@ namespace SocialMauiApp.Api.Endpoints
                 .Produces<ApiResult<CommentDto>>()
                 .WithName("SaveCommentWithImages");
 
-            postsGroup.MapPost("/upload-photo", async ([FromForm] IFormFile? photo, PhotoUploadService photoUploadService) =>
-            {
-                if (photo == null || photo.Length == 0)
-                    return Results.BadRequest("No file uploaded.");
-
-                try
+            postsGroup.MapPost("/{postId:guid}/comments/reply/upload-photo",
+                async (Guid postId, [FromForm(Name = "photo")] IFormFile? photo, [FromForm(Name = "serializedCommentDto")] string serializedCommentDto, PostService postService, ClaimsPrincipal user) =>
                 {
-                    var (photoPath, photoUrl) = await photoUploadService.SavePhotoAsync(photo, "Uploads", "Photos");
-                    return Results.Ok(new { PhotoUrl = photoUrl });
-                }
-                catch (Exception ex)
-                {
-                    return Results.Problem($"Internal Server Error: {ex.Message}");
-                }
-            })
+                    var dto = JsonSerializer.Deserialize<SaveCommentDto>(serializedCommentDto)!;
+                    dto.Photo = photo;
+                    var result = await postService.SaveCommentAsync(dto, user.GetUser());
+                    return Results.Ok(result);
+                })
                 .DisableAntiforgery()
-                .Produces<ApiResult<object>>()
-                .WithName("UploadPhoto");
+                .Accepts<IFormFile>("multipart/form-data")
+                .Produces<ApiResult<CommentDto>>()
+                .WithName("ReplyCommentWithImages");
 
             return app;
         }

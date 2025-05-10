@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using SocialMauiApp.Api.Data;
 using SocialMauiApp.Api.Data.Entities;
 using SocialMediaMaui.Shared.Dtos;
 using SocialMediaMaui.Shared.Hubs;
-using System.Collections.Immutable;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialMauiApp.Api.Services
 {
@@ -24,7 +24,6 @@ namespace SocialMauiApp.Api.Services
             _hubContext = hubContext;
         }
 
-        // Lưu post
         public async Task<ApiResult<PostDto>> SavePostAsync(SavePostDto dto, LoggedInUser user)
         {
             string? _existingPhotoPath = null;
@@ -104,7 +103,6 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        // Lấy danh sách tất cả các bài post
         public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize, Guid currentUserId)
         {
             var posts = await _context.Set<PostDto>()
@@ -113,7 +111,6 @@ namespace SocialMauiApp.Api.Services
             return posts;
         }
 
-        // Lấy 1 bài post 
         public async Task<PostDto?> GetPostAsync(Guid postId, Guid currentUserId)
         {
             var rawPosts = await _context.Set<PostDto>()
@@ -128,7 +125,7 @@ namespace SocialMauiApp.Api.Services
                 UserName = p.UserName,
                 UserPhotoUrl = p.UserPhotoUrl,
                 Content = p.Content,
-                PhotoUrl = p.UserPhotoUrl,
+                PhotoUrl = p.PhotoUrl,
                 PostedOn = p.PostedOn,
                 ModifiedOn = p.ModifiedOn,
                 IsLiked = Convert.ToBoolean(p.IsLiked),
@@ -137,7 +134,6 @@ namespace SocialMauiApp.Api.Services
             return posts.FirstOrDefault();
         }
 
-        // Thông báo đếm số lượt thích, bình luận
         private async Task NotifyCountsAsync(Guid postId)
         {
             var likeCount = await _context.Likes.CountAsync(l => l.PostId == postId);
@@ -151,7 +147,6 @@ namespace SocialMauiApp.Api.Services
             await _hubContext.Clients.All.PostCountsUpdated(dto);
         }
 
-        // Lưu bình luận (bao gồm reply)
         public async Task<ApiResult<CommentDto>> SaveCommentAsync(SaveCommentDto dto, LoggedInUser currentUser)
         {
             var postOwnerId = await _context.Posts.Where(p => p.Id == dto.PostId).Select(p => p.UserId).FirstOrDefaultAsync();
@@ -163,6 +158,13 @@ namespace SocialMauiApp.Api.Services
             bool sendNotification = false;
             if (dto.CommentId == Guid.Empty)
             {
+                var existingComment = await _context.Comments
+                    .FirstOrDefaultAsync(c => c.PostId == dto.PostId && c.UserId == currentUser.Id && c.Content == dto.Content && c.AddedOn > DateTime.UtcNow.AddSeconds(-5));
+                if (existingComment != null)
+                {
+                    return ApiResult<CommentDto>.Fail("Duplicate comment detected");
+                }
+
                 comment = new Comment
                 {
                     Id = Guid.NewGuid(),
@@ -226,7 +228,8 @@ namespace SocialMauiApp.Api.Services
                     UserName = currentUser.Name,
                     UserPhotoUrl = currentUser.PhotoUrl,
                     PhotoUrl = comment.PhotoUrl,
-                    ParentCommentId = comment.ParentCommentId
+                    ParentCommentId = comment.ParentCommentId,
+                    Level = comment.ParentCommentId == null ? 0 : 1
                 };
                 if (sendNotification)
                 {
@@ -243,7 +246,6 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        // Cập nhật bình luận với ảnh
         public async Task<ApiResult<CommentDto>> UpdateCommentWithImageAsync(Guid commentId, UpdateCommentDto dto, LoggedInUser currentUser)
         {
             var comment = await _context.Comments.FindAsync(commentId);
@@ -287,7 +289,8 @@ namespace SocialMauiApp.Api.Services
                     UserPhotoUrl = currentUser.PhotoUrl,
                     PhotoUrl = comment.PhotoUrl,
                     AddedOn = comment.AddedOn,
-                    ParentCommentId = comment.ParentCommentId
+                    ParentCommentId = comment.ParentCommentId,
+                    Level = comment.ParentCommentId == null ? 0 : 1
                 };
                 await _hubContext.Clients.All.CommentUpdated(commentDto);
                 await NotifyCountsAsync(comment.PostId);
@@ -299,7 +302,6 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        // Xóa bình luận
         public async Task<ApiResult> DeleteCommentAsync(Guid commentId, LoggedInUser currentUser)
         {
             var comment = await _context.Comments.FindAsync(commentId);
@@ -325,7 +327,6 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        // Cập nhật bình luận (không ảnh)
         public async Task<ApiResult<CommentDto>> UpdateCommentAsync(Guid commentId, UpdateCommentDto dto, LoggedInUser currentUser)
         {
             var comment = await _context.Comments.FindAsync(commentId);
@@ -353,7 +354,8 @@ namespace SocialMauiApp.Api.Services
                     UserPhotoUrl = currentUser.PhotoUrl,
                     AddedOn = comment.AddedOn,
                     PhotoUrl = comment.PhotoUrl,
-                    ParentCommentId = comment.ParentCommentId
+                    ParentCommentId = comment.ParentCommentId,
+                    Level = comment.ParentCommentId == null ? 0 : 1
                 };
                 await _hubContext.Clients.All.CommentUpdated(commentDto);
                 return ApiResult<CommentDto>.Success(commentDto);
@@ -364,7 +366,6 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        // Lấy bình luận và replies
         public async Task<CommentDto[]> GetPostsCommentAsync(Guid postId, int startIndex, int pageSize)
         {
             var comments = await _context.Comments
@@ -383,6 +384,7 @@ namespace SocialMauiApp.Api.Services
                     UserPhotoUrl = c.User.PhotoUrl,
                     PhotoUrl = c.PhotoUrl,
                     ParentCommentId = c.ParentCommentId,
+                    Level = c.ParentCommentId == null ? 0 : 1,
                     Replies = c.Replies.Select(r => new CommentDto
                     {
                         AddedOn = r.AddedOn,
@@ -393,14 +395,14 @@ namespace SocialMauiApp.Api.Services
                         UserName = r.User.Name,
                         UserPhotoUrl = r.User.PhotoUrl,
                         PhotoUrl = r.PhotoUrl,
-                        ParentCommentId = r.ParentCommentId
+                        ParentCommentId = r.ParentCommentId,
+                        Level = 1
                     }).ToList()
                 })
                 .ToArrayAsync();
             return comments;
         }
 
-        // Thích bài post
         public async Task<ApiResult> ToggleLikeAsync(Guid postId, LoggedInUser currentUser)
         {
             var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p => p.UserId).FirstOrDefaultAsync();

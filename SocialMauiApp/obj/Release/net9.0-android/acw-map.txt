@@ -541,6 +541,9 @@ microsoft.maui.devices.EnergySaverBroadcastReceiver;crc640a8d9a12ddbf2cf2.Energy
 Microsoft.Maui.Graphics.Platform.PlatformGraphicsView, Microsoft.Maui.Graphics;crc643f2b18b2570eaa5a.PlatformGraphicsView
 Microsoft.Maui.Graphics.Platform.PlatformGraphicsView;crc643f2b18b2570eaa5a.PlatformGraphicsView
 microsoft.maui.graphics.platform.PlatformGraphicsView;crc643f2b18b2570eaa5a.PlatformGraphicsView
+Plugin.Fingerprint.AuthenticationHandler, Plugin.Fingerprint;crc64e6d0b84c6264ccdd.AuthenticationHandler
+Plugin.Fingerprint.AuthenticationHandler;crc64e6d0b84c6264ccdd.AuthenticationHandler
+plugin.fingerprint.AuthenticationHandler;crc64e6d0b84c6264ccdd.AuthenticationHandler
 Syncfusion.Maui.Graphics.Internals.CustomAccessibilityDelegate, Syncfusion.Maui.Core;crc640360c8a960a6805b.CustomAccessibilityDelegate
 Syncfusion.Maui.Graphics.Internals.CustomAccessibilityDelegate;crc640360c8a960a6805b.CustomAccessibilityDelegate
 syncfusion.maui.graphics.internals.CustomAccessibilityDelegate;crc640360c8a960a6805b.CustomAccessibilityDelegate
@@ -1075,6 +1078,42 @@ com.google.android.material.appbar.AppBarLayout$OnOffsetChangedListener;com.goog
 Google.Android.Material.AppBar.AppBarLayout+IOnOffsetChangedListenerImplementor, Xamarin.Google.Android.Material;mono.com.google.android.material.appbar.AppBarLayout_OnOffsetChangedListenerImplementor
 Google.Android.Material.AppBar.AppBarLayout.IOnOffsetChangedListenerImplementor;mono.com.google.android.material.appbar.AppBarLayout_OnOffsetChangedListenerImplementor
 mono.com.google.android.material.appbar.AppBarLayout_OnOffsetChangedListenerImplementor;mono.com.google.android.material.appbar.AppBarLayout_OnOffsetChangedListenerImplementor
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal+IBooleanList, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.Internal$BooleanList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal.IBooleanList;com.google.crypto.tink.shaded.protobuf.Internal$BooleanList
+com.google.crypto.tink.shaded.protobuf.Internal$BooleanList;com.google.crypto.tink.shaded.protobuf.Internal$BooleanList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal+IDoubleList, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.Internal$DoubleList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal.IDoubleList;com.google.crypto.tink.shaded.protobuf.Internal$DoubleList
+com.google.crypto.tink.shaded.protobuf.Internal$DoubleList;com.google.crypto.tink.shaded.protobuf.Internal$DoubleList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal+IEnumLite, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.Internal$EnumLite
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal.IEnumLite;com.google.crypto.tink.shaded.protobuf.Internal$EnumLite
+com.google.crypto.tink.shaded.protobuf.Internal$EnumLite;com.google.crypto.tink.shaded.protobuf.Internal$EnumLite
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal+IEnumLiteMap, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.Internal$EnumLiteMap
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal.IEnumLiteMap;com.google.crypto.tink.shaded.protobuf.Internal$EnumLiteMap
+com.google.crypto.tink.shaded.protobuf.Internal$EnumLiteMap;com.google.crypto.tink.shaded.protobuf.Internal$EnumLiteMap
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal+IFloatList, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.Internal$FloatList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal.IFloatList;com.google.crypto.tink.shaded.protobuf.Internal$FloatList
+com.google.crypto.tink.shaded.protobuf.Internal$FloatList;com.google.crypto.tink.shaded.protobuf.Internal$FloatList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal+IIntList, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.Internal$IntList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal.IIntList;com.google.crypto.tink.shaded.protobuf.Internal$IntList
+com.google.crypto.tink.shaded.protobuf.Internal$IntList;com.google.crypto.tink.shaded.protobuf.Internal$IntList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal+ILongList, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.Internal$LongList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal.ILongList;com.google.crypto.tink.shaded.protobuf.Internal$LongList
+com.google.crypto.tink.shaded.protobuf.Internal$LongList;com.google.crypto.tink.shaded.protobuf.Internal$LongList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal+IProtobufList, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.Internal$ProtobufList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.Internal.IProtobufList;com.google.crypto.tink.shaded.protobuf.Internal$ProtobufList
+com.google.crypto.tink.shaded.protobuf.Internal$ProtobufList;com.google.crypto.tink.shaded.protobuf.Internal$ProtobufList
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.IMessageLiteBuilder, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.MessageLite$Builder
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.IMessageLiteBuilder;com.google.crypto.tink.shaded.protobuf.MessageLite$Builder
+com.google.crypto.tink.shaded.protobuf.MessageLite$Builder;com.google.crypto.tink.shaded.protobuf.MessageLite$Builder
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.IMessageLite, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.MessageLite
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.IMessageLite;com.google.crypto.tink.shaded.protobuf.MessageLite
+com.google.crypto.tink.shaded.protobuf.MessageLite;com.google.crypto.tink.shaded.protobuf.MessageLite
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.IMessageLiteOrBuilder, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.MessageLiteOrBuilder
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.IMessageLiteOrBuilder;com.google.crypto.tink.shaded.protobuf.MessageLiteOrBuilder
+com.google.crypto.tink.shaded.protobuf.MessageLiteOrBuilder;com.google.crypto.tink.shaded.protobuf.MessageLiteOrBuilder
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.IParser, Xamarin.Google.Crypto.Tink.Android;com.google.crypto.tink.shaded.protobuf.Parser
+Xamarin.Google.Crypto.Tink.Shaded.Protobuf.IParser;com.google.crypto.tink.shaded.protobuf.Parser
+com.google.crypto.tink.shaded.protobuf.Parser;com.google.crypto.tink.shaded.protobuf.Parser
 Kotlin.IFunction, Xamarin.Kotlin.StdLib;kotlin.Function
 Kotlin.IFunction;kotlin.Function
 kotlin.Function;kotlin.Function

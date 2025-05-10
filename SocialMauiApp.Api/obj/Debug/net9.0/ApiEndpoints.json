@@ -272,6 +272,44 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapPostsEndpoints\u003Eb__0_12",
+    "RelativePath": "api/posts/{postId:guid}/comments/reply/upload-photo",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "photo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "serializedCommentDto",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[SocialMediaMaui.Shared.Dtos.CommentDto, SocialMediaMaui.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Posts"
+    ],
+    "EndpointName": "ReplyCommentWithImages"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
     "Method": "\u003CMapPostsEndpoints\u003Eb__0_8",
     "RelativePath": "api/posts/{postId:guid}/toggle-bookmark",
     "HttpMethod": "POST",
@@ -495,34 +533,6 @@
       "Posts"
     ],
     "EndpointName": "SavePost"
-  },
-  {
-    "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapPostsEndpoints\u003Eb__0_12",
-    "RelativePath": "api/posts/upload-photo",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "photo",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ],
-    "Tags": [
-      "Posts"
-    ],
-    "EndpointName": "UploadPhoto"
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.UserEndpoints\u002B\u003C\u003Ec",

@@ -1,59 +1,57 @@
-﻿using SocialMauiApp.Services;
+﻿using Microsoft.Maui.Controls;
 using SocialMauiApp.ViewModel;
 using SocialMediaMaui.Shared.Dtos;
 
-namespace SocialMauiApp.Pages;
-
-public partial class PostDetailsPage : ContentPage
+namespace SocialMauiApp.Pages
 {
-    private readonly DetailsViewModel _detailsViewModel;
-    private readonly RealtimeUpdatesService _realtimeUpdatesService;
-	public PostDetailsPage(DetailsViewModel detailsViewModel, RealtimeUpdatesService realtimeUpdatesService)
-	{
-		InitializeComponent();
-        BindingContext = detailsViewModel;
-        _detailsViewModel = detailsViewModel;
-        _realtimeUpdatesService = realtimeUpdatesService;
-	}
-   
-
-    protected override void OnAppearing()
+    public partial class PostDetailsPage : ContentPage
     {
-        base.OnAppearing();
-        _detailsViewModel.ConfigureRealtimeUpdates();
-    }
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        _realtimeUpdatesService.RemoveHandlers(nameof(DetailsViewModel));
-        _detailsViewModel.Cleanup();
-    }
-    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-        await Shell.Current.GoToAsync("..", animate: true);
-    }
-    private void CollectionView_RemainingItemsThresholdReached(object sender, EventArgs e)
-    {
-        _detailsViewModel.FetchCommentsCommand.Execute(null);
-    }
-    private async void OnMoreOptionsTapped(object sender, EventArgs e)
-    {
-        string action = await Shell.Current.DisplayActionSheet("Select action", "Cancel", null, "Edit", "Delete");
-
-        if (action == "Edit")
+        public PostDetailsPage(DetailsViewModel viewModel)
         {
-            if (sender is VisualElement element && element.BindingContext is CommentDto commentDto)
+            InitializeComponent();
+            BindingContext = viewModel;
+        }
+
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("..");
+        }
+
+        private async void OnMoreOptionsTapped(object sender, TappedEventArgs e)
+        {
+            if (sender is VisualElement element && element.BindingContext is CommentDto comment && BindingContext is DetailsViewModel viewModel)
             {
-               await _detailsViewModel.EditAndUpdateCommentCommand.ExecuteAsync(commentDto);
+                // Define options based on whether the comment belongs to the current user
+                string[] options = comment.IsOwnComment
+                    ? new[] { "Edit", "Delete"}
+                    : new[] { "Cancel" };
+
+                string action = await DisplayActionSheet("Comment Options", "Cancel", null, options);
+                switch (action)
+                {
+                    case "Edit":
+                        await viewModel.EditAndUpdateCommentAsync(comment);
+                        break;
+                    case "Delete":
+                        await viewModel.DeleteCommentAsync(comment);
+                        break;
+                }
             }
         }
-        else if (action == "Delete")
+
+        private void OnReplyTapped(object sender, TappedEventArgs e)
         {
-            if (sender is VisualElement element && element.BindingContext is CommentDto commentDto)
+            if (sender is VisualElement element && element.BindingContext is CommentDto comment)
             {
-                await _detailsViewModel.DeleteCommentCommand.ExecuteAsync(commentDto);
+                var viewModel = (DetailsViewModel)BindingContext;
+                viewModel.ReplyCommentCommand.Execute(comment);
             }
         }
-    }
 
+        private void CollectionView_RemainingItemsThresholdReached(object sender, EventArgs e)
+        {
+            var viewModel = (DetailsViewModel)BindingContext;
+            viewModel.FetchCommentsCommand.Execute(null);
+        }
+    }
 }

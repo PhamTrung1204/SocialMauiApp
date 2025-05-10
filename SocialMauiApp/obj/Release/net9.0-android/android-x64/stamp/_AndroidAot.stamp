@@ -29,6 +29,7 @@ obj\Release\net9.0-android\android-x64\aot\Microsoft.Maui.Controls.Xaml.dll.so
 obj\Release\net9.0-android\android-x64\aot\Microsoft.Maui.dll.so
 obj\Release\net9.0-android\android-x64\aot\Microsoft.Maui.Essentials.dll.so
 obj\Release\net9.0-android\android-x64\aot\Microsoft.Maui.Graphics.dll.so
+obj\Release\net9.0-android\android-x64\aot\Plugin.Fingerprint.dll.so
 obj\Release\net9.0-android\android-x64\aot\Refit.dll.so
 obj\Release\net9.0-android\android-x64\aot\Refit.HttpClientFactory.dll.so
 obj\Release\net9.0-android\android-x64\aot\Syncfusion.Licensing.dll.so
@@ -41,6 +42,7 @@ obj\Release\net9.0-android\android-x64\aot\System.Net.ServerSentEvents.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Activity.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.AppCompat.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.AppCompat.AppCompatResources.dll.so
+obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Biometric.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Browser.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.CardView.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Collection.Jvm.dll.so
@@ -50,8 +52,10 @@ obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.CursorAdapter.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.CustomView.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.DrawerLayout.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Fragment.dll.so
+obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Lifecycle.Common.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Lifecycle.Common.Jvm.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Lifecycle.LiveData.Core.dll.so
+obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Lifecycle.ViewModel.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Lifecycle.ViewModel.Android.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Lifecycle.ViewModelSavedState.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Loader.dll.so
@@ -61,10 +65,12 @@ obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Navigation.Runtime.d
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Navigation.UI.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.RecyclerView.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.SavedState.dll.so
+obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.Security.SecurityCrypto.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.SwipeRefreshLayout.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.ViewPager.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.AndroidX.ViewPager2.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.Google.Android.Material.dll.so
+obj\Release\net9.0-android\android-x64\aot\Xamarin.Google.Crypto.Tink.Android.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.Kotlin.StdLib.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.KotlinX.Coroutines.Core.Jvm.dll.so
 obj\Release\net9.0-android\android-x64\aot\Xamarin.KotlinX.Serialization.Core.Jvm.dll.so
@@ -78,6 +84,7 @@ obj\Release\net9.0-android\android-x64\aot\System.ComponentModel.Primitives.dll.
 obj\Release\net9.0-android\android-x64\aot\System.ComponentModel.TypeConverter.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.ComponentModel.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Console.dll.so
+obj\Release\net9.0-android\android-x64\aot\System.Core.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Diagnostics.DiagnosticSource.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Diagnostics.Process.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Diagnostics.TraceSource.dll.so

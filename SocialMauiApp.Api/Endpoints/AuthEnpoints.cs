@@ -39,8 +39,8 @@ namespace SocialMauiApp.Api.Endpoints
                 var result = await authService.ValidateTokenAsync(token);
                 return Results.Ok(result);
             })
-.Produces<ApiResult<LoggedInUser>>()
-.WithName("Auth-ValidateToken");
+                .Produces<ApiResult<LoggedInUser>>()
+                .WithName("Auth-ValidateToken");
             return app;
         }
     }

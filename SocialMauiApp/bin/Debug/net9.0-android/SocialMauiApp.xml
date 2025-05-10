@@ -122,12 +122,16 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.IsEditing">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._isEditing"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.CommentBeingEdited">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._commentBeingEdited"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.ReplyingToComment">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._replyingToComment"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.Post">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.post"/>
@@ -167,17 +171,23 @@
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhotoCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhoto(System.String)"/>.</summary>
         </member>
-        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.clearPhotosCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.ClearPhotosCommand"/>.</summary>
-        </member>
-        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.ClearPhotosCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.ClearPhotos"/>.</summary>
-        </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.addCommentCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.replyCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.ReplyCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.ReplyCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.ReplyComment(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.cancelReplyCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelReplyCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelReplyCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.CancelReply"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.editAndUpdateCommentCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.EditAndUpdateCommentCommand"/>.</summary>
@@ -189,7 +199,7 @@
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelEditCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelEditCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.CancelEdit"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.CancelEdit"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.deleteCommentCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.DeleteCommentCommand"/>.</summary>
@@ -668,6 +678,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CommentBeingEdited">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CommentBeingEdited" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ReplyingToComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ReplyingToComment" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Post">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Post" generated properties.</summary>
         </member>
@@ -781,6 +794,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CommentBeingEdited">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CommentBeingEdited" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ReplyingToComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ReplyingToComment" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Post">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Post" generated properties.</summary>
@@ -920,6 +936,9 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.DeleteCommentAsync(System.Guid)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.ReplyCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SaveCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
             <inheritdoc />
         </member>
@@ -954,6 +973,9 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#DeleteCommentAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#ReplyCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#SaveCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
