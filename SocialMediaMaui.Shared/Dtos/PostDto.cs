@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json.Serialization;
 
 namespace SocialMediaMaui.Shared.Dtos
@@ -30,7 +31,7 @@ namespace SocialMediaMaui.Shared.Dtos
                 if (timeSpan.TotalDays < 7)
                     return $"{(int)timeSpan.TotalDays} days ago";
 
-                return postTime.ToString("dd MMM yyyy");
+                return postTime.ToString("MMM dd yyyy", new CultureInfo("en-US"));
             }
         }
         public bool IsLiked { get; set; }

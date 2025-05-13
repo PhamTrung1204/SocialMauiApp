@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:dtos="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
+    xmlns:converters="clr-namespace:SocialMauiApp.Converters"
     Title="Notification"
     x:DataType="vm:NotificationViewModel"
     BackgroundColor="{StaticResource Gray100}"
@@ -24,7 +25,7 @@
                                 StrokeThickness="0">
                             <VerticalStackLayout Spacing="5">
                                 <Label FontSize="12"
-                                       Text="{Binding When, StringFormat='{0:hh:mm tt | dd MMM yyyy}'}"
+                                       Text="{Binding When, Converter={StaticResource HumanizedTimeConverter }}"
                                        TextColor="DarkGray" />
                                 <Label Text="{Binding Text}" TextColor="DarkGray"/>
                             </VerticalStackLayout>

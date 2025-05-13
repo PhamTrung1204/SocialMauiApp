@@ -42,8 +42,7 @@
 
                     <!-- Thêm converter ở đây -->
                     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-                   
-
+                    <converters:DateTimeToHumanizedConverter x:Key="HumanizedTimeConverter"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

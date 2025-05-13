@@ -7,6 +7,7 @@ public class MonoPackageManager_Resources {
 		"CommunityToolkit.Maui.Core.dll",
 		"CommunityToolkit.Mvvm.dll",
 		"GoogleGson.dll",
+		"Humanizer.dll",
 		"Microsoft.AspNetCore.Connections.Abstractions.dll",
 		"Microsoft.AspNetCore.Http.Connections.Client.dll",
 		"Microsoft.AspNetCore.Http.Connections.Common.dll",
