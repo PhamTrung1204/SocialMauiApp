@@ -515,6 +515,7 @@
                     WidthRequest="20" />
             </Border>
             <!--  Selected Images Preview  -->
+
             <CollectionView
                 Grid.Row="2"
                 Grid.Column="0"
@@ -534,21 +535,20 @@
                                 BackgroundColor="#CC000000"
                                 HeightRequest="20"
                                 HorizontalOptions="End"
+                                InputTransparent="False"
                                 StrokeShape="RoundRectangle 10"
                                 VerticalOptions="Start"
                                 WidthRequest="20"
-                                InputTransparent="False"
                                 ZIndex="10">
                                 <Label
+                                    BackgroundColor="Transparent"
                                     FontSize="12"
                                     HorizontalOptions="Center"
                                     Text="✕"
                                     TextColor="White"
                                     VerticalOptions="Center" />
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
-                                        CommandParameter="{Binding Id}" />
+                                    <TapGestureRecognizer Command="{Binding BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding Id}" />
                                 </Border.GestureRecognizers>
                             </Border>
                         </Grid>

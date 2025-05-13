@@ -6,6 +6,7 @@ using SocialMauiApp.Api.Data.Entities;
 using SocialMediaMaui.Shared.Dtos;
 using SocialMediaMaui.Shared.Hubs;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -385,7 +386,7 @@ namespace SocialMauiApp.Api.Services
                     PhotoUrl = c.PhotoUrl,
                     ParentCommentId = c.ParentCommentId,
                     Level = c.ParentCommentId == null ? 0 : 1,
-                    Replies = c.Replies.Select(r => new CommentDto
+                    Replies = new ObservableCollection<CommentDto>(c.Replies.Select(r => new CommentDto
                     {
                         AddedOn = r.AddedOn,
                         CommentId = r.Id,
@@ -397,7 +398,7 @@ namespace SocialMauiApp.Api.Services
                         PhotoUrl = r.PhotoUrl,
                         ParentCommentId = r.ParentCommentId,
                         Level = 1
-                    }).ToList()
+                    }).ToArray())
                 })
                 .ToArrayAsync();
             return comments;

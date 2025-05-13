@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -23,7 +24,7 @@ namespace SocialMediaMaui.Shared.Dtos
 
         public Guid UserId { get; set; }
         public string UserName { get; set; }
-        public List<CommentDto> Replies { get; set; } = new List<CommentDto>();
+        public ObservableCollection<CommentDto> Replies { get; set; } = new ObservableCollection<CommentDto>();
         public DateTime AddedOn { get; set; }
         public string UserPhoto => string.IsNullOrWhiteSpace(UserPhotoUrl) ? "personal.png" : UserPhotoUrl;
         public int Level { get; set; }
