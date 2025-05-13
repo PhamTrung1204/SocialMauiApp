@@ -196,12 +196,7 @@
                                             HeightRequest="40"
                                             Source="{Binding UserPhotoUrl}"
                                             WidthRequest="40" />
-                                        <Border.Shadow>
-                                            <Shadow
-                                                Brush="#CCCCCC"
-                                                Radius="2"
-                                                Offset="1,1" />
-                                        </Border.Shadow>
+                                       
                                     </Border>
                                     <!--  Comment Content  -->
                                     <Border
@@ -212,12 +207,7 @@
                                         StrokeShape="RoundRectangle 12"
                                         StrokeThickness="1"
                                         VerticalOptions="Start">
-                                        <Border.Shadow>
-                                            <Shadow
-                                                Brush="#DDDDDD"
-                                                Radius="4"
-                                                Offset="2,2" />
-                                        </Border.Shadow>
+                                        
                                         <Grid
                                             ColumnDefinitions="*,Auto"
                                             RowDefinitions="Auto,Auto,Auto,Auto"
@@ -299,7 +289,7 @@
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
-                                        Margin="48,8,0,0"
+                                        Margin="30,8,0,0"
                                         IsVisible="{Binding Replies.Count, Converter={StaticResource CountToBoolConverter}}"
                                         ItemsSource="{Binding Replies}"
                                         SelectionMode="None">
@@ -325,12 +315,7 @@
                                                             HeightRequest="32"
                                                             Source="{Binding UserPhotoUrl}"
                                                             WidthRequest="32" />
-                                                        <Border.Shadow>
-                                                            <Shadow
-                                                                Brush="#CCCCCC"
-                                                                Radius="2"
-                                                                Offset="1,1" />
-                                                        </Border.Shadow>
+                                                        
                                                     </Border>
                                                     <!--  Reply Content  -->
                                                     <Border
@@ -341,12 +326,7 @@
                                                         StrokeShape="RoundRectangle 10"
                                                         StrokeThickness="1"
                                                         VerticalOptions="Start">
-                                                        <Border.Shadow>
-                                                            <Shadow
-                                                                Brush="#CCCCCC"
-                                                                Radius="3"
-                                                                Offset="1,1" />
-                                                        </Border.Shadow>
+                                                        
                                                         <Grid
                                                             ColumnDefinitions="*,Auto"
                                                             RowDefinitions="Auto,Auto,Auto"

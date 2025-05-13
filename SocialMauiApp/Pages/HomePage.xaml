@@ -3,16 +3,17 @@
     x:Class="SocialMauiApp.Pages.HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:android="http://schemas.microsoft.com/dotnet/2021/maui/android-specific"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     x:DataType="vm:HomeViewModel"
-    BackgroundColor="{DynamicResource Gray100}"
+    BackgroundColor="{DynamicResource LightBackground}"
     Shell.BackgroundColor="{DynamicResource Primary}">
 
     <!--  TitleView của Shell  -->
     <Shell.TitleView>
-        <Grid Padding="10" ColumnDefinitions="Auto,*,Auto">
+        <Grid Padding="5" ColumnDefinitions="Auto,*,Auto">
             <Label
                 Grid.Column="0"
                 FontAttributes="Bold"
@@ -42,10 +43,11 @@
                         HeightRequest="20"
                         Source="bell.png"
                         WidthRequest="20" />
-                    <Ellipse IsVisible="{Binding IsThereNewNotification}"
+                    <Ellipse
                         Fill="Black"
                         HeightRequest="10"
                         HorizontalOptions="End"
+                        IsVisible="{Binding IsThereNewNotification}"
                         VerticalOptions="Start"
                         WidthRequest="10" />
                     <Grid.GestureRecognizers>
@@ -67,38 +69,67 @@
     </Shell.TitleView>
 
     <RefreshView Command="{Binding RefreshPostsCommand}" IsRefreshing="{Binding IsRefreshing}">
-        <Grid>
+        <Grid Padding="0" RowDefinitions="Auto,*">
+            <Grid
+                Padding="5"
+                ColumnDefinitions="Auto, Auto"
+                ColumnSpacing="5">
+                <Border
+                    Grid.Column="0"
+                    HeightRequest="50"
+                    StrokeShape="RoundRectangle 30"
+                    WidthRequest="50">
+                    <Image
+                        Aspect="AspectFill"
+                        HeightRequest="50"
+                        HorizontalOptions="Center"
+                        Source="{Binding User.Photo}"
+                        VerticalOptions="Center"
+                        WidthRequest="50">
+                        <Image.Clip>
+                            <EllipseGeometry
+                                Center="25,25"
+                                RadiusX="20"
+                                RadiusY="20" />
+                        </Image.Clip>
+                    </Image>
+                </Border>
+                <!--  Entry mới ở đầu trang  -->
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,5,0,5"
+                    Padding="10,5,0,0"
+                    BackgroundColor="{DynamicResource White}"
+                    HeightRequest="50"
+                    StrokeShape="RoundRectangle 25"
+                    WidthRequest="325">
+                    <controls:NoUnderLine
+                        FontSize="16"
+                        Placeholder="What's on your mind?"
+                        PlaceholderColor="{DynamicResource Gray500}"
+                        ReturnType="Done">
+
+                        <controls:NoUnderLine.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
+                        </controls:NoUnderLine.GestureRecognizers>
+                    </controls:NoUnderLine>
+                </Border>
+            </Grid>
+
             <CollectionView
+                Grid.Row="1"
                 ItemTemplate="{StaticResource postDataTemplateSelector}"
                 ItemsSource="{Binding Posts}"
                 RemainingItemsThreshold="2"
                 RemainingItemsThresholdReachedCommand="{Binding FetchPostsCommand}">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout ItemSpacing="15" Orientation="Vertical" />
+                    <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
             </CollectionView>
 
-            <Border
-                Margin="15"
-                BackgroundColor="{DynamicResource Primary}"
-                HeightRequest="45"
-                HorizontalOptions="End"
-                StrokeShape="RoundRectangle 15"
-                VerticalOptions="End"
-                WidthRequest="45">
-                <controls:WhiteImage
-                    HeightRequest="24"
-                    Source="plus_fab.png"
-                    WidthRequest="24" />
-                <Border.Shadow>
-                    <Shadow Brush="Black" Radius="25"/>
-                </Border.Shadow>
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
-                </Border.GestureRecognizers>
-            </Border>
-
             <ActivityIndicator
+                Grid.Row="1"
                 HorizontalOptions="Center"
                 IsRunning="{Binding IsBusy}"
                 VerticalOptions="Center" />

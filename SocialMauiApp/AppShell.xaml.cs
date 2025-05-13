@@ -14,27 +14,7 @@ namespace SocialMauiApp
         {
             InitializeComponent();
             RegisterRoutes();
-
-            // Lấy service từ container
-            _preferencesService =
-               Application.Current
-                          .Handler
-                          .MauiContext
-                          .Services
-                          .GetRequiredService<IPreferencesService>();
-
-            // Chạy điều hướng không chặn UI
-            _ = InitializeAsync();
-        }
-
-        private async Task InitializeAsync()
-        {
-            bool isRemembered = _preferencesService.GetBool("IsRemembered", false);
-            string route = isRemembered
-                ? $"//{nameof(LoginWithFingerprintPage)}"
-                : $"//{nameof(LoginPage)}";
-
-            await Shell.Current.GoToAsync(route);
+            _preferencesService = Application.Current.Handler.MauiContext.Services.GetRequiredService<IPreferencesService>();
         }
 
         private static void RegisterRoutes()
@@ -46,7 +26,6 @@ namespace SocialMauiApp
             Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
             Routing.RegisterRoute(nameof(NotificationPage), typeof(NotificationPage));
             Routing.RegisterRoute(nameof(CropPhotoPage), typeof(CropPhotoPage));
-            Routing.RegisterRoute(nameof(LoginWithFingerprintPage), typeof(LoginWithFingerprintPage));
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
         }
     }

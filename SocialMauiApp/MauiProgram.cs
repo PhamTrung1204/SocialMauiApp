@@ -4,11 +4,14 @@ using Microsoft.Extensions.Logging;
 using Refit;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
+using SocialMauiApp.Controls;
 using SocialMauiApp.Services;
 using SocialMauiApp.ViewModel;
 using SocialMediaMaui.Shared;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
+using Microsoft.Maui.Handlers;
+
 
 namespace SocialMauiApp
 {
@@ -49,6 +52,18 @@ namespace SocialMauiApp
             builder.Services.AddTransient<NotificationViewModel>().AddTransient<NotificationPage>();
             builder.Services.AddTransient<RealtimeUpdatesService>();
             ConfigureRefit(builder.Services);
+#if ANDROID
+            // Đăng ký handler riêng cho NoUnderLine
+            builder.ConfigureMauiHandlers(handlers =>
+            {
+                handlers.AddHandler(typeof(NoUnderLine), typeof(EntryHandler));
+                EntryHandler.Mapper.AppendToMapping(nameof(NoUnderLine), (handler, view) =>
+                {
+                    // remove toàn bộ background mặc định của EditText (underline)
+                    handler.PlatformView.Background = null;
+                });
+            });
+#endif
             return builder.Build();
         }
 

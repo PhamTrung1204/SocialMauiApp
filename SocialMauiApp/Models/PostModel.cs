@@ -25,8 +25,8 @@ namespace SocialMauiApp.Models
 
         [ObservableProperty]
         private string? _photoUrl;
-
-        public DateTime PostedOnDisplay { get; set; }
+        [ObservableProperty]
+        public string _postedOnDisplay;
 
         public string PostTemplateContentViewName =>
             string.IsNullOrWhiteSpace(PhotoUrl) ? "WithNoImage" :

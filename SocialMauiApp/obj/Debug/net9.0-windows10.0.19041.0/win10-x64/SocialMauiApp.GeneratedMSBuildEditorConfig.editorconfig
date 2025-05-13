@@ -71,12 +71,6 @@ build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.LoginP
 build_metadata.AdditionalFiles.TargetPath = Pages\LoginPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\LoginPage.xaml
 
-[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/LoginWithFingerprintPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.LoginWithFingerprintPage.xaml
-build_metadata.AdditionalFiles.TargetPath = Pages\LoginWithFingerprintPage.xaml
-build_metadata.AdditionalFiles.RelativePath = Pages\LoginWithFingerprintPage.xaml
-
 [C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/NotificationPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.NotificationPage.xaml

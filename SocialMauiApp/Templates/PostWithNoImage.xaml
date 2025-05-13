@@ -40,27 +40,21 @@
                 </Border>
                 <Grid
                     Grid.Column="1"
-                    ColumnDefinitions="Auto,Auto,Auto"
-                    ColumnSpacing="5"
                     HorizontalOptions="Center"
+                    RowDefinitions="Auto, Auto"
+                    RowSpacing="1"
                     VerticalOptions="Center">
                     <Label
-                        Grid.Column="0"
+                        Grid.Row="0"
                         FontAttributes="Bold"
+                        FontSize="15"
                         Text="{Binding UserName}"
                         TextColor="Black" />
+
                     <Label
-                        Grid.Column="1"
-                        Margin="0,-7,0,0"
-                        FontAttributes="Bold"
-                        FontSize="14"
-                        Text="."
-                        TextColor="Gray"
-                        VerticalOptions="Center" />
-                    <Label
-                        Grid.Column="2"
-                        FontSize="12"
-                        Text="{Binding PostedOnDisplay, StringFormat='{0:dd MMM yyyy}'}"
+                        Grid.Row="1"
+                        FontSize="10"
+                        Text="{Binding PostedOnDisplay}"
                         TextColor="Gray"
                         VerticalOptions="Center" />
                 </Grid>
@@ -88,8 +82,8 @@
                 <!--  Likes  -->
                 <HorizontalStackLayout
                     Grid.Column="0"
-                    HorizontalOptions="Start"
                     BackgroundColor="Transparent"
+                    HorizontalOptions="Start"
                     Spacing="6">
                     <Image
                         HeightRequest="18"
@@ -115,8 +109,8 @@
                 <!--  Comments  -->
                 <HorizontalStackLayout
                     Grid.Column="1"
-                    HorizontalOptions="End"
                     BackgroundColor="Transparent"
+                    HorizontalOptions="End"
                     Spacing="6">
                     <Image
                         HeightRequest="18"

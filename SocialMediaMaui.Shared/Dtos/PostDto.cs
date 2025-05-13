@@ -13,7 +13,26 @@ namespace SocialMediaMaui.Shared.Dtos
         public DateTime? PostedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
         [JsonIgnore]
-        public DateTime PostedOnDisplay => PostedOn ?? ModifiedOn;
+        public string PostedOnDisplay
+        {
+            get
+            {
+                var postTime = PostedOn ?? ModifiedOn;
+                var now = DateTime.UtcNow;
+                var timeSpan = now - postTime;
+
+                if (timeSpan.TotalMinutes < 1)
+                    return "Just posted";
+                if (timeSpan.TotalMinutes < 60)
+                    return $"{(int)timeSpan.TotalMinutes} minutes ago";
+                if (timeSpan.TotalHours < 24)
+                    return $"{(int)timeSpan.TotalHours} hours ago";
+                if (timeSpan.TotalDays < 7)
+                    return $"{(int)timeSpan.TotalDays} days ago";
+
+                return postTime.ToString("dd MMM yyyy");
+            }
+        }
         public bool IsLiked { get; set; }
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }

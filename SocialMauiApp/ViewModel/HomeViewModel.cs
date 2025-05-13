@@ -26,14 +26,15 @@ namespace SocialMauiApp.ViewModel
         {
             _realtimeUpdatesService = realtimeUpdatesService;
             _authService = authService;
-
+            User = authService.User!;
             Posts = new ObservableCollection<PostModel>();
 
             _ = FetchPostsAsync();
 
             ConfigureRealtimeUpdates();
         }
-
+        [ObservableProperty]
+        private LoggedInUser _user;
         public ObservableCollection<PostModel> Posts { get; }
 
         [ObservableProperty]

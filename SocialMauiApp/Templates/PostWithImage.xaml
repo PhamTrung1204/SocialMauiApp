@@ -39,27 +39,21 @@
 
                 <Grid
                     Grid.Column="1"
-                    ColumnDefinitions="Auto, Auto, Auto"
-                    ColumnSpacing="5"
+                    RowDefinitions="Auto, Auto"
+                    RowSpacing="1"
                     HorizontalOptions="Center"
                     VerticalOptions="Center">
                     <Label
-                        Grid.Column="0"
+                        Grid.Row="0"
                         FontAttributes="Bold"
+                        FontSize="15"
                         Text="{Binding UserName}"
                         TextColor="Black" />
+                    
                     <Label
-                        Grid.Column="1"
-                        Margin="0,-7,0,0"
-                        FontAttributes="Bold"
-                        FontSize="14"
-                        Text="."
-                        TextColor="Gray"
-                        VerticalOptions="Center" />
-                    <Label
-                        Grid.Column="2"
-                        FontSize="12"
-                        Text="{Binding PostedOnDisplay, StringFormat='{0:dd MMM yyyy}'}"
+                        Grid.Row="1"
+                        FontSize="10"
+                        Text="{Binding PostedOnDisplay}"
                         TextColor="Gray"
                         VerticalOptions="Center" />
                 </Grid>
