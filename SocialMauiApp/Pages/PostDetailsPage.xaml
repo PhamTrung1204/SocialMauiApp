@@ -196,7 +196,6 @@
                                             HeightRequest="40"
                                             Source="{Binding UserPhotoUrl}"
                                             WidthRequest="40" />
-
                                     </Border>
                                     <!--  Comment Content  -->
                                     <Border
@@ -207,7 +206,6 @@
                                         StrokeShape="RoundRectangle 12"
                                         StrokeThickness="1"
                                         VerticalOptions="Start">
-
                                         <Grid
                                             ColumnDefinitions="*,Auto"
                                             RowDefinitions="Auto,Auto,Auto,Auto"
@@ -224,7 +222,6 @@
                                                     FontSize="15"
                                                     Text="{Binding UserName}"
                                                     TextColor="#1C2526" />
-
                                             </StackLayout>
                                             <!--  More Options  -->
                                             <Label
@@ -315,7 +312,6 @@
                                                             HeightRequest="32"
                                                             Source="{Binding UserPhotoUrl}"
                                                             WidthRequest="32" />
-
                                                     </Border>
                                                     <!--  Reply Content  -->
                                                     <Border
@@ -326,10 +322,9 @@
                                                         StrokeShape="RoundRectangle 10"
                                                         StrokeThickness="1"
                                                         VerticalOptions="Start">
-
                                                         <Grid
                                                             ColumnDefinitions="*,Auto"
-                                                            RowDefinitions="Auto,Auto,Auto"
+                                                            RowDefinitions="Auto,Auto,Auto,Auto"
                                                             RowSpacing="4">
                                                             <!--  Username and Timestamp  -->
                                                             <StackLayout
@@ -343,11 +338,7 @@
                                                                     FontSize="13"
                                                                     Text="{Binding UserName}"
                                                                     TextColor="#1C2526" />
-                                                                <Label
-                                                                    FontSize="11"
-                                                                    Text="{Binding AddedOn, Converter={StaticResource HumanizedTimeConverter}}"
-                                                                    TextColor="#65676B"
-                                                                    VerticalOptions="Center" />
+
                                                             </StackLayout>
                                                             <!--  More Options  -->
                                                             <Label
@@ -368,7 +359,7 @@
                                                             <Label
                                                                 Grid.Row="1"
                                                                 Grid.Column="0"
-                                                                Grid.ColumnSpan="2"
+                                                                Grid.ColumnSpan="1"
                                                                 FontSize="13"
                                                                 LineBreakMode="WordWrap"
                                                                 Text="{Binding Content}"
@@ -377,13 +368,29 @@
                                                             <Image
                                                                 Grid.Row="2"
                                                                 Grid.Column="0"
-                                                                Grid.ColumnSpan="2"
+                                                                Grid.ColumnSpan="1"
                                                                 Margin="0,6,0,0"
                                                                 Aspect="AspectFit"
                                                                 HeightRequest="100"
                                                                 HorizontalOptions="Start"
                                                                 IsVisible="{Binding PhotoUrl, Converter={StaticResource StringToBoolConverter}}"
                                                                 Source="{Binding PhotoUrl}" />
+                                                            <HorizontalStackLayout Grid.Row="3" Grid.Column="0">
+                                                                <Label
+                                                                    Padding="0,0,10,0"
+                                                                    FontSize="11"
+                                                                    Text="{Binding AddedOn, Converter={StaticResource HumanizedTimeConverter}}"
+                                                                    TextColor="#65676B"
+                                                                    VerticalOptions="Center" />
+                                                                <Label
+                                                                    FontSize="12"
+                                                                    Text="Reply"
+                                                                    TextColor="{StaticResource Primary}">
+                                                                    <Label.GestureRecognizers>
+                                                                        <TapGestureRecognizer Tapped="OnReplyTapped" />
+                                                                    </Label.GestureRecognizers>
+                                                                </Label>
+                                                            </HorizontalStackLayout>
                                                         </Grid>
                                                     </Border>
                                                 </Grid>
@@ -491,7 +498,6 @@
                     WidthRequest="20" />
             </Border>
             <!--  Selected Images Preview  -->
-
             <CollectionView
                 Grid.Row="2"
                 Grid.Column="0"
@@ -506,25 +512,28 @@
                             Margin="5,0,5,0"
                             HeightRequest="60"
                             WidthRequest="60">
-                            <Image Aspect="AspectFill" Source="{Binding Source}" />
+                            <Image
+                                Aspect="AspectFill"
+                                InputTransparent="True"
+                                Source="{Binding Source}" />
                             <Border
                                 BackgroundColor="#CC000000"
-                                HeightRequest="20"
+                                HeightRequest="24"
                                 HorizontalOptions="End"
                                 InputTransparent="False"
-                                StrokeShape="RoundRectangle 10"
+                                StrokeShape="RoundRectangle 12"
                                 VerticalOptions="Start"
-                                WidthRequest="20"
+                                WidthRequest="24"
                                 ZIndex="10">
                                 <Label
                                     BackgroundColor="Transparent"
-                                    FontSize="12"
-                                    HorizontalOptions="Center"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"  
                                     Text="✕"
                                     TextColor="White"
                                     VerticalOptions="Center" />
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding Id}" />
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}, Mode=FindAncestor}}" CommandParameter="{Binding Id}" />
                                 </Border.GestureRecognizers>
                             </Border>
                         </Grid>

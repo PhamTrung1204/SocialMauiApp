@@ -110,7 +110,6 @@ namespace SocialMauiApp.ViewModel
                         c.IsOwnComment = _authService.User != null && c.UserId == _authService.User.Id;
                         c.Level = c.ParentCommentId == null ? 0 : 1;
                         c.UserPhotoUrl = c.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                        // Ensure Replies is an ObservableCollection
                         var replies = new ObservableCollection<CommentDto>();
                         foreach (var reply in c.Replies ?? Enumerable.Empty<CommentDto>())
                         {
@@ -264,11 +263,11 @@ namespace SocialMauiApp.ViewModel
                     _selectedFiles.Remove(mapEntry.FileResult);
                     _imageFileMap.Remove(mapEntry);
 
-                    if (mapEntry.ImageSource is StreamImageSource streamImageSource && streamImageSource.Stream != null)
+                    if (mapEntry.ImageSource is StreamImageSource streamImageSource)
                     {
                         try
                         {
-                            var stream = streamImageSource.Stream(CancellationToken.None);
+                            var stream = streamImageSource.Stream?.Invoke(CancellationToken.None);
                             stream?.Dispose();
                             System.Diagnostics.Debug.WriteLine($"RemovePhoto: Disposed ImageSource stream for ID: {imageId}");
                         }
@@ -285,8 +284,6 @@ namespace SocialMauiApp.ViewModel
                     OnPropertyChanged(nameof(IsPhotoButtonVisible));
                     System.Diagnostics.Debug.WriteLine($"RemovePhoto: Successfully removed image with ID: {imageId}. Previews: {SelectedImagePreviews.Count}, Files: {_selectedFiles.Count}, Map: {_imageFileMap.Count}");
                 });
-
-                await ToastAsync("Image removed successfully.");
             }
             catch (Exception ex)
             {
@@ -306,18 +303,14 @@ namespace SocialMauiApp.ViewModel
             {
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    foreach (var mapEntry in _imageFileMap.ToList()) // Create a copy to avoid collection modification issues
+                    foreach (var mapEntry in _imageFileMap.ToList())
                     {
                         if (mapEntry.ImageSource is StreamImageSource streamImageSource)
                         {
                             try
                             {
-                                var streamTask = streamImageSource.Stream?.Invoke(CancellationToken.None);
-                                if (streamTask != null)
-                                {
-                                    var stream = streamTask.GetAwaiter().GetResult();
-                                    stream?.Dispose();
-                                }
+                                var stream = streamImageSource.Stream?.Invoke(CancellationToken.None);
+                                stream?.Dispose();
                             }
                             catch (Exception disposeEx)
                             {
@@ -389,7 +382,7 @@ namespace SocialMauiApp.ViewModel
                         CommentId = _commentBeingEdited.CommentId,
                         Content = Comment ?? "",
                         IsExistingPhotoRemoved = _selectedFiles.Count == 0 && !string.IsNullOrEmpty(_commentBeingEdited.PhotoUrl),
-                        Photo = null // Client sends image as StreamPart, not IFormFile
+                        Photo = null
                     };
                     var serialized = JsonSerializer.Serialize(dto);
 
@@ -465,7 +458,7 @@ namespace SocialMauiApp.ViewModel
 
                         await MainThread.InvokeOnMainThreadAsync(() =>
                         {
-                            if (_commentBeingEdited.Level == 0) // Top-level comment
+                            if (_commentBeingEdited.Level == 0)
                             {
                                 var existingComment = Comments.FirstOrDefault(c => c.CommentId == _commentBeingEdited.CommentId);
                                 if (existingComment != null)
@@ -487,7 +480,7 @@ namespace SocialMauiApp.ViewModel
                                     System.Diagnostics.Debug.WriteLine($"AddCommentAsync: Top-level comment {_commentBeingEdited.CommentId} not found in Comments");
                                 }
                             }
-                            else // Reply (Level 1)
+                            else
                             {
                                 if (_commentBeingEdited.ParentCommentId == null || _commentBeingEdited.ParentCommentId == Guid.Empty)
                                 {
@@ -504,13 +497,6 @@ namespace SocialMauiApp.ViewModel
                                         System.Diagnostics.Debug.WriteLine($"AddCommentAsync: Initialized Replies for parent comment {parentComment.CommentId}");
                                     }
 
-                                    int parentIndex = Comments.IndexOf(parentComment);
-                                    if (parentIndex < 0)
-                                    {
-                                        System.Diagnostics.Debug.WriteLine($"AddCommentAsync: Parent comment {_commentBeingEdited.ParentCommentId} index not found in Comments");
-                                        return;
-                                    }
-
                                     var existingReply = parentComment.Replies.FirstOrDefault(r => r.CommentId == _commentBeingEdited.CommentId);
                                     if (existingReply != null)
                                     {
@@ -518,8 +504,7 @@ namespace SocialMauiApp.ViewModel
                                         if (replyIndex >= 0)
                                         {
                                             parentComment.Replies[replyIndex] = updatedComment;
-                                            // Replace the parent comment to force UI refresh
-                                            Comments[parentIndex] = parentComment;
+                                            Comments[Comments.IndexOf(parentComment)] = parentComment;
                                             System.Diagnostics.Debug.WriteLine($"AddCommentAsync: Updated reply {updatedComment.CommentId}, ParentCommentId: {parentComment.CommentId}, UserPhotoUrl: {updatedComment.UserPhotoUrl}, IsOwnComment: {updatedComment.IsOwnComment}, UserId: {updatedComment.UserId}, PhotoUrl: {updatedComment.PhotoUrl}, Parent replies count: {parentComment.Replies.Count}");
                                             OnPropertyChanged(nameof(Comments));
                                         }
@@ -532,7 +517,7 @@ namespace SocialMauiApp.ViewModel
                                     {
                                         System.Diagnostics.Debug.WriteLine($"AddCommentAsync: Reply {_commentBeingEdited.CommentId} not found in parent {parentComment.CommentId}. Adding as new reply.");
                                         parentComment.Replies.Add(updatedComment);
-                                        Comments[parentIndex] = parentComment;
+                                        Comments[Comments.IndexOf(parentComment)] = parentComment;
                                         OnPropertyChanged(nameof(Comments));
                                     }
                                 }
@@ -625,7 +610,7 @@ namespace SocialMauiApp.ViewModel
 
                     try
                     {
-                        System.Diagnostics.Debug.WriteLine($"AddCommentAsync: Calling SaveCommentWithImagesAsync for PostId: {Post.PostId}, ParentCommentId: {(isReply ? _replyingToComment!.CommentId.ToString() : "null")}");
+                        
                         var result = await PostsApi.SaveCommentWithImagesAsync(Post.PostId, imgPart, serialized);
 
                         if (!result.IsSuccess)
@@ -663,6 +648,7 @@ namespace SocialMauiApp.ViewModel
                                     if (!parentComment.Replies.Any(r => r.CommentId == result.Data.CommentId))
                                     {
                                         parentComment.Replies.Insert(0, result.Data);
+                                        Comments[parentIndex] = parentComment;
                                         System.Diagnostics.Debug.WriteLine($"AddCommentAsync: Added reply {result.Data.CommentId} to parent {parentComment.CommentId}, Total replies: {parentComment.Replies.Count}");
                                         OnPropertyChanged(nameof(Comments));
                                     }
@@ -724,9 +710,27 @@ namespace SocialMauiApp.ViewModel
         private void ReplyComment(CommentDto commentDto)
         {
             if (IsBusy || commentDto == null) return;
-            _replyingToComment = commentDto;
-            Comment = $"@{commentDto.UserName} ";
-            System.Diagnostics.Debug.WriteLine($"ReplyComment: Initiated reply to comment {commentDto.CommentId}, UserName: {commentDto.UserName}");
+
+            if (commentDto.Level == 1 && commentDto.ParentCommentId != null)
+            {
+                var parentComment = Comments.FirstOrDefault(c => c.CommentId == commentDto.ParentCommentId);
+                if (parentComment != null)
+                {
+                    _replyingToComment = parentComment;
+                    Comment = $"@{commentDto.UserName} ";
+                    System.Diagnostics.Debug.WriteLine($"ReplyComment: Initiated reply to reply {commentDto.CommentId}, using parent comment {parentComment.CommentId}, UserName: {commentDto.UserName}");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"ReplyComment: Parent comment {commentDto.ParentCommentId} not found for reply {commentDto.CommentId}");
+                }
+            }
+            else
+            {
+                _replyingToComment = commentDto;
+                Comment = $"@{commentDto.UserName} ";
+                System.Diagnostics.Debug.WriteLine($"ReplyComment: Initiated reply to comment {commentDto.CommentId}, UserName: {commentDto.UserName}");
+            }
         }
 
         [RelayCommand]
@@ -767,7 +771,7 @@ namespace SocialMauiApp.ViewModel
 
                     Comment = commentDto.Content ?? "";
                     IsEditing = true;
-                    _commentBeingEdited = commentDto;
+                    CommentBeingEdited = commentDto;
                     _replyingToComment = null;
 
                     await ClearPhotos();
@@ -878,7 +882,7 @@ namespace SocialMauiApp.ViewModel
                     System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: User not authorized to delete comment {commentDto.CommentId}");
                     return;
                 }
-                bool confirm = await Shell.Current.DisplayAlert("Confirm Delete", $"Are you sure you want to delete this {(commentDto.Level == 1 ? "reply" : "comment")}?", "Yes", "No");
+                bool confirm = await Shell.Current.DisplayAlert("Confirm Delete", $"Are you sure you want to delete this {(commentDto.Level == 1 ? "reply" : "comment")}?{(commentDto.Level == 0 ? " This will also delete all replies." : "")}", "Yes", "No");
                 if (!confirm) return;
 
                 var result = await PostsApi.DeleteCommentAsync(commentDto.CommentId);
@@ -889,59 +893,61 @@ namespace SocialMauiApp.ViewModel
                     return;
                 }
 
-                if (IsEditing && _commentBeingEdited?.CommentId == commentDto.CommentId)
+                await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    IsEditing = false;
-                    _commentBeingEdited = null;
-                    Comment = string.Empty;
-                    await ClearPhotos();
-                }
-                if (_replyingToComment?.CommentId == commentDto.CommentId)
-                {
-                    _replyingToComment = null;
-                    Comment = string.Empty;
-                    await ClearPhotos();
-                }
-
-                if (commentDto.Level == 1) // Reply
-                {
-                    var parentComment = Comments.FirstOrDefault(c => c.Replies.Any(r => r.CommentId == commentDto.CommentId));
-                    if (parentComment != null)
+                    if (IsEditing && _commentBeingEdited?.CommentId == commentDto.CommentId)
                     {
-                        int parentIndex = Comments.IndexOf(parentComment);
-                        var reply = parentComment.Replies.FirstOrDefault(r => r.CommentId == commentDto.CommentId);
-                        if (reply != null)
+                        IsEditing = false;
+                        _commentBeingEdited = null;
+                        Comment = string.Empty;
+                        ClearPhotos();
+                    }
+                    if (_replyingToComment?.CommentId == commentDto.CommentId)
+                    {
+                        _replyingToComment = null;
+                        Comment = string.Empty;
+                        ClearPhotos();
+                    }
+
+                    if (commentDto.Level == 1)
+                    {
+                        var parentComment = Comments.FirstOrDefault(c => c.Replies.Any(r => r.CommentId == commentDto.CommentId));
+                        if (parentComment != null)
                         {
-                            parentComment.Replies.Remove(reply);
-                            // Replace the parent comment to force UI refresh
-                            Comments[parentIndex] = parentComment;
-                            System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Deleted reply {commentDto.CommentId}, ParentCommentId: {parentComment.CommentId}, Remaining replies: {parentComment.Replies.Count}");
+                            int parentIndex = Comments.IndexOf(parentComment);
+                            var reply = parentComment.Replies.FirstOrDefault(r => r.CommentId == commentDto.CommentId);
+                            if (reply != null)
+                            {
+                                parentComment.Replies.Remove(reply);
+                                Comments[parentIndex] = parentComment;
+                                System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Deleted reply {commentDto.CommentId}, ParentCommentId: {parentComment.CommentId}, Remaining replies: {parentComment.Replies.Count}");
+                                OnPropertyChanged(nameof(Comments));
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Reply {commentDto.CommentId} not found in parent {parentComment.CommentId}");
+                            }
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Parent comment not found for reply {commentDto.CommentId}");
+                        }
+                    }
+                    else
+                    {
+                        var existing = Comments.FirstOrDefault(c => c.CommentId == commentDto.CommentId);
+                        if (existing != null)
+                        {
+                            Comments.Remove(existing);
+                            System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Deleted comment {commentDto.CommentId} with {existing.Replies?.Count ?? 0} replies, Total comments: {Comments.Count}");
                             OnPropertyChanged(nameof(Comments));
                         }
                         else
                         {
-                            System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Reply {commentDto.CommentId} not found in parent {parentComment.CommentId}");
+                            System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Comment {commentDto.CommentId} not found in Comments");
                         }
                     }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Parent comment not found for reply {commentDto.CommentId}");
-                    }
-                }
-                else // Top-level comment
-                {
-                    var existing = Comments.FirstOrDefault(c => c.CommentId == commentDto.CommentId);
-                    if (existing != null)
-                    {
-                        Comments.Remove(existing);
-                        System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Deleted comment {commentDto.CommentId}, Total comments: {Comments.Count}");
-                        OnPropertyChanged(nameof(Comments));
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync: Comment {commentDto.CommentId} not found in Comments");
-                    }
-                }
+                });
 
                 await ToastAsync($"{(commentDto.Level == 1 ? "Reply" : "Comment")} deleted");
             }
@@ -1074,17 +1080,16 @@ namespace SocialMauiApp.ViewModel
                     comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                     comment.Level = comment.ParentCommentId == null ? 0 : 1;
                     comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                    // Ensure Replies is an ObservableCollection
                     comment.Replies = new ObservableCollection<CommentDto>(comment.Replies ?? Enumerable.Empty<CommentDto>());
                     System.Diagnostics.Debug.WriteLine($"OnCommentAdded: Received CommentAdded: CommentId: {comment.CommentId}, UserPhotoUrl: {comment.UserPhotoUrl}, Level: {comment.Level}, ParentCommentId: {comment.ParentCommentId}, IsOwnComment: {comment.IsOwnComment}, UserId: {comment.UserId}, PhotoUrl: {comment.PhotoUrl}");
 
-                    if (comment.Level == 0) // Top-level comment
+                    if (comment.Level == 0)
                     {
                         Comments.Insert(0, comment);
                         System.Diagnostics.Debug.WriteLine($"OnCommentAdded: Added comment {comment.CommentId}, Total comments: {Comments.Count}");
                         OnPropertyChanged(nameof(Comments));
                     }
-                    else if (comment.Level == 1) // Reply
+                    else if (comment.Level == 1)
                     {
                         var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
                         if (parentComment != null)
@@ -1098,6 +1103,7 @@ namespace SocialMauiApp.ViewModel
                             if (!parentComment.Replies.Any(r => r.CommentId == comment.CommentId))
                             {
                                 parentComment.Replies.Insert(0, comment);
+                                Comments[parentIndex] = parentComment;
                                 System.Diagnostics.Debug.WriteLine($"OnCommentAdded: Added reply {comment.CommentId}, ParentCommentId: {parentComment.CommentId}, Parent replies count: {parentComment.Replies.Count}, IsOwnComment: {comment.IsOwnComment}, PhotoUrl: {comment.PhotoUrl}");
                                 OnPropertyChanged(nameof(Comments));
                             }
@@ -1124,11 +1130,10 @@ namespace SocialMauiApp.ViewModel
                     comment.Level = comment.ParentCommentId == null ? 0 : 1;
                     comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
                     comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
-                    // Ensure Replies is an ObservableCollection
                     comment.Replies = new ObservableCollection<CommentDto>(comment.Replies ?? Enumerable.Empty<CommentDto>());
                     System.Diagnostics.Debug.WriteLine($"OnCommentUpdated: Received CommentUpdated: CommentId: {comment.CommentId}, ParentCommentId: {comment.ParentCommentId}, UserPhotoUrl: {comment.UserPhotoUrl}, Level: {comment.Level}, IsOwnComment: {comment.IsOwnComment}, UserId: {comment.UserId}, PhotoUrl: {comment.PhotoUrl}");
 
-                    if (comment.Level == 0) // Top-level comment
+                    if (comment.Level == 0)
                     {
                         var existing = Comments.FirstOrDefault(c => c.CommentId == comment.CommentId);
                         if (existing != null)
@@ -1136,7 +1141,6 @@ namespace SocialMauiApp.ViewModel
                             int index = Comments.IndexOf(existing);
                             if (index >= 0)
                             {
-                                // Preserve the existing Replies collection
                                 comment.Replies = existing.Replies ?? new ObservableCollection<CommentDto>();
                                 Comments[index] = comment;
                                 System.Diagnostics.Debug.WriteLine($"OnCommentUpdated: Updated top-level comment {comment.CommentId}, IsOwnComment: {comment.IsOwnComment}, UserId: {comment.UserId}, PhotoUrl: {comment.PhotoUrl}, Replies count: {comment.Replies.Count}");
@@ -1152,7 +1156,7 @@ namespace SocialMauiApp.ViewModel
                             System.Diagnostics.Debug.WriteLine($"OnCommentUpdated: Top-level comment {comment.CommentId} not found in Comments");
                         }
                     }
-                    else if (comment.Level == 1) // Reply
+                    else if (comment.Level == 1)
                     {
                         var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
                         if (parentComment != null)
@@ -1169,6 +1173,7 @@ namespace SocialMauiApp.ViewModel
                                 if (replyIndex >= 0)
                                 {
                                     parentComment.Replies[replyIndex] = comment;
+                                    Comments[Comments.IndexOf(parentComment)] = parentComment;
                                     System.Diagnostics.Debug.WriteLine($"OnCommentUpdated: Updated reply {comment.CommentId}, ParentCommentId: {parentComment.CommentId}, IsOwnComment: {comment.IsOwnComment}, UserId: {comment.UserId}, PhotoUrl: {comment.PhotoUrl}, Parent replies count: {parentComment.Replies.Count}");
                                     OnPropertyChanged(nameof(Comments));
                                 }
@@ -1180,6 +1185,7 @@ namespace SocialMauiApp.ViewModel
                             else
                             {
                                 parentComment.Replies.Insert(0, comment);
+                                Comments[Comments.IndexOf(parentComment)] = parentComment;
                                 System.Diagnostics.Debug.WriteLine($"OnCommentUpdated: Added new reply {comment.CommentId} to parent {parentComment.CommentId}, IsOwnComment: {comment.IsOwnComment}, UserId: {comment.UserId}, PhotoUrl: {comment.PhotoUrl}, Parent replies count: {parentComment.Replies.Count}");
                                 OnPropertyChanged(nameof(Comments));
                             }
@@ -1204,6 +1210,7 @@ namespace SocialMauiApp.ViewModel
                     if (reply != null)
                     {
                         parentComment.Replies.Remove(reply);
+                        Comments[Comments.IndexOf(parentComment)] = parentComment;
                         System.Diagnostics.Debug.WriteLine($"OnCommentDeleted: Deleted reply {commentId}, ParentCommentId: {parentComment.CommentId}, Remaining replies: {parentComment.Replies.Count}");
                         OnPropertyChanged(nameof(Comments));
                     }
@@ -1218,7 +1225,7 @@ namespace SocialMauiApp.ViewModel
                     if (existing != null)
                     {
                         Comments.Remove(existing);
-                        System.Diagnostics.Debug.WriteLine($"OnCommentDeleted: Deleted comment {commentId}, Total comments: {Comments.Count}");
+                        System.Diagnostics.Debug.WriteLine($"OnCommentDeleted: Deleted comment {commentId} with {existing.Replies?.Count ?? 0} replies, Total comments: {Comments.Count}");
                         OnPropertyChanged(nameof(Comments));
                     }
                     else
