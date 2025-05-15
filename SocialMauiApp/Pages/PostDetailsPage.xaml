@@ -248,16 +248,17 @@
                                                 Text="{Binding Content}"
                                                 TextColor="#1C2526" />
                                             <!--  Comment Image  -->
-                                            <Image
+                                            <Border
                                                 Grid.Row="2"
                                                 Grid.Column="0"
-                                                Grid.ColumnSpan="2"
-                                                Margin="0,8,0,0"
-                                                Aspect="AspectFit"
-                                                HeightRequest="120"
-                                                HorizontalOptions="Start"
+                                                Grid.ColumnSpan="1"
                                                 IsVisible="{Binding PhotoUrl, Converter={StaticResource StringToBoolConverter}}"
-                                                Source="{Binding PhotoUrl}" />
+                                                StrokeShape="RoundRectangle 10">
+                                                <Image
+                                                    Aspect="AspectFit"
+                                                    HorizontalOptions="Start"
+                                                    Source="{Binding PhotoUrl}" />
+                                            </Border>
                                             <!--  Reply Button  -->
                                             <HorizontalStackLayout
                                                 Grid.Row="3"
@@ -365,16 +366,17 @@
                                                                 Text="{Binding Content}"
                                                                 TextColor="#1C2526" />
                                                             <!--  Reply Image  -->
-                                                            <Image
+                                                            <Border
                                                                 Grid.Row="2"
                                                                 Grid.Column="0"
                                                                 Grid.ColumnSpan="1"
-                                                                Margin="0,6,0,0"
-                                                                Aspect="AspectFit"
-                                                                HeightRequest="100"
-                                                                HorizontalOptions="Start"
                                                                 IsVisible="{Binding PhotoUrl, Converter={StaticResource StringToBoolConverter}}"
-                                                                Source="{Binding PhotoUrl}" />
+                                                                StrokeShape="RoundRectangle 10">
+                                                                <Image
+                                                                    Aspect="AspectFit"
+                                                                    HorizontalOptions="Start"
+                                                                    Source="{Binding PhotoUrl}" />
+                                                            </Border>
                                                             <HorizontalStackLayout Grid.Row="3" Grid.Column="0">
                                                                 <Label
                                                                     Padding="0,0,10,0"
@@ -508,34 +510,41 @@
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:ImagePreview">
-                        <Grid
-                            Margin="5,0,5,0"
-                            HeightRequest="60"
-                            WidthRequest="60">
-                            <Image
-                                Aspect="AspectFill"
-                                InputTransparent="True"
-                                Source="{Binding Source}" />
-                            <Border
-                                BackgroundColor="#CC000000"
-                                HeightRequest="24"
-                                HorizontalOptions="End"
-                                InputTransparent="False"
-                                StrokeShape="RoundRectangle 12"
-                                VerticalOptions="Start"
-                                WidthRequest="24"
-                                ZIndex="10">
-                                <Label
-                                    BackgroundColor="Transparent"
-                                    FontSize="14"
-                                    HorizontalOptions="Center"  
-                                    Text="✕"
-                                    TextColor="White"
-                                    VerticalOptions="Center" />
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}, Mode=FindAncestor}}" CommandParameter="{Binding Id}" />
-                                </Border.GestureRecognizers>
-                            </Border>
+                        <Grid Margin="5,0,5,0">
+                            <HorizontalStackLayout Padding="5">
+                                <!--  Bọc Image trong Border để bo góc  -->
+                                <Border
+                                    HeightRequest="100"
+                                    Stroke="LightGray"
+                                    StrokeShape="RoundRectangle 10"
+                                    StrokeThickness="2"
+                                    WidthRequest="80">
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="100"
+                                        Source="{Binding Source}"
+                                        WidthRequest="80" />
+                                </Border>
+                                <Border
+                                    BackgroundColor="#CC000000"
+                                    HeightRequest="24"
+                                    HorizontalOptions="End"
+                                    StrokeShape="RoundRectangle 12"
+                                    VerticalOptions="Start"
+                                    WidthRequest="24"
+                                    ZIndex="10">
+                                    <Label
+                                        BackgroundColor="Transparent"
+                                        FontSize="14"
+                                        HorizontalOptions="Center"
+                                        Text="✕"
+                                        TextColor="White"
+                                        VerticalOptions="Center" />
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Path=BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}, Mode=FindAncestor}}" CommandParameter="{Binding Id}" />
+                                    </Border.GestureRecognizers>
+                                </Border>
+                            </HorizontalStackLayout>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
