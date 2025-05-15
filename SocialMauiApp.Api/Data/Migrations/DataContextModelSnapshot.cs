@@ -46,9 +46,6 @@ namespace SocialMauiApp.Api.Data.Migrations
                     b.Property<DateTime>("AddedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CommentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -70,7 +67,7 @@ namespace SocialMauiApp.Api.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentId");
+                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("PostId");
 
@@ -261,9 +258,9 @@ namespace SocialMauiApp.Api.Data.Migrations
 
             modelBuilder.Entity("SocialMauiApp.Api.Data.Entities.Comment", b =>
                 {
-                    b.HasOne("SocialMauiApp.Api.Data.Entities.Comment", null)
+                    b.HasOne("SocialMauiApp.Api.Data.Entities.Comment", "ParentComment")
                         .WithMany("Replies")
-                        .HasForeignKey("CommentId");
+                        .HasForeignKey("ParentCommentId");
 
                     b.HasOne("SocialMauiApp.Api.Data.Entities.Post", "Post")
                         .WithMany()
@@ -276,6 +273,8 @@ namespace SocialMauiApp.Api.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("ParentComment");
 
                     b.Navigation("Post");
 

@@ -49,7 +49,8 @@ namespace SocialMauiApp.Apis
             Guid commentId,
             [AliasAs("photo")] StreamPart? photo,
             [AliasAs("serializedCommentDto")] string serializedCommentDto);
-
+        [Delete("/api/post/delete-comment-with-children/{commentId}")]
+        Task<ApiResult> DeleteCommentWithChildrenAsync(Guid commentId);
         [Post("/api/posts/{postId}/toggle-like")]
         Task<ApiResult> ToggleLikeAsync(Guid postId);
 
@@ -61,5 +62,6 @@ namespace SocialMauiApp.Apis
 
         [Get("/api/posts/{postId}")]
         Task<PostDto?> GetPostAsync(Guid postId);
+
     }
 }

@@ -53,6 +53,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.AddPos
 build_metadata.AdditionalFiles.TargetPath = Pages\AddPostPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\AddPostPage.xaml
 
+[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/AdminDashboardPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.AdminDashboardPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\AdminDashboardPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\AdminDashboardPage.xaml
+
 [C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/CropPhotoPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.CropPhotoPage.xaml

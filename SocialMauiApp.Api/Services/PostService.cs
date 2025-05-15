@@ -314,17 +314,56 @@ namespace SocialMauiApp.Api.Services
             {
                 return ApiResult.Fail("You can only delete your own comment");
             }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
+                // Xóa đệ quy tất cả comment con
+                await DeleteCommentRecursivelyAsync(commentId);
+
+                // Xóa comment cha
                 _context.Comments.Remove(comment);
                 await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
                 await NotifyCountsAsync(comment.PostId);
                 await _hubContext.Clients.All.CommentDeleted(commentId);
                 return ApiResult.Success();
             }
             catch (Exception ex)
             {
-                return ApiResult.Fail(ex.Message);
+                await transaction.RollbackAsync();
+                Console.WriteLine($"DeleteCommentAsync Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
+                return ApiResult.Fail($"Failed to delete comment: {ex.InnerException?.Message ?? ex.Message}");
+            }
+        }
+
+        private async Task DeleteCommentRecursivelyAsync(Guid commentId)
+        {
+            // Lấy tất cả comment con trực tiếp
+            var childComments = await _context.Comments
+                .Where(c => c.ParentCommentId == commentId)
+                .ToListAsync();
+
+            foreach (var child in childComments)
+            {
+                // Xóa đệ quy các comment con của comment con
+                await DeleteCommentRecursivelyAsync(child.Id);
+
+                // Xóa ảnh nếu có
+                if (!string.IsNullOrEmpty(child.PhotoPath) && File.Exists(child.PhotoPath))
+                {
+                    try
+                    {
+                        File.Delete(child.PhotoPath);
+                    }
+                    catch (Exception exFile)
+                    {
+                        Console.WriteLine($"Error deleting comment photo file: {exFile.Message}");
+                    }
+                }
+
+                _context.Comments.Remove(child);
             }
         }
 

@@ -957,6 +957,9 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.UpdateCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.DeleteCommentWithChildrenAsync(System.Guid)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.ToggleLikeAsync(System.Guid)">
             <inheritdoc />
         </member>
@@ -994,6 +997,9 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#UpdateCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#DeleteCommentWithChildrenAsync(System.Guid)">
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#ToggleLikeAsync(System.Guid)">
