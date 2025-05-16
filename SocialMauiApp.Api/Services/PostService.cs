@@ -35,7 +35,7 @@ namespace SocialMauiApp.Api.Services
                 post = new Post
                 {
                     Content = dto.Content,
-                    PostedOn = DateTime.UtcNow,
+                    PostedOn = DateTime.Now,
                     UserId = user.Id
                 };
                 if (dto.Photo is not null)
@@ -56,7 +56,7 @@ namespace SocialMauiApp.Api.Services
                     return ApiResult<PostDto>.Fail("Permission Denied");
                 }
                 post.Content = dto.Content;
-                post.ModifiedOn = DateTime.UtcNow;
+                post.ModifiedOn = DateTime.Now;
                 if (dto.Photo is not null)
                 {
                     _existingPhotoPath = post.PhotoPath;
@@ -160,7 +160,7 @@ namespace SocialMauiApp.Api.Services
             if (dto.CommentId == Guid.Empty)
             {
                 var existingComment = await _context.Comments
-                    .FirstOrDefaultAsync(c => c.PostId == dto.PostId && c.UserId == currentUser.Id && c.Content == dto.Content && c.AddedOn > DateTime.UtcNow.AddSeconds(-5));
+                    .FirstOrDefaultAsync(c => c.PostId == dto.PostId && c.UserId == currentUser.Id && c.Content == dto.Content && c.AddedOn > DateTime.Now.AddSeconds(-5));
                 if (existingComment != null)
                 {
                     return ApiResult<CommentDto>.Fail("Duplicate comment detected");
@@ -172,7 +172,7 @@ namespace SocialMauiApp.Api.Services
                     PostId = dto.PostId,
                     UserId = currentUser.Id,
                     Content = dto.Content,
-                    AddedOn = DateTime.UtcNow,
+                    AddedOn = DateTime.Now,
                     ParentCommentId = dto.ParentCommentId
                 };
                 if (dto.Photo != null)
@@ -194,7 +194,7 @@ namespace SocialMauiApp.Api.Services
                     return ApiResult<CommentDto>.Fail("You can modify your own comments only");
                 }
                 comment.Content = dto.Content;
-                comment.AddedOn = DateTime.UtcNow;
+                comment.AddedOn = DateTime.Now;
                 if (dto.Photo != null)
                 {
                     var existingPhotoPath = comment.PhotoPath;
@@ -259,7 +259,7 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<CommentDto>.Fail("You can only edit your own comment");
             }
             comment.Content = dto.Content;
-            comment.AddedOn = DateTime.UtcNow;
+            comment.AddedOn = DateTime.Now;
             string? existingPhotoPath = null;
             if (dto.Photo != null)
             {
@@ -379,7 +379,7 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<CommentDto>.Fail("You can only edit your own comment");
             }
             comment.Content = dto.Content;
-            comment.AddedOn = DateTime.UtcNow;
+            comment.AddedOn = DateTime.Now;
             try
             {
                 _context.Comments.Update(comment);

@@ -339,7 +339,6 @@
                                                                     FontSize="13"
                                                                     Text="{Binding UserName}"
                                                                     TextColor="#1C2526" />
-
                                                             </StackLayout>
                                                             <!--  More Options  -->
                                                             <Label
@@ -527,21 +526,25 @@
                                 </Border>
                                 <Border
                                     BackgroundColor="#CC000000"
-                                    HeightRequest="24"
+                                    HeightRequest="30"
                                     HorizontalOptions="End"
-                                    StrokeShape="RoundRectangle 12"
+                                    InputTransparent="False"
+                                    StrokeShape="RoundRectangle 15"
                                     VerticalOptions="Start"
-                                    WidthRequest="24"
+                                    WidthRequest="30"
                                     ZIndex="10">
                                     <Label
                                         BackgroundColor="Transparent"
-                                        FontSize="14"
+                                        FontSize="16"
                                         HorizontalOptions="Center"
                                         Text="✕"
                                         TextColor="White"
                                         VerticalOptions="Center" />
                                     <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Path=BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}, Mode=FindAncestor}}" CommandParameter="{Binding Id}" />
+                                        <TapGestureRecognizer
+                                            Command="{Binding Path=BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding Id}"
+                                            Tapped="OnRemovePhotoTapped" />
                                     </Border.GestureRecognizers>
                                 </Border>
                             </HorizontalStackLayout>

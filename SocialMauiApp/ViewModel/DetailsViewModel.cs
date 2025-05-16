@@ -220,18 +220,33 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task RemovePhoto(string imageId)
         {
-            if (string.IsNullOrEmpty(imageId) || IsBusy) return;
+            if (string.IsNullOrEmpty(imageId) || IsBusy)
+            {
+                System.Diagnostics.Debug.WriteLine($"RemovePhoto: Invalid imageId or IsBusy. imageId: {imageId}, IsBusy: {IsBusy}");
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"RemovePhoto: Attempting to remove image with ID: {imageId}");
             IsBusy = true;
             try
             {
                 var mapEntry = _imageFileMap.FirstOrDefault(x => x.Id == imageId);
-                if (mapEntry.ImageSource == null) return;
+                if (mapEntry.ImageSource == null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"RemovePhoto: No mapEntry found for imageId: {imageId}");
+                    return;
+                }
 
                 var preview = SelectedImagePreviews.FirstOrDefault(p => p.Id == imageId);
-                if (preview == null) return;
+                if (preview == null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"RemovePhoto: No preview found for imageId: {imageId}");
+                    return;
+                }
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
+                    System.Diagnostics.Debug.WriteLine($"RemovePhoto: Removing preview and mapEntry for imageId: {imageId}");
                     SelectedImagePreviews.Remove(preview);
                     _selectedFiles.Remove(mapEntry.FileResult);
                     _imageFileMap.Remove(mapEntry);
@@ -241,11 +256,15 @@ namespace SocialMauiApp.ViewModel
                         try
                         {
                             var stream = streamImageSource.Stream?.Invoke(CancellationToken.None);
-                            stream?.Dispose();
+                            if (stream != null)
+                            {
+                                stream.Dispose();
+                                System.Diagnostics.Debug.WriteLine($"RemovePhoto: Disposed StreamImageSource for imageId: {imageId}");
+                            }
                         }
                         catch (Exception disposeEx)
                         {
-                            System.Diagnostics.Debug.WriteLine($"RemovePhoto: Error disposing ImageSource: {disposeEx.Message}");
+                            System.Diagnostics.Debug.WriteLine($"RemovePhoto: Error disposing ImageSource for imageId: {imageId}, Error: {disposeEx.Message}");
                         }
                     }
 
@@ -254,15 +273,18 @@ namespace SocialMauiApp.ViewModel
                     OnPropertyChanged(nameof(SelectedImagePreviews));
                     OnPropertyChanged(nameof(HasSelectedImages));
                     OnPropertyChanged(nameof(IsPhotoButtonVisible));
+                    System.Diagnostics.Debug.WriteLine($"RemovePhoto: Updated state - HasSelectedImages: {HasSelectedImages}, IsPhotoButtonVisible: {IsPhotoButtonVisible}, Previews Count: {SelectedImagePreviews.Count}");
                 });
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"RemovePhoto: Exception occurred: {ex.Message}");
                 await ToastAsync($"Error removing image: {ex.Message}");
             }
             finally
             {
                 IsBusy = false;
+                System.Diagnostics.Debug.WriteLine($"RemovePhoto: Completed for imageId: {imageId}");
             }
         }
 
@@ -408,13 +430,22 @@ namespace SocialMauiApp.ViewModel
                 else
                 {
                     var isReply = _replyingToComment != null;
-                    if (Post == null || (_authService.User == null)) return;
+                    if (Post == null || _authService.User == null) return;
+
+                    Guid? parentCommentId = null;
+                    if (isReply)
+                    {
+                        // Nếu reply comment cấp 1, lấy ParentCommentId của comment cấp 0
+                        parentCommentId = _replyingToComment!.Level == 1
+                            ? _replyingToComment.ParentCommentId
+                            : _replyingToComment.CommentId;
+                    }
 
                     var dto = new SaveCommentDto
                     {
                         PostId = Post.PostId,
                         Content = Comment ?? "",
-                        ParentCommentId = isReply ? _replyingToComment!.CommentId : null
+                        ParentCommentId = parentCommentId
                     };
                     var serialized = JsonSerializer.Serialize(dto);
 
@@ -447,7 +478,7 @@ namespace SocialMauiApp.ViewModel
                         {
                             if (isReply)
                             {
-                                var parentComment = Comments.FirstOrDefault(c => c.CommentId == _replyingToComment!.CommentId);
+                                var parentComment = Comments.FirstOrDefault(c => c.CommentId == parentCommentId);
                                 if (parentComment != null)
                                 {
                                     if (parentComment.Replies == null) parentComment.Replies = new ObservableCollection<CommentDto>();
@@ -457,6 +488,13 @@ namespace SocialMauiApp.ViewModel
                                     }
                                     int parentIndex = Comments.IndexOf(parentComment);
                                     if (parentIndex >= 0) Comments[parentIndex] = parentComment;
+                                }
+                                else
+                                {
+                                    // Nếu không tìm thấy parentComment, thêm vào danh sách Comments tạm thời
+                                    Comments.Insert(0, result.Data);
+                                    // Làm mới danh sách comments
+                                    Task.Run(() => FetchCommentsAsync());
                                 }
                             }
                             else
@@ -482,7 +520,7 @@ namespace SocialMauiApp.ViewModel
             }
             catch (Exception ex)
             {
-                //await ShowErrorAlertAsync($"Error with {ReplyingToComment != null ? "reply":"comment"}: {ex.Message}");
+                await ShowErrorAlertAsync($"Error: {ex.Message}");
             }
             finally
             {
@@ -491,19 +529,25 @@ namespace SocialMauiApp.ViewModel
         }
 
         [RelayCommand]
-        private void ReplyComment(CommentDto commentDto)
+        private async Task ReplyComment(CommentDto commentDto)
         {
             if (IsBusy || commentDto == null) return;
-            _replyingToComment = commentDto;
-            Comment = $"@{commentDto.UserName} ";
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                ReplyingToComment = commentDto; // Sử dụng setter từ ObservableProperty
+                Comment = $"@{commentDto.UserName} ";
+            });
         }
 
         [RelayCommand]
         private async Task CancelReply()
         {
             if (IsBusy) return;
-            _replyingToComment = null;
-            Comment = string.Empty;
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                ReplyingToComment = null;
+                Comment = string.Empty;
+            });
             await ClearPhotos();
         }
 
@@ -519,7 +563,7 @@ namespace SocialMauiApp.ViewModel
                 Comment = commentDto.Content ?? "";
                 IsEditing = true;
                 CommentBeingEdited = commentDto;
-                _replyingToComment = null;
+                ReplyingToComment = null;
                 await ClearPhotos();
 
                 if (!string.IsNullOrEmpty(commentDto.PhotoUrl))
@@ -606,11 +650,9 @@ namespace SocialMauiApp.ViewModel
                     "Yes", "No");
                 if (!confirm) return;
 
-                // Lấy danh sách tất cả comment của bài viết
                 var allComments = await FetchAllCommentsForPostAsync();
                 await DeleteCommentRecursivelyAsync(commentDto.CommentId, allComments);
 
-                // Xóa comment cha
                 var result = await PostsApi.DeleteCommentAsync(commentDto.CommentId);
                 if (!result.IsSuccess)
                 {
@@ -627,9 +669,9 @@ namespace SocialMauiApp.ViewModel
                         Comment = string.Empty;
                         ClearPhotos();
                     }
-                    if (_replyingToComment?.CommentId == commentDto.CommentId)
+                    if (ReplyingToComment?.CommentId == commentDto.CommentId)
                     {
-                        _replyingToComment = null;
+                        ReplyingToComment = null;
                         Comment = string.Empty;
                         ClearPhotos();
                     }
@@ -695,15 +737,13 @@ namespace SocialMauiApp.ViewModel
 
         private async Task DeleteCommentRecursivelyAsync(Guid commentId, ObservableCollection<CommentDto> allComments)
         {
-            // Lấy tất cả comment con trực tiếp của commentId
             var childComments = allComments
                 .Where(c => c.ParentCommentId == commentId)
                 .ToList();
 
-            // Xử lý đệ quy cho mỗi comment con
             foreach (var child in childComments.ToList())
             {
-                await DeleteCommentRecursivelyAsync(child.CommentId, allComments); // Xóa đệ quy các comment con
+                await DeleteCommentRecursivelyAsync(child.CommentId, allComments);
                 var result = await PostsApi.DeleteCommentAsync(child.CommentId);
                 if (result.IsSuccess)
                 {
@@ -866,6 +906,13 @@ namespace SocialMauiApp.ViewModel
                                 if (parentIndex >= 0) Comments[parentIndex] = parentComment;
                                 OnPropertyChanged(nameof(Comments));
                             }
+                            else
+                            {
+                                // Nếu không tìm thấy parentComment, thêm tạm thời và làm mới danh sách
+                                Comments.Insert(0, comment);
+                                OnPropertyChanged(nameof(Comments));
+                                Task.Run(() => FetchCommentsAsync());
+                            }
                         }
                     }
                 }
@@ -955,9 +1002,9 @@ namespace SocialMauiApp.ViewModel
                     Comment = string.Empty;
                     ClearPhotos();
                 }
-                if (_replyingToComment?.CommentId == commentId)
+                if (ReplyingToComment?.CommentId == commentId)
                 {
-                    _replyingToComment = null;
+                    ReplyingToComment = null;
                     Comment = string.Empty;
                     ClearPhotos();
                 }

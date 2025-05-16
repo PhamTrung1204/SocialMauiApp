@@ -95,6 +95,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.PostDe
 build_metadata.AdditionalFiles.TargetPath = Pages\PostDetailsPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\PostDetailsPage.xaml
 
+[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/PostManagementPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.PostManagementPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\PostManagementPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\PostManagementPage.xaml
+
 [C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/ProfilePage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.ProfilePage.xaml

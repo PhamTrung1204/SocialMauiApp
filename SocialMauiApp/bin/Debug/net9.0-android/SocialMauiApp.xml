@@ -184,7 +184,7 @@
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.ReplyCommentCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.ReplyCommentCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.ReplyComment(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.ReplyComment(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.cancelReplyCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelReplyCommand"/>.</summary>
@@ -886,6 +886,21 @@
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoPath" generated properties.</summary>
         </member>
         <member name="T:Refit.Implementation.Generated">
+            <inheritdoc />
+        </member>
+        <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi">
+            <inheritdoc />
+        </member>
+        <member name="P:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.Client">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.#ctor(System.Net.Http.HttpClient,Refit.IRequestBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetDashboardAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetDashboardAsync">
             <inheritdoc />
         </member>
         <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi">

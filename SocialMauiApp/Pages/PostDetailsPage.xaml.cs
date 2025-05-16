@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
+using SocialMauiApp.Models;
 using SocialMauiApp.ViewModel;
 using SocialMediaMaui.Shared.Dtos;
 
@@ -47,7 +48,15 @@ namespace SocialMauiApp.Pages
                 viewModel.ReplyCommentCommand.Execute(comment);
             }
         }
-
+        private void OnRemovePhotoTapped(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("RemovePhotoTapped: Tap event triggered on '✕' button.");
+            if (sender is BindableObject bindable && bindable.BindingContext is ImagePreview preview)
+            {
+                var viewModel = BindingContext as DetailsViewModel;
+                viewModel?.RemovePhotoCommand.Execute(preview.Id);
+            }
+        }
         private void CollectionView_RemainingItemsThresholdReached(object sender, EventArgs e)
         {
             var viewModel = (DetailsViewModel)BindingContext;
