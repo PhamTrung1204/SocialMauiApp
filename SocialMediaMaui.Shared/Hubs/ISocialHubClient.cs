@@ -17,6 +17,9 @@ namespace SocialMediaMaui.Shared.Hubs
         Task UserPhotoChanged(UserPhotoChangedDto userPhotoChangedDto);
         Task NotificationGenerated(NotificationDto notification);
         Task PostCountsUpdated(PostDto counts);
+        Task UserLocked(Guid userId);
+        Task UserUnlocked(Guid userId);
+        Task UserDeleted(Guid userId);
     }
     public record struct UserPhotoChangedDto(Guid UserId, string? PhotoUrl);
 }

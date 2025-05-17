@@ -16,5 +16,7 @@ namespace SocialMauiApp.Api.Data.Entities
         [Comment("Physical path of the images")]
         public string? PhotoPath { get; set; }
         public string? PhotoUrl { get; set; }
+        public string Role { get; set; }
+        public bool IsLocked { get; set; }
     }
 }

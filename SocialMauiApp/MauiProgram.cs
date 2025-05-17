@@ -11,6 +11,7 @@ using SocialMediaMaui.Shared;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using Microsoft.Maui.Handlers;
+using SocialMauiApp.ViewModel;
 
 
 namespace SocialMauiApp
@@ -43,7 +44,8 @@ namespace SocialMauiApp
       
             builder.Services.AddTransient<LoginViewModel>().AddTransient<LoginPage>();
             builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
-
+            builder.Services.AddTransient<AdminViewModel>().AddTransient<AdminDashboardPage>();
+            builder.Services.AddTransient<PostManagementPage>();
             builder.Services.AddTransient<RegisterViewModel>().AddTransient<RegisterPage>();
             builder.Services.AddTransient<SavePostViewModel>().AddTransient<AddPostPage>();
             builder.Services.AddSingleton<HomeViewModel>().AddSingleton<HomePage>() ;
@@ -71,6 +73,8 @@ namespace SocialMauiApp
         {
             //var baseApiUrl = "https://r2dpzmzp-7022.asse.devtunnels.ms";
             services.AddRefitClient<IAuthApi>()
+                .ConfigureHttpClient(SetHttpClient);
+            services.AddRefitClient<IAdminApi>(GetRefitSettings)
                 .ConfigureHttpClient(SetHttpClient);
             services.AddRefitClient<IPostApi>(GetRefitSettings)
                 .ConfigureHttpClient(SetHttpClient);

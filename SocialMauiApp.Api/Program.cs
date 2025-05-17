@@ -23,6 +23,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 builder.Services.AddTransient<AuthService>()
     .AddTransient<PostService>()
+    .AddTransient<AdminService>()
     .AddTransient<IPasswordHasher<User>, PasswordHasher<User>>()
     .AddScoped<UserService>()
     .AddTransient<PhotoUploadService>();
@@ -82,6 +83,7 @@ app.Use(async (httpContext, next) =>
 app.UseAuthentication()
     .UseAuthorization();
 app.MapAuthEndpoints()
+    .MapAdminEndpoints()
     .MapPostsEndpoints()
     .MapUserEndpoints();
 app.MapHub<SocialHub>(AppConstants.HubPattern);

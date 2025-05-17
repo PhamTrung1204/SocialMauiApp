@@ -77,6 +77,30 @@
             Khởi tạo AuthService bằng cách đọc dữ liệu đã lưu trong Preferences (nếu có).
             </summary>
         </member>
+        <member name="T:SocialMauiApp.ViewModel.AdminViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.PostCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._postCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.UserCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._userCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.CommentCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._commentCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.LikeCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._likeCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.IsLoading">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._isLoading"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.Users">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._users"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.SelectedUser">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._selectedUser"/>
+        </member>
         <member name="T:SocialMauiApp.ViewModel.BasePostViewModel">
             <inheritdoc/>
             <inheritdoc/>
@@ -681,6 +705,21 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CommentCount">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CommentCount" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PostCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PostCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UserCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UserCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Users">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Users" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedUser">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedUser" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBusy">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBusy" generated properties.</summary>
         </member>
@@ -801,6 +840,21 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CommentCount">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CommentCount" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PostCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PostCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UserCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UserCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Users">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Users" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedUser">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedUser" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBusy">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBusy" generated properties.</summary>
         </member>
@@ -900,7 +954,31 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetDashboardAsync">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetUsersAsync(System.String,System.String,System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.LockUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.UnlockUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.DeleteUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetDashboardAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetUsersAsync(System.String,System.String,System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#LockUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#UnlockUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#DeleteUserAsync(System.Guid)">
             <inheritdoc />
         </member>
         <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi">

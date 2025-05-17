@@ -27,6 +27,8 @@
         Title="Details"
         ContentTemplate="{DataTemplate pages:PostDetailsPage}"
         Route="PostDetailsPage" />
-    
-
+    <ShellContent
+        Title="Admin Page"
+        ContentTemplate="{DataTemplate pages:AdminDashboardPage}"
+        Route="AdminDashboardPage"/>
 </Shell>

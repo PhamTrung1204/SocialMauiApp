@@ -43,6 +43,8 @@
                     <!-- Thêm converter ở đây -->
                     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
                     <converters:DateTimeToHumanizedConverter x:Key="HumanizedTimeConverter"/>
+                    <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+                    <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -76,10 +76,12 @@ public partial class LoginViewModel : BaseViewModel
             _pref.SetBool("FingerprintAuthEnabled", true);
             _pref.SetString("LastEmail", resp.Data.User.Email);
             _pref.SetString("Username", resp.Data.User.Name);
-            _pref.SetInt(FailKey, 0);                     
+            _pref.SetInt(FailKey, 0);
             await SecureStorage.SetAsync("AuthToken", resp.Data.Token);
 
-            await NavigateAsync($"//{nameof(HomePage)}");
+            // Kiểm tra Role để điều hướng
+            string targetPage = resp.Data.User.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
+            await NavigateAsync($"//{targetPage}");
         });
     }
 
@@ -136,7 +138,9 @@ public partial class LoginViewModel : BaseViewModel
             {
                 _authService.Login(new LoginResponseDto(v.Data, token));
                 Username = user;
-                await NavigateAsync($"//{nameof(HomePage)}");
+                // Kiểm tra Role để điều hướng
+                string targetPage = v.Data.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
+                await NavigateAsync($"//{targetPage}");
             }
             else
             {
@@ -151,7 +155,7 @@ public partial class LoginViewModel : BaseViewModel
         _pref.SetBool("FingerprintAuthEnabled", false);
         _pref.SetString("LastEmail", "");
         _pref.SetString("Username", "");
-        _pref.SetInt(FailKey, 0);                        
+        _pref.SetInt(FailKey, 0);
         SecureStorage.Remove("AuthToken");
         ShowFingerprintOption = false;
 

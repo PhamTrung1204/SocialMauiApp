@@ -1,291 +1,297 @@
-﻿//using Microsoft.EntityFrameworkCore;
-//using SocialMauiApp.Api.Data;
-//using SocialMauiApp.Api.Data.Entities;
-//using SocialMediaMaui.Shared.Dtos;
-//using System;
-//using System.Linq;
-//using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using SocialMauiApp.Api.Data;
+using SocialMauiApp.Api.Data.Entities;
+using SocialMediaMaui.Shared.Dtos;
+using SocialMediaMaui.Shared.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
-//namespace SocialMauiApp.Api.Services
-//{
-//    public class AdminService
-//    {
-//        private readonly DataContext _context;
-//        private readonly PhotoUploadService _photoUploadService;
-//        public AdminService(DataContext context)
-//        {
-//            _context = context;
-//        }
+namespace SocialMauiApp.Api.Services
+{
+    public class AdminService
+    {
+        private readonly DataContext _context;
+        private readonly PhotoUploadService _photoUploadService;
+        private readonly IHubContext<SocialHub, ISocialHubClient> _hubContext;
 
-//        // Dashboard
-//        public async Task<DashboardDto> GetDashboardAsync()
-//        {
-//            var postCount = await _context.Posts.CountAsync();
-//            var userCount = await _context.Users.CountAsync();
-//            var commentCount = await _context.Comments.CountAsync();
-//            var likeCount = await _context.Likes.CountAsync();
+        public AdminService(DataContext context, PhotoUploadService photoUploadService, IHubContext<SocialHub, ISocialHubClient> hubContext)
+        {
+            _context = context;
+            _photoUploadService = photoUploadService;
+            _hubContext = hubContext;
+        }
 
-//            return new DashboardDto
-//            {
-//                PostCount = postCount,
-//                UserCount = userCount,
-//                CommentCount = commentCount,
-//                LikeCount = likeCount
-//            };
-//        }
+        public async Task<DashboardDto> GetDashboardAsync()
+        {
+            System.Diagnostics.Debug.WriteLine($"Database connected: {_context.Database.CanConnect()}");
+            var postCount = await _context.Posts.CountAsync(p => !p.IsDeleted);
+            var userCount = await _context.Users.CountAsync();
+            var commentCount = await _context.Comments.CountAsync();
+            var likeCount = await _context.Likes.CountAsync();
 
-//        // Quản lý người dùng
-//        public async Task<UserDto[]> GetUsersAsync(string? search, string? role, int page, int pageSize)
-//        {
-//            var query = _context.Users.AsQueryable();
+            System.Diagnostics.Debug.WriteLine($"Dashboard counts - Posts: {postCount}, Users: {userCount}, Comments: {commentCount}, Likes: {likeCount}");
 
-//            if (!string.IsNullOrEmpty(search))
-//            {
-//                query = query.Where(u => u.Name.Contains(search) || u.Email.Contains(search));
-//            }
+            return new DashboardDto
+            {
+                PostCount = postCount,
+                UserCount = userCount,
+                CommentCount = commentCount,
+                LikeCount = likeCount
+            };
+        }
 
-//            if (!string.IsNullOrEmpty(role))
-//            {
-//                query = query.Where(u => u.Role == role);
-//            }
+        public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize)
+        {
+            var posts = await _context.Posts
+                .Where(p => !p.IsDeleted)
+                .OrderByDescending(p => p.PostedOn)
+                .Skip(startIndex)
+                .Take(pageSize)
+                .Select(p => new PostDto
+                {
+                    PostId = p.Id,
+                    UserId = p.UserId,
+                    UserName = p.User.Name,
+                    UserPhotoUrl = p.User.PhotoUrl,
+                    Content = p.Content,
+                    PhotoUrl = p.PhotoUrl,
+                    PostedOn = p.PostedOn,
+                    ModifiedOn = p.ModifiedOn,
+                    //LikeCount = p.Likes.Count,
+                    //CommentCount = p.Comments.Count
+                })
+                .ToArrayAsync();
 
-//            var users = await query.OrderBy(u => u.Name)
-//                                   .Skip((page - 1) * pageSize)
-//                                   .Take(pageSize)
-//                                   .Select(u => new UserDto
-//                                   {
-//                                       Id = u.Id,
-//                                       Name = u.Name,
-//                                       Email = u.Email,
-//                                       Role = u.Role,
-//                                       IsLocked = u.IsLocked
-//                                   })
-//                                   .ToArrayAsync();
-//            return users;
-//        }
+            return posts;
+        }
 
-//        public async Task<ApiResult> LockUserAsync(Guid userId)
-//        {
-//            var user = await _context.Users.FindAsync(userId);
-//            if (user == null)
-//                return ApiResult.Fail("User not found");
+        public async Task<ApiResult> DeletePostAsync(Guid postId)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+                if (post == null)
+                    return ApiResult.Fail("Post not found");
 
-//            user.IsLocked = true;
-//            await _context.SaveChangesAsync();
-//            return ApiResult.Success();
-//        }
+                if (!string.IsNullOrEmpty(post.PhotoPath) && File.Exists(post.PhotoPath))
+                {
+                    try
+                    {
+                        File.Delete(post.PhotoPath);
+                    }
+                    catch (Exception exFile)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error deleting post photo file: {exFile.Message}");
+                    }
+                }
 
-//        public async Task<ApiResult> UnlockUserAsync(Guid userId)
-//        {
-//            var user = await _context.Users.FindAsync(userId);
-//            if (user == null)
-//                return ApiResult.Fail("User not found");
+                _context.Comments.RemoveRange(_context.Comments.Where(c => c.PostId == postId));
+                _context.Likes.RemoveRange(_context.Likes.Where(l => l.PostId == postId));
+                _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.PostId == postId));
+                _context.Notifications.RemoveRange(_context.Notifications.Where(n => n.PostId == postId));
+                _context.Posts.Remove(post);
 
-//            user.IsLocked = false;
-//            await _context.SaveChangesAsync();
-//            return ApiResult.Success();
-//        }
+                int result = await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
-//        public async Task<ApiResult> ChangeUserRoleAsync(Guid userId, string newRole)
-//        {
-//            var user = await _context.Users.FindAsync(userId);
-//            if (user == null)
-//                return ApiResult.Fail("User not found");
+                if (result > 0)
+                {
+                    await _hubContext.Clients.All.PostDeleted(postId);
+                    return ApiResult.Success();
+                }
+                return ApiResult.Fail("No rows affected");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                System.Diagnostics.Debug.WriteLine($"DeletePostAsync Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
+                return ApiResult.Fail($"Failed to delete post: {ex.InnerException?.Message ?? ex.Message}");
+            }
+        }
 
-//            user.Role = newRole;
-//            await _context.SaveChangesAsync();
-//            return ApiResult.Success();
-//        }
+        public async Task<UserDto[]> GetUsersAsync(string? searchText, string? role, int page, int pageSize)
+        {
+            var query = _context.Users.AsQueryable();
 
-//        // Quản lý bài viết
-//        public async Task<PostDto[]> GetPostsForAdminAsync(string? search, Guid? authorId, string? status, int page, int pageSize)
-//        {
-//            var query = _context.Posts.AsQueryable();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                searchText = searchText.ToLower();
+                query = query.Where(u => u.Name.ToLower().Contains(searchText) || u.Email.ToLower().Contains(searchText));
+            }
 
-//            if (!string.IsNullOrEmpty(search))
-//            {
-//                query = query.Where(p => p.Content.Contains(search));
-//            }
+            if (!string.IsNullOrEmpty(role))
+            {
+                query = query.Where(u => u.Role == role);
+            }
 
-//            if (authorId.HasValue)
-//            {
-//                query = query.Where(p => p.UserId == authorId.Value);
-//            }
+            var users = await query
+                .OrderBy(u => u.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email,
+                    Role = u.Role,
+                    PhotoUrl = u.PhotoUrl,
+                    IsLocked = u.IsLocked
+                })
+                .ToArrayAsync();
 
-//            var posts = await query.OrderByDescending(p => p.PostedOn)
-//                                   .Skip((page - 1) * pageSize)
-//                                   .Take(pageSize)
-//                                   .Select(p => new PostDto
-//                                   {
-//                                       PostId = p.Id,
-//                                       Content = p.Content,
-//                                       PhotoUrl = p.PhotoUrl,
-//                                       PostedOn = p.PostedOn,
-//                                       UserId = p.UserId,
-//                                       UserName = p.User.Name,
-                                      
-//                                   })
-//                                   .ToArrayAsync();
-//            return posts;
-//        }
+            return users;
+        }
 
-//        public async Task<ApiResult> DeletePostByAdminAsync(Guid postId)
-//        {
-//            using var transaction = await _context.Database.BeginTransactionAsync();
-//            try
-//            {
-//                var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
-//                if (post == null)
-//                    return ApiResult.Fail("Post not found");
+        public async Task<ApiResult> LockUserAsync(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return ApiResult.Fail("User not found");
 
-//                if (!string.IsNullOrEmpty(post.PhotoPath) && File.Exists(post.PhotoPath))
-//                {
-//                    File.Delete(post.PhotoPath);
-//                }
+            if (user.Role == "Admin")
+                return ApiResult.Fail("Cannot lock an admin user");
 
-//                _context.Comments.RemoveRange(_context.Comments.Where(c => c.PostId == postId));
-//                _context.Likes.RemoveRange(_context.Likes.Where(l => l.PostId == postId));
-//                _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.PostId == postId));
-//                _context.Notifications.RemoveRange(_context.Notifications.Where(n => n.PostId == postId));
-//                _context.Posts.Remove(post);
+            user.IsLocked = true;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
 
-//                await _context.SaveChangesAsync();
-//                await transaction.CommitAsync();
-//                return ApiResult.Success();
-//            }
-//            catch (Exception ex)
-//            {
-//                await transaction.RollbackAsync();
-//                return ApiResult.Fail(ex.Message);
-//            }
-//        }
+            await _hubContext.Clients.All.UserLocked(userId);
+            return ApiResult.Success();
+        }
 
-//        public async Task<ApiResult<PostDto>> UpdatePostByAdminAsync(Guid postId, SavePostDto dto)
-//        {
-//            var post = await _context.Posts.FindAsync(postId);
-//            if (post == null)
-//                return ApiResult<PostDto>.Fail("Post not found");
+        public async Task<ApiResult> UnlockUserAsync(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return ApiResult.Fail("User not found");
 
-//            post.Content = dto.Content;
-//            post.ModifiedOn = DateTime.Now;
-//            string? existingPhotoPath = null;
+            user.IsLocked = false;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
 
-//            if (dto.Photo != null)
-//            {
-//                existingPhotoPath = post.PhotoPath;
-//                (post.PhotoPath, post.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", post.UserId.ToString(), "posts");
-//            }
-//            else if (dto.IsExistingPhotoRemoved)
-//            {
-//                existingPhotoPath = post.PhotoPath;
-//                post.PhotoPath = null;
-//                post.PhotoUrl = null;
-//            }
+            await _hubContext.Clients.All.UserUnlocked(userId);
+            return ApiResult.Success();
+        }
 
-//            try
-//            {
-//                _context.Posts.Update(post);
-//                await _context.SaveChangesAsync();
+        public async Task<ApiResult> DeleteUserAsync(Guid userId)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null)
+                    return ApiResult.Fail("User not found");
 
-//                if (!string.IsNullOrEmpty(existingPhotoPath) && File.Exists(existingPhotoPath))
-//                {
-//                    File.Delete(existingPhotoPath);
-//                }
+                if (user.Role == "Admin")
+                    return ApiResult.Fail("Cannot delete an admin user");
 
-//                var postDto = new PostDto
-//                {
-//                    PostId = post.Id,
-//                    Content = post.Content,
-//                    PhotoUrl = post.PhotoUrl,
-//                    PostedOn = post.PostedOn,
-//                    ModifiedOn = post.ModifiedOn,
-//                    UserId = post.UserId,
-//                    UserName = post.User.Name
-//                };
-//                return ApiResult<PostDto>.Success(postDto);
-//            }
-//            catch (Exception ex)
-//            {
-//                return ApiResult<PostDto>.Fail(ex.Message);
-//            }
-//        }
+                var userPosts = await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
+                foreach (var post in userPosts)
+                {
+                    if (!string.IsNullOrEmpty(post.PhotoPath) && File.Exists(post.PhotoPath))
+                    {
+                        try
+                        {
+                            File.Delete(post.PhotoPath);
+                        }
+                        catch (Exception exFile)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Error deleting post photo file: {exFile.Message}");
+                        }
+                    }
+                    _context.Comments.RemoveRange(_context.Comments.Where(c => c.PostId == post.Id));
+                    _context.Likes.RemoveRange(_context.Likes.Where(l => l.PostId == post.Id));
+                    _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.PostId == post.Id));
+                    _context.Notifications.RemoveRange(_context.Notifications.Where(n => n.PostId == post.Id));
+                    _context.Posts.Remove(post);
+                }
 
-//        // Quản lý bình luận
-//        public async Task<CommentDto[]> GetCommentsForAdminAsync(string? search, Guid? postId, Guid? authorId, int page, int pageSize)
-//        {
-//            var query = _context.Comments.AsQueryable();
+                var userComments = await _context.Comments.Where(c => c.UserId == userId).ToListAsync();
+                foreach (var comment in userComments)
+                {
+                    if (!string.IsNullOrEmpty(comment.PhotoPath) && File.Exists(comment.PhotoPath))
+                    {
+                        try
+                        {
+                            File.Delete(comment.PhotoPath);
+                        }
+                        catch (Exception exFile)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Error deleting comment photo file: {exFile.Message}");
+                        }
+                    }
+                    _context.Comments.Remove(comment);
+                }
 
-//            if (!string.IsNullOrEmpty(search))
-//            {
-//                query = query.Where(c => c.Content.Contains(search));
-//            }
+                _context.Likes.RemoveRange(_context.Likes.Where(l => l.UserId == userId));
+                _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.UserId == userId));
+                _context.Notifications.RemoveRange(_context.Notifications.Where(n => n.ForUserId == userId));
+                _context.Users.Remove(user);
 
-//            if (postId.HasValue)
-//            {
-//                query = query.Where(c => c.PostId == postId.Value);
-//            }
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
-//            if (authorId.HasValue)
-//            {
-//                query = query.Where(c => c.UserId == authorId.Value);
-//            }
+                await _hubContext.Clients.All.UserDeleted(userId);
+                return ApiResult.Success();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                System.Diagnostics.Debug.WriteLine($"DeleteUserAsync Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
+                return ApiResult.Fail($"Failed to delete user: {ex.InnerException?.Message ?? ex.Message}");
+            }
+        }
 
-//            var comments = await query.OrderByDescending(c => c.AddedOn)
-//                                      .Skip((page - 1) * pageSize)
-//                                      .Take(pageSize)
-//                                      .Select(c => new CommentDto
-//                                      {
-//                                          CommentId = c.Id,
-//                                          Content = c.Content,
-//                                          PostId = c.PostId,
-//                                          UserId = c.UserId,
-//                                          UserName = c.User.Name,
-//                                          PhotoUrl = c.PhotoUrl,
-//                                          AddedOn = c.AddedOn,
-//                                          ParentCommentId = c.ParentCommentId
-//                                      })
-//                                      .ToArrayAsync();
-//            return comments;
-//        }
+        public async Task<ApiResult> DeleteCommentAsync(Guid commentId)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var comment = await _context.Comments.FindAsync(commentId);
+                if (comment == null)
+                    return ApiResult.Fail("Comment not found");
 
-//        public async Task<ApiResult> DeleteCommentByAdminAsync(Guid commentId)
-//        {
-//            using var transaction = await _context.Database.BeginTransactionAsync();
-//            try
-//            {
-//                var comment = await _context.Comments.FindAsync(commentId);
-//                if (comment == null)
-//                    return ApiResult.Fail("Comment not found");
+                await DeleteCommentRecursivelyAsync(commentId);
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
 
-//                await DeleteCommentRecursivelyAsync(commentId);
-//                _context.Comments.Remove(comment);
-//                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                await _hubContext.Clients.All.CommentDeleted(commentId);
+                return ApiResult.Success();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                System.Diagnostics.Debug.WriteLine($"DeleteCommentAsync Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
+                return ApiResult.Fail($"Failed to delete comment: {ex.InnerException?.Message ?? ex.Message}");
+            }
+        }
 
-//                await transaction.CommitAsync();
-//                return ApiResult.Success();
-//            }
-//            catch (Exception ex)
-//            {
-//                await transaction.RollbackAsync();
-//                return ApiResult.Fail(ex.Message);
-//            }
-//        }
+        private async Task DeleteCommentRecursivelyAsync(Guid commentId)
+        {
+            var childComments = await _context.Comments
+                .Where(c => c.ParentCommentId == commentId)
+                .ToListAsync();
 
-//        private async Task DeleteCommentRecursivelyAsync(Guid commentId)
-//        {
-//            var childComments = await _context.Comments
-//                .Where(c => c.ParentCommentId == commentId)
-//                .ToListAsync();
-
-//            foreach (var child in childComments)
-//            {
-//                await DeleteCommentRecursivelyAsync(child.Id);
-//                if (!string.IsNullOrEmpty(child.PhotoPath) && File.Exists(child.PhotoPath))
-//                {
-//                    File.Delete(child.PhotoPath);
-//                }
-//                _context.Comments.Remove(child);
-//            }
-//        }
-//    }
-//}
+            foreach (var child in childComments)
+            {
+                await DeleteCommentRecursivelyAsync(child.Id);
+                if (!string.IsNullOrEmpty(child.PhotoPath) && File.Exists(child.PhotoPath))
+                {
+                    try
+                    {
+                        File.Delete(child.PhotoPath);
+                    }
+                    catch (Exception exFile)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error deleting comment photo file: {exFile.Message}");
+                    }
+                }
+                _context.Comments.Remove(child);
+            }
+        }
+    }
+}

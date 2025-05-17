@@ -14,7 +14,9 @@ namespace SocialMauiApp.Api
             var name = principal.FindFirstValue(ClaimTypes.Name);
             var email = principal.FindFirstValue(ClaimTypes.Email);
             var photoUrl = principal.FindFirstValue("UserPhotoUrl");
-            return new LoggedInUser(userId, name, email, photoUrl);
+         
+            var role = principal.FindFirstValue(ClaimTypes.Role);
+            return new LoggedInUser(userId, name, email, photoUrl, role);
         }
     }
 }

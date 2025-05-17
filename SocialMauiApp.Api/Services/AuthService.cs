@@ -14,7 +14,6 @@ namespace SocialMauiApp.Api.Services
     {
         private readonly DataContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
-
         private readonly PhotoUploadService _photoUploadService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
@@ -31,6 +30,7 @@ namespace SocialMauiApp.Api.Services
             _configuration = configuration;
             _logger = logger;
         }
+
         public async Task<ApiResult<Guid>> RegisterAsync(RegisterDto dto)
         {
             if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
@@ -42,7 +42,8 @@ namespace SocialMauiApp.Api.Services
                 var user = new User
                 {
                     Email = dto.Email,
-                    Name = dto.Name
+                    Name = dto.Name,
+                    Role = "Client" // Mặc định là "User", có thể thay bằng "Admin" nếu cần
                 };
                 user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
                 _context.Users.Add(user);
@@ -54,6 +55,7 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<Guid>.Fail(ex.Message);
             }
         }
+
         public async Task<ApiResult> UploadPhotoAsync(Guid userId, IFormFile photo)
         {
             var user = await _context.Users.FindAsync(userId);
@@ -72,8 +74,8 @@ namespace SocialMauiApp.Api.Services
             {
                 return ApiResult.Fail(e.Message);
             }
-
         }
+
         public async Task<ApiResult<LoginResponseDto>> LoginAsync(LoginDto dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
@@ -81,14 +83,17 @@ namespace SocialMauiApp.Api.Services
             {
                 return ApiResult<LoginResponseDto>.Fail("User does not exists");
             }
+            if (user == null || user.IsLocked)
+                return ApiResult<LoginResponseDto>.Fail("Invalid credentials or account locked.");
             var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if (passwordVerificationResult != PasswordVerificationResult.Success)
-                return ApiResult<LoginResponseDto>.Fail("Invail credentials");
+                return ApiResult<LoginResponseDto>.Fail("Invalid credentials");
             var jwt = GenerateJwtToken(user);
-            var loggedInuser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl);
+            var loggedInuser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl, user.Role);
             var loginResponse = new LoginResponseDto(loggedInuser, jwt);
             return ApiResult<LoginResponseDto>.Success(loginResponse);
         }
+
         public async Task<ApiResult<LoggedInUser>> ValidateTokenAsync(string token)
         {
             try
@@ -100,7 +105,6 @@ namespace SocialMauiApp.Api.Services
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.UTF8.GetBytes(secretKey);
 
-                // Set token validation parameters
                 var validationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -112,21 +116,17 @@ namespace SocialMauiApp.Api.Services
                     ClockSkew = TimeSpan.Zero
                 };
 
-                // Validate token and extract principal
                 var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
 
-                // Extract user ID claim
                 var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
                     return ApiResult<LoggedInUser>.Fail("Invalid token");
 
-                // Get user from database
                 var user = await _context.Users.FindAsync(userId);
                 if (user == null)
                     return ApiResult<LoggedInUser>.Fail("User not found");
 
-                // Return user info
-                var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl);
+                var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl, user.Role);
                 return ApiResult<LoggedInUser>.Success(loggedInUser);
             }
             catch (SecurityTokenExpiredException)
@@ -143,6 +143,7 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<LoggedInUser>.Fail("Authentication error");
             }
         }
+
         private string GenerateJwtToken(User user)
         {
             var claims = new[]
@@ -150,6 +151,7 @@ namespace SocialMauiApp.Api.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role ?? "Client") // Thêm claim Role từ user.Role
             };
 
             var secretKey = _configuration.GetValue<string>("Jwt:SecretKey");
@@ -173,11 +175,9 @@ namespace SocialMauiApp.Api.Services
 
             var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
-            // Sử dụng ILogger để log token (chỉ nên log trong môi trường Development)
             _logger.LogDebug("Generated JWT Token: {Token}", token);
 
             return token;
         }
-
     }
 }
