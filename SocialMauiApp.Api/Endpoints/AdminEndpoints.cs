@@ -18,9 +18,9 @@ namespace SocialMauiApp.Api.Endpoints
                 .WithTags("Admin");
 
             adminGroup.MapGet("/dashboard", async ([FromServices] AdminService adminService) =>
-    Results.Ok(await adminService.GetDashboardAsync()))
-    .Produces<DashboardDto>()
-    .WithName("GetDashboard");
+                Results.Ok(await adminService.GetDashboardAsync()))
+                .Produces<DashboardDto>()
+                .WithName("GetDashboard");
 
             adminGroup.MapGet("/posts", async (int startIndex, int pageSize, [FromServices] AdminService adminService) =>
                 Results.Ok(await adminService.GetPostsAsync(startIndex, pageSize)))
@@ -51,6 +51,11 @@ namespace SocialMauiApp.Api.Endpoints
                 Results.Ok(await adminService.DeleteUserAsync(userId)))
                 .Produces<ApiResult>()
                 .WithName("DeleteUser");
+
+            adminGroup.MapGet("/comments", async (int startIndex, int pageSize, [FromServices] AdminService adminService) =>
+                Results.Ok(await adminService.GetCommentsAsync(startIndex, pageSize)))
+                .Produces<CommentDto[]>()
+                .WithName("GetAdminComments");
 
             adminGroup.MapDelete("/comments/{commentId:guid}", async (Guid commentId, [FromServices] AdminService adminService) =>
                 Results.Ok(await adminService.DeleteCommentAsync(commentId)))

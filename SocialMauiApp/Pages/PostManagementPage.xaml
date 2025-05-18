@@ -1,12 +1,150 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SocialMauiApp.Pages.PostManagementPage"
-             Title="PostManagementPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="SocialMauiApp.Pages.PostManagementPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Post Management"
+    BackgroundColor="#F5F5F5">
+    <Grid RowDefinitions="Auto, *, *">
+        <!--  Loading Indicator  -->
+        <ActivityIndicator
+            Grid.RowSpan="3"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsLoading}"
+            IsVisible="{Binding IsLoading}"
+            VerticalOptions="Center"
+            Color="#1976D2" />
+
+        <!--  Header Section  -->
+        <StackLayout
+            Grid.Row="0"
+            Padding="15"
+            BackgroundColor="#1976D2"
+            Spacing="15">
+            <Label
+                FontAttributes="Bold"
+                FontSize="26"
+                HorizontalOptions="Center"
+                Text="Post Management Dashboard"
+                TextColor="White" />
+            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto">
+                <Label
+                    Grid.Column="0"
+                    FontSize="18"
+                    Text="Posts:"
+                    TextColor="White" />
+                <Label
+                    Grid.Column="1"
+                    FontSize="18"
+                    Text="{Binding PostCount}"
+                    TextColor="White" />
+                <Label
+                    Grid.Column="2"
+                    FontSize="18"
+                    Text="Comments:"
+                    TextColor="White" />
+                <Label
+                    Grid.Column="3"
+                    FontSize="18"
+                    Text="{Binding CommentCount}"
+                    TextColor="White" />
+            </Grid>
+        </StackLayout>
+
+        <!--  Posts List Section  -->
+        <StackLayout Grid.Row="1" Margin="15">
+            <Label
+                Margin="0,0,0,10"
+                FontAttributes="Bold"
+                FontSize="22"
+                Text="Posts" />
+            <CollectionView ItemsSource="{Binding Posts}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,5"
+                            Padding="12"
+                            BackgroundColor="White">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackLayout Grid.Column="0" Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        Text="{Binding UserName}" />
+                                    <Label
+                                        FontSize="16"
+                                        LineBreakMode="TailTruncation"
+                                        MaxLines="2"
+                                        Text="{Binding Content}" />
+                                    <Label
+                                        FontSize="14"
+                                        Text="{Binding PostedOn, StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                                        TextColor="Gray" />
+                                </StackLayout>
+                                <Button
+                                    Grid.Column="1"
+                                    Margin="10,0,0,0"
+                                    BackgroundColor="#D32F2F"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeletePostCommand}"
+                                    CommandParameter="{Binding PostId}"
+                                    CornerRadius="10"
+                                    HeightRequest="45"
+                                    Text="Delete"
+                                    TextColor="White"
+                                    WidthRequest="90" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+
+        <!--  Comments List Section  -->
+        <StackLayout Grid.Row="2" Margin="15">
+            <Label
+                Margin="0,0,0,10"
+                FontAttributes="Bold"
+                FontSize="22"
+                Text="Comments" />
+            <CollectionView ItemsSource="{Binding Comments}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,5"
+                            Padding="12"
+                            BackgroundColor="White">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackLayout Grid.Column="0" Spacing="5">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        Text="{Binding UserName}" />
+                                    <Label
+                                        FontSize="16"
+                                        LineBreakMode="TailTruncation"
+                                        MaxLines="2"
+                                        Text="{Binding Content}" />
+                                    <Label
+                                        FontSize="14"
+                                        Text="{Binding CreatedOn, StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                                        TextColor="Gray" />
+                                </StackLayout>
+                                <Button
+                                    Grid.Column="1"
+                                    Margin="10,0,0,0"
+                                    BackgroundColor="#D32F2F"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCommentCommand}"
+                                    CommandParameter="{Binding Id}"
+                                    CornerRadius="10"
+                                    HeightRequest="45"
+                                    Text="Delete"
+                                    TextColor="White"
+                                    WidthRequest="90" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </Grid>
 </ContentPage>

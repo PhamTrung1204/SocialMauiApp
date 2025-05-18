@@ -387,6 +387,30 @@
         <member name="P:SocialMauiApp.ViewModel.NotificationViewModel.OpenPostCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.NotificationViewModel.OpenPostAsync(System.Nullable{System.Guid})"/>.</summary>
         </member>
+        <member name="T:SocialMauiApp.ViewModel.PostManageViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.PostCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._postCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.CommentCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._commentCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.IsLoading">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._isLoading"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.Posts">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._posts"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.Comments">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._comments"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.SelectedPost">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._selectedPost"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.SelectedComment">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._selectedComment"/>
+        </member>
         <member name="T:SocialMauiApp.ViewModel.ProfileViewModel">
             <inheritdoc/>
             <inheritdoc/>
@@ -777,6 +801,18 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBiometricAvailable">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBiometricAvailable" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Posts">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Posts" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Comments">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Comments" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedPost" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedComment" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsUploading">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsUploading" generated properties.</summary>
         </member>
@@ -912,6 +948,18 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBiometricAvailable">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBiometricAvailable" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Posts">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Posts" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Comments">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Comments" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedPost" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedComment" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsUploading">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsUploading" generated properties.</summary>
         </member>
@@ -966,6 +1014,18 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.DeleteUserAsync(System.Guid)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetPostsAsync(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.DeletePostAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetCommentsAsync(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.DeleteCommentAsync(System.Guid)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetDashboardAsync">
             <inheritdoc />
         </member>
@@ -979,6 +1039,18 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#DeleteUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetPostsAsync(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#DeletePostAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetCommentsAsync(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#DeleteCommentAsync(System.Guid)">
             <inheritdoc />
         </member>
         <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi">

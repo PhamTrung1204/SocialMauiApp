@@ -22,5 +22,17 @@ namespace SocialMauiApp.Apis
 
         [Delete("/api/admin/users/{userId}")]
         Task<ApiResult> DeleteUserAsync(Guid userId);
+
+        [Get("/api/admin/posts")]
+        Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize);
+
+        [Delete("/api/admin/posts/{postsId}")]
+        Task<ApiResult> DeletePostAsync(Guid postsId);
+
+        [Get("/api/admin/comments")]
+        Task<CommentDto[]> GetCommentsAsync(int startIndex, int pageSize);
+
+        [Delete("/api/admin/comments/{commentId}")]
+        Task<ApiResult> DeleteCommentAsync(Guid commentId);
     }
 }

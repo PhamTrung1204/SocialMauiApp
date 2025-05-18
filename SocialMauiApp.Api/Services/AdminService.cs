@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace SocialMauiApp.Api.Services
 {
@@ -244,7 +245,29 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult.Fail($"Failed to delete user: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
+        public async Task<CommentDto[]> GetCommentsAsync(int startIndex, int pageSize)
+        {
+            var comments = await _context.Comments
+                .OrderByDescending(c => c.AddedOn)
+                .Skip(startIndex)
+                .Take(pageSize)
+                .Select(c => new CommentDto
+                {
+                    CommentId = c.Id,
+                    UserId = c.UserId,
+                    UserName = c.User.Name,
+                    UserPhotoUrl = c.User.PhotoUrl,
+                    PostId = c.PostId,
+                    Content = c.Content,
+                    PhotoUrl = c.PhotoUrl,
+                    AddedOn = c.AddedOn,
+             
+                    ParentCommentId = c.ParentCommentId
+                })
+                .ToArrayAsync();
 
+            return comments;
+        }
         public async Task<ApiResult> DeleteCommentAsync(Guid commentId)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();

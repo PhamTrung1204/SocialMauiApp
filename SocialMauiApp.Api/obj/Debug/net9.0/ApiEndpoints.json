@@ -2,6 +2,39 @@
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.AdminEndpoints\u002B\u003C\u003Ec",
     "Method": "\u003CMapAdminEndpoints\u003Eb__0_8",
+    "RelativePath": "api/admin/comments",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "startIndex",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.CommentDto[]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Admin"
+    ],
+    "EndpointName": "GetAdminComments"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.AdminEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapAdminEndpoints\u003Eb__0_9",
     "RelativePath": "api/admin/comments/{commentId:guid}",
     "HttpMethod": "DELETE",
     "IsController": false,
