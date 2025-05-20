@@ -57,6 +57,11 @@ namespace SocialMauiApp.Api.Endpoints
                 .Produces<CommentDto[]>()
                 .WithName("GetAdminComments");
 
+            adminGroup.MapGet("/posts/{postId:guid}/comments", async (Guid postId, int startIndex, int pageSize, [FromServices] AdminService adminService) =>
+                Results.Ok(await adminService.GetCommentsForPostAsync(postId, startIndex, pageSize)))
+                .Produces<CommentDto[]>()
+                .WithName("GetCommentsForPost");
+
             adminGroup.MapDelete("/comments/{commentId:guid}", async (Guid commentId, [FromServices] AdminService adminService) =>
                 Results.Ok(await adminService.DeleteCommentAsync(commentId)))
                 .Produces<ApiResult>()

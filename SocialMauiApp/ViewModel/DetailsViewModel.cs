@@ -21,21 +21,26 @@ namespace SocialMauiApp.ViewModel
     [QueryProperty(nameof(Post), nameof(Post))]
     public partial class DetailsViewModel : BasePostViewModel
     {
+        private readonly ISyncApi _syncApi;
         private readonly AuthService _authService;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
         private bool _isPageActive = false;
         private int _startIndex = 0;
         private const int PageSize = 10;
-
+        private readonly IDispatcherTimer _syncTimer; // Timer để tự động đồng bộ
+        private DateTime _lastSyncTime;
         private readonly List<(string Id, ImageSource ImageSource, FileResult FileResult)> _imageFileMap = new();
 
         public DetailsViewModel(
             AuthService authService,
             IPostApi postApi,
+            ISyncApi syncApi,
+            IDispatcher dispatcher,
             RealtimeUpdatesService realtimeUpdatesService
         ) : base(postApi, realtimeUpdatesService)
         {
             _authService = authService;
+            _syncApi = syncApi;
             _realtimeUpdatesService = realtimeUpdatesService;
             SkipGoToDetailsCommandAction = true;
             Comments = new ObservableCollection<CommentDto>();
@@ -47,6 +52,10 @@ namespace SocialMauiApp.ViewModel
                 OnPropertyChanged(nameof(IsPhotoButtonVisible));
                 System.Diagnostics.Debug.WriteLine($"HasSelectedImages updated to: {HasSelectedImages}, Preview count: {SelectedImagePreviews.Count}");
             };
+            _syncTimer = dispatcher.CreateTimer();
+            _syncTimer.Interval = TimeSpan.FromMinutes(5); // Đồng bộ mỗi 5 phút
+            _syncTimer.Tick += async (s, e) => await AutoSynchronizeDataAsync();
+            _lastSyncTime = DateTime.UtcNow; // 02:48 AM UTC (09:48 AM +07, 20/05/2025)
             IsPhotoButtonVisible = true;
         }
 
@@ -91,6 +100,86 @@ namespace SocialMauiApp.ViewModel
             {
                 _isPageActive = true;
                 ConfigureRealtimeUpdates();
+            }
+        }
+
+        [RelayCommand]
+        private async Task SynchronizeDataAsync()
+        {
+            if (IsBusy || !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet) || Post == null) return;
+
+            IsBusy = true;
+            try
+            {
+                var result = await _syncApi.SynchronizeAsync();
+                Console.WriteLine("Đồng bộ thành công: " + result.ToString());
+                // Làm mới danh sách bình luận sau đồng bộ
+                _startIndex = 0;
+                await FetchCommentsAsync();
+                _lastSyncTime = DateTime.UtcNow; // Cập nhật thời gian đồng bộ: 02:48 AM UTC (09:48 AM +07, 20/05/2025)
+            }
+            catch (ApiException ex)
+            {
+                await ShowErrorAlertAsync($"Lỗi đồng bộ: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task AutoSynchronizeDataAsync()
+        {
+            if (!_isPageActive || IsBusy || !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet) || Post == null) return;
+
+            IsBusy = true;
+            try
+            {
+                var newComments = await _syncApi.GetCommentsSinceAsync(_lastSyncTime, Post.PostId);
+                _lastSyncTime = DateTime.UtcNow; // 02:48 AM UTC (09:48 AM +07, 20/05/2025)
+
+                foreach (var comment in newComments.OrderByDescending(c => c.AddedOn))
+                {
+                    if (!Comments.Any(c => c.CommentId == comment.CommentId))
+                    {
+                        comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
+                        comment.Level = comment.ParentCommentId == null ? 0 : 1;
+                        comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
+                        comment.Replies = new ObservableCollection<CommentDto>(comment.Replies ?? Enumerable.Empty<CommentDto>());
+
+                        if (comment.Level == 0)
+                        {
+                            Comments.Insert(0, comment);
+                        }
+                        else
+                        {
+                            var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
+                            if (parentComment != null)
+                            {
+                                if (parentComment.Replies == null) parentComment.Replies = new ObservableCollection<CommentDto>();
+                                if (!parentComment.Replies.Any(r => r.CommentId == comment.CommentId))
+                                {
+                                    parentComment.Replies.Insert(0, comment);
+                                }
+                                int parentIndex = Comments.IndexOf(parentComment);
+                                if (parentIndex >= 0) Comments[parentIndex] = parentComment;
+                            }
+                            else
+                            {
+                                Comments.Insert(0, comment);
+                            }
+                        }
+                        OnPropertyChanged(nameof(Comments));
+                    }
+                }
+            }
+            catch (ApiException ex)
+            {
+                await ShowErrorAlertAsync($"Lỗi đồng bộ tự động: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -435,7 +524,6 @@ namespace SocialMauiApp.ViewModel
                     Guid? parentCommentId = null;
                     if (isReply)
                     {
-                        // Nếu reply comment cấp 1, lấy ParentCommentId của comment cấp 0
                         parentCommentId = _replyingToComment!.Level == 1
                             ? _replyingToComment.ParentCommentId
                             : _replyingToComment.CommentId;
@@ -479,22 +567,15 @@ namespace SocialMauiApp.ViewModel
                             if (isReply)
                             {
                                 var parentComment = Comments.FirstOrDefault(c => c.CommentId == parentCommentId);
-                                if (parentComment != null)
+                                if (parentComment != null && parentComment.Replies != null && !parentComment.Replies.Any(r => r.CommentId == result.Data.CommentId))
                                 {
-                                    if (parentComment.Replies == null) parentComment.Replies = new ObservableCollection<CommentDto>();
-                                    if (!parentComment.Replies.Any(r => r.CommentId == result.Data.CommentId))
-                                    {
-                                        parentComment.Replies.Insert(0, result.Data);
-                                    }
+                                    parentComment.Replies.Insert(0, result.Data);
                                     int parentIndex = Comments.IndexOf(parentComment);
                                     if (parentIndex >= 0) Comments[parentIndex] = parentComment;
                                 }
-                                else
+                                else if (parentComment == null && !Comments.Any(c => c.CommentId == result.Data.CommentId))
                                 {
-                                    // Nếu không tìm thấy parentComment, thêm vào danh sách Comments tạm thời
                                     Comments.Insert(0, result.Data);
-                                    // Làm mới danh sách comments
-                                    Task.Run(() => FetchCommentsAsync());
                                 }
                             }
                             else
@@ -534,7 +615,7 @@ namespace SocialMauiApp.ViewModel
             if (IsBusy || commentDto == null) return;
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                ReplyingToComment = commentDto; // Sử dụng setter từ ObservableProperty
+                ReplyingToComment = commentDto;
                 Comment = $"@{commentDto.UserName} ";
             });
         }
@@ -878,41 +959,27 @@ namespace SocialMauiApp.ViewModel
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (Post != null && comment.PostId == Post.PostId)
+                if (Post != null && comment.PostId == Post.PostId && !Comments.Any(c => c.CommentId == comment.CommentId))
                 {
-                    if (!Comments.Any(c => c.CommentId == comment.CommentId))
-                    {
-                        comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
-                        comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                        comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                        comment.Replies = new ObservableCollection<CommentDto>(comment.Replies ?? Enumerable.Empty<CommentDto>());
+                    comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
+                    comment.Level = comment.ParentCommentId == null ? 0 : 1;
+                    comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
+                    comment.Replies = new ObservableCollection<CommentDto>(comment.Replies ?? Enumerable.Empty<CommentDto>());
 
-                        if (comment.Level == 0)
+                    if (comment.Level == 0)
+                    {
+                        Comments.Insert(0, comment);
+                        OnPropertyChanged(nameof(Comments));
+                    }
+                    else if (comment.Level == 1)
+                    {
+                        var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
+                        if (parentComment != null && parentComment.Replies != null && !parentComment.Replies.Any(r => r.CommentId == comment.CommentId))
                         {
-                            Comments.Insert(0, comment);
+                            parentComment.Replies.Insert(0, comment);
+                            int parentIndex = Comments.IndexOf(parentComment);
+                            if (parentIndex >= 0) Comments[parentIndex] = parentComment;
                             OnPropertyChanged(nameof(Comments));
-                        }
-                        else if (comment.Level == 1)
-                        {
-                            var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
-                            if (parentComment != null)
-                            {
-                                if (parentComment.Replies == null) parentComment.Replies = new ObservableCollection<CommentDto>();
-                                if (!parentComment.Replies.Any(r => r.CommentId == comment.CommentId))
-                                {
-                                    parentComment.Replies.Insert(0, comment);
-                                }
-                                int parentIndex = Comments.IndexOf(parentComment);
-                                if (parentIndex >= 0) Comments[parentIndex] = parentComment;
-                                OnPropertyChanged(nameof(Comments));
-                            }
-                            else
-                            {
-                                // Nếu không tìm thấy parentComment, thêm tạm thời và làm mới danh sách
-                                Comments.Insert(0, comment);
-                                OnPropertyChanged(nameof(Comments));
-                                Task.Run(() => FetchCommentsAsync());
-                            }
                         }
                     }
                 }
@@ -955,10 +1022,6 @@ namespace SocialMauiApp.ViewModel
                             {
                                 int replyIndex = parentComment.Replies.IndexOf(existingReply);
                                 if (replyIndex >= 0) parentComment.Replies[replyIndex] = comment;
-                            }
-                            else
-                            {
-                                parentComment.Replies.Insert(0, comment);
                             }
                             int parentIndex = Comments.IndexOf(parentComment);
                             if (parentIndex >= 0) Comments[parentIndex] = parentComment;
@@ -1033,6 +1096,42 @@ namespace SocialMauiApp.ViewModel
             _realtimeUpdatesService.AddCommentUpdatedHandler(nameof(DetailsViewModel), OnCommentUpdated);
             _realtimeUpdatesService.AddCommentDeletedHandler(nameof(DetailsViewModel), OnCommentDeleted);
             _realtimeUpdatesService.AddPostCountsUpdatedHandler(nameof(DetailsViewModel), OnPostCountsUpdated);
+        }
+
+        public void OnAppearing()
+        {
+            _isPageActive = true;
+            ConfigureRealtimeUpdates();
+            Connectivity.ConnectivityChanged += OnConnectivityChanged;
+            _syncTimer.Start();
+            if (Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet) && Post != null)
+            {
+                Task.Run(() => SynchronizeDataAsync());
+            }
+        }
+
+        private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            if (e.NetworkAccess.HasFlag(NetworkAccess.Internet) && _isPageActive && Post != null)
+            {
+                await SynchronizeDataAsync();
+                if (!_syncTimer.IsRunning)
+                {
+                    _syncTimer.Start();
+                }
+            }
+            else
+            {
+                _syncTimer.Stop();
+            }
+        }
+
+        public void OnDisappearing()
+        {
+            _isPageActive = false;
+            _syncTimer.Stop();
+            Connectivity.ConnectivityChanged -= OnConnectivityChanged;
+            Cleanup();
         }
 
         public void Cleanup()

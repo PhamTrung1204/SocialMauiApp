@@ -18,5 +18,6 @@ namespace SocialMauiApp.Api.Data.Entities
         public DateTime PostedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
+        public bool IsSynced { get; set; } = false;
     }
 }

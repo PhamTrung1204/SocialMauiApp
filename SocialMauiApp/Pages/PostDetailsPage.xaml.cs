@@ -15,7 +15,7 @@ namespace SocialMauiApp.Pages
 
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("..");
+            await Shell.Current.GoToAsync("//HomePage");
         }
 
         private async void OnMoreOptionsTapped(object sender, TappedEventArgs e)

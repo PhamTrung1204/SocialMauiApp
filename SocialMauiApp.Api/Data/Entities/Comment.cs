@@ -16,6 +16,7 @@ namespace SocialMauiApp.Api.Data.Entities
         public Guid? ParentCommentId { get; set; }
         public virtual Post Post { get; set; }
         public virtual Comment? ParentComment { get; set; }
-        public List<Comment> Replies { get; set; } = new List<Comment>();  
+        public List<Comment> Replies { get; set; } = new List<Comment>();
+        public bool IsSynced { get; set; } = false;
     }
 }

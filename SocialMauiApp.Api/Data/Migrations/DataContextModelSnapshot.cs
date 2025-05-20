@@ -50,6 +50,9 @@ namespace SocialMauiApp.Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsSynced")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("ParentCommentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -134,6 +137,9 @@ namespace SocialMauiApp.Api.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsSynced")
+                        .HasColumnType("bit");
+
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");
 
@@ -171,6 +177,9 @@ namespace SocialMauiApp.Api.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -186,6 +195,10 @@ namespace SocialMauiApp.Api.Data.Migrations
                         .HasComment("Physical path of the images");
 
                     b.Property<string>("PhotoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel; // Đảm bảo có MainThread
+using Refit;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
 using SocialMauiApp.Services;
@@ -18,19 +19,25 @@ namespace SocialMauiApp.ViewModel
     {
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
         private readonly AuthService _authService;
+        private readonly ISyncApi _syncApi;
         private int _startIndex = 0;
         private const int PageSize = 7;
-
-        public HomeViewModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
+        private readonly IDispatcherTimer _syncTimer; // Timer để tự động đồng bộ
+        private DateTime _lastSyncTime; // Lưu thời gian đồng bộ cuối
+        private bool _isPageActive = false;
+        public HomeViewModel(IPostApi postApi, ISyncApi syncApi, IDispatcher dispatcher, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
             : base(postApi, realtimeUpdatesService)
         {
             _realtimeUpdatesService = realtimeUpdatesService;
             _authService = authService;
             User = authService.User!;
             Posts = new ObservableCollection<PostModel>();
-
+            _syncApi = syncApi;
             _ = FetchPostsAsync();
-
+            _syncTimer = dispatcher.CreateTimer();
+            _syncTimer.Interval = TimeSpan.FromMinutes(5); // Đồng bộ mỗi 5 phút
+            _syncTimer.Tick += async (s, e) => await AutoSynchronizeDataAsync();
+            _lastSyncTime = DateTime.UtcNow;
             ConfigureRealtimeUpdates();
         }
         [ObservableProperty]
@@ -49,7 +56,29 @@ namespace SocialMauiApp.ViewModel
                 _startIndex++;
             }
         }
+        [RelayCommand]
+        private async Task SynchronizeDataAsync()
+        {
+            if (IsBusy || !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet)) return;
 
+            IsBusy = true;
+            try
+            {
+                var result = await _syncApi.SynchronizeAsync();
+                Console.WriteLine("Đồng bộ thành công: " + result.ToString());
+                // Sau khi đồng bộ, làm mới danh sách bài đăng
+                _startIndex = 0;
+                await FetchPostsAsync();
+            }
+            catch (ApiException ex)
+            {
+                await ShowErrorAlertAsync($"Lỗi đồng bộ: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
         [RelayCommand]
         private async Task FetchPostsAsync()
         {
@@ -87,7 +116,71 @@ namespace SocialMauiApp.ViewModel
 
         [RelayCommand]
         private async Task GoToAddPostAsync() => await NavigateAsync(nameof(AddPostPage));
+        private async Task AutoSynchronizeDataAsync()
+        {
+            if (!_isPageActive || IsBusy || !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet)) return;
 
+            IsBusy = true;
+            try
+            {
+                var newPosts = await _syncApi.GetPostsSinceAsync(_lastSyncTime);
+                _lastSyncTime = DateTime.UtcNow; // Cập nhật thời gian đồng bộ
+
+                foreach (var dto in newPosts.OrderByDescending(p => p.PostedOn))
+                {
+                    if (!Posts.Any(p => p.PostId == dto.PostId))
+                    {
+                        Posts.Insert(0, PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService));
+                        _startIndex++;
+                    }
+                }
+            }
+            catch (ApiException ex)
+            {
+                await ShowErrorAlertAsync($"Lỗi đồng bộ tự động: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+        public void OnAppearing()
+        {
+            _isPageActive = true;
+            ConfigureRealtimeUpdates();
+            Connectivity.ConnectivityChanged += OnConnectivityChanged;
+            // Bắt đầu timer khi trang hiển thị
+            _syncTimer.Start();
+            // Đồng bộ ngay lập tức nếu có mạng
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                Task.Run(() => SynchronizeDataAsync());
+            }
+        }
+
+        private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            if (e.NetworkAccess == NetworkAccess.Internet && _isPageActive)
+            {
+                await SynchronizeDataAsync();
+                if (!_syncTimer.IsRunning)
+                {
+                    _syncTimer.Start();
+                }
+            }
+            else
+            {
+                _syncTimer.Stop();
+            }
+        }
+
+        public void OnDisappearing()
+        {
+            _isPageActive = false;
+            _syncTimer.Stop();
+            Connectivity.ConnectivityChanged -= OnConnectivityChanged;
+            _realtimeUpdatesService.RemoveHandlers(nameof(HomeViewModel));
+        }
         private void OnPostChanged(PostDto updated)
         {
             MainThread.BeginInvokeOnMainThread(() =>

@@ -8,7 +8,7 @@
     Title="Admin Dashboard"
     BackgroundColor="#F5F7FA">
 
-    <!--  Toolbar for Logout  -->
+    <!-- Toolbar for Logout -->
     <ContentPage.ToolbarItems>
         <ToolbarItem
             Command="{Binding LogoutCommand}"
@@ -25,7 +25,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!--  Summary Section  -->
+        <!-- Summary Section -->
         <StackLayout
             Grid.Row="0"
             Margin="0,0,0,20"
@@ -42,7 +42,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <!--  Post Count  -->
+                <!-- Post Count -->
                 <Border
                     Grid.Column="0"
                     Margin="5"
@@ -65,7 +65,7 @@
                             TextColor="#2D3748" />
                     </StackLayout>
                 </Border>
-                <!--  Comment Count  -->
+                <!-- Comment Count -->
                 <Border
                     Grid.Column="1"
                     Margin="5"
@@ -88,7 +88,7 @@
                             TextColor="#2D3748" />
                     </StackLayout>
                 </Border>
-                <!--  User Count  -->
+                <!-- User Count -->
                 <Border
                     Grid.Column="2"
                     Margin="5"
@@ -114,7 +114,7 @@
             </Grid>
         </StackLayout>
 
-        <!--  Navigation Button  -->
+        <!-- Navigation Button -->
         <StackLayout
             Grid.Row="1"
             Margin="0,0,0,20"
@@ -126,15 +126,15 @@
                 Command="{Binding NavigateToPostManagementCommand}"
                 CornerRadius="8"
                 FontFamily="UbuntuBold"
-                Text="Quản lý bài viết"
+                Text="Manage Post"
                 TextColor="White" />
         </StackLayout>
 
-        <!--  User List with RefreshView  -->
+        <!-- User List with RefreshView -->
         <RefreshView
             Grid.Row="2"
             Command="{Binding LoadDashboardCommand}"
-            IsRefreshing="{Binding IsLoading}"
+            IsRefreshing="{Binding IsLoading, Mode=OneWay}"
             RefreshColor="#3182CE">
             <CollectionView
                 BackgroundColor="Transparent"
@@ -151,7 +151,7 @@
                             StrokeShape="RoundRectangle 12"
                             StrokeThickness="1">
                             <Grid ColumnDefinitions="Auto,*">
-                                <!--  User Avatar  -->
+                                <!-- User Avatar -->
                                 <Image
                                     Aspect="AspectFill"
                                     HeightRequest="50"
@@ -162,7 +162,7 @@
                                         <RoundRectangleGeometry CornerRadius="25" Rect="0,0,50,50" />
                                     </Image.Clip>
                                 </Image>
-                                <!--  User Info  -->
+                                <!-- User Info -->
                                 <StackLayout
                                     Grid.Column="1"
                                     Padding="10,0"
@@ -195,7 +195,7 @@
             </CollectionView>
         </RefreshView>
 
-        <!--  Action Buttons  -->
+        <!-- Action Buttons -->
         <StackLayout
             Grid.Row="3"
             Margin="0,10"
@@ -222,7 +222,7 @@
                 TextColor="White" />
         </StackLayout>
 
-        <!--  Loading Indicator  -->
+        <!-- Loading Indicator -->
         <ActivityIndicator
             HorizontalOptions="Center"
             IsRunning="{Binding IsLoading}"

@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SocialMauiApp"
     xmlns:templates="clr-namespace:SocialMauiApp.Templates"
+    xmlns:behaviors="clr-namespace:SocialMauiApp.Behaviors"
     xmlns:converters="clr-namespace:SocialMauiApp.Converters">
 
     <Application.Resources>
@@ -45,6 +46,8 @@
                     <converters:DateTimeToHumanizedConverter x:Key="HumanizedTimeConverter"/>
                     <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
                     <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+
+                    <behaviors:AnimationBehavior x:Key="AnimationBehavior"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

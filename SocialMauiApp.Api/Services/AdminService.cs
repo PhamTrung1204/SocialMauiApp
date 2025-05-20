@@ -292,7 +292,47 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult.Fail($"Failed to delete comment: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
+        public async Task<CommentDto[]> GetCommentsForPostAsync(Guid postId, int startIndex, int pageSize)
+        {
+            try
+            {
+                // Check if the post exists
+                var postExists = await _context.Posts.AnyAsync(p => p.Id == postId && !p.IsDeleted);
+                if (!postExists)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Post with ID {postId} not found or is deleted.");
+                    return Array.Empty<CommentDto>(); // Return empty array if post doesn't exist
+                }
 
+                var comments = await _context.Comments
+                    .Where(c => c.PostId == postId)
+                    .OrderByDescending(c => c.AddedOn)
+                    .Skip(startIndex)
+                    .Take(pageSize)
+                    .Select(c => new CommentDto
+                    {
+                        CommentId = c.Id,
+                        UserId = c.UserId,
+                        UserName = c.User.Name,
+                        UserPhotoUrl = c.User.PhotoUrl,
+                        PostId = c.PostId,
+                        Content = c.Content,
+                        PhotoUrl = c.PhotoUrl,
+                        AddedOn = c.AddedOn,
+                        ParentCommentId = c.ParentCommentId
+                    })
+                    .ToArrayAsync();
+
+                System.Diagnostics.Debug.WriteLine($"Fetched {comments.Length} comments for post ID {postId}.");
+                return comments;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetCommentsForPostAsync Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
+                return Array.Empty<CommentDto>(); // Return empty array on error
+            }
+        }
+    
         private async Task DeleteCommentRecursivelyAsync(Guid commentId)
         {
             var childComments = await _context.Comments

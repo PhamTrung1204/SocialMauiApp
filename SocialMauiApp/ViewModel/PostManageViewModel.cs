@@ -7,7 +7,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
 
 namespace SocialMauiApp.ViewModel
 {
@@ -27,16 +29,29 @@ namespace SocialMauiApp.ViewModel
         private bool _isLoading;
 
         [ObservableProperty]
-        private ObservableCollection<PostDto> _posts = new ObservableCollection<PostDto>();
+        private bool _isRefreshingComments;
 
         [ObservableProperty]
-        private ObservableCollection<CommentDto> _comments = new ObservableCollection<CommentDto>();
+        private ObservableCollection<PostDto> _posts = new();
+
+        [ObservableProperty]
+        private ObservableCollection<CommentDto> _comments = new();
 
         [ObservableProperty]
         private PostDto? _selectedPost;
 
         [ObservableProperty]
         private CommentDto? _selectedComment;
+
+        [ObservableProperty]
+        private ObservableCollection<CommentDto> _selectedPostComments = new();
+
+        [ObservableProperty]
+        private bool _isCommentsVisible;
+
+        private int _currentCommentPage;
+        private const int _pageSize = 2;
+        private bool _isLoadingMoreComments;
 
         public PostManageViewModel(AuthService authService, IAdminApi adminApi, RealtimeUpdatesService realtimeUpdatesService)
         {
@@ -63,9 +78,10 @@ namespace SocialMauiApp.ViewModel
         public void Cleanup()
         {
             _realtimeUpdatesService.RemoveHandlers(nameof(PostManageViewModel));
+            Debug.WriteLine("Cleaned up real-time handlers for PostManageViewModel.");
         }
 
-        private async Task LoadDashboardAsync()
+        private async Task LoadDashboardAsync(CancellationToken cancellationToken)
         {
             if (IsLoading) return;
             IsLoading = true;
@@ -82,6 +98,7 @@ namespace SocialMauiApp.ViewModel
 
                 // Fetch dashboard data
                 var dashboardData = await _adminApi.GetDashboardAsync();
+                cancellationToken.ThrowIfCancellationRequested();
                 Debug.WriteLine($"Dashboard data received: {JsonSerializer.Serialize(dashboardData)}");
 
                 if (dashboardData == null)
@@ -99,8 +116,12 @@ namespace SocialMauiApp.ViewModel
                 });
 
                 // Load posts and comments
-                await LoadPostsAsync();
-                await LoadCommentsAsync();
+                await LoadPostsAsync(cancellationToken);
+                await LoadCommentsAsync(cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadDashboardAsync was canceled.");
             }
             catch (Exception ex)
             {
@@ -113,11 +134,12 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
-        private async Task LoadPostsAsync()
+        private async Task LoadPostsAsync(CancellationToken cancellationToken)
         {
             try
             {
                 var posts = await _adminApi.GetPostsAsync(0, 10);
+                cancellationToken.ThrowIfCancellationRequested();
                 Debug.WriteLine($"Posts fetched: {JsonSerializer.Serialize(posts)}");
 
                 if (posts == null)
@@ -136,6 +158,10 @@ namespace SocialMauiApp.ViewModel
                     Debug.WriteLine($"Posts collection updated: {Posts.Count} items");
                 });
             }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadPostsAsync was canceled.");
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine($"LoadPostsAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
@@ -143,11 +169,12 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
-        private async Task LoadCommentsAsync()
+        private async Task LoadCommentsAsync(CancellationToken cancellationToken)
         {
             try
             {
                 var comments = await _adminApi.GetCommentsAsync(0, 10);
+                cancellationToken.ThrowIfCancellationRequested();
                 Debug.WriteLine($"Comments fetched: {JsonSerializer.Serialize(comments)}");
 
                 if (comments == null)
@@ -166,10 +193,167 @@ namespace SocialMauiApp.ViewModel
                     Debug.WriteLine($"Comments collection updated: {Comments.Count} items");
                 });
             }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadCommentsAsync was canceled.");
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine($"LoadCommentsAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
                 await ShowErrorAlertAsync($"Failed to load comments: {ex.Message}");
+            }
+        }
+
+        private async Task LoadCommentsForPostAsync(Guid postId, int page, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var comments = await _adminApi.GetCommentsForPostAsync(postId, page * _pageSize, _pageSize);
+                cancellationToken.ThrowIfCancellationRequested();
+                Debug.WriteLine($"Comments for post {postId}, page {page} fetched: {JsonSerializer.Serialize(comments)}");
+
+                if (comments == null || comments.Length == 0)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        if (page == 0) SelectedPostComments.Clear();
+                        Debug.WriteLine($"No more comments for post {postId} on page {page}.");
+                    });
+                    return;
+                }
+
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    if (page == 0) SelectedPostComments.Clear();
+                    foreach (var comment in comments)
+                    {
+                        SelectedPostComments.Add(comment);
+                    }
+                    Debug.WriteLine($"SelectedPostComments updated: {SelectedPostComments.Count} items for post {postId}, page {page}");
+                });
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadCommentsForPostAsync was canceled.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"LoadCommentsForPostAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
+                await ShowErrorAlertAsync($"Failed to load comments for post: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private async Task SelectPostAsync(PostDto? post)
+        {
+            if (IsLoading || post == null) return;
+            IsLoading = true;
+
+            try
+            {
+                if (SelectedPost?.PostId == post.PostId)
+                {
+                    // Toggle comments visibility
+                    IsCommentsVisible = !IsCommentsVisible;
+                    if (!IsCommentsVisible)
+                    {
+                        SelectedPostComments.Clear();
+                        _currentCommentPage = 0;
+                        Debug.WriteLine($"Comments hidden for post {post.PostId}.");
+                    }
+                }
+                else
+                {
+                    // Select new post and load initial comments
+                    SelectedPost = post;
+                    IsCommentsVisible = true;
+                    _currentCommentPage = 0;
+                    await LoadCommentsForPostAsync(post.PostId, _currentCommentPage, CancellationToken.None);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SelectPostAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
+                await ShowErrorAlertAsync($"Failed to select post: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task LoadMoreCommentsAsync()
+        {
+            if (_isLoadingMoreComments || !IsCommentsVisible || SelectedPost == null) return;
+            _isLoadingMoreComments = true;
+
+            try
+            {
+                _currentCommentPage++;
+                await LoadCommentsForPostAsync(SelectedPost.PostId, _currentCommentPage, CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"LoadMoreCommentsAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
+                await ShowErrorAlertAsync($"Failed to load more comments: {ex.Message}");
+            }
+            finally
+            {
+                _isLoadingMoreComments = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task RefreshPostsAsync(CancellationToken cancellationToken)
+        {
+            if (IsLoading) return;
+            IsLoading = true;
+
+            try
+            {
+                await LoadPostsAsync(cancellationToken);
+                await ToastAsync("Posts refreshed successfully.");
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("RefreshPostsAsync was canceled.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"RefreshPostsAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
+                await ShowErrorAlertAsync($"Failed to refresh posts: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task RefreshCommentsAsync(CancellationToken cancellationToken)
+        {
+            if (IsRefreshingComments || !IsCommentsVisible || SelectedPost == null) return;
+            IsRefreshingComments = true;
+
+            try
+            {
+                _currentCommentPage = 0;
+                await LoadCommentsForPostAsync(SelectedPost.PostId, _currentCommentPage, cancellationToken);
+                await ToastAsync("Comments refreshed successfully.");
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("RefreshCommentsAsync was canceled.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"RefreshCommentsAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
+                await ShowErrorAlertAsync($"Failed to refresh comments: {ex.Message}");
+            }
+            finally
+            {
+                IsRefreshingComments = false;
             }
         }
 
@@ -199,6 +383,13 @@ namespace SocialMauiApp.ViewModel
                         {
                             Posts.Remove(post);
                             PostCount--;
+                        }
+                        if (SelectedPost?.PostId == postId)
+                        {
+                            SelectedPost = null;
+                            IsCommentsVisible = false;
+                            SelectedPostComments.Clear();
+                            _currentCommentPage = 0;
                         }
                         Debug.WriteLine($"Post deleted, new PostCount: {PostCount}");
                     });
@@ -247,6 +438,15 @@ namespace SocialMauiApp.ViewModel
                             Comments.Remove(comment);
                             CommentCount--;
                         }
+                        var selectedComment = SelectedPostComments.FirstOrDefault(c => c.CommentId == commentId);
+                        if (selectedComment != null)
+                        {
+                            SelectedPostComments.Remove(selectedComment);
+                        }
+                        if (SelectedComment?.CommentId == commentId)
+                        {
+                            SelectedComment = null;
+                        }
                         Debug.WriteLine($"Comment deleted, new CommentCount: {CommentCount}");
                     });
                     await ToastAsync("Comment deleted successfully.");
@@ -271,14 +471,20 @@ namespace SocialMauiApp.ViewModel
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (PostCount > 0)
+                if (PostCount <= 0) return;
+
+                PostCount--;
+                var post = Posts.FirstOrDefault(p => p.PostId == postId);
+                if (post != null) Posts.Remove(post);
+                if (SelectedPost?.PostId == postId)
                 {
-                    PostCount--;
-                    var post = Posts.FirstOrDefault(p => p.PostId == postId);
-                    if (post != null) Posts.Remove(post);
-                    OnPropertyChanged(nameof(PostCount));
-                    Debug.WriteLine($"Post deleted (realtime), new PostCount: {PostCount}");
+                    SelectedPost = null;
+                    IsCommentsVisible = false;
+                    SelectedPostComments.Clear();
+                    _currentCommentPage = 0;
                 }
+                OnPropertyChanged(nameof(PostCount));
+                Debug.WriteLine($"Post deleted (realtime), new PostCount: {PostCount}");
             });
         }
 
@@ -286,14 +492,16 @@ namespace SocialMauiApp.ViewModel
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (CommentCount > 0)
-                {
-                    CommentCount--;
-                    var comment = Comments.FirstOrDefault(c => c.CommentId == commentId);
-                    if (comment != null) Comments.Remove(comment);
-                    OnPropertyChanged(nameof(CommentCount));
-                    Debug.WriteLine($"Comment deleted (realtime), new CommentCount: {CommentCount}");
-                }
+                if (CommentCount <= 0) return;
+
+                CommentCount--;
+                var comment = Comments.FirstOrDefault(c => c.CommentId == commentId);
+                if (comment != null) Comments.Remove(comment);
+                var selectedComment = SelectedPostComments.FirstOrDefault(c => c.CommentId == commentId);
+                if (selectedComment != null) SelectedPostComments.Remove(selectedComment);
+                if (SelectedComment?.CommentId == commentId) SelectedComment = null;
+                OnPropertyChanged(nameof(CommentCount));
+                Debug.WriteLine($"Comment deleted (realtime), new CommentCount: {CommentCount}");
             });
         }
 
@@ -309,7 +517,7 @@ namespace SocialMauiApp.ViewModel
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                await Application.Current.MainPage.DisplayAlert("Error", message, "OK");
+                await Application.Current?.MainPage?.DisplayAlert("Error", message, "OK")!;
             });
         }
 
@@ -318,6 +526,4 @@ namespace SocialMauiApp.ViewModel
             await CommunityToolkit.Maui.Alerts.Toast.Make(message, CommunityToolkit.Maui.Core.ToastDuration.Short).Show();
         }
     }
-
-   
 }

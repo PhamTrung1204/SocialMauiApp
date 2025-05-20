@@ -3,148 +3,256 @@
     x:Class="SocialMauiApp.Pages.PostManagementPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:SocialMauiApp.Behaviors"
     Title="Post Management"
-    BackgroundColor="#F5F5F5">
+    BackgroundColor="#F7F9FC">
     <Grid RowDefinitions="Auto, *, *">
         <!--  Loading Indicator  -->
         <ActivityIndicator
             Grid.RowSpan="3"
+            HeightRequest="50"
             HorizontalOptions="Center"
             IsRunning="{Binding IsLoading}"
             IsVisible="{Binding IsLoading}"
             VerticalOptions="Center"
-            Color="#1976D2" />
+            WidthRequest="50"
+            Color="#0052CC" />
 
         <!--  Header Section  -->
         <StackLayout
             Grid.Row="0"
-            Padding="15"
-            BackgroundColor="#1976D2"
+            Padding="20,15"
+            BackgroundColor="#0052CC"
             Spacing="15">
             <Label
                 FontAttributes="Bold"
-                FontSize="26"
+                FontFamily="Roboto"
+                FontSize="28"
                 HorizontalOptions="Center"
-                Text="Post Management Dashboard"
-                TextColor="White" />
-            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto">
+                Text="Admin Dashboard"
+                TextColor="#FFFFFF" />
+            <Grid ColumnDefinitions="*,Auto,*,Auto">
                 <Label
                     Grid.Column="0"
-                    FontSize="18"
-                    Text="Posts:"
-                    TextColor="White" />
+                    FontFamily="Roboto"
+                    FontSize="16"
+                    Text="Total Posts:"
+                    TextColor="#E6F0FA" />
                 <Label
                     Grid.Column="1"
-                    FontSize="18"
+                    Margin="5,0,15,0"
+                    FontFamily="Roboto"
+                    FontSize="16"
                     Text="{Binding PostCount}"
-                    TextColor="White" />
+                    TextColor="#E6F0FA" />
                 <Label
                     Grid.Column="2"
-                    FontSize="18"
-                    Text="Comments:"
-                    TextColor="White" />
+                    FontFamily="Roboto"
+                    FontSize="16"
+                    Text="Total Comments:"
+                    TextColor="#E6F0FA" />
                 <Label
                     Grid.Column="3"
-                    FontSize="18"
+                    Margin="5,0,0,0"
+                    FontFamily="Roboto"
+                    FontSize="16"
                     Text="{Binding CommentCount}"
-                    TextColor="White" />
+                    TextColor="#E6F0FA" />
             </Grid>
         </StackLayout>
 
         <!--  Posts List Section  -->
-        <StackLayout Grid.Row="1" Margin="15">
+        <StackLayout Grid.Row="1" Margin="15,10">
             <Label
                 Margin="0,0,0,10"
                 FontAttributes="Bold"
-                FontSize="22"
-                Text="Posts" />
-            <CollectionView ItemsSource="{Binding Posts}" SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            Margin="0,5"
-                            Padding="12"
-                            BackgroundColor="White">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <StackLayout Grid.Column="0" Spacing="5">
-                                    <Label
-                                        FontAttributes="Bold"
-                                        FontSize="18"
-                                        Text="{Binding UserName}" />
-                                    <Label
-                                        FontSize="16"
-                                        LineBreakMode="TailTruncation"
-                                        MaxLines="2"
-                                        Text="{Binding Content}" />
-                                    <Label
+                FontFamily="Roboto"
+                FontSize="24"
+                Text="Posts"
+                TextColor="#1A1A1A" />
+            <RefreshView
+                Command="{Binding RefreshPostsCommand}"
+                IsRefreshing="{Binding IsLoading, Mode=OneWay}"
+                RefreshColor="#0052CC">
+                <CollectionView
+                    Margin="0,0,0,10"
+                    ItemsSource="{Binding Posts}"
+                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="0,5"
+                                Padding="15"
+                                BackgroundColor="#FFFFFF"
+                                Stroke="#E0E0E0"
+                                StrokeShape="RoundRectangle 8"
+                                StrokeThickness="1">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectPostCommand}" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackLayout Grid.Column="0" Spacing="6">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontFamily="Roboto"
+                                            FontSize="18"
+                                            Text="{Binding UserName}"
+                                            TextColor="#1A1A1A" />
+                                        <Label
+                                            FontFamily="Roboto"
+                                            FontSize="16"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="2"
+                                            Text="{Binding Content}"
+                                            TextColor="#333333" />
+                                        <Label
+                                            FontFamily="Roboto"
+                                            FontSize="14"
+                                            Text="{Binding PostedOn, StringFormat='Posted on {0:dd/MM/yyyy HH:mm}'}"
+                                            TextColor="#666666" />
+                                    </StackLayout>
+                                    <Button
+                                        Grid.Column="1"
+                                        Margin="10,0,0,0"
+                                        BackgroundColor="#D32F2F"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeletePostCommand}"
+                                        CommandParameter="{Binding PostId}"
+                                        CornerRadius="8"
+                                        FontFamily="Roboto"
                                         FontSize="14"
-                                        Text="{Binding PostedOn, StringFormat='{0:dd/MM/yyyy HH:mm}'}"
-                                        TextColor="Gray" />
-                                </StackLayout>
-                                <Button
-                                    Grid.Column="1"
-                                    Margin="10,0,0,0"
-                                    BackgroundColor="#D32F2F"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeletePostCommand}"
-                                    CommandParameter="{Binding PostId}"
-                                    CornerRadius="10"
-                                    HeightRequest="45"
-                                    Text="Delete"
-                                    TextColor="White"
-                                    WidthRequest="90" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                        HeightRequest="40"
+                                        Text="Delete"
+                                        TextColor="#FFFFFF"
+                                        WidthRequest="80">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="Opacity" Value="1" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState Name="Pressed">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="Opacity" Value="0.8" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Button>
+                                </Grid>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Normal">
+                                            <VisualState.Setters>
+                                                <Setter Property="Opacity" Value="1" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Property="Opacity" Value="0.8" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </StackLayout>
 
         <!--  Comments List Section  -->
-        <StackLayout Grid.Row="2" Margin="15">
+        <StackLayout
+            Grid.Row="2"
+            Margin="15,10"
+            IsVisible="{Binding IsCommentsVisible}"
+            Opacity="0">
+            <StackLayout.Behaviors>
+                <behaviors:AnimationBehavior
+                    AnimationType="Fade"
+                    EasingType="SinInOut"
+                    Duration="300" />
+            </StackLayout.Behaviors>
             <Label
                 Margin="0,0,0,10"
                 FontAttributes="Bold"
-                FontSize="22"
-                Text="Comments" />
-            <CollectionView ItemsSource="{Binding Comments}" SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            Margin="0,5"
-                            Padding="12"
-                            BackgroundColor="White">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <StackLayout Grid.Column="0" Spacing="5">
-                                    <Label
-                                        FontAttributes="Bold"
-                                        FontSize="18"
-                                        Text="{Binding UserName}" />
-                                    <Label
-                                        FontSize="16"
-                                        LineBreakMode="TailTruncation"
-                                        MaxLines="2"
-                                        Text="{Binding Content}" />
-                                    <Label
+                FontFamily="Roboto"
+                FontSize="24"
+                Text="Comments"
+                TextColor="#1A1A1A" />
+            <RefreshView
+                Command="{Binding RefreshCommentsCommand}"
+                IsRefreshing="{Binding IsRefreshingComments, Mode=OneWay}"
+                RefreshColor="#0052CC">
+                <CollectionView
+                    ItemsSource="{Binding SelectedPostComments}"
+                    RemainingItemsThreshold="1"
+                    RemainingItemsThresholdReachedCommand="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LoadMoreCommentsCommand}"
+                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="0,5"
+                                Padding="15"
+                                BackgroundColor="#FFFFFF"
+                                Stroke="#E0E0E0"
+                                StrokeShape="RoundRectangle 8"
+                                StrokeThickness="1">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackLayout Grid.Column="0" Spacing="6">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontFamily="Roboto"
+                                            FontSize="18"
+                                            Text="{Binding UserName}"
+                                            TextColor="#1A1A1A" />
+                                        <Label
+                                            FontFamily="Roboto"
+                                            FontSize="16"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="2"
+                                            Text="{Binding Content}"
+                                            TextColor="#333333" />
+                                        <Label
+                                            FontFamily="Roboto"
+                                            FontSize="14"
+                                            Text="{Binding AddedOn, StringFormat='Commented on {0:dd/MM/yyyy HH:mm}'}"
+                                            TextColor="#666666" />
+                                    </StackLayout>
+                                    <Button
+                                        Grid.Column="1"
+                                        Margin="10,0,0,0"
+                                        BackgroundColor="#D32F2F"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCommentCommand}"
+                                        CommandParameter="{Binding CommentId}"
+                                        CornerRadius="8"
+                                        FontFamily="Roboto"
                                         FontSize="14"
-                                        Text="{Binding CreatedOn, StringFormat='{0:dd/MM/yyyy HH:mm}'}"
-                                        TextColor="Gray" />
-                                </StackLayout>
-                                <Button
-                                    Grid.Column="1"
-                                    Margin="10,0,0,0"
-                                    BackgroundColor="#D32F2F"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCommentCommand}"
-                                    CommandParameter="{Binding Id}"
-                                    CornerRadius="10"
-                                    HeightRequest="45"
-                                    Text="Delete"
-                                    TextColor="White"
-                                    WidthRequest="90" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                        HeightRequest="40"
+                                        Text="Delete"
+                                        TextColor="#FFFFFF"
+                                        WidthRequest="80">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="Opacity" Value="1" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState Name="Pressed">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="Opacity" Value="0.8" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </StackLayout>
     </Grid>
 </ContentPage>

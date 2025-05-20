@@ -14,7 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
+builder.Services.AddSingleton<IWebHostEnvironment>(builder.Environment);
+builder.Services.AddDbContext<SQLiteContext>((serviceProvider, options) =>
+{
+    var env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
+    var dbPath = Path.Combine(env.ContentRootPath, "Data", "socialmauiapp.db");
+    options.UseSqlite($"Filename={dbPath}");
+});
 
 var connectionString = builder.Configuration.GetConnectionString("SocialConnection");
 builder.Services.AddDbContext<DataContext>(options =>
@@ -24,6 +30,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddTransient<AuthService>()
     .AddTransient<PostService>()
     .AddTransient<AdminService>()
+    .AddTransient<SyncService>()
     .AddTransient<IPasswordHasher<User>, PasswordHasher<User>>()
     .AddScoped<UserService>()
     .AddTransient<PhotoUploadService>();
@@ -83,6 +90,7 @@ app.Use(async (httpContext, next) =>
 app.UseAuthentication()
     .UseAuthorization();
 app.MapAuthEndpoints()
+    .MapSyncEndpoints()
     .MapAdminEndpoints()
     .MapPostsEndpoints()
     .MapUserEndpoints();

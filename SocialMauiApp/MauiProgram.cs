@@ -76,6 +76,8 @@ namespace SocialMauiApp
                 .ConfigureHttpClient(SetHttpClient);
             services.AddRefitClient<IAdminApi>(GetRefitSettings)
                 .ConfigureHttpClient(SetHttpClient);
+            services.AddRefitClient<ISyncApi>(GetRefitSettings)
+               .ConfigureHttpClient(SetHttpClient);
             services.AddRefitClient<IPostApi>(GetRefitSettings)
                 .ConfigureHttpClient(SetHttpClient);
             services.AddRefitClient<IUserApi>(GetRefitSettings)

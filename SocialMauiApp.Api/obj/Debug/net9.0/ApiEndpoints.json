@@ -34,7 +34,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.AdminEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapAdminEndpoints\u003Eb__0_9",
+    "Method": "\u003CMapAdminEndpoints\u003Eb__0_10",
     "RelativePath": "api/admin/comments/{commentId:guid}",
     "HttpMethod": "DELETE",
     "IsController": false,
@@ -142,6 +142,44 @@
       "Admin"
     ],
     "EndpointName": "DeleteAdminPost"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.AdminEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapAdminEndpoints\u003Eb__0_9",
+    "RelativePath": "api/admin/posts/{postId:guid}/comments",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "startIndex",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.CommentDto[]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Admin"
+    ],
+    "EndpointName": "GetCommentsForPost"
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.AdminEndpoints\u002B\u003C\u003Ec",
@@ -804,6 +842,145 @@
       "Posts"
     ],
     "EndpointName": "SavePost"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.SyncEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapSyncEndpoints\u003Eb__0_0",
+    "RelativePath": "api/sync/",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Object",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Sync"
+    ],
+    "EndpointName": "SynchronizeData"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.SyncEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapSyncEndpoints\u003Eb__0_3",
+    "RelativePath": "api/sync/comments",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "since",
+        "Type": "System.DateTime",
+        "IsRequired": true
+      },
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMauiApp.Api.Data.Entities.Comment[]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Sync"
+    ],
+    "EndpointName": "GetCommentsSince"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.SyncEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapSyncEndpoints\u003Eb__0_4",
+    "RelativePath": "api/sync/comments/upsert",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "comments",
+        "Type": "System.Collections.Generic.List\u00601[[SocialMauiApp.Api.Data.Entities.Comment, SocialMauiApp.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Object",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Sync"
+    ],
+    "EndpointName": "UpsertComments"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.SyncEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapSyncEndpoints\u003Eb__0_1",
+    "RelativePath": "api/sync/posts",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "since",
+        "Type": "System.DateTime",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMauiApp.Api.Data.Entities.Post[]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Sync"
+    ],
+    "EndpointName": "GetPostsSince"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.SyncEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapSyncEndpoints\u003Eb__0_2",
+    "RelativePath": "api/sync/posts/upsert",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "posts",
+        "Type": "System.Collections.Generic.List\u00601[[SocialMauiApp.Api.Data.Entities.Post, SocialMauiApp.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Object",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Sync"
+    ],
+    "EndpointName": "UpsertPosts"
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.UserEndpoints\u002B\u003C\u003Ec",

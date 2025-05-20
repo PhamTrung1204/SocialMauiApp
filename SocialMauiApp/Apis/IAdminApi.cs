@@ -31,6 +31,8 @@ namespace SocialMauiApp.Apis
 
         [Get("/api/admin/comments")]
         Task<CommentDto[]> GetCommentsAsync(int startIndex, int pageSize);
+        [Get("/api/admin/posts/{postId}/comments")]
+        Task<CommentDto[]> GetCommentsForPostAsync(Guid postId, [Query] int startIndex, [Query] int pageSize);
 
         [Delete("/api/admin/comments/{commentId}")]
         Task<ApiResult> DeleteCommentAsync(Guid commentId);
