@@ -95,6 +95,14 @@ C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Debug\net9.0-ios
 --refs 
  C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMediaMaui.Shared\obj\Debug\net9.0\ref\SocialMediaMaui.Shared.dll
 --refs 
+ C:\Users\PhamTrung\.nuget\packages\sqlite-net-pcl\1.9.172\lib\netstandard2.0\SQLite-net.dll
+--refs 
+ C:\Users\PhamTrung\.nuget\packages\sqlitepclraw.bundle_green\2.1.2\lib\net6.0-ios14.2\SQLitePCLRaw.batteries_v2.dll
+--refs 
+ C:\Users\PhamTrung\.nuget\packages\sqlitepclraw.core\2.1.2\lib\netstandard2.0\SQLitePCLRaw.core.dll
+--refs 
+ C:\Users\PhamTrung\.nuget\packages\sqlitepclraw.provider.sqlite3\2.1.2\lib\net6.0\SQLitePCLRaw.provider.sqlite3.dll
+--refs 
  C:\Users\PhamTrung\.nuget\packages\syncfusion.licensing\28.1.38\lib\net9.0\Syncfusion.Licensing.dll
 --refs 
  C:\Users\PhamTrung\.nuget\packages\syncfusion.maui.core\28.1.38\lib\net9.0-ios18.0\Syncfusion.Maui.Core.dll

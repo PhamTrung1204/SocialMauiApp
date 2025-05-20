@@ -4,10 +4,12 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Dispatching;
 using Refit;
 using SocialMauiApp.Apis;
+using SocialMauiApp.Data;
 using SocialMauiApp.Models;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
 using SocialMediaMaui.Shared.Hubs;
+using SQLite;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -24,10 +26,11 @@ namespace SocialMauiApp.ViewModel
         private readonly ISyncApi _syncApi;
         private readonly AuthService _authService;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
+        private readonly LocalDatabase _localDatabase;
         private bool _isPageActive = false;
         private int _startIndex = 0;
         private const int PageSize = 10;
-        private readonly IDispatcherTimer _syncTimer; // Timer để tự động đồng bộ
+        private readonly IDispatcherTimer _syncTimer;
         private DateTime _lastSyncTime;
         private readonly List<(string Id, ImageSource ImageSource, FileResult FileResult)> _imageFileMap = new();
 
@@ -36,11 +39,13 @@ namespace SocialMauiApp.ViewModel
             IPostApi postApi,
             ISyncApi syncApi,
             IDispatcher dispatcher,
+            LocalDatabase localDatabase,
             RealtimeUpdatesService realtimeUpdatesService
         ) : base(postApi, realtimeUpdatesService)
         {
             _authService = authService;
             _syncApi = syncApi;
+            _localDatabase = localDatabase;
             _realtimeUpdatesService = realtimeUpdatesService;
             SkipGoToDetailsCommandAction = true;
             Comments = new ObservableCollection<CommentDto>();
@@ -53,9 +58,9 @@ namespace SocialMauiApp.ViewModel
                 System.Diagnostics.Debug.WriteLine($"HasSelectedImages updated to: {HasSelectedImages}, Preview count: {SelectedImagePreviews.Count}");
             };
             _syncTimer = dispatcher.CreateTimer();
-            _syncTimer.Interval = TimeSpan.FromMinutes(5); // Đồng bộ mỗi 5 phút
+            _syncTimer.Interval = TimeSpan.FromMinutes(5);
             _syncTimer.Tick += async (s, e) => await AutoSynchronizeDataAsync();
-            _lastSyncTime = DateTime.UtcNow; // 02:48 AM UTC (09:48 AM +07, 20/05/2025)
+            _lastSyncTime = DateTime.UtcNow; // 07:07 AM UTC (02:07 PM +07, 20/05/2025)
             IsPhotoButtonVisible = true;
         }
 
@@ -95,6 +100,35 @@ namespace SocialMauiApp.ViewModel
             IsOwnPost = _authService.User != null && value.UserId == _authService.User.Id;
             _startIndex = 0;
             Comments.Clear();
+
+            // Kiểm tra Post trong SQLite
+            var localPost = await _localDatabase.GetPostAsync(value.PostId);
+            if (localPost != null && !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet))
+            {
+                Post = localPost.ToPostModel(PostsApi, _realtimeUpdatesService);
+            }
+            else
+            {
+                // Lưu Post vào SQLite nếu có mạng
+                var postEntity = new PostEntity
+                {
+                    PostId = value.PostId,
+                    UserId = value.UserId,
+                    UserName = value.UserName,
+                    UserPhotoUrl = value.UserPhotoUrl,
+                    Content = value.Content,
+                    PhotoUrl = value.PhotoUrl,
+                    PostedOnDisplay = value.PostedOnDisplay,
+                    IsLiked = value.IsLiked,
+                    IsBookmarked = value.IsBookmarked,
+                    LikeCount = value.LikeCount,
+                    CommentCount = value.CommentCount,
+                    IsSync = value.IsSync
+                };
+                await _localDatabase.SavePostAsync(postEntity);
+                Post = value; // Giữ giá trị hiện tại
+            }
+
             await FetchCommentsAsync();
             if (!_isPageActive)
             {
@@ -113,10 +147,31 @@ namespace SocialMauiApp.ViewModel
             {
                 var result = await _syncApi.SynchronizeAsync();
                 Console.WriteLine("Đồng bộ thành công: " + result.ToString());
-                // Làm mới danh sách bình luận sau đồng bộ
+                if (Post != null)
+                {
+                    var postEntity = new PostEntity
+                    {
+                        PostId = Post.PostId,
+                        UserId = Post.UserId,
+                        UserName = Post.UserName,
+                        UserPhotoUrl = Post.UserPhotoUrl,
+                        Content = Post.Content,
+                        PhotoUrl = Post.PhotoUrl,
+                        PostedOnDisplay = Post.PostedOnDisplay,
+                        IsLiked = Post.IsLiked,
+                        IsBookmarked = Post.IsBookmarked,
+                        LikeCount = Post.LikeCount,
+                        CommentCount = Post.CommentCount,
+                        IsSync = 1
+                    };
+                    await _localDatabase.SavePostAsync(postEntity);
+                }
                 _startIndex = 0;
                 await FetchCommentsAsync();
-                _lastSyncTime = DateTime.UtcNow; // Cập nhật thời gian đồng bộ: 02:48 AM UTC (09:48 AM +07, 20/05/2025)
+                _lastSyncTime = DateTime.UtcNow; // 07:07 AM UTC (02:07 PM +07, 20/05/2025)
+
+                var syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = _lastSyncTime };
+                await _localDatabase.SaveSyncMetadataAsync(syncMetadata);
             }
             catch (ApiException ex)
             {
@@ -136,7 +191,7 @@ namespace SocialMauiApp.ViewModel
             try
             {
                 var newComments = await _syncApi.GetCommentsSinceAsync(_lastSyncTime, Post.PostId);
-                _lastSyncTime = DateTime.UtcNow; // 02:48 AM UTC (09:48 AM +07, 20/05/2025)
+                _lastSyncTime = DateTime.UtcNow; // 07:07 AM UTC (02:07 PM +07, 20/05/2025)
 
                 foreach (var comment in newComments.OrderByDescending(c => c.AddedOn))
                 {
@@ -149,7 +204,7 @@ namespace SocialMauiApp.ViewModel
 
                         if (comment.Level == 0)
                         {
-                            Comments.Insert(0, comment);
+                            Comments.Insert(0, comment); 
                         }
                         else
                         {
@@ -170,8 +225,14 @@ namespace SocialMauiApp.ViewModel
                             }
                         }
                         OnPropertyChanged(nameof(Comments));
+
+                        // Lưu comment vào SQLite
+                        await _localDatabase.SaveCommentAsync(comment);
                     }
                 }
+
+                var syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = _lastSyncTime };
+                await _localDatabase.SaveSyncMetadataAsync(syncMetadata);
             }
             catch (ApiException ex)
             {
@@ -190,41 +251,86 @@ namespace SocialMauiApp.ViewModel
             IsBusy = true;
             try
             {
-                var comments = await PostsApi.GetPostsCommentAsync(Post.PostId, _startIndex, PageSize);
-                if (comments.Length > 0)
+                // Fetch comments from local database if offline
+                if (!Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet))
                 {
-                    _startIndex += comments.Length;
-                    foreach (var c in comments)
+                    var localComments = await _localDatabase.GetCommentsAsync(Post.PostId, _startIndex, PageSize);
+                    await MainThread.InvokeOnMainThreadAsync(() =>
                     {
-                        c.IsOwnComment = _authService.User != null && c.UserId == _authService.User.Id;
-                        c.Level = c.ParentCommentId == null ? 0 : 1;
-                        c.UserPhotoUrl = c.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                        var replies = new ObservableCollection<CommentDto>();
-                        foreach (var reply in c.Replies ?? Enumerable.Empty<CommentDto>())
+                        foreach (var comment in localComments)
                         {
-                            reply.IsOwnComment = _authService.User != null && reply.UserId == _authService.User.Id;
-                            reply.Level = 1;
-                            reply.UserPhotoUrl = reply.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                            replies.Add(reply);
+                            if (!Comments.Any(x => x.CommentId == comment.CommentId))
+                            {
+                                Comments.Add(comment);
+                            }
                         }
-                        c.Replies = replies;
-                        if (!Comments.Any(x => x.CommentId == c.CommentId))
+                        _startIndex += localComments.Count;
+                        OnPropertyChanged(nameof(Comments));
+                    });
+                }
+                else
+                {
+                    // Fetch comments from API if online
+                    var comments = await PostsApi.GetPostsCommentAsync(Post.PostId, _startIndex, PageSize);
+                    if (comments != null && comments.Length > 0)
+                    {
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
                         {
-                            Comments.Add(c);
-                        }
+                            foreach (var comment in comments)
+                            {
+                                // Ensure comment properties are properly initialized
+                                comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
+                                comment.Level = comment.ParentCommentId == null ? 0 : 1;
+                                comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
+                                comment.Replies = new ObservableCollection<CommentDto>(
+                                    comment.Replies?.Select(r => new CommentDto
+                                    {
+                                        CommentId = r.CommentId,
+                                        PostId = r.PostId,
+                                        Content = r.Content,
+                                        PhotoUrl = r.PhotoUrl,
+                                        UserId = r.UserId,
+                                        UserName = r.UserName,
+                                        UserPhotoUrl = r.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png",
+                                        AddedOn = r.AddedOn,
+                                        IsOwnComment = _authService.User != null && r.UserId == _authService.User.Id,
+                                        Level = 1,
+                                        ParentCommentId = r.ParentCommentId,
+                                        Replies = new ObservableCollection<CommentDto>()
+                                    }) ?? Enumerable.Empty<CommentDto>());
+
+                                // Save to local database
+                                await _localDatabase.SaveCommentAsync(comment);
+
+                                // Add to collection if not already present
+                                if (!Comments.Any(x => x.CommentId == comment.CommentId))
+                                {
+                                    Comments.Add(comment);
+                                }
+                            }
+                            _startIndex += comments.Length;
+                            OnPropertyChanged(nameof(Comments));
+                        });
                     }
                 }
             }
+            catch (ApiException apiEx)
+            {
+                await ShowErrorAlertAsync($"API error fetching comments: {apiEx.Message}");
+            }
+            catch (SQLiteException sqlEx)
+            {
+                await ShowErrorAlertAsync($"Database error fetching comments: {sqlEx.Message}");
+            }
             catch (Exception ex)
             {
-                await ShowErrorAlertAsync($"Failed to fetch comments: {ex.Message}");
+                await ShowErrorAlertAsync($"Unexpected error fetching comments: {ex.Message}");
             }
             finally
             {
                 IsBusy = false;
             }
         }
-
         [RelayCommand]
         private async Task SelectPhotoAsync()
         {
@@ -503,6 +609,9 @@ namespace SocialMauiApp.ViewModel
                                 }
                             }
                             OnPropertyChanged(nameof(Comments));
+
+                            // Lưu cập nhật vào SQLite
+                            _ = _localDatabase.SaveCommentAsync(updatedComment);
                         });
                     }
                     else
@@ -586,6 +695,9 @@ namespace SocialMauiApp.ViewModel
                                 }
                             }
                             OnPropertyChanged(nameof(Comments));
+
+                            // Lưu comment mới vào SQLite
+                            _ = _localDatabase.SaveCommentAsync(result.Data);
                         });
                     }
                     else
@@ -741,20 +853,20 @@ namespace SocialMauiApp.ViewModel
                     return;
                 }
 
-                await MainThread.InvokeOnMainThreadAsync(() =>
+                await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     if (IsEditing && _commentBeingEdited?.CommentId == commentDto.CommentId)
                     {
                         IsEditing = false;
                         _commentBeingEdited = null;
                         Comment = string.Empty;
-                        ClearPhotos();
+                        await ClearPhotos();
                     }
                     if (ReplyingToComment?.CommentId == commentDto.CommentId)
                     {
                         ReplyingToComment = null;
                         Comment = string.Empty;
-                        ClearPhotos();
+                        await ClearPhotos();
                     }
 
                     if (commentDto.Level == 1)
@@ -780,6 +892,9 @@ namespace SocialMauiApp.ViewModel
                         }
                     }
                     OnPropertyChanged(nameof(Comments));
+
+                    // Xóa comment khỏi SQLite using public method
+                    await _localDatabase.DeleteCommentAsync(commentDto);
                 });
 
                 await ToastAsync($"{(commentDto.Level == 1 ? "Reply" : "Comment")} deleted");
@@ -854,6 +969,9 @@ namespace SocialMauiApp.ViewModel
                         }
                         OnPropertyChanged(nameof(Comments));
                     });
+
+                    // Xóa child comment khỏi SQLite
+                    await _localDatabase.DeleteCommentAsync(child);
                 }
             }
         }
@@ -897,7 +1015,8 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
-        private void OnPostChanged(PostDto changedPost)
+        // Renamed to avoid conflict with the partial OnPostChanged from [ObservableProperty]
+        private void OnPostUpdated(PostDto changedPost)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
@@ -916,6 +1035,24 @@ namespace SocialMauiApp.ViewModel
                         LikeCount = changedPost.LikeCount,
                         CommentCount = changedPost.CommentCount,
                     };
+
+                    // Cập nhật Post trong SQLite
+                    var postEntity = new PostEntity
+                    {
+                        PostId = Post.PostId,
+                        UserId = Post.UserId,
+                        UserName = Post.UserName,
+                        UserPhotoUrl = Post.UserPhotoUrl,
+                        Content = Post.Content,
+                        PhotoUrl = Post.PhotoUrl,
+                        PostedOnDisplay = Post.PostedOnDisplay,
+                        IsLiked = Post.IsLiked,
+                        IsBookmarked = Post.IsBookmarked,
+                        LikeCount = Post.LikeCount,
+                        CommentCount = Post.CommentCount,
+                        IsSync = 1
+                    };
+                    _ = _localDatabase.SavePostAsync(postEntity);
                 }
             });
         }
@@ -926,6 +1063,8 @@ namespace SocialMauiApp.ViewModel
             {
                 if (Post?.PostId == postId)
                 {
+                    // Xóa Post khỏi SQLite
+                    await _localDatabase.DeletePostAsync(postId);
                     await Shell.Current.GoToAsync("..");
                 }
             });
@@ -957,7 +1096,7 @@ namespace SocialMauiApp.ViewModel
 
         private void OnCommentAdded(CommentDto comment)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 if (Post != null && comment.PostId == Post.PostId && !Comments.Any(c => c.CommentId == comment.CommentId))
                 {
@@ -982,13 +1121,16 @@ namespace SocialMauiApp.ViewModel
                             OnPropertyChanged(nameof(Comments));
                         }
                     }
+
+                    // Lưu comment vào SQLite
+                    await _localDatabase.SaveCommentAsync(comment);
                 }
             });
         }
 
         private void OnCommentUpdated(CommentDto comment)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 if (Post != null && comment.PostId == Post.PostId)
                 {
@@ -1028,13 +1170,16 @@ namespace SocialMauiApp.ViewModel
                             OnPropertyChanged(nameof(Comments));
                         }
                     }
+
+                    // Lưu cập nhật vào SQLite
+                    await _localDatabase.SaveCommentAsync(comment);
                 }
             });
         }
 
         private void OnCommentDeleted(Guid commentId)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 var parentComment = Comments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == commentId) == true);
                 if (parentComment != null)
@@ -1063,25 +1208,46 @@ namespace SocialMauiApp.ViewModel
                     IsEditing = false;
                     _commentBeingEdited = null;
                     Comment = string.Empty;
-                    ClearPhotos();
+                    await ClearPhotos();
                 }
                 if (ReplyingToComment?.CommentId == commentId)
                 {
                     ReplyingToComment = null;
                     Comment = string.Empty;
-                    ClearPhotos();
+                    await ClearPhotos();
                 }
+
+                // Xóa comment khỏi SQLite
+                await _localDatabase.DeleteCommentByIdAsync(commentId);
             });
         }
 
         private void OnPostCountsUpdated(PostDto dto)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 if (Post is not null && Post.PostId == dto.PostId)
                 {
                     Post.LikeCount = dto.LikeCount;
                     Post.CommentCount = dto.CommentCount;
+
+                    // Cập nhật Post trong SQLite
+                    var postEntity = new PostEntity
+                    {
+                        PostId = Post.PostId,
+                        UserId = Post.UserId,
+                        UserName = Post.UserName,
+                        UserPhotoUrl = Post.UserPhotoUrl,
+                        Content = Post.Content,
+                        PhotoUrl = Post.PhotoUrl,
+                        PostedOnDisplay = Post.PostedOnDisplay,
+                        IsLiked = Post.IsLiked,
+                        IsBookmarked = Post.IsBookmarked,
+                        LikeCount = Post.LikeCount,
+                        CommentCount = Post.CommentCount,
+                        IsSync = 1
+                    };
+                    await _localDatabase.SavePostAsync(postEntity);
                 }
             });
         }
@@ -1089,7 +1255,7 @@ namespace SocialMauiApp.ViewModel
         public void ConfigureRealtimeUpdates()
         {
             _realtimeUpdatesService.RemoveHandlers(nameof(DetailsViewModel));
-            _realtimeUpdatesService.AddPostChangedHandler(nameof(DetailsViewModel), OnPostChanged);
+            _realtimeUpdatesService.AddPostChangedHandler(nameof(DetailsViewModel), OnPostUpdated);
             _realtimeUpdatesService.AddPostDeletedHandler(nameof(DetailsViewModel), OnPostDeleted);
             _realtimeUpdatesService.AddUserPhotoChangedHandler(nameof(DetailsViewModel), OnUserPhotoChanged);
             _realtimeUpdatesService.AddCommentAddedHandler(nameof(DetailsViewModel), OnCommentAdded);

@@ -3,14 +3,18 @@ using SocialMauiApp.Apis;
 using SocialMauiApp.Services;
 using SocialMauiApp.ViewModel;
 using SocialMediaMaui.Shared.Dtos;
+using SQLite;
 using System;
 
 namespace SocialMauiApp.Models
 {
     public partial class PostModel : BasePostViewModel
     {
+        [PrimaryKey]
         public Guid PostId { get; set; }
-        public Guid UserId { get; set; }
+
+        [ObservableProperty]
+        private Guid _userId;
 
         [ObservableProperty]
         private string _userName = string.Empty;
@@ -25,8 +29,9 @@ namespace SocialMauiApp.Models
 
         [ObservableProperty]
         private string? _photoUrl;
+
         [ObservableProperty]
-        public string _postedOnDisplay;
+        private string _postedOnDisplay;
 
         public string PostTemplateContentViewName =>
             string.IsNullOrWhiteSpace(PhotoUrl) ? "WithNoImage" :
@@ -40,13 +45,19 @@ namespace SocialMauiApp.Models
 
         [ObservableProperty]
         private int _likeCount;
-      
+
         [ObservableProperty]
         private int _commentCount;
-       
 
+        [Ignore] // Không lưu vào SQLite vì tính toán động
         public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
+
+        [Ignore] // Không lưu vào SQLite vì tính toán động
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
+
+        // Thêm thuộc tính IsSync để đánh dấu trạng thái đồng bộ
+        [ObservableProperty]
+        private int _isSync;
 
         public PostModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
             : base(postApi, realtimeUpdatesService)
@@ -83,20 +94,17 @@ namespace SocialMauiApp.Models
             new PostModel(postApi, realtimeUpdatesService)
             {
                 PostId = dto.PostId,
+                UserId = dto.UserId,
+                UserName = dto.UserName ?? string.Empty,
+                UserPhotoUrl = dto.UserPhotoUrl,
                 Content = dto.Content,
-                IsBookmarked = dto.IsBookmarked,
-                IsLiked = dto.IsLiked,
                 PhotoUrl = dto.PhotoUrl,
                 PostedOnDisplay = dto.PostedOnDisplay,
-                UserId = dto.UserId,
-                UserName = dto.UserName,
-                UserPhotoUrl = dto.UserPhotoUrl,
-
-                // Bổ sung dữ liệu lượt tương tác
+                IsLiked = dto.IsLiked,
+                IsBookmarked = dto.IsBookmarked,
                 LikeCount = dto.LikeCount,
                 CommentCount = dto.CommentCount,
-               
+                IsSync = 0 // Mặc định chưa đồng bộ
             };
     }
-
 }

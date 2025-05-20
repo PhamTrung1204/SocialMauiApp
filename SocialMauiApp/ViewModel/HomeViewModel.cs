@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel; // Đảm bảo có MainThread
 using Refit;
 using SocialMauiApp.Apis;
+using SocialMauiApp.Data;
 using SocialMauiApp.Models;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
@@ -21,11 +22,12 @@ namespace SocialMauiApp.ViewModel
         private readonly AuthService _authService;
         private readonly ISyncApi _syncApi;
         private int _startIndex = 0;
+        private readonly LocalDatabase _localDatabase;
         private const int PageSize = 7;
         private readonly IDispatcherTimer _syncTimer; // Timer để tự động đồng bộ
         private DateTime _lastSyncTime; // Lưu thời gian đồng bộ cuối
         private bool _isPageActive = false;
-        public HomeViewModel(IPostApi postApi, ISyncApi syncApi, IDispatcher dispatcher, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
+        public HomeViewModel(IPostApi postApi, ISyncApi syncApi, IDispatcher dispatcher, RealtimeUpdatesService realtimeUpdatesService, AuthService authService, LocalDatabase localDatabase)
             : base(postApi, realtimeUpdatesService)
         {
             _realtimeUpdatesService = realtimeUpdatesService;
@@ -33,11 +35,12 @@ namespace SocialMauiApp.ViewModel
             User = authService.User!;
             Posts = new ObservableCollection<PostModel>();
             _syncApi = syncApi;
+            _localDatabase = localDatabase;
             _ = FetchPostsAsync();
             _syncTimer = dispatcher.CreateTimer();
             _syncTimer.Interval = TimeSpan.FromMinutes(5); // Đồng bộ mỗi 5 phút
             _syncTimer.Tick += async (s, e) => await AutoSynchronizeDataAsync();
-            _lastSyncTime = DateTime.UtcNow;
+            _lastSyncTime = DateTime.UtcNow; // 06:45 AM UTC (01:45 PM +07, 20/05/2025)
             ConfigureRealtimeUpdates();
         }
         [ObservableProperty]
@@ -69,6 +72,10 @@ namespace SocialMauiApp.ViewModel
                 // Sau khi đồng bộ, làm mới danh sách bài đăng
                 _startIndex = 0;
                 await FetchPostsAsync();
+
+                // Lưu SyncMetadata
+                var syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = DateTime.UtcNow };
+                await _localDatabase.SaveSyncMetadataAsync(syncMetadata);
             }
             catch (ApiException ex)
             {
@@ -84,16 +91,55 @@ namespace SocialMauiApp.ViewModel
         {
             await MakeApiCall(async () =>
             {
-                var posts = await PostsApi.GetPostsAsync(_startIndex, PageSize);
-                if (posts.Length > 0)
+                // Kiểm tra dữ liệu trong SQLite trước
+                var localPosts = await _localDatabase.GetPostsAsync();
+                if (localPosts.Any() && !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet))
                 {
                     if (_startIndex == 0) Posts.Clear();
-                    _startIndex += posts.Length;
-                    foreach (var dto in posts.OrderByDescending(p => p.PostedOn))
+                    var newPosts = localPosts.OrderByDescending(p => p.PostedOnDisplay)
+                                           .Skip(_startIndex)
+                                           .Take(PageSize)
+                                           .Select(p => p.ToPostModel(PostsApi, _realtimeUpdatesService))
+                                           .Where(p => !Posts.Any(x => x.PostId == p.PostId));
+                    foreach (var post in newPosts)
                     {
-                        if (!Posts.Any(p => p.PostId == dto.PostId))
+                        Posts.Add(post);
+                    }
+                    _startIndex += newPosts.Count();
+                }
+                else
+                {
+                    // Nếu có mạng, lấy từ server và lưu vào SQLite
+                    var posts = await PostsApi.GetPostsAsync(_startIndex, PageSize);
+                    if (posts.Length > 0)
+                    {
+                        if (_startIndex == 0) Posts.Clear();
+                        _startIndex += posts.Length;
+                        foreach (var dto in posts.OrderByDescending(p => p.PostedOn))
                         {
-                            Posts.Add(PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService));
+                            if (!Posts.Any(p => p.PostId == dto.PostId))
+                            {
+                                var postModel = PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService);
+                                Posts.Add(postModel);
+
+                                // Lưu vào SQLite
+                                var postEntity = new PostEntity
+                                {
+                                    PostId = postModel.PostId,
+                                    UserId = postModel.UserId,
+                                    UserName = postModel.UserName,
+                                    UserPhotoUrl = postModel.UserPhotoUrl,
+                                    Content = postModel.Content,
+                                    PhotoUrl = postModel.PhotoUrl,
+                                    PostedOnDisplay = postModel.PostedOnDisplay,
+                                    IsLiked = postModel.IsLiked,
+                                    IsBookmarked = postModel.IsBookmarked,
+                                    LikeCount = postModel.LikeCount,
+                                    CommentCount = postModel.CommentCount,
+                                    IsSync = 1
+                                };
+                                await _localDatabase.SavePostAsync(postEntity);
+                            }
                         }
                     }
                 }
@@ -124,16 +170,38 @@ namespace SocialMauiApp.ViewModel
             try
             {
                 var newPosts = await _syncApi.GetPostsSinceAsync(_lastSyncTime);
-                _lastSyncTime = DateTime.UtcNow; // Cập nhật thời gian đồng bộ
+                _lastSyncTime = DateTime.UtcNow; // 06:45 AM UTC (01:45 PM +07, 20/05/2025)
 
                 foreach (var dto in newPosts.OrderByDescending(p => p.PostedOn))
                 {
                     if (!Posts.Any(p => p.PostId == dto.PostId))
                     {
-                        Posts.Insert(0, PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService));
+                        var postModel = PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService);
+                        Posts.Insert(0, postModel);
                         _startIndex++;
+
+                        // Lưu vào SQLite
+                        var postEntity = new PostEntity
+                        {
+                            PostId = postModel.PostId,
+                            UserId = postModel.UserId,
+                            UserName = postModel.UserName,
+                            UserPhotoUrl = postModel.UserPhotoUrl,
+                            Content = postModel.Content,
+                            PhotoUrl = postModel.PhotoUrl,
+                            PostedOnDisplay = postModel.PostedOnDisplay,
+                            IsLiked = postModel.IsLiked,
+                            IsBookmarked = postModel.IsBookmarked,
+                            LikeCount = postModel.LikeCount,
+                            CommentCount = postModel.CommentCount,
+                            IsSync = 1
+                        };
+                        await _localDatabase.SavePostAsync(postEntity);
                     }
                 }
+
+                var syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = _lastSyncTime };
+                await _localDatabase.SaveSyncMetadataAsync(syncMetadata);
             }
             catch (ApiException ex)
             {

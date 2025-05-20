@@ -119,6 +119,10 @@
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
+            },
+            "sqlite-net-pcl": {
+              "target": "Package",
+              "version": "[1.9.172, )"
             }
           },
           "imports": [
@@ -190,6 +194,10 @@
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
+            },
+            "sqlite-net-pcl": {
+              "target": "Package",
+              "version": "[1.9.172, )"
             }
           },
           "imports": [
@@ -255,6 +263,10 @@
             "Syncfusion.Maui.Toolkit": {
               "target": "Package",
               "version": "[1.0.3, )"
+            },
+            "sqlite-net-pcl": {
+              "target": "Package",
+              "version": "[1.9.172, )"
             }
           },
           "imports": [

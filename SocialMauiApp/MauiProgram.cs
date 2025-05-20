@@ -11,7 +11,8 @@ using SocialMediaMaui.Shared;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using Microsoft.Maui.Handlers;
-using SocialMauiApp.ViewModel;
+using SocialMauiApp.Data;
+
 
 
 namespace SocialMauiApp
@@ -41,7 +42,8 @@ namespace SocialMauiApp
 
 
             builder.Services.AddSingleton<AuthService>();
-      
+            builder.Services.AddSingleton<LocalDatabase>();
+
             builder.Services.AddTransient<LoginViewModel>().AddTransient<LoginPage>();
             builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
             builder.Services.AddTransient<AdminViewModel>().AddTransient<AdminDashboardPage>();
