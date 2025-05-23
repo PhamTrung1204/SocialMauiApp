@@ -111,7 +111,7 @@ public partial class LoginViewModel : BaseViewModel
             {
                 // Ẩn tuỳ chọn vân tay, buộc nhập lại mật khẩu
                 ShowFingerprintOption = false;
-                _pref.SetBool("FingerprintAuthEnabled", true);
+                _pref.SetBool("FingerprintAuthEnabled", false); // Cập nhật để tắt tính năng
                 await ShowErrorAlertAsync("Too many failed attempts. Please login with your password.");
             }
             return;
@@ -150,6 +150,26 @@ public partial class LoginViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task ForgotPasswordAsync()
+    {
+        if (IsBusy || string.IsNullOrWhiteSpace(Email) || !IsValidGmail(Email))
+        {
+            await Shell.Current.DisplayAlert("Error", "Please enter a valid Gmail address", "OK");
+            return;
+        }
+
+        IsBusy = true;
+        try
+        {
+            await NavigateAsync(nameof(ResetPasswordPage), new Dictionary<string, object> { { "email", Email } });
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
     private async Task SwitchAccountAsync()
     {
         _pref.SetBool("FingerprintAuthEnabled", false);
@@ -160,5 +180,12 @@ public partial class LoginViewModel : BaseViewModel
         ShowFingerprintOption = false;
 
         await NavigateAsync($"//{nameof(LoginPage)}");
+    }
+
+    // Định nghĩa phương thức IsValidGmail
+    private bool IsValidGmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email)) return false;
+        return email.ToLower().EndsWith("@gmail.com") && new System.Net.Mail.MailAddress(email).Address == email;
     }
 }

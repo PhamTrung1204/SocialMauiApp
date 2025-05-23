@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Base theme that inherits from Theme.AppCompat -->
+	<style name="Maui.AppCompat" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="android:windowBackground">@android:color/white</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<!-- Ensure no ActionBar is present -->
+		<item name="android:windowActionBar">false</item>
+		<item name="android:windowNoTitle">true</item>
+	</style>
+
+	<!-- Splash theme for MAUI, inherits from Maui.AppCompat -->
+	<style name="Maui.SplashTheme" parent="Maui.AppCompat">
+		<!-- Customize splash screen background if needed -->
+		<item name="android:windowBackground">@drawable/splash</item>
+		<item name="android:windowFullscreen">true</item>
+	</style>
+</resources>

@@ -13,6 +13,7 @@ namespace SocialMauiApp.ViewModel
     {
         [ObservableProperty]
         private bool _isBusy;
+        public Dictionary<string, object> Parameters { get; set; }
         protected async Task ShowErrorAlertAsync(string message) =>
             await Shell.Current.DisplayAlert("Error", message, "Ok");
         protected async Task NavigateAsync(string url) =>

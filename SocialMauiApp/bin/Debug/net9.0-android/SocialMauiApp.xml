@@ -313,6 +313,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.LoginViewModel.Email">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.LoginViewModel.email"/>
@@ -337,6 +338,12 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.LoginViewModel.LoginWithFingerprintCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.LoginViewModel.LoginWithFingerprintAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.LoginViewModel.forgotPasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.LoginViewModel.ForgotPasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.LoginViewModel.ForgotPasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.LoginViewModel.ForgotPasswordAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.LoginViewModel.switchAccountCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.LoginViewModel.SwitchAccountCommand"/>.</summary>
@@ -550,9 +557,10 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
-        <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.Name">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._name"/>
+        <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.Username">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._username"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.Email">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._email"/>
@@ -574,6 +582,12 @@
             <param name="value">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.RegisterViewModel.CroppedPhotoSource"/> is changed.</remarks>
         </member>
+        <member name="F:SocialMauiApp.ViewModel.RegisterViewModel.showSuccessAndNavigateToLoginCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.RegisterViewModel.ShowSuccessAndNavigateToLoginCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.ShowSuccessAndNavigateToLoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.RegisterViewModel.ShowSuccessAndNavigateToLogin"/>.</summary>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.RegisterViewModel.registerCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.RegisterViewModel.RegisterCommand"/>.</summary>
         </member>
@@ -585,6 +599,35 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.SelectPhotoCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.RegisterViewModel.SelectPhotoAsync"/>.</summary>
+        </member>
+        <member name="T:SocialMauiApp.ViewModel.ResetPasswordViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.Email">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._email"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.NewPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._newPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ConfirmPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._confirmPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetToken">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._resetToken"/>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ResetPasswordViewModel.requestResetCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ResetPasswordViewModel.resetPasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetPasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetPasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetPasswordAsync"/>.</summary>
         </member>
         <member name="T:SocialMauiApp.ViewModel.SavePostViewModel">
             <inheritdoc/>
@@ -900,14 +943,20 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CroppedPhotoSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CroppedPhotoSource" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Name">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Name" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RepeatPassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RepeatPassword" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PhotoImageSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PhotoImageSource" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ResetToken">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ResetToken" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PhotoPath">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PhotoPath" generated properties.</summary>
@@ -1062,14 +1111,20 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CroppedPhotoSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CroppedPhotoSource" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Name">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Name" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RepeatPassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RepeatPassword" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PhotoImageSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoImageSource" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ResetToken">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ResetToken" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PhotoPath">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoPath" generated properties.</summary>
@@ -1167,6 +1222,18 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.ValidateTokenAsync(System.String)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SendVerificationEmailAsync(SocialMediaMaui.Shared.Dtos.SendVerificationEmailDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.VerifyEmailAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.RequestPasswordResetAsync(SocialMediaMaui.Shared.Dtos.PasswordResetRequestDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.ResetPasswordAsync(SocialMediaMaui.Shared.Dtos.ResetPasswordDto)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#RegisterAsync(SocialMediaMaui.Shared.Dtos.RegisterDto)">
             <inheritdoc />
         </member>
@@ -1177,6 +1244,18 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#ValidateTokenAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#SendVerificationEmailAsync(SocialMediaMaui.Shared.Dtos.SendVerificationEmailDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#VerifyEmailAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#RequestPasswordResetAsync(SocialMediaMaui.Shared.Dtos.PasswordResetRequestDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#ResetPasswordAsync(SocialMediaMaui.Shared.Dtos.ResetPasswordDto)">
             <inheritdoc />
         </member>
         <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIPostApi">

@@ -84,7 +84,7 @@
                             Placeholder="Enter your name"
                             BackgroundColor="#F2F2F2"
                             PlaceholderColor="#A0A0A0"
-                            Text="{Binding Name}"
+                            Text="{Binding Username}"
                             HeightRequest="45" />
 
                         <Label Text="Email" Style="{StaticResource formLabel}" />

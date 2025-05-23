@@ -6,10 +6,11 @@ using SocialMediaMaui.Shared.Dtos;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Maui.Media;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
 
 namespace SocialMauiApp.ViewModel
 {
-    [QueryProperty(nameof(CroppedPhotoSource), "new-src")]
     public partial class RegisterViewModel : BaseViewModel
     {
         private readonly IAuthApi _authApi;
@@ -17,41 +18,108 @@ namespace SocialMauiApp.ViewModel
         public RegisterViewModel(IAuthApi authApi)
         {
             _authApi = authApi;
+            CheckNavigationParameters();
         }
 
-        [ObservableProperty] private string _name;
+        public async void CheckNavigationParameters()
+        {
+            if (Shell.Current?.CurrentPage is RegisterPage registerPage)
+            {
+                var parameters = registerPage.Parameters;
+                if (parameters != null && parameters.TryGetValue("ShowSuccessMessage", out object value) && value is bool showSuccess && showSuccess)
+                {
+                    await ShowSuccessAndNavigateToLogin();
+                }
+            }
+        }
+
+        [ObservableProperty] private string _username;
         [ObservableProperty] private string _email;
         [ObservableProperty] private string _password;
         [ObservableProperty] private string _repeatPassword;
         [ObservableProperty] private string _photoImageSource = "user.png";
 
         [RelayCommand]
+        public async Task ShowSuccessAndNavigateToLogin()
+        {
+            try
+            {
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Success", "Registration successful! You will be redirected to the login page.", "OK");
+                    await NavigateAsync($"//{nameof(LoginPage)}");
+                }
+                else
+                {
+                    Console.WriteLine("MainPage is not available for navigation.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowSuccessAndNavigateToLogin: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
         private async Task RegisterAsync()
         {
-            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(RepeatPassword))
+            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(RepeatPassword))
             {
-                await ToastAsync("All fields are required");
+                await ToastAsync("Please fill in all information");
                 return;
             }
-            if (Password.ToString() != RepeatPassword.ToString())
+
+            if (!IsValidGmail(Email))
             {
-                await ShowErrorAlertAsync("Confirmed password incorrect");
+                await ShowErrorAlertAsync("Please use a Gmail address.");
                 return;
             }
+
+            if (Password != RepeatPassword)
+            {
+                await ShowErrorAlertAsync("Passwords do not match");
+                return;
+            }
+
             await MakeApiCall(async () =>
             {
-                var registerDto = new RegisterDto(Name, Email, Password, RepeatPassword);
+                var registerDto = new RegisterDto(Username, Email, Password, RepeatPassword);
                 var result = await _authApi.RegisterAsync(registerDto);
-                
+
                 if (!result.IsSuccess)
                 {
-                    await ShowErrorAlertAsync(result.Error);
+                    if (result.Error == "Email already exists and is verified. Please log in or use a different email.")
+                    {
+                        bool openEmail = await Application.Current.MainPage.DisplayAlert(
+                            "Email Already Exists",
+                            result.Error,
+                            "OK",
+                            "Cancel");
+
+                        if (openEmail)
+                        {
+                            await OpenEmailClientAsync(Email);
+                            await NavigateAsync($"//{nameof(LoginPage)}");
+                        }
+                    }
+                    else if (result.Error.StartsWith("Email already exists but not verified"))
+                    {
+                        await Application.Current.MainPage.DisplayAlert(
+                            "Verification Required",
+                            result.Error,
+                            "OK");
+
+                        await OpenEmailClientAsync(Email);
+                    }
+                    else
+                    {
+                        await ShowErrorAlertAsync(result.Error ?? "Registration failed");
+                    }
                     return;
                 }
-               
 
                 var userId = result.Data;
-                if (!string.IsNullOrWhiteSpace(PhotoImageSource) && PhotoImageSource != "personal.png")
+                if (!string.IsNullOrWhiteSpace(PhotoImageSource) && PhotoImageSource != "user.png")
                 {
                     var photoName = Path.GetFileName(PhotoImageSource);
                     using var fs = File.OpenRead(PhotoImageSource);
@@ -60,13 +128,30 @@ namespace SocialMauiApp.ViewModel
 
                     if (!apiResult.IsSuccess)
                     {
-                        await ToastAsync("Photo upload failed.");
+                        await ToastAsync("Photo upload failed");
                         return;
                     }
                 }
 
-                await ToastAsync("Successfully registered");
-                await NavigateAsync($"//{nameof(LoginPage)}");
+                var sendVerificationDto = new SendVerificationEmailDto { Email = Email };
+                var verificationResult = await _authApi.SendVerificationEmailAsync(sendVerificationDto);
+                if (verificationResult.IsSuccess)
+                {
+                    bool openEmail = await Application.Current.MainPage.DisplayAlert(
+                        "Registration Successful",
+                        $"A verification email has been sent to {Email}. Please check your inbox to verify your account.",
+                        "OK",
+                        "Cancel");
+
+                    if (openEmail)
+                    {
+                        await OpenEmailClientAsync(Email);
+                    }
+                }
+                else
+                {
+                    await ShowErrorAlertAsync(verificationResult.Error ?? "Failed to send verification email");
+                }
             });
         }
 
@@ -89,21 +174,21 @@ namespace SocialMauiApp.ViewModel
 
                     if (!File.Exists(localPath))
                     {
-                        await ToastAsync("Không lưu được ảnh. Vui lòng thử lại.");
+                        await ToastAsync("Failed to save photo. Please try again.");
                         return;
                     }
 
                     var param = new Dictionary<string, object>
-            {
-                { "new-src", localPath }
-            };
+                    {
+                        { "new-src", localPath }
+                    };
 
                     await NavigateAsync(nameof(CropPhotoPage), param);
                 }
             }
             else
             {
-                await ToastAsync("Thiết bị không hỗ trợ chụp ảnh");
+                await ToastAsync("Device does not support taking photos");
             }
         }
 
@@ -116,5 +201,43 @@ namespace SocialMauiApp.ViewModel
                 PhotoImageSource = value;
             }
         }
+
+        private bool IsValidGmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return false;
+            return email.ToLower().EndsWith("@gmail.com") && new System.Net.Mail.MailAddress(email).Address == email;
+        }
+
+        private async Task OpenEmailClientAsync(string email)
+        {
+            try
+            {
+                var gmailUri = new Uri("googlegmail:///");
+                var mailtoUri = new Uri($"mailto:{email}");
+
+                if (DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    try
+                    {
+                        await Launcher.OpenAsync(gmailUri);
+                    }
+                    catch
+                    {
+                        await Launcher.OpenAsync(mailtoUri);
+                    }
+                }
+                else
+                {
+                    await Launcher.OpenAsync(mailtoUri);
+                }
+            }
+            catch (Exception ex)
+            {
+                await ToastAsync("Unable to open email app. Please open Gmail manually.");
+                Console.WriteLine($"Error opening email client: {ex.Message}");
+            }
+        }
     }
+
+  
 }
