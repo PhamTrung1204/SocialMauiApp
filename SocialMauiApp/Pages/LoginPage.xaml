@@ -100,6 +100,9 @@
                             Source="fingerprint.png"
                             WidthRequest="48" />
                     </HorizontalStackLayout>
+                    <Label Text="Forgot Password ?" TextColor="Gray">
+                        <Label.GestureRecognizers Tapped="ForgotPassword_Clicked"/>
+                    </Label>
 
                     <Button
                         BackgroundColor="Transparent"
@@ -142,6 +145,9 @@
                             PlaceholderColor="#A8A8A8"
                             Text="{Binding Password}" />
                     </VerticalStackLayout>
+                    <Label Text="Forgot Password ?" TextColor="Gray">
+                        <Label.GestureRecognizers Tapped="ForgotPassword_Clicked"/>
+                    </Label>
 
                     <!--  Login button  -->
                     <Button
