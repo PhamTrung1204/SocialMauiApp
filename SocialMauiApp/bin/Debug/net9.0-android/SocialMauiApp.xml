@@ -617,6 +617,12 @@
         <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetToken">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._resetToken"/>
         </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.IsRequestResetVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._isRequestResetVisible"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.IsResetPasswordVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._isResetPasswordVisible"/>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.ResetPasswordViewModel.requestResetCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetCommand"/>.</summary>
         </member>
@@ -958,6 +964,12 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ResetToken">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ResetToken" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRequestResetVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRequestResetVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsResetPasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsResetPasswordVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PhotoPath">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PhotoPath" generated properties.</summary>
         </member>
@@ -1125,6 +1137,12 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ResetToken">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ResetToken" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRequestResetVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRequestResetVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsResetPasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsResetPasswordVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PhotoPath">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoPath" generated properties.</summary>

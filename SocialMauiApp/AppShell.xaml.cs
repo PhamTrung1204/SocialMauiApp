@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Maui.Core;
 using SocialMauiApp.Pages;
 using SocialMauiApp.Services;
-using Microsoft.Extensions.DependencyInjection;    // để dùng GetRequiredService
+using Microsoft.Extensions.DependencyInjection;    
 using System.Threading.Tasks;
 
 namespace SocialMauiApp
@@ -28,6 +28,7 @@ namespace SocialMauiApp
             Routing.RegisterRoute(nameof(CropPhotoPage), typeof(CropPhotoPage));
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(AdminDashboardPage), typeof(AdminDashboardPage));
+            Routing.RegisterRoute(nameof(ResetPasswordPage), typeof(ResetPasswordPage));
             Routing.RegisterRoute(nameof(PostManagementPage), typeof(PostManagementPage));
         }
     }

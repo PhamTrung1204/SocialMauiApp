@@ -14,12 +14,27 @@ namespace SocialMauiApp.ViewModel
         public ResetPasswordViewModel(IAuthApi authApi)
         {
             _authApi = authApi;
+            CheckNavigationParameters(); // Kiểm tra tham số khi khởi tạo
+            IsRequestResetVisible = true; // Mặc định hiển thị phần 1
+            IsResetPasswordVisible = false;
         }
 
         [ObservableProperty] private string _email;
         [ObservableProperty] private string _newPassword;
         [ObservableProperty] private string _confirmPassword;
         [ObservableProperty] private string _resetToken;
+        [ObservableProperty] private bool _isRequestResetVisible;
+        [ObservableProperty] private bool _isResetPasswordVisible;
+
+        public void CheckNavigationParameters()
+        {
+            if (Parameters != null && Parameters.TryGetValue("resetToken", out object value) && value is string token)
+            {
+                ResetToken = token;
+                IsRequestResetVisible = false;
+                IsResetPasswordVisible = true;
+            }
+        }
 
         [RelayCommand]
         private async Task RequestResetAsync()

@@ -50,6 +50,7 @@ namespace SocialMauiApp
             builder.Services.AddTransient<LoginViewModel>().AddTransient<LoginPage>();
             builder.Services.AddTransient<AdminViewModel>().AddTransient<AdminDashboardPage>();
             builder.Services.AddTransient<PostManageViewModel>().AddTransient<PostManagementPage>();
+            builder.Services.AddTransient<ResetPasswordViewModel>().AddTransient<ResetPasswordPage>();
             builder.Services.AddTransient<RegisterViewModel>().AddTransient<RegisterPage>();
             builder.Services.AddTransient<SavePostViewModel>().AddTransient<AddPostPage>();
             builder.Services.AddSingleton<HomeViewModel>().AddSingleton<HomePage>();
@@ -74,7 +75,7 @@ namespace SocialMauiApp
                         Console.WriteLine($"Deep link received: {uri}");
                         if (uri.Contains("socialmauiapp://RegisterPage"))
                         {
-                            Microsoft.Maui.Controls.Application.Current.Dispatcher.Dispatch(async () =>
+                            Application.Current.Dispatcher.Dispatch(async () =>
                             {
                                 try
                                 {

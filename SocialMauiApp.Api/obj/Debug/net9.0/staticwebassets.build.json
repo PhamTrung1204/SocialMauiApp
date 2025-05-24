@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "gEhheQ9zu4qMntUVYcENtc49UnYIBDxc/27xAy5N2Ow=",
+  "Hash": "pVQ+o5OMlD6BSFrXi8VhJz94RLUqEBu9SwflL9vMZfk=",
   "Source": "SocialMauiApp.Api",
   "BasePath": "_content/SocialMauiApp.Api",
   "Mode": "Default",
@@ -2724,6 +2724,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\images\\users\\e11492d6-e536-4f45-80de-0532a99559b8_638784727318559390.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\e64141f7-0a7b-4744-b124-08dd99dd8684\\posts\\34976333-1e32-4ac9-8316-efe0b7ddf208_638835913263652557.jpg",
+      "SourceId": "SocialMauiApp.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\",
+      "BasePath": "_content/SocialMauiApp.Api",
+      "RelativePath": "uploads/images/users/e64141f7-0a7b-4744-b124-08dd99dd8684/posts/34976333-1e32-4ac9-8316-efe0b7ddf208_638835913263652557#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "4qxh5y1crh",
+      "Integrity": "/MF/U0tf7mQLnXn88WutMFHNqkD50QX4hVCEa0oP/ng=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\images\\users\\e64141f7-0a7b-4744-b124-08dd99dd8684\\posts\\34976333-1e32-4ac9-8316-efe0b7ddf208_638835913263652557.jpg"
     }
   ],
   "Endpoints": [
@@ -3078,7 +3099,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 07:44:03 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3123,7 +3144,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 07:44:03 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3734,7 +3755,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 21 May 2025 16:52:56 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3779,7 +3800,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 21 May 2025 16:52:56 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7014,7 +7035,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 02:43:33 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7051,7 +7072,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 02:43:33 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7998,7 +8019,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 07:44:14 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -8035,7 +8056,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 07:44:14 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -10950,7 +10971,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 21 May 2025 16:50:36 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -10995,7 +11016,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 21 May 2025 16:50:36 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -12098,7 +12119,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 23 May 2025 09:40:01 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -12143,7 +12164,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 23 May 2025 09:40:01 GMT"
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -13302,6 +13323,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-Y6PqW+HNJ9yb5CVQvu8peu4fU/tx2Nkh9eAyIkV/jFM="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/images/users/e64141f7-0a7b-4744-b124-08dd99dd8684/posts/34976333-1e32-4ac9-8316-efe0b7ddf208_638835913263652557.4qxh5y1crh.jpg",
+      "AssetFile": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\e64141f7-0a7b-4744-b124-08dd99dd8684\\posts\\34976333-1e32-4ac9-8316-efe0b7ddf208_638835913263652557.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "63414"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/MF/U0tf7mQLnXn88WutMFHNqkD50QX4hVCEa0oP/ng=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4qxh5y1crh"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/images/users/e64141f7-0a7b-4744-b124-08dd99dd8684/posts/34976333-1e32-4ac9-8316-efe0b7ddf208_638835913263652557.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/MF/U0tf7mQLnXn88WutMFHNqkD50QX4hVCEa0oP/ng="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/images/users/e64141f7-0a7b-4744-b124-08dd99dd8684/posts/34976333-1e32-4ac9-8316-efe0b7ddf208_638835913263652557.jpg",
+      "AssetFile": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\e64141f7-0a7b-4744-b124-08dd99dd8684\\posts\\34976333-1e32-4ac9-8316-efe0b7ddf208_638835913263652557.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "63414"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/MF/U0tf7mQLnXn88WutMFHNqkD50QX4hVCEa0oP/ng=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 10:19:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-/MF/U0tf7mQLnXn88WutMFHNqkD50QX4hVCEa0oP/ng="
         }
       ]
     }
