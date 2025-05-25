@@ -23,7 +23,7 @@
             Grid.Row="0"
             Padding="15,10,15,8"
             Spacing="5">
-            <!--  Profile Header Section  -->
+            <!--  Profile Header with Dropmenu  -->
             <Grid>
                 <Border
                     BackgroundColor="White"
@@ -47,6 +47,7 @@
                     </Image>
                 </Border>
                 <Border
+                    x:Name="ProfileMenuTrigger"
                     Margin="50,50,-5,-20"
                     BackgroundColor="{StaticResource Primary}"
                     HeightRequest="28"
@@ -67,70 +68,84 @@
                             Radius="4"
                             Offset="0,2" />
                     </Border.Shadow>
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ChangePhotoCommand}" />
-                    </Border.GestureRecognizers>
                 </Border>
+                <!--  Đặt GestureRecognizers trước nội dung con  -->
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleProfileMenuCommand}" />
+                </Grid.GestureRecognizers>
             </Grid>
 
-            <controls:Spacer Space="10" />
-
-            <!--  User Information  -->
-            <Label
-                Margin="0,10,0,0"
-                FontAttributes="Bold"
-                FontSize="20"
-                HorizontalOptions="Center"
-                Text="{Binding User.Name}" />
-            <Label
-                FontSize="16"
-                HorizontalOptions="Center"
-                Text="{Binding User.Email}"
-                TextColor="{StaticResource Gray600}" />
-
-            <!--  Fingerprint Settings Section  -->
+            <!--  Dropmenu  -->
             <Border
-                Margin="0,15,0,10"
-                Padding="15,12"
+                x:Name="ProfileMenu"
+                Margin="0,-50,0,0"
+                Padding="10"
                 BackgroundColor="White"
+                HorizontalOptions="Center"
+                IsVisible="{Binding IsProfileMenuOpen}"
                 Stroke="{StaticResource Gray200}"
                 StrokeShape="RoundRectangle 10"
-                StrokeThickness="1">
-                <Grid
-                    ColumnDefinitions="Auto,*,Auto"
-                    ColumnSpacing="15"
-                    RowSpacing="0">
-                    <Image
-                        Grid.Column="0"
-                        HeightRequest="24"
-                        Source="fingerprint.png"
-                        VerticalOptions="Center"
-                        WidthRequest="24" />
-                    <VerticalStackLayout Grid.Column="1" Spacing="2">
+                VerticalOptions="End"
+                WidthRequest="200">
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="{Binding User.Name}"
+                        TextColor="{StaticResource Gray800}" />
+                    <Label
+                        FontSize="14"
+                        Text="{Binding User.Email}"
+                        TextColor="{StaticResource Gray600}" />
+                    <Border
+                        Margin="0,5,0,0"
+                        Padding="5"
+                        BackgroundColor="{StaticResource LightGray}"
+                        StrokeShape="RoundRectangle 5">
                         <Label
-                            FontAttributes="Bold"
-                            FontSize="16"
-                            Text="Fingerprint Login"
+                            FontSize="14"
+                            Text="Change Name"
                             TextColor="{StaticResource Primary}"
-                            VerticalOptions="Center" />
+                            VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ShowChangeNameCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+                    <Border
+                        Margin="0,5,0,0"
+                        Padding="5"
+                        BackgroundColor="{StaticResource LightGray}"
+                        StrokeShape="RoundRectangle 5">
                         <Label
-                            FontSize="12"
-                            Text="Use fingerprint to quickly log into your account"
-                            TextColor="{StaticResource Gray600}" />
-                    </VerticalStackLayout>
-                    <Switch
-                        Grid.Column="2"
-                        HorizontalOptions="End"
-                        IsToggled="{Binding IsFingerprintEnabled}"
-                        OnColor="{StaticResource Primary}"
-                        ThumbColor="White"
-                        VerticalOptions="Center">
-                        <Switch.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ShowFingerprintSettingsCommand}" />
-                        </Switch.GestureRecognizers>
-                    </Switch>
-                </Grid>
+                            FontSize="14"
+                            Text="Change Password"
+                            TextColor="{StaticResource Primary}"
+                            VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ShowChangePasswordCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+                    <Border
+                        Margin="0,5,0,0"
+                        Padding="5"
+                        BackgroundColor="{StaticResource LightBackground}"
+                        StrokeShape="RoundRectangle 5">
+                        <Label
+                            FontSize="14"
+                            Text="Change Profile Photo"
+                            TextColor="{StaticResource Primary}"
+                            VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChangePhotoCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+                </VerticalStackLayout>
             </Border>
+
+            <controls:Spacer Space="10" />
 
             <!--  Post Selection Tabs  -->
             <Border

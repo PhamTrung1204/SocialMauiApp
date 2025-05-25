@@ -12,16 +12,17 @@ namespace SocialMauiApp.Api.Endpoints
             var userGroup = app.MapGroup("/api/user")
                 .RequireAuthorization()
                 .WithName("User");
+
             userGroup.MapPost("/change-photo", async (IFormFile photo, UserService userService, ClaimsPrincipal principal) =>
-            Results.Ok(await userService.ChangePhotoAsync(photo, principal.GetUserId())))
-            .DisableAntiforgery()
-            .Produces<ApiResult>()
-            .WithName("ChangePhoto");
+                Results.Ok(await userService.ChangePhotoAsync(photo, principal.GetUserId())))
+                .DisableAntiforgery()
+                .Produces<ApiResult>()
+                .WithName("ChangePhoto");
 
             userGroup.MapGet("/posts", async ([FromQuery] int startIndex, [FromQuery] int pageSize, UserService userService, ClaimsPrincipal principal) =>
-              Results.Ok(await userService.GetUserPostsAsync(startIndex, pageSize, principal.GetUserId())))
-              .Produces<PostDto[]>()
-              .WithName("GetUserPosts");
+                Results.Ok(await userService.GetUserPostsAsync(startIndex, pageSize, principal.GetUserId())))
+                .Produces<PostDto[]>()
+                .WithName("GetUserPosts");
 
             userGroup.MapGet("/bookmarked-posts", async ([FromQuery] int startIndex, [FromQuery] int pageSize, UserService userService, ClaimsPrincipal principal) =>
                 Results.Ok(await userService.GetUserBookmarkedPostsAsync(startIndex, pageSize, principal.GetUserId())))
@@ -29,12 +30,16 @@ namespace SocialMauiApp.Api.Endpoints
                 .WithName("GetBookmarkedPosts");
 
             userGroup.MapGet("/notifications", async ([FromQuery] int startIndex, [FromQuery] int pageSize, UserService userService, ClaimsPrincipal principal) =>
-              Results.Ok(await userService.GetNotificationAsync(startIndex, pageSize, principal.GetUserId())))
-              .Produces<NotificationDto[]>()
-              .WithName("GetNotifications");
+                Results.Ok(await userService.GetNotificationAsync(startIndex, pageSize, principal.GetUserId())))
+                .Produces<NotificationDto[]>()
+                .WithName("GetNotifications");
+
+            userGroup.MapPost("/change-password", async (ChangePasswordDto dto, UserService userService, ClaimsPrincipal principal) =>
+                Results.Ok(await userService.ChangePasswordAsync(dto, principal.GetUserId())))
+                .Produces<ApiResult<string>>()
+                .WithName("ChangePassword");
 
             return app;
         }
-
     }
 }

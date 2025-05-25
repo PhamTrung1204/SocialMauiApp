@@ -484,6 +484,11 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.User">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._user"/>
@@ -493,6 +498,24 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.IsFingerprintEnabled">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._isFingerprintEnabled"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.IsProfileMenuOpen">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._isProfileMenuOpen"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.CurrentPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._currentPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.NewPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._newPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ConfirmNewPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._confirmNewPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.NewName">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._newName"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.IsChangePasswordVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._isChangePasswordVisible"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.IsMyPostsTabSelected">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._isMyPostsTabSelected"/>
@@ -511,6 +534,12 @@
             <param name="newValue">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.CroppedPhotoSource"/> is changed.</remarks>
         </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.toggleProfileMenuCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ToggleProfileMenuCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ToggleProfileMenuCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ToggleProfileMenu"/>.</summary>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.showFingerprintSettingsCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowFingerprintSettingsCommand"/>.</summary>
         </member>
@@ -522,6 +551,36 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.LogoutCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.LogoutAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.showChangePasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangePasswordAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.changePasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangePasswordAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.showChangeNameCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangeNameCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangeNameCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangeNameAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.changeNameCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangeNameCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangeNameCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangeNameAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.changePhotoCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.selectMyPostsTabCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.SelectMyPostsTabCommand"/>.</summary>
@@ -546,12 +605,6 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.FetchBookmarkedPostsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.FetchBookmarkedPostsAsync"/>.</summary>
-        </member>
-        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.changePhotoCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoCommand"/>.</summary>
-        </member>
-        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoAsync"/>.</summary>
         </member>
         <member name="T:SocialMauiApp.ViewModel.RegisterViewModel">
             <inheritdoc/>
@@ -958,6 +1011,24 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsFingerprintEnabled">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsFingerprintEnabled" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsProfileMenuOpen">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsProfileMenuOpen" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CurrentPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CurrentPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmNewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmNewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsChangePasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsChangePasswordVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsMyPostsTabSelected">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsMyPostsTabSelected" generated properties.</summary>
         </member>
@@ -972,9 +1043,6 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PhotoImageSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PhotoImageSource" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewPassword">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewPassword" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmPassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
@@ -1138,6 +1206,24 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsFingerprintEnabled">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsFingerprintEnabled" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsProfileMenuOpen">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsProfileMenuOpen" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CurrentPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CurrentPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmNewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmNewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsChangePasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsChangePasswordVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsMyPostsTabSelected">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsMyPostsTabSelected" generated properties.</summary>
         </member>
@@ -1152,9 +1238,6 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PhotoImageSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoImageSource" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewPassword">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewPassword" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmPassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
@@ -1465,6 +1548,12 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.GetNotificationAsync(System.String,System.Int32,System.Int32)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.ChangePasswordAsync(System.String,SocialMediaMaui.Shared.Dtos.ChangePasswordDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.ChangeNameAsync(System.String,SocialMediaMaui.Shared.Dtos.ChangeNameDto)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#ChangePhotoAsync(System.String,Refit.StreamPart)">
             <inheritdoc />
         </member>
@@ -1475,6 +1564,12 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#GetNotificationAsync(System.String,System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#ChangePasswordAsync(System.String,SocialMediaMaui.Shared.Dtos.ChangePasswordDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#ChangeNameAsync(System.String,SocialMediaMaui.Shared.Dtos.ChangeNameDto)">
             <inheritdoc />
         </member>
     </members>
