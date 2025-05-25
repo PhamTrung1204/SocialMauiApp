@@ -399,7 +399,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.AuthEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapAuthEndpoints\u003Eb__0_6",
+    "Method": "\u003CMapAuthEndpoints\u003Eb__0_7",
     "RelativePath": "api/auth/request-password-reset",
     "HttpMethod": "POST",
     "IsController": false,
@@ -427,7 +427,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.AuthEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapAuthEndpoints\u003Eb__0_7",
+    "Method": "\u003CMapAuthEndpoints\u003Eb__0_8",
     "RelativePath": "api/auth/reset-password",
     "HttpMethod": "POST",
     "IsController": false,
@@ -455,7 +455,7 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.AuthEndpoints\u002B\u003C\u003Ec",
-    "Method": "\u003CMapAuthEndpoints\u003Eb__0_5",
+    "Method": "\u003CMapAuthEndpoints\u003Eb__0_6",
     "RelativePath": "api/auth/send-verification-email",
     "HttpMethod": "POST",
     "IsController": false,
@@ -530,6 +530,34 @@
       "Auth"
     ],
     "EndpointName": "Auth-VerifyEmail"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.AuthEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapAuthEndpoints\u003Eb__0_5",
+    "RelativePath": "api/auth/verify-reset-token",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Auth"
+    ],
+    "EndpointName": "Auth-VerifyResetToken"
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.PostsEndpoints\u002B\u003C\u003Ec",

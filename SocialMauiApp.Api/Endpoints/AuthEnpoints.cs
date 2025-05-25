@@ -44,13 +44,20 @@ namespace SocialMauiApp.Api.Endpoints
                 var result = await authService.VerifyEmailAsync(token);
                 if (result.IsSuccess)
                 {
-                    // Redirect client to the deep link
-                    return Results.Redirect(result.Data); // e.g., "socialmauiapp://RegisterPage?verified=true"
+                    return Results.Redirect(result.Data);
                 }
                 return Results.BadRequest(new { message = result.Error });
             })
-            .Produces<ApiResult<string>>()
-            .WithName("Auth-VerifyEmail");
+                .Produces<ApiResult<string>>()
+                .WithName("Auth-VerifyEmail");
+
+            authGroup.MapGet("/verify-reset-token", async (string token, AuthService authService) =>
+            {
+                var result = await authService.VerifyResetTokenAsync(token);
+                return Results.Ok(result); // Trả về JSON thay vì redirect
+            })
+                .Produces<ApiResult<string>>()
+                .WithName("Auth-VerifyResetToken");
 
             authGroup.MapPost("/send-verification-email", async (SendVerificationEmailDto dto, AuthService authService) =>
                 Results.Ok(await authService.SendVerificationEmailAsync(dto)))
@@ -63,7 +70,10 @@ namespace SocialMauiApp.Api.Endpoints
                 .WithName("Auth-RequestPasswordReset");
 
             authGroup.MapPost("/reset-password", async (ResetPasswordDto dto, AuthService authService) =>
-                Results.Ok(await authService.ResetPasswordAsync(dto)))
+            {
+                var result = await authService.ResetPasswordAsync(dto);
+                return Results.Ok(result); // Trả về JSON thay vì redirect
+            })
                 .Produces<ApiResult<string>>()
                 .WithName("Auth-ResetPassword");
 

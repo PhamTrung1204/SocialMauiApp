@@ -1,35 +1,23 @@
+using Microsoft.Maui.Controls;
 using SocialMauiApp.ViewModel;
 
-namespace SocialMauiApp.Pages;
-
-public partial class ResetPasswordPage : ContentPage
+namespace SocialMauiApp.Pages
 {
-    public Dictionary<string, object> Parameters { get; set; }
-    public ResetPasswordPage(ResetPasswordViewModel resetPasswordViewModel)
+    public partial class ResetPasswordPage : ContentPage
     {
-        InitializeComponent();
-        BindingContext = resetPasswordViewModel;
-    }
-    private void ResetPasswordPage_Loaded(object sender, EventArgs e)
-    {
-        if (Parameters != null && BindingContext is ResetPasswordViewModel viewModel)
-        {
-            viewModel.Parameters = Parameters;
-            viewModel.CheckNavigationParameters();
-            Loaded += ResetPasswordPage_Loaded;
-        }
-    }
+        private readonly ResetPasswordViewModel _viewModel;
 
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        if (BindingContext is ResetPasswordViewModel viewModel)
+        public ResetPasswordPage(ResetPasswordViewModel resetPasswordViewModel)
         {
-            viewModel.CheckNavigationParameters();
+            Console.WriteLine("ResetPasswordPage instantiated.");
+            InitializeComponent();
+            _viewModel = resetPasswordViewModel;
+            BindingContext = _viewModel;
         }
-    }
-    private async void btnLogin_Clicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+
+        private async void btnLogin_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+        }
     }
 }

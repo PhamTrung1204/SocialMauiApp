@@ -101,7 +101,9 @@
                             WidthRequest="48" />
                     </HorizontalStackLayout>
                     <Label Text="Forgot Password ?" TextColor="Gray">
-                        <Label.GestureRecognizers Tapped="ForgotPassword_Clicked"/>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ForgotPassword_Clicked"/>
+                        </Label.GestureRecognizers>
                     </Label>
 
                     <Button
@@ -146,7 +148,9 @@
                             Text="{Binding Password}" />
                     </VerticalStackLayout>
                     <Label Text="Forgot Password ?" TextColor="Gray">
-                        <Label.GestureRecognizers Tapped="ForgotPassword_Clicked"/>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ForgotPassword_Clicked"/>
+                        </Label.GestureRecognizers>
                     </Label>
 
                     <!--  Login button  -->

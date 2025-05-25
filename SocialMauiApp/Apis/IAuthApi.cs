@@ -1,5 +1,4 @@
-﻿// Apis/IAuthApi.cs
-using Refit;
+﻿using Refit;
 using SocialMediaMaui.Shared.Dtos;
 using System.IO;
 using System.Threading.Tasks;
@@ -21,19 +20,18 @@ namespace SocialMauiApp.Apis
         [Get("/api/auth/validate")]
         Task<ApiResult<LoggedInUser>> ValidateTokenAsync([Header("Authorization")] string bearerToken);
 
-        // Thêm endpoint gửi email xác nhận
         [Post("/api/auth/send-verification-email")]
         Task<ApiResult<string>> SendVerificationEmailAsync([Body] SendVerificationEmailDto dto);
 
-        // Thêm endpoint xác minh email
         [Get("/api/auth/verify-email")]
         Task<ApiResult<string>> VerifyEmailAsync(string token);
 
-        // Thêm endpoint yêu cầu đổi mật khẩu
         [Post("/api/auth/request-password-reset")]
         Task<ApiResult<string>> RequestPasswordResetAsync([Body] PasswordResetRequestDto dto);
 
-        // Thêm endpoint xác minh và đổi mật khẩu
+        [Get("/api/auth/verify-reset-token")]
+        Task<ApiResult<string>> VerifyResetTokenAsync(string token);
+
         [Post("/api/auth/reset-password")]
         Task<ApiResult<string>> ResetPasswordAsync([Body] ResetPasswordDto dto);
     }

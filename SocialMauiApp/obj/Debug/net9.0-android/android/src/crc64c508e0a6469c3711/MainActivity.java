@@ -12,6 +12,9 @@ public class MainActivity
 		__md_methods = 
 			"n_onCreate:(Landroid/os/Bundle;)V:GetOnCreate_Landroid_os_Bundle_Handler\n" +
 			"n_onNewIntent:(Landroid/content/Intent;)V:GetOnNewIntent_Landroid_content_Intent_Handler\n" +
+			"n_onResume:()V:GetOnResumeHandler\n" +
+			"n_onPause:()V:GetOnPauseHandler\n" +
+			"n_onDestroy:()V:GetOnDestroyHandler\n" +
 			"";
 		mono.android.Runtime.register ("com.companyname.socialmauiapp.MainActivity, SocialMauiApp", MainActivity.class, __md_methods);
 	}
@@ -45,6 +48,27 @@ public class MainActivity
 	}
 
 	private native void n_onNewIntent (android.content.Intent p0);
+
+	public void onResume ()
+	{
+		n_onResume ();
+	}
+
+	private native void n_onResume ();
+
+	public void onPause ()
+	{
+		n_onPause ();
+	}
+
+	private native void n_onPause ();
+
+	public void onDestroy ()
+	{
+		n_onDestroy ();
+	}
+
+	private native void n_onDestroy ();
 
 	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)

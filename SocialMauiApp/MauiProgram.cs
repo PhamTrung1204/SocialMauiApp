@@ -39,7 +39,7 @@ namespace SocialMauiApp
                 {
                     fonts.AddFont("Ubuntu-Bold.tff", "UbuntuBold");
                     fonts.AddFont("Ubuntu-Regular.ttf", "UbuntuRegular");
-                    fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
+                    fonts.AddFont("FluentSystemIcons-Regular.ttf", "FluentUI");
                 })
                 .ConfigureSyncfusionCore();
 
@@ -62,59 +62,12 @@ namespace SocialMauiApp
             // Cấu hình Refit
             ConfigureRefit(builder.Services);
 
-            // Cấu hình deep link
-            builder.ConfigureLifecycleEvents(events =>
-            {
+            // Đăng ký dịch vụ deep link
 #if ANDROID
-                events.AddAndroid(android => android.OnCreate((activity, bundle) =>
-                {
-                    var intent = activity.Intent;
-                    if (intent?.Data != null)
-                    {
-                        var uri = intent.Data.ToString();
-                        Console.WriteLine($"Deep link received: {uri}");
-                        if (uri.Contains("socialmauiapp://RegisterPage"))
-                        {
-                            Application.Current.Dispatcher.Dispatch(async () =>
-                            {
-                                try
-                                {
-                                    if (Shell.Current != null)
-                                    {
-                                        var navigationParameters = new Dictionary<string, object>
-                                        {
-                                            { "ShowSuccessMessage", uri.Contains("verified=true") }
-                                        };
-                                        await Shell.Current.GoToAsync("//RegisterPage", navigationParameters);
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("Shell.Current is null, delaying navigation...");
-                                        await Task.Delay(1000);
-                                        if (Shell.Current != null)
-                                        {
-                                            var navigationParameters = new Dictionary<string, object>
-                                            {
-                                                { "ShowSuccessMessage", uri.Contains("verified=true") }
-                                            };
-                                            await Shell.Current.GoToAsync("//RegisterPage", navigationParameters);
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Shell still not ready, navigation failed.");
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($"Navigation error: {ex.Message}");
-                                }
-                            });
-                        }
-                    }
-                }));
+            builder.Services.AddSingleton<IDeepLinkService, Platforms.Android.DeepLinkService>();
+#else
+            builder.Services.AddSingleton<IDeepLinkService, DefaultDeepLinkService>();
 #endif
-            });
 
             return builder.Build();
         }
@@ -122,26 +75,31 @@ namespace SocialMauiApp
         private static void ConfigureRefit(IServiceCollection services)
         {
             services.AddRefitClient<IAuthApi>()
-                .ConfigureHttpClient(SetHttpClient);
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(AppConstants.ApiBaseUrl));
             services.AddRefitClient<IAdminApi>(GetRefitSettings)
-                .ConfigureHttpClient(SetHttpClient);
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(AppConstants.ApiBaseUrl));
             services.AddRefitClient<ISyncApi>(GetRefitSettings)
-                .ConfigureHttpClient(SetHttpClient);
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(AppConstants.ApiBaseUrl));
             services.AddRefitClient<IPostApi>(GetRefitSettings)
-                .ConfigureHttpClient(SetHttpClient);
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(AppConstants.ApiBaseUrl));
             services.AddRefitClient<IUserApi>(GetRefitSettings)
-                .ConfigureHttpClient(SetHttpClient);
-
-            void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(AppConstants.ApiBaseUrl);
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(AppConstants.ApiBaseUrl));
 
             RefitSettings GetRefitSettings(IServiceProvider sp)
             {
                 var authService = sp.GetRequiredService<AuthService>();
                 return new RefitSettings
                 {
-                    AuthorizationHeaderValueGetter = (_, __) => Task.FromResult(authService.Token ?? "")
+                    AuthorizationHeaderValueGetter = (_, __) => Task.FromResult(authService.Token ?? string.Empty)
                 };
             }
         }
+    }
+
+    // Default implementation for non-Android platforms
+    public class DefaultDeepLinkService : IDeepLinkService
+    {
+        public Uri? GetPendingDeepLink() => null;
+        public void ClearPendingDeepLink() { }
     }
 }

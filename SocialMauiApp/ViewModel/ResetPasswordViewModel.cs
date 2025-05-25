@@ -14,25 +14,49 @@ namespace SocialMauiApp.ViewModel
         public ResetPasswordViewModel(IAuthApi authApi)
         {
             _authApi = authApi;
-            CheckNavigationParameters(); // Kiểm tra tham số khi khởi tạo
-            IsRequestResetVisible = true; // Mặc định hiển thị phần 1
+            IsRequestResetVisible = true;
+            IsEnterCodeVisible = false;
             IsResetPasswordVisible = false;
+            Console.WriteLine("ResetPasswordViewModel initialized with default visibility: IsRequestResetVisible=true, IsEnterCodeVisible=false, IsResetPasswordVisible=false");
         }
 
         [ObservableProperty] private string _email;
         [ObservableProperty] private string _newPassword;
         [ObservableProperty] private string _confirmPassword;
         [ObservableProperty] private string _resetToken;
+        [ObservableProperty] private string _resetCode;
+        partial void OnResetTokenChanged(string value)
+        {
+            Console.WriteLine($"ResetToken changed to: {value}");
+            CheckNavigationParameters();
+        }
+
         [ObservableProperty] private bool _isRequestResetVisible;
+        [ObservableProperty] private bool _isEnterCodeVisible;
         [ObservableProperty] private bool _isResetPasswordVisible;
 
         public void CheckNavigationParameters()
         {
-            if (Parameters != null && Parameters.TryGetValue("resetToken", out object value) && value is string token)
+            if (!string.IsNullOrEmpty(ResetToken))
             {
-                ResetToken = token;
                 IsRequestResetVisible = false;
+                IsEnterCodeVisible = false;
                 IsResetPasswordVisible = true;
+                Console.WriteLine($"ResetPasswordViewModel: ResetToken set: {ResetToken}, IsResetPasswordVisible: {IsResetPasswordVisible}");
+            }
+            else if (IsEnterCodeVisible)
+            {
+                IsRequestResetVisible = false;
+                IsEnterCodeVisible = true;
+                IsResetPasswordVisible = false;
+                Console.WriteLine("ResetPasswordViewModel: Showing enter code form.");
+            }
+            else
+            {
+                IsRequestResetVisible = true;
+                IsEnterCodeVisible = false;
+                IsResetPasswordVisible = false;
+                Console.WriteLine("ResetPasswordViewModel: Showing request reset form.");
             }
         }
 
@@ -51,11 +75,43 @@ namespace SocialMauiApp.ViewModel
                 var result = await _authApi.RequestPasswordResetAsync(dto);
                 if (result.IsSuccess)
                 {
-                    await ToastAsync($"A password reset link has been sent to {Email}. Please check your inbox (or spam folder).");
+                    IsRequestResetVisible = false;
+                    IsEnterCodeVisible = true;
+                    IsResetPasswordVisible = false;
+                    await ToastAsync($"A reset code has been sent to {Email}. Please check your inbox (or spam folder).");
+                    Email = string.Empty;
                 }
                 else
                 {
-                    await ShowErrorAlertAsync(result.Error ?? "Failed to send reset link");
+                    await ShowErrorAlertAsync(result.Error ?? "Failed to send reset code");
+                }
+            });
+        }
+
+        [RelayCommand]
+        private async Task VerifyCodeAsync()
+        {
+            if (string.IsNullOrWhiteSpace(ResetCode) || ResetCode.Length != 6)
+            {
+                await ShowErrorAlertAsync("Please enter a valid 6-character code");
+                return;
+            }
+
+            await MakeApiCall(async () =>
+            {
+                Console.WriteLine($"Calling VerifyResetTokenAsync with code: {ResetCode}");
+                var result = await _authApi.VerifyResetTokenAsync(ResetCode);
+                Console.WriteLine($"VerifyResetTokenAsync result: IsSuccess={result.IsSuccess}, Data={result.Data}, Error={result.Error}");
+                if (result.IsSuccess)
+                {
+                    ResetToken = ResetCode;
+                    IsEnterCodeVisible = false;
+                    IsResetPasswordVisible = true;
+                    await ToastAsync("Code verified successfully. Please enter your new password.");
+                }
+                else
+                {
+                    await ShowErrorAlertAsync(result.Error ?? "Invalid or expired code");
                 }
             });
         }
@@ -82,7 +138,7 @@ namespace SocialMauiApp.ViewModel
                 if (result.IsSuccess)
                 {
                     await ToastAsync("Password reset successfully. Please log in with your new password.");
-                    await NavigateAsync($"//{nameof(LoginPage)}");
+                    await Shell.Current.GoToAsync("//LoginPage");
                 }
                 else
                 {

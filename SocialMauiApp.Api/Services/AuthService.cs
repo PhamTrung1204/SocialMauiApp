@@ -94,6 +94,7 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<Guid>.Fail($"Đăng ký thất bại: {ex.Message}");
             }
         }
+
         public async Task<ApiResult> UploadPhotoAsync(Guid userId, IFormFile photo)
         {
             _logger.LogInformation("Attempting to upload photo for user ID: {UserId}", userId);
@@ -301,7 +302,7 @@ namespace SocialMauiApp.Api.Services
 
             try
             {
-                _context.Users.Update(user); // Đảm bảo entity được đánh dấu để cập nhật
+                _context.Users.Update(user);
                 var changes = await _context.SaveChangesAsync();
                 if (changes > 0)
                 {
@@ -337,42 +338,80 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<string>.Fail("User not found or not confirmed.");
             }
 
-            var resetToken = Guid.NewGuid().ToString();
-            user.ResetToken = resetToken;
+            var resetCode = GenerateResetCode();
+            user.ResetToken = resetCode;
             user.ResetTokenExpiry = DateTime.UtcNow.AddHours(1);
-            await _context.SaveChangesAsync();
+            _context.Users.Update(user);
+
+            var saveResult = await _context.SaveChangesAsync();
+            if (saveResult <= 0)
+            {
+                _logger.LogError("Failed to save ResetCode and ResetTokenExpiry for email {Email}.", dto.Email);
+                return ApiResult<string>.Fail("Failed to save reset request. Please try again.");
+            }
+
+            _logger.LogInformation("ResetCode {ResetCode} and ResetTokenExpiry {Expiry} saved for email {Email}", resetCode, user.ResetTokenExpiry, dto.Email);
 
             try
             {
-                await SendResetPasswordEmail(user.Email, resetToken);
-                _logger.LogInformation("Password reset link sent to: {Email}", dto.Email);
-                return ApiResult<string>.Success("Password reset link sent.");
+                await SendResetPasswordEmail(user.Email, resetCode);
+                _logger.LogInformation("Password reset code sent to: {Email}", dto.Email);
+                return ApiResult<string>.Success("Password reset code sent.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to send password reset link to {Email}.", dto.Email);
-                return ApiResult<string>.Fail($"Failed to send reset link: {ex.Message}");
+                _logger.LogError(ex, "Failed to send password reset code to {Email}.", dto.Email);
+                return ApiResult<string>.Fail($"Failed to send reset code: {ex.Message}");
             }
         }
 
         public async Task<ApiResult<string>> ResetPasswordAsync(ResetPasswordDto dto)
         {
-            _logger.LogInformation("Attempting to reset password with token: {Token}", dto.Token);
+            _logger.LogInformation("Attempting to reset password with code: {Token}", dto.Token);
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == dto.Token && u.ResetTokenExpiry > DateTime.UtcNow);
             if (user == null)
             {
-                _logger.LogWarning("Password reset failed: Invalid or expired token {Token}.", dto.Token);
-                return ApiResult<string>.Fail("Invalid or expired reset token.");
+                _logger.LogWarning("Password reset failed: Invalid or expired code {Token}.", dto.Token);
+                return ApiResult<string>.Fail("Invalid or expired reset code.");
             }
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.NewPassword);
             user.ResetToken = null;
             user.ResetTokenExpiry = null;
-            await _context.SaveChangesAsync();
+
+            // Đảm bảo EF theo dõi thay đổi
+            _context.Users.Update(user);
+
+            var saveResult = await _context.SaveChangesAsync();
+            if (saveResult <= 0)
+            {
+                _logger.LogError("Failed to save new password for user: {Email}. No changes were saved to the database.", user.Email);
+                return ApiResult<string>.Fail("Failed to save new password. Please try again.");
+            }
 
             _logger.LogInformation("Password reset successfully for user: {Email}", user.Email);
             return ApiResult<string>.Success("Password reset successfully.");
+        }
+        public async Task<ApiResult<string>> VerifyResetTokenAsync(string token)
+        {
+            _logger.LogInformation("Received request to verify reset code: {Token}", token);
+
+            if (string.IsNullOrWhiteSpace(token) || token.Length != 6)
+            {
+                _logger.LogWarning("Invalid reset code format: {Token}", token);
+                return ApiResult<string>.Fail("Invalid reset code.");
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == token && u.ResetTokenExpiry > DateTime.UtcNow);
+            if (user == null)
+            {
+                _logger.LogWarning("Reset code {Token} not found or expired.", token);
+                return ApiResult<string>.Fail("Invalid or expired reset code.");
+            }
+
+            _logger.LogInformation("Reset code verified successfully for user: {Email}.", user.Email);
+            return ApiResult<string>.Success(token);
         }
 
         private async Task SendVerificationEmail(string email, string token)
@@ -396,76 +435,66 @@ namespace SocialMauiApp.Api.Services
                 EnableSsl = enableSsl
             };
 
-            var deepLink = $"socialmauiapp://RegisterPage";
-            var fallbackLink = $"{baseUrl}/api/auth/verify-email?token={token}";
+            var deepLink = $"{baseUrl}/api/auth/verify-email?token={token}";
             using var mailMessage = new MailMessage
             {
                 From = new MailAddress(senderEmail),
                 Subject = "Confirm Your Email Address",
                 Body = $@"<p>Welcome to SocialMauiApp!</p>
-                  <p>Please click the link below to confirm your email address:</p>
-                  <p><a href=""{deepLink}"">Verify Email</a></p>
-                  <p>If the link above doesn't work, copy and paste this URL into your browser:</p>
-                  <p>{fallbackLink}</p>
-                  <p>This link will expire in 48 hours.</p>",
+                          <p>Please click the link below to confirm your email address:</p>
+                          <p><a href=""{deepLink}"">Verify Email</a></p>
+                          <p>This link will expire in 48 hours.</p>",
                 IsBodyHtml = true
             };
             mailMessage.To.Add(email);
 
             await smtpClient.SendMailAsync(mailMessage);
         }
-        private async Task SendResetPasswordEmail(string email, string token)
+
+        private string GenerateResetCode()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, 6)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private async Task SendResetPasswordEmail(string email, string resetCode)
         {
             var senderEmail = _configuration.GetValue<string>("SmtpSettings:SenderEmail");
             var appPassword = _configuration.GetValue<string>("SmtpSettings:AppPassword");
             var host = _configuration.GetValue<string>("SmtpSettings:Host");
             var port = _configuration.GetValue<int>("SmtpSettings:Port");
             var enableSsl = _configuration.GetValue<bool>("SmtpSettings:EnableSsl");
-            var baseUrl = _configuration.GetValue<string>("AppSettings:BaseUrl");
 
-            _logger.LogInformation("Preparing to send password reset email - Sender: {Sender}, Host: {Host}, Port: {Port}, SSL: {Ssl}",
-                senderEmail, host, port, enableSsl);
-
-            if (string.IsNullOrEmpty(senderEmail) || string.IsNullOrEmpty(appPassword) || string.IsNullOrEmpty(baseUrl))
+            if (string.IsNullOrEmpty(senderEmail) || string.IsNullOrEmpty(appPassword))
             {
-                _logger.LogError("SMTP configuration missing: SenderEmail, AppPassword, or BaseUrl is null.");
-                throw new InvalidOperationException("SMTP or application configuration is missing.");
+                _logger.LogError("SMTP configuration missing.");
+                throw new InvalidOperationException("SMTP configuration is missing.");
             }
 
-            try
+            using var smtpClient = new SmtpClient(host)
             {
-                using var smtpClient = new SmtpClient(host)
-                {
-                    Port = port,
-                    Credentials = new System.Net.NetworkCredential(senderEmail, appPassword),
-                    EnableSsl = enableSsl
-                };
+                Port = port,
+                Credentials = new System.Net.NetworkCredential(senderEmail, appPassword),
+                EnableSsl = enableSsl
+            };
 
-                var resetLink = $"{baseUrl}/reset-password?token={token}";
-                using var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(senderEmail),
-                    Subject = "Reset Your Password",
-                    Body = $"Click this link to reset your password: <a href=\"{resetLink}\">{resetLink}</a>",
-                    IsBodyHtml = true
-                };
-                mailMessage.To.Add(email);
+            using var mailMessage = new MailMessage
+            {
+                From = new MailAddress(senderEmail),
+                Subject = "Reset Your Password",
+                Body = $@"<p>You requested a password reset for SocialMauiApp!</p>
+                          <p>Your reset code is: <strong>{resetCode}</strong></p>
+                          <p>Please copy this code and enter it in the app to reset your password.</p>
+                          <p>This code will expire in 1 hour.</p>",
+                IsBodyHtml = true
+            };
+            mailMessage.To.Add(email);
 
-                _logger.LogInformation("Sending password reset email to {Email} with link: {Link}", email, resetLink);
-                await smtpClient.SendMailAsync(mailMessage);
-                _logger.LogInformation("Password reset email sent successfully to {Email}", email);
-            }
-            catch (SmtpException ex)
-            {
-                _logger.LogError(ex, "Failed to send password reset email to {Email}. Server response: {Response}", email, ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error while sending password reset email to {Email}", email);
-                throw;
-            }
+            await smtpClient.SendMailAsync(mailMessage);
         }
+
 
         private string GenerateJwtToken(User user)
         {

@@ -35,4 +35,6 @@
         Title="Post Management Page"
         ContentTemplate="{DataTemplate pages:PostManagementPage}"
         Route="PostManagementPage" />
+    <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate pages:AddPostPage}" />
+    <ShellContent Route="ResetPasswordPage" ContentTemplate="{DataTemplate pages:ResetPasswordPage}" />
 </Shell>

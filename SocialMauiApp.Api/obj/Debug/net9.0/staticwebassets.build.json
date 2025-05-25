@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "mbbpjJKWkmtZVTdQz7rGOyUTXVpSaG59hETSzcZonWc=",
+  "Hash": "eDZQxYjS9r/W2mDv3xOUyZ+bGiXuo225O85hkakwwrc=",
   "Source": "SocialMauiApp.Api",
   "BasePath": "_content/SocialMauiApp.Api",
   "Mode": "Default",
@@ -57,6 +57,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\images\\users\\526749fd-83b9-4906-b561-710060ba879d_638776640127461838.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\58aac030-e4a2-4317-886e-23305e303cbb_638836926493920073.jpeg",
+      "SourceId": "SocialMauiApp.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\",
+      "BasePath": "_content/SocialMauiApp.Api",
+      "RelativePath": "uploads/images/users/58aac030-e4a2-4317-886e-23305e303cbb_638836926493920073#[.{fingerprint}]?.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "qaband1j02",
+      "Integrity": "svKkl8dGde1+ebziB9mNMA3r8d680lNC+GEogPWmtRE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\images\\users\\58aac030-e4a2-4317-886e-23305e303cbb_638836926493920073.jpeg"
     },
     {
       "Identity": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\6a006d11-7c11-4b05-ffe2-08dd54718e99\\comments\\02795818-cf59-4e57-890e-98860f753bd7_638820395772238493.jpg",
@@ -2888,6 +2909,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-CmY2SILcQAx9nmbGsTacGuEMZlg3ababpp7yI0t6Uy8="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/images/users/58aac030-e4a2-4317-886e-23305e303cbb_638836926493920073.jpeg",
+      "AssetFile": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\58aac030-e4a2-4317-886e-23305e303cbb_638836926493920073.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1477804"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"svKkl8dGde1+ebziB9mNMA3r8d680lNC+GEogPWmtRE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 24 May 2025 14:10:49 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-svKkl8dGde1+ebziB9mNMA3r8d680lNC+GEogPWmtRE="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/images/users/58aac030-e4a2-4317-886e-23305e303cbb_638836926493920073.qaband1j02.jpeg",
+      "AssetFile": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\58aac030-e4a2-4317-886e-23305e303cbb_638836926493920073.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1477804"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"svKkl8dGde1+ebziB9mNMA3r8d680lNC+GEogPWmtRE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 24 May 2025 14:10:49 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "qaband1j02"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/images/users/58aac030-e4a2-4317-886e-23305e303cbb_638836926493920073.jpeg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-svKkl8dGde1+ebziB9mNMA3r8d680lNC+GEogPWmtRE="
         }
       ]
     },

@@ -604,6 +604,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.Email">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._email"/>
@@ -617,17 +618,34 @@
         <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetToken">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._resetToken"/>
         </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetCode">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._resetCode"/>
+        </member>
         <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.IsRequestResetVisible">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._isRequestResetVisible"/>
         </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.IsEnterCodeVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._isEnterCodeVisible"/>
+        </member>
         <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.IsResetPasswordVisible">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._isResetPasswordVisible"/>
+        </member>
+        <member name="M:SocialMauiApp.ViewModel.ResetPasswordViewModel.OnResetTokenChanged(System.String)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetToken"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetToken"/> is changed.</remarks>
         </member>
         <member name="F:SocialMauiApp.ViewModel.ResetPasswordViewModel.requestResetCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ResetPasswordViewModel.verifyCodeCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.VerifyCodeCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.VerifyCodeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ResetPasswordViewModel.VerifyCodeAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.ResetPasswordViewModel.resetPasswordCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetPasswordCommand"/>.</summary>
@@ -964,8 +982,14 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ResetToken">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ResetToken" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ResetCode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ResetCode" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRequestResetVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRequestResetVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsEnterCodeVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsEnterCodeVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsResetPasswordVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsResetPasswordVisible" generated properties.</summary>
@@ -1138,8 +1162,14 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ResetToken">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ResetToken" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ResetCode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ResetCode" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRequestResetVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRequestResetVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsEnterCodeVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsEnterCodeVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsResetPasswordVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsResetPasswordVisible" generated properties.</summary>
@@ -1249,6 +1279,9 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.RequestPasswordResetAsync(SocialMediaMaui.Shared.Dtos.PasswordResetRequestDto)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.VerifyResetTokenAsync(System.String)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.ResetPasswordAsync(SocialMediaMaui.Shared.Dtos.ResetPasswordDto)">
             <inheritdoc />
         </member>
@@ -1271,6 +1304,9 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#RequestPasswordResetAsync(SocialMediaMaui.Shared.Dtos.PasswordResetRequestDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#VerifyResetTokenAsync(System.String)">
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#ResetPasswordAsync(SocialMediaMaui.Shared.Dtos.ResetPasswordDto)">
