@@ -169,7 +169,20 @@ namespace SocialMauiApp.Services
                 }
             });
         }
-
+        public async Task NotifyPostChangedAsync(PostDto postDto)
+        {
+            try
+            {
+                await EnsureConnectedAsync();
+                // Giả sử bạn có một hub method tên "PostChanged" trên server
+                await _hubConnection.InvokeAsync("PostChanged", postDto);
+                Console.WriteLine($"Notified PostChanged for post {postDto.PostId} at 12:29 PM +07, 27/05/2025.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error notifying PostChanged: {ex.Message} at 12:29 PM +07, 27/05/2025.");
+            }
+        }
         public void NotifyPostChanged(Guid postId)
         {
             if (_hubConnection != null && _hubConnection.State == HubConnectionState.Connected)

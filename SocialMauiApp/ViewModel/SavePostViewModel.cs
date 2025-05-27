@@ -3,16 +3,16 @@ using CommunityToolkit.Mvvm.Input;
 using Refit;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Models;
+using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Media;
 using Microsoft.Maui.Devices;
-using SocialMauiApp.Services;
 using Microsoft.Maui.Dispatching;
+using SocialMediaMaui.Shared.Hubs;
 
 namespace SocialMauiApp.ViewModel
 {
@@ -21,12 +21,14 @@ namespace SocialMauiApp.ViewModel
     {
         private readonly IPostApi _postApi;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
+        private readonly AuthService _authService; // Thêm AuthService để lấy UserName và UserPhotoUrl
         private string? _existingPhotoUrl;
 
-        public SavePostViewModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
+        public SavePostViewModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
         {
             _postApi = postApi;
             _realtimeUpdatesService = realtimeUpdatesService;
+            _authService = authService; // Khởi tạo AuthService
         }
 
         [ObservableProperty]
@@ -71,7 +73,6 @@ namespace SocialMauiApp.ViewModel
                     await CapturePhotoAsync();
                 }
 
-                // Cập nhật UI trên MainThread
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     OnPropertyChanged(nameof(PhotoPath));
@@ -89,7 +90,7 @@ namespace SocialMauiApp.ViewModel
 
         private async Task PickFromDeviceAsync()
         {
-            Console.WriteLine("Picking photo from device at 12:29 PM +07, 27/05/2025...");
+            Console.WriteLine("Picking photo from device at 01:57 PM +07, 27/05/2025...");
             FileResult? fileResult = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions { Title = "Select Photo" });
             if (fileResult is null)
             {
@@ -111,7 +112,7 @@ namespace SocialMauiApp.ViewModel
 
         private async Task CapturePhotoAsync()
         {
-            Console.WriteLine("Capturing photo at 12:29 PM +07, 27/05/2025...");
+            Console.WriteLine("Capturing photo at 01:57 PM +07, 27/05/2025...");
             FileResult? fileResult = await MediaPicker.Default.CapturePhotoAsync(new MediaPickerOptions { Title = "Take Photo" });
             if (fileResult is null)
             {
@@ -165,23 +166,19 @@ namespace SocialMauiApp.ViewModel
                     if (!string.IsNullOrWhiteSpace(PhotoPath) && File.Exists(PhotoPath) && !PhotoPath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                     {
                         var fileName = Path.GetFileName(PhotoPath);
-                        using var fileStream = File.OpenRead(PhotoPath); // Đảm bảo stream được đóng
+                        using var fileStream = File.OpenRead(PhotoPath);
                         var memoryStream = new MemoryStream();
                         await fileStream.CopyToAsync(memoryStream);
                         memoryStream.Position = 0;
-                        photoStreamPart = new StreamPart(memoryStream, fileName);
+                        photoStreamPart = new StreamPart(memoryStream, fileName, "image/jpeg");
                     }
 
                     var dto = new SavePostDto
                     {
                         Content = Content,
-                        PostId = Post?.PostId ?? default
+                        PostId = Post?.PostId ?? default,
+                        IsExistingPhotoRemoved = string.IsNullOrWhiteSpace(PhotoPath) && !string.IsNullOrWhiteSpace(_existingPhotoUrl)
                     };
-
-                    if (string.IsNullOrWhiteSpace(PhotoPath) && !string.IsNullOrWhiteSpace(_existingPhotoUrl))
-                    {
-                        dto.IsExistingPhotoRemoved = true;
-                    }
 
                     var serializedDto = JsonSerializer.Serialize(dto);
                     var result = await _postApi.SavePostAsync(photoStreamPart, serializedDto);
@@ -191,11 +188,21 @@ namespace SocialMauiApp.ViewModel
                         return;
                     }
 
-                    var saved = PostModel.FromDto(result.Data, _postApi, _realtimeUpdatesService);
-                    saved.LikeCount = originalLikeCount;
-                    saved.CommentCount = originalCommentCount;
-                    saved.IsLiked = originalIsLiked;
-                    saved.IsBookmarked = originalIsBookmarked;
+                    // Tạo PostModel với thông tin chính xác, bao gồm UserName và UserPhotoUrl từ AuthService
+                    var saved = new PostModel(_postApi, _realtimeUpdatesService)
+                    {
+                        PostId = result.Data.PostId,
+                        Content = result.Data.Content,
+                        PhotoUrl = result.Data.PhotoUrl,
+                        UserId = _authService.User?.Id ?? result.Data.UserId,
+                        UserName = _authService.User?.Name ?? result.Data.UserName ?? "Unknown",
+                        UserPhotoUrl = _authService.User?.PhotoUrl ?? result.Data.UserPhotoUrl ?? "default_avatar.png",
+                        LikeCount = originalLikeCount,
+                        CommentCount = originalCommentCount,
+                        IsLiked = originalIsLiked,
+                        IsBookmarked = originalIsBookmarked,
+                        PostedOnDisplay = result.Data.PostedOnDisplay ?? Post?.PostedOnDisplay ?? DateTime.UtcNow.ToString("g")
+                    };
                     saved.NotifyIsLikeIconChanged();
                     saved.NotifyIsBookmarkIconChanged();
 
@@ -204,36 +211,56 @@ namespace SocialMauiApp.ViewModel
                     {
                         Content = string.Empty;
                         PhotoPath = string.IsNullOrWhiteSpace(saved.PhotoUrl) ? string.Empty : saved.PhotoUrl;
+                        Post = saved;
                         OnPropertyChanged(nameof(Content));
                         OnPropertyChanged(nameof(PhotoPath));
-                        Post = saved; // Cập nhật Post để phản ánh trên UI
                         OnPropertyChanged(nameof(Post));
                     });
+
+                    // Gửi sự kiện SignalR để thông báo cập nhật bài viết
+                    try
+                    {
+                        await _realtimeUpdatesService.NotifyPostChangedAsync(result.Data);
+                        // Cập nhật avatar nếu UserPhotoUrl thay đổi
+                        if (_authService.User?.PhotoUrl != saved.UserPhotoUrl)
+                        {
+                            var userPhotoDto = new UserPhotoChangedDto
+                            {
+                                UserId = saved.UserId,
+                                PhotoUrl = saved.UserPhotoUrl
+                            };
+                            //await _realtimeUpdatesService.NotifyUserPhotoChangedAsync(userPhotoDto);
+                        }
+                    }
+                    catch (Exception signalREx)
+                    {
+                        Console.WriteLine($"SignalR error: {signalREx.Message} at 01:57 PM +07, 27/05/2025.");
+                    }
 
                     // Định tuyến
                     try
                     {
                         if (Post != null && Post.PostId != default)
                         {
-                            Console.WriteLine($"Navigating back with updated post {saved.PostId} at 12:29 PM +07, 27/05/2025.");
+                            Console.WriteLine($"Navigating back with updated post {saved.PostId} at 01:57 PM +07, 27/05/2025.");
                             await NavigateAsync("..", new Dictionary<string, object> { [nameof(DetailsViewModel.Post)] = saved });
                         }
                         else
                         {
-                            Console.WriteLine($"Navigating to HomePage with new post {saved.PostId} at 12:29 PM +07, 27/05/2025.");
+                            Console.WriteLine($"Navigating to HomePage with new post {saved.PostId} at 01:57 PM +07, 27/05/2025.");
                             await NavigateAsync("//HomePage", new Dictionary<string, object> { ["newPost"] = saved });
                         }
                     }
                     catch (Exception navEx)
                     {
-                        Console.WriteLine($"Navigation error: {navEx.Message} at 12:29 PM +07, 27/05/2025.");
+                        Console.WriteLine($"Navigation error: {navEx.Message} at 01:57 PM +07, 27/05/2025.");
                         await ShowErrorAlertAsync($"Navigation failed: {navEx.Message}");
                     }
                 });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving post: {ex.Message} at 12:29 PM +07, 27/05/2025.");
+                Console.WriteLine($"Error saving post: {ex.Message} at 01:57 PM +07, 27/05/2025.");
                 await ShowErrorAlertAsync($"Error: {ex.Message}");
             }
             finally

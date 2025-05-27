@@ -489,6 +489,8 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.User">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._user"/>
@@ -564,6 +566,12 @@
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePasswordCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangePasswordAsync"/>.</summary>
         </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.cancelChangePasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangePasswordAsync"/>.</summary>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.showChangeNameCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangeNameCommand"/>.</summary>
         </member>
@@ -575,6 +583,12 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangeNameCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangeNameAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.cancelChangeNameCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangeNameCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangeNameCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangeNameAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.changePhotoCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoCommand"/>.</summary>

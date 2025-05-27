@@ -39,6 +39,10 @@ namespace SocialMauiApp.Api.Endpoints
                 .Produces<ApiResult<string>>()
                 .WithName("ChangePassword");
 
+            userGroup.MapPost("/change-name", async (ChangeNameDto dto, UserService userService, ClaimsPrincipal principal) =>
+                Results.Ok(await userService.ChangeNameAsync(dto, principal.GetUserId())))
+                .Produces<ApiResult<string>>()
+                .WithName("ChangeName");
             return app;
         }
     }

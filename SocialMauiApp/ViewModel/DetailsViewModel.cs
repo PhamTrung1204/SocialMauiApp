@@ -1199,22 +1199,14 @@ namespace SocialMauiApp.ViewModel
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                if (Post?.PostId != changedPost.PostId) return;
-
-                // Kiểm tra xem Post có thực sự thay đổi
-                if (Post.Content == changedPost.Content &&
-                    Post.PhotoUrl == changedPost.PhotoUrl &&
-                    Post.IsLiked == changedPost.IsLiked &&
-                    Post.IsBookmarked == changedPost.IsBookmarked &&
-                    Post.LikeCount == changedPost.LikeCount &&
-                    Post.CommentCount == changedPost.CommentCount &&
-                    Post.UserPhotoUrl == (changedPost.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? ""))
+                if (Post?.PostId != changedPost.PostId)
                 {
-                    Console.WriteLine($"No changes detected for post {changedPost.PostId} at 12:29 PM +07, 27/05/2025.");
+                    Console.WriteLine($"Post {changedPost.PostId} ignored: Mismatched PostId at 12:29 PM +07, 27/05/2025.");
                     return;
                 }
 
-                Post = new PostModel(PostsApi, _realtimeUpdatesService)
+                // Tạo PostModel mới từ DTO
+                var updatedPost = new PostModel(PostsApi, _realtimeUpdatesService)
                 {
                     PostId = changedPost.PostId,
                     Content = changedPost.Content,
@@ -1223,12 +1215,16 @@ namespace SocialMauiApp.ViewModel
                     IsBookmarked = changedPost.IsBookmarked,
                     UserId = Post.UserId,
                     UserName = Post.UserName,
-                    UserPhotoUrl = changedPost.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "",
+                    UserPhotoUrl = changedPost.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png",
                     LikeCount = changedPost.LikeCount,
                     CommentCount = changedPost.CommentCount,
+                    PostedOnDisplay = Post.PostedOnDisplay // Giữ nguyên giá trị gốc nếu không thay đổi
                 };
 
+                // Cập nhật Post và thông báo UI
+                Post = updatedPost;
                 OnPropertyChanged(nameof(Post));
+                OnPropertyChanged(nameof(IsOwnPost)); // Cập nhật lại IsOwnPost nếu cần
 
                 // Lưu vào database trên luồng phụ
                 var postEntity = new PostEntity
@@ -1256,6 +1252,15 @@ namespace SocialMauiApp.ViewModel
                 {
                     Console.WriteLine($"SQLite error saving post: {ex.Message} at 12:29 PM +07, 27/05/2025.");
                     await ShowErrorAlertAsync($"Database error: {ex.Message}");
+                }
+
+                // Tải lại bình luận nếu CommentCount thay đổi
+                if (Post.CommentCount != changedPost.CommentCount)
+                {
+                    _startIndex = 0;
+                    Comments.Clear();
+                    _processedCommentIds.Clear();
+                    await FetchCommentsAsync();
                 }
             });
         }
@@ -1427,6 +1432,7 @@ namespace SocialMauiApp.ViewModel
             _realtimeUpdatesService.AddCommentUpdatedHandler(nameof(DetailsViewModel), OnCommentUpdated);
             _realtimeUpdatesService.AddCommentDeletedHandler(nameof(DetailsViewModel), OnCommentDeleted);
             _realtimeUpdatesService.AddPostCountsUpdatedHandler(nameof(DetailsViewModel), OnPostCountsUpdated);
+            _realtimeUpdatesService.AddUserPhotoChangedHandler(nameof(DetailsViewModel), OnUserPhotoChanged);
         }
 
         public void OnAppearing()

@@ -161,7 +161,7 @@ namespace SocialMauiApp.ViewModel
         private async Task ShowChangePasswordAsync()
         {
             IsChangePasswordVisible = true;
-            IsProfileMenuOpen = false; // Đóng dropmenu
+            IsProfileMenuOpen = false;
 
             var currentPasswordEntry = new Entry { Placeholder = "Current Password", IsPassword = true };
             var newPasswordEntry = new Entry { Placeholder = "New Password", IsPassword = true };
@@ -185,16 +185,14 @@ namespace SocialMauiApp.ViewModel
                             NewPassword = newPasswordEntry.Text;
                             ConfirmNewPassword = confirmNewPasswordEntry.Text;
                             await ChangePasswordAsync();
-                            IsChangePasswordVisible = false;
                         })
                     },
                     new Button
                     {
                         Text = "Cancel",
-                        Command = new Command(() =>
+                        Command = new Command(async () =>
                         {
-                            IsChangePasswordVisible = false;
-                            CurrentPassword = NewPassword = ConfirmNewPassword = string.Empty;
+                            await CancelChangePasswordAsync();
                         })
                     }
                 }
@@ -244,8 +242,7 @@ namespace SocialMauiApp.ViewModel
                 if (result.IsSuccess)
                 {
                     await ToastAsync("Password changed successfully.");
-                    CurrentPassword = NewPassword = ConfirmNewPassword = string.Empty;
-                    await Shell.Current.Navigation.PopModalAsync();
+                    await CancelChangePasswordAsync();
                 }
                 else
                 {
@@ -255,9 +252,19 @@ namespace SocialMauiApp.ViewModel
         }
 
         [RelayCommand]
+        private async Task CancelChangePasswordAsync()
+        {
+            CurrentPassword = string.Empty;
+            NewPassword = string.Empty;
+            ConfirmNewPassword = string.Empty;
+            IsChangePasswordVisible = false;
+            await Shell.Current.Navigation.PopModalAsync();
+        }
+
+        [RelayCommand]
         private async Task ShowChangeNameAsync()
         {
-            IsProfileMenuOpen = false; // Đóng dropmenu
+            IsProfileMenuOpen = false;
 
             var nameEntry = new Entry { Placeholder = "New Name", Text = User.Name };
 
@@ -280,9 +287,9 @@ namespace SocialMauiApp.ViewModel
                     new Button
                     {
                         Text = "Cancel",
-                        Command = new Command(() =>
+                        Command = new Command(async () =>
                         {
-                            NewName = string.Empty;
+                            await CancelChangeNameAsync();
                         })
                     }
                 }
@@ -316,14 +323,20 @@ namespace SocialMauiApp.ViewModel
                     User = User with { Name = NewName };
                     _authService.Login(new LoginResponseDto(User, _authService.Token));
                     await ToastAsync("Name changed successfully.");
-                    NewName = string.Empty;
-                    await Shell.Current.Navigation.PopModalAsync();
+                    await CancelChangeNameAsync();
                 }
                 else
                 {
                     await ShowErrorAlertAsync(result.Error ?? "Failed to change name.");
                 }
             });
+        }
+
+        [RelayCommand]
+        private async Task CancelChangeNameAsync()
+        {
+            NewName = string.Empty;
+            await Shell.Current.Navigation.PopModalAsync();
         }
 
         [RelayCommand]
