@@ -199,6 +199,12 @@
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.FetchCommentsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.FetchCommentsAsync"/>.</summary>
         </member>
+        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.addCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentAsync"/>.</summary>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.selectPhotoCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.SelectPhotoCommand"/>.</summary>
         </member>
@@ -210,12 +216,6 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhotoCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhoto(System.String)"/>.</summary>
-        </member>
-        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.addCommentCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand"/>.</summary>
-        </member>
-        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.replyCommentCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.ReplyCommentCommand"/>.</summary>
@@ -736,7 +736,7 @@
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.SavePostViewModel.RemovePhotoCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.SavePostViewModel.RemovePhotoCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.SavePostViewModel.RemovePhoto"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.SavePostViewModel.RemovePhoto"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.SavePostViewModel.savePostCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.SavePostViewModel.SavePostCommand"/>.</summary>

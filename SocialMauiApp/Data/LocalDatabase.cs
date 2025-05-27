@@ -23,15 +23,37 @@ namespace SocialMauiApp.Data
         {
             if (_isInitialized) return;
 
-            await _database.CreateTableAsync<PostEntity>();
-            await _database.CreateTableAsync<CommentEntity>(); // Sử dụng CommentEntity thay vì CommentDto
-            await _database.CreateTableAsync<SyncMetadata>();
+            try
+            {
+                var dbPath = Path.Combine(FileSystem.AppDataDirectory, "local_socialmauiapp.db");
+                Console.WriteLine($"Initializing database at: {dbPath} at 11:44 AM +07, 27/05/2025.");
 
-            // Ensure indexes for better performance
-            await _database.ExecuteAsync("CREATE INDEX IF NOT EXISTS idx_postid ON Comments (PostId, ParentCommentId);");
-            await _database.ExecuteAsync("CREATE INDEX IF NOT EXISTS idx_postid ON Posts (PostId);");
+                await _database.CreateTableAsync<PostEntity>();
+                Console.WriteLine("Posts table created or verified.");
 
-            _isInitialized = true;
+                await _database.CreateTableAsync<CommentEntity>();
+                Console.WriteLine("Comments table created or verified.");
+
+                await _database.CreateTableAsync<SyncMetadata>();
+                Console.WriteLine("SyncMetadata table created or verified.");
+
+                await _database.ExecuteAsync("CREATE INDEX IF NOT EXISTS idx_postid ON Comments (PostId, ParentCommentId);");
+                await _database.ExecuteAsync("CREATE INDEX IF NOT EXISTS idx_postid ON Posts (PostId);");
+                Console.WriteLine("Indexes created or verified for Comments and Posts.");
+
+                _isInitialized = true;
+                Console.WriteLine("Database initialized successfully at 11:44 AM +07, 27/05/2025.");
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine($"SQLite error initializing database: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error initializing database: {ex.Message}");
+                throw;
+            }
         }
 
         // Methods for Posts
@@ -72,95 +94,205 @@ namespace SocialMauiApp.Data
         // Methods for Comments
         public async Task<List<CommentDto>> GetCommentsAsync(Guid postId, int startIndex, int pageSize)
         {
-            await InitializeAsync();
-            var commentEntities = await _database.Table<CommentEntity>()
-                .Where(c => c.PostId == postId && !c.ParentCommentId.HasValue)
-                .Skip(startIndex)
-                .Take(pageSize)
-                .ToListAsync();
-
-            var comments = new List<CommentDto>();
-            foreach (var entity in commentEntities)
+            try
             {
-                var comment = ToCommentDto(entity);
-                comment.Replies = new ObservableCollection<CommentDto>(await GetRepliesAsync(comment.CommentId));
-                comments.Add(comment);
-            }
-            return comments;
-        }
-
-        public async Task<List<CommentDto>> GetRepliesAsync(Guid parentCommentId)
-        {
-            await InitializeAsync();
-            var replyEntities = await _database.Table<CommentEntity>()
-                .Where(c => c.ParentCommentId == parentCommentId)
-                .ToListAsync();
-
-            var replies = new List<CommentDto>();
-            foreach (var entity in replyEntities)
-            {
-                var reply = ToCommentDto(entity);
-                reply.Replies = new ObservableCollection<CommentDto>(await GetRepliesAsync(reply.CommentId));
-                replies.Add(reply);
-            }
-            return replies;
-        }
-
-        public async Task<int> SaveCommentAsync(CommentDto comment)
-        {
-            await InitializeAsync();
-            var entity = ToCommentEntity(comment);
-            var existingComment = await _database.Table<CommentEntity>().FirstOrDefaultAsync(c => c.CommentId == comment.CommentId);
-            int result;
-            if (existingComment != null)
-            {
-                result = await _database.UpdateAsync(entity);
-            }
-            else
-            {
-                result = await _database.InsertAsync(entity);
-            }
-
-            if (comment.Replies != null)
-            {
-                foreach (var reply in comment.Replies)
+                await InitializeAsync();
+                var tableInfo = await _database.ExecuteScalarAsync<int>("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='Comments'");
+                if (tableInfo == 0)
                 {
-                    reply.ParentCommentId = comment.CommentId;
-                    await SaveCommentAsync(reply);
+                    Console.WriteLine($"Comments table does not exist at 11:44 AM +07, 27/05/2025.");
+                    return new List<CommentDto>();
                 }
+
+                // Tải tất cả bình luận và phản hồi cùng lúc để tối ưu hóa
+                var allCommentEntities = await _database.Table<CommentEntity>()
+                    .Where(c => c.PostId == postId)
+                    .ToListAsync();
+
+                // Lọc bình luận cấp cao
+                var topLevelComments = allCommentEntities
+                    .Where(c => !c.ParentCommentId.HasValue)
+                    .OrderByDescending(c => c.AddedOn)
+                    .Skip(startIndex)
+                    .Take(pageSize)
+                    .ToList();
+
+                var comments = new List<CommentDto>();
+                foreach (var entity in topLevelComments)
+                {
+                    var comment = ToCommentDto(entity);
+                    comment.Replies = new ObservableCollection<CommentDto>(BuildReplyHierarchy(allCommentEntities, comment.CommentId, 0));
+                    comments.Add(comment);
+                    Console.WriteLine($"Loaded comment {comment.CommentId} with {comment.Replies.Count} replies for post {postId}.");
+                }
+
+                Console.WriteLine($"Loaded {comments.Count} top-level comments for post {postId} (startIndex: {startIndex}, pageSize: {pageSize}) at 11:44 AM +07, 27/05/2025.");
+                return comments;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine($"SQLite error loading comments for post {postId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                return new List<CommentDto>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error loading comments for post {postId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                return new List<CommentDto>();
+            }
+        }
+
+        private List<CommentDto> BuildReplyHierarchy(List<CommentEntity> allComments, Guid parentCommentId, int level, int maxDepth = 5)
+        {
+            if (level >= maxDepth)
+            {
+                Console.WriteLine($"Reached max reply depth ({maxDepth}) for parent comment {parentCommentId} at 11:44 AM +07, 27/05/2025.");
+                return new List<CommentDto>();
+            }
+
+            var replies = allComments
+                .Where(c => c.ParentCommentId == parentCommentId)
+                .OrderByDescending(c => c.AddedOn)
+                .ToList();
+
+            var result = new List<CommentDto>();
+            foreach (var replyEntity in replies)
+            {
+                var reply = ToCommentDto(replyEntity);
+                reply.Level = level + 1;
+                reply.Replies = new ObservableCollection<CommentDto>(BuildReplyHierarchy(allComments, reply.CommentId, level + 1, maxDepth));
+                result.Add(reply);
+                Console.WriteLine($"Built reply {reply.CommentId} for parent {parentCommentId} at level {reply.Level}.");
             }
 
             return result;
         }
 
+        private readonly SemaphoreSlim _commentSaveSemaphore = new SemaphoreSlim(1, 1);
+
+        public async Task<int> SaveCommentAsync(CommentDto comment)
+        {
+            try
+            {
+                await InitializeAsync();
+                var tableInfo = await _database.ExecuteScalarAsync<int>("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='Comments'");
+                if (tableInfo == 0)
+                {
+                    Console.WriteLine($"Comments table does not exist at 11:44 AM +07, 27/05/2025.");
+                    return 0;
+                }
+
+                var entity = ToCommentEntity(comment);
+                int result = 0;
+
+                await _commentSaveSemaphore.WaitAsync();
+                try
+                {
+                    var existingComment = await _database.Table<CommentEntity>().FirstOrDefaultAsync(c => c.CommentId == comment.CommentId);
+                    if (existingComment != null)
+                    {
+                        entity.CommentId = existingComment.CommentId;
+                        result = await _database.UpdateAsync(entity);
+                        Console.WriteLine($"Updated comment {comment.CommentId} in database at 11:44 AM +07, 27/05/2025.");
+                    }
+                    else
+                    {
+                        result = await _database.InsertAsync(entity);
+                        Console.WriteLine($"Inserted comment {comment.CommentId} into database at 11:44 AM +07, 27/05/2025.");
+                    }
+
+                    if (comment.Replies != null && comment.Replies.Any())
+                    {
+                        var allCommentEntities = await _database.Table<CommentEntity>().Where(c => c.PostId == comment.PostId).ToListAsync();
+                        allCommentEntities.Add(entity); // Thêm comment mới vào danh sách
+                        var replies = BuildReplyHierarchy(allCommentEntities, comment.CommentId, comment.Level, maxDepth: 5);
+                        foreach (var reply in replies)
+                        {
+                            await SaveCommentAsync(reply);
+                        }
+                    }
+                }
+                finally
+                {
+                    _commentSaveSemaphore.Release();
+                }
+
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine($"SQLite error saving comment {comment.CommentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error saving comment {comment.CommentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                throw;
+            }
+        }
+
         public async Task<int> DeleteCommentAsync(CommentDto comment)
         {
-            await InitializeAsync();
-            // Delete all replies recursively
-            var replies = await GetRepliesAsync(comment.CommentId);
-            foreach (var reply in replies)
+            try
             {
-                await DeleteCommentAsync(reply);
-            }
+                await InitializeAsync();
+                // Load all comments for the post to build the reply hierarchy
+                var allCommentEntities = await _database.Table<CommentEntity>()
+                    .Where(c => c.PostId == comment.PostId)
+                    .ToListAsync();
 
-            var entity = await _database.Table<CommentEntity>().FirstOrDefaultAsync(c => c.CommentId == comment.CommentId);
-            if (entity != null)
-            {
-                return await _database.DeleteAsync(entity);
+                // Delete all replies recursively
+                var replies = BuildReplyHierarchy(allCommentEntities, comment.CommentId, 0);
+                foreach (var reply in replies)
+                {
+                    await DeleteCommentAsync(reply);
+                }
+
+                var entity = await _database.Table<CommentEntity>().FirstOrDefaultAsync(c => c.CommentId == comment.CommentId);
+                if (entity != null)
+                {
+                    int result = await _database.DeleteAsync(entity);
+                    Console.WriteLine($"Deleted comment {comment.CommentId} from database at 11:44 AM +07, 27/05/2025.");
+                    return result;
+                }
+                Console.WriteLine($"Comment {comment.CommentId} not found in database at 11:44 AM +07, 27/05/2025.");
+                return 0;
             }
-            return 0;
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine($"SQLite error deleting comment {comment.CommentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error deleting comment {comment.CommentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                throw;
+            }
         }
 
         public async Task<int> DeleteCommentByIdAsync(Guid commentId)
         {
-            await InitializeAsync();
-            var comment = await _database.Table<CommentEntity>().FirstOrDefaultAsync(c => c.CommentId == commentId);
-            if (comment != null)
+            try
             {
-                var commentDto = ToCommentDto(comment);
-                return await DeleteCommentAsync(commentDto);
+                await InitializeAsync();
+                var comment = await _database.Table<CommentEntity>().FirstOrDefaultAsync(c => c.CommentId == commentId);
+                if (comment != null)
+                {
+                    var commentDto = ToCommentDto(comment);
+                    return await DeleteCommentAsync(commentDto);
+                }
+                Console.WriteLine($"Comment {commentId} not found for deletion at 11:44 AM +07, 27/05/2025.");
+                return 0; // No comment found to delete
             }
-            return 0; // No comment found to delete
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine($"SQLite error deleting comment by ID {commentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error deleting comment by ID {commentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                throw;
+            }
         }
 
         // Methods for SyncMetadata
@@ -200,6 +332,50 @@ namespace SocialMauiApp.Data
             };
         }
 
+        public async Task<CommentDto> GetCommentAsync(Guid commentId)
+        {
+            try
+            {
+                await InitializeAsync();
+                var tableInfo = await _database.ExecuteScalarAsync<int>("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='Comments'");
+                if (tableInfo == 0)
+                {
+                    Console.WriteLine($"Comments table does not exist at 11:44 AM +07, 27/05/2025.");
+                    return null;
+                }
+
+                var entity = await _database.Table<CommentEntity>()
+                    .FirstOrDefaultAsync(c => c.CommentId == commentId);
+
+                if (entity == null)
+                {
+                    Console.WriteLine($"No comment found with ID {commentId} at 11:44 AM +07, 27/05/2025.");
+                    return null;
+                }
+
+                // Load all comments for the post to build the reply hierarchy
+                var allCommentEntities = await _database.Table<CommentEntity>()
+                    .Where(c => c.PostId == entity.PostId)
+                    .ToListAsync();
+
+                var comment = ToCommentDto(entity);
+                comment.Replies = new ObservableCollection<CommentDto>(
+                    BuildReplyHierarchy(allCommentEntities, comment.CommentId, 0));
+                Console.WriteLine($"Loaded comment {commentId} with {comment.Replies.Count} replies at 11:44 AM +07, 27/05/2025.");
+                return comment;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine($"SQLite error loading comment {commentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error loading comment {commentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                throw;
+            }
+        }
+
         private CommentDto ToCommentDto(CommentEntity entity)
         {
             return new CommentDto
@@ -215,7 +391,7 @@ namespace SocialMauiApp.Data
                 IsOwnComment = entity.IsOwnComment,
                 Level = entity.Level,
                 ParentCommentId = entity.ParentCommentId,
-                Replies = new ObservableCollection<CommentDto>() // Will be populated in GetCommentsAsync/GetRepliesAsync
+                Replies = new ObservableCollection<CommentDto>() // Will be populated in GetCommentsAsync or GetCommentAsync
             };
         }
     }

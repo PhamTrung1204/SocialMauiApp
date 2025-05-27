@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.Maui.Media;
 using Microsoft.Maui.Devices;
 using SocialMauiApp.Services;
+using Microsoft.Maui.Dispatching;
 
 namespace SocialMauiApp.ViewModel
 {
@@ -20,9 +21,12 @@ namespace SocialMauiApp.ViewModel
     {
         private readonly IPostApi _postApi;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
-        public SavePostViewModel(IPostApi postApi)
+        private string? _existingPhotoUrl;
+
+        public SavePostViewModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
         {
             _postApi = postApi;
+            _realtimeUpdatesService = realtimeUpdatesService;
         }
 
         [ObservableProperty]
@@ -34,9 +38,6 @@ namespace SocialMauiApp.ViewModel
         [ObservableProperty]
         private string _photoPath = string.Empty;
 
-       
-        private string? _existingPhotoUrl;
-
         [RelayCommand]
         private async Task SelectPhotoAsync()
         {
@@ -44,16 +45,10 @@ namespace SocialMauiApp.ViewModel
             IsBusy = true;
             try
             {
-                // Yêu cầu quyền truy cập ảnh
-                PermissionStatus permissionStatus = PermissionStatus.Unknown;
-                if (DeviceInfo.Platform == DevicePlatform.Android)
-                {
-                    permissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
-                }
-                else
-                {
-                    permissionStatus = await Permissions.RequestAsync<Permissions.Photos>();
-                }
+                PermissionStatus permissionStatus = DeviceInfo.Platform == DevicePlatform.Android
+                    ? await Permissions.RequestAsync<Permissions.StorageRead>()
+                    : await Permissions.RequestAsync<Permissions.Photos>();
+
                 if (permissionStatus != PermissionStatus.Granted)
                 {
                     await ToastAsync("Photo access not granted");
@@ -75,6 +70,16 @@ namespace SocialMauiApp.ViewModel
                 {
                     await CapturePhotoAsync();
                 }
+
+                // Cập nhật UI trên MainThread
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    OnPropertyChanged(nameof(PhotoPath));
+                });
+            }
+            catch (Exception ex)
+            {
+                await ToastAsync($"Error selecting photo: {ex.Message}");
             }
             finally
             {
@@ -84,7 +89,7 @@ namespace SocialMauiApp.ViewModel
 
         private async Task PickFromDeviceAsync()
         {
-            Console.WriteLine("Picking photo from device...");
+            Console.WriteLine("Picking photo from device at 12:29 PM +07, 27/05/2025...");
             FileResult? fileResult = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions { Title = "Select Photo" });
             if (fileResult is null)
             {
@@ -92,21 +97,21 @@ namespace SocialMauiApp.ViewModel
                 await ToastAsync("No photo selected");
                 return;
             }
-            // Nếu fileResult.FileName trống, tạo tên file mới dựa trên GUID
+
             string fileName = string.IsNullOrWhiteSpace(fileResult.FileName) ? $"{Guid.NewGuid()}.jpg" : fileResult.FileName;
-            using var stream = await fileResult.OpenReadAsync();
             var tempFile = Path.Combine(FileSystem.CacheDirectory, fileName);
-            using (var fileStream = File.Create(tempFile))
-            {
-                await stream.CopyToAsync(fileStream);
-            }
+
+            using var stream = await fileResult.OpenReadAsync();
+            using var fileStream = File.Create(tempFile);
+            await stream.CopyToAsync(fileStream);
+
             Console.WriteLine($"[PickFromDeviceAsync] File saved at: {tempFile}, exists: {File.Exists(tempFile)}");
             PhotoPath = tempFile;
         }
 
         private async Task CapturePhotoAsync()
         {
-            Console.WriteLine("Capturing photo...");
+            Console.WriteLine("Capturing photo at 12:29 PM +07, 27/05/2025...");
             FileResult? fileResult = await MediaPicker.Default.CapturePhotoAsync(new MediaPickerOptions { Title = "Take Photo" });
             if (fileResult is null)
             {
@@ -114,21 +119,26 @@ namespace SocialMauiApp.ViewModel
                 await ToastAsync("No photo captured");
                 return;
             }
+
             string fileName = string.IsNullOrWhiteSpace(fileResult.FileName) ? $"{Guid.NewGuid()}.jpg" : fileResult.FileName;
-            using var stream = await fileResult.OpenReadAsync();
             var tempFile = Path.Combine(FileSystem.CacheDirectory, fileName);
-            using (var fileStream = File.Create(tempFile))
-            {
-                await stream.CopyToAsync(fileStream);
-            }
+
+            using var stream = await fileResult.OpenReadAsync();
+            using var fileStream = File.Create(tempFile);
+            await stream.CopyToAsync(fileStream);
+
             Console.WriteLine($"[CapturePhotoAsync] File saved at: {tempFile}, exists: {File.Exists(tempFile)}");
             PhotoPath = tempFile;
         }
 
         [RelayCommand]
-        private void RemovePhoto()
+        private async Task RemovePhoto()
         {
-            PhotoPath = string.Empty;
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                PhotoPath = string.Empty;
+                OnPropertyChanged(nameof(PhotoPath));
+            });
         }
 
         [RelayCommand]
@@ -138,25 +148,28 @@ namespace SocialMauiApp.ViewModel
             IsBusy = true;
             try
             {
-                // Kiểm tra nội dung và ảnh hợp lệ
                 if (string.IsNullOrWhiteSpace(Content) && string.IsNullOrWhiteSpace(PhotoPath))
                 {
                     await ToastAsync("Either content or photo is required");
                     return;
                 }
+
                 var originalLikeCount = Post?.LikeCount ?? 0;
                 var originalCommentCount = Post?.CommentCount ?? 0;
                 var originalIsLiked = Post?.IsLiked ?? false;
                 var originalIsBookmarked = Post?.IsBookmarked ?? false;
+
                 await MakeApiCall(async () =>
                 {
-                   
                     StreamPart? photoStreamPart = null;
                     if (!string.IsNullOrWhiteSpace(PhotoPath) && File.Exists(PhotoPath) && !PhotoPath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                     {
                         var fileName = Path.GetFileName(PhotoPath);
-                        var fileStream = File.OpenRead(PhotoPath);
-                        photoStreamPart = new StreamPart(fileStream, fileName);
+                        using var fileStream = File.OpenRead(PhotoPath); // Đảm bảo stream được đóng
+                        var memoryStream = new MemoryStream();
+                        await fileStream.CopyToAsync(memoryStream);
+                        memoryStream.Position = 0;
+                        photoStreamPart = new StreamPart(memoryStream, fileName);
                     }
 
                     var dto = new SavePostDto
@@ -165,7 +178,6 @@ namespace SocialMauiApp.ViewModel
                         PostId = Post?.PostId ?? default
                     };
 
-                   
                     if (string.IsNullOrWhiteSpace(PhotoPath) && !string.IsNullOrWhiteSpace(_existingPhotoUrl))
                     {
                         dto.IsExistingPhotoRemoved = true;
@@ -179,7 +191,6 @@ namespace SocialMauiApp.ViewModel
                         return;
                     }
 
-                    // Tạo instance mới và gán lại counts gốc nếu edit
                     var saved = PostModel.FromDto(result.Data, _postApi, _realtimeUpdatesService);
                     saved.LikeCount = originalLikeCount;
                     saved.CommentCount = originalCommentCount;
@@ -187,25 +198,51 @@ namespace SocialMauiApp.ViewModel
                     saved.IsBookmarked = originalIsBookmarked;
                     saved.NotifyIsLikeIconChanged();
                     saved.NotifyIsBookmarkIconChanged();
-                    Content = string.Empty;
-                    PhotoPath = string.IsNullOrWhiteSpace(saved.PhotoUrl) ? string.Empty : saved.PhotoUrl;
 
-                    if (Post != null && Post.PostId != default)
+                    // Cập nhật UI trên MainThread
+                    await MainThread.InvokeOnMainThreadAsync(() =>
                     {
-                        // Đang edit
-                        await NavigateAsync("..", new Dictionary<string, object> { [nameof(DetailsViewModel.Post)] = saved });
+                        Content = string.Empty;
+                        PhotoPath = string.IsNullOrWhiteSpace(saved.PhotoUrl) ? string.Empty : saved.PhotoUrl;
+                        OnPropertyChanged(nameof(Content));
+                        OnPropertyChanged(nameof(PhotoPath));
+                        Post = saved; // Cập nhật Post để phản ánh trên UI
                         OnPropertyChanged(nameof(Post));
-                    }
-                    else
+                    });
+
+                    // Định tuyến
+                    try
                     {
-                        // Tạo mới
-                        await NavigateAsync("//HomePage", new Dictionary<string, object> { ["newPost"] = saved });
+                        if (Post != null && Post.PostId != default)
+                        {
+                            Console.WriteLine($"Navigating back with updated post {saved.PostId} at 12:29 PM +07, 27/05/2025.");
+                            await NavigateAsync("..", new Dictionary<string, object> { [nameof(DetailsViewModel.Post)] = saved });
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Navigating to HomePage with new post {saved.PostId} at 12:29 PM +07, 27/05/2025.");
+                            await NavigateAsync("//HomePage", new Dictionary<string, object> { ["newPost"] = saved });
+                        }
+                    }
+                    catch (Exception navEx)
+                    {
+                        Console.WriteLine($"Navigation error: {navEx.Message} at 12:29 PM +07, 27/05/2025.");
+                        await ShowErrorAlertAsync($"Navigation failed: {navEx.Message}");
                     }
                 });
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving post: {ex.Message} at 12:29 PM +07, 27/05/2025.");
+                await ShowErrorAlertAsync($"Error: {ex.Message}");
+            }
             finally
             {
-                IsBusy = false;
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    IsBusy = false;
+                    OnPropertyChanged(nameof(IsBusy));
+                });
             }
         }
 
@@ -213,9 +250,14 @@ namespace SocialMauiApp.ViewModel
         {
             if (value is not null)
             {
-                Content = value.Content ?? string.Empty;
-                PhotoPath = value.PhotoUrl ?? string.Empty;
-                _existingPhotoUrl = value.PhotoUrl;
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    Content = value.Content ?? string.Empty;
+                    PhotoPath = value.PhotoUrl ?? string.Empty;
+                    _existingPhotoUrl = value.PhotoUrl;
+                    OnPropertyChanged(nameof(Content));
+                    OnPropertyChanged(nameof(PhotoPath));
+                });
             }
         }
     }
