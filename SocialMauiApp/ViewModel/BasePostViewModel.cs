@@ -14,7 +14,7 @@ namespace SocialMauiApp.ViewModel
 {
     public partial class BasePostViewModel : BaseViewModel, IDisposable
     {
-        private readonly RealtimeUpdatesService? _realtimeUpdatesService;
+        public readonly RealtimeUpdatesService? _realtimeUpdatesService;
         private readonly Dictionary<string, string> _downloadedPhotos = new();
         private HttpClient? _httpClient;
 

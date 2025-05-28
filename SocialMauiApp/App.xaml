@@ -46,7 +46,7 @@
                     <converters:DateTimeToHumanizedConverter x:Key="HumanizedTimeConverter"/>
                     <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
                     <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
-
+                    <converters:CountToBoolConverter x:Key="CountToBoolConverter"/>
                     <behaviors:AnimationBehavior x:Key="AnimationBehavior"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>

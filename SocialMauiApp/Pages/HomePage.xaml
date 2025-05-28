@@ -29,9 +29,9 @@
                 VerticalOptions="Center">
                 <controls:WhiteImage
                     Grid.Column="0"
-                    HeightRequest="20"
+                    HeightRequest="25"
                     Source="plus.png"
-                    WidthRequest="20">
+                    WidthRequest="25">
                     <controls:WhiteImage.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
                     </controls:WhiteImage.GestureRecognizers>
@@ -39,16 +39,16 @@
 
                 <Grid Grid.Column="1">
                     <controls:WhiteImage
-                        HeightRequest="20"
+                        HeightRequest="24"
                         Source="bell.png"
-                        WidthRequest="20" />
+                        WidthRequest="24" />
                     <Ellipse
                         Fill="Black"
-                        HeightRequest="10"
+                        HeightRequest="15"
                         HorizontalOptions="End"
                         IsVisible="{Binding IsThereNewNotification}"
                         VerticalOptions="Start"
-                        WidthRequest="10" />
+                        WidthRequest="15" />
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer Tapped="GoToNotification" />
                     </Grid.GestureRecognizers>
@@ -56,9 +56,9 @@
 
                 <controls:WhiteImage
                     Grid.Column="2"
-                    HeightRequest="20"
+                    HeightRequest="25"
                     Source="personal.png"
-                    WidthRequest="20">
+                    WidthRequest="25">
                     <controls:WhiteImage.GestureRecognizers>
                         <TapGestureRecognizer Tapped="GoToProfile" />
                     </controls:WhiteImage.GestureRecognizers>
@@ -88,8 +88,8 @@
                         <Image.Clip>
                             <EllipseGeometry
                                 Center="25,25"
-                                RadiusX="20"
-                                RadiusY="20" />
+                                RadiusX="25"
+                                RadiusY="25" />
                         </Image.Clip>
                     </Image>
                 </Border>
@@ -108,7 +108,6 @@
                         Placeholder="What's on your mind?"
                         PlaceholderColor="{DynamicResource Gray500}"
                         ReturnType="Done">
-
                         <controls:NoUnderLine.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
                         </controls:NoUnderLine.GestureRecognizers>

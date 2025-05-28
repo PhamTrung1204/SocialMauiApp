@@ -29,12 +29,15 @@ namespace SocialMauiApp.ViewModel
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
         private readonly LocalDatabase _localDatabase;
         private bool _isPageActive = false;
+        private bool _hasFetchedComments = false;
+        private bool _isFetchingComments = false; // Prevent recursive FetchCommentsAsync calls
         private int _startIndex = 0;
         private const int PageSize = 10;
         private readonly IDispatcherTimer _syncTimer;
         private DateTime _lastSyncTime;
         private readonly List<(string Id, ImageSource ImageSource, FileResult FileResult)> _imageFileMap = new();
-        private readonly HashSet<Guid> _processedCommentIds = new(); // Track processed CommentIds
+        private readonly HashSet<Guid> _processedCommentIds = new();
+        private readonly object _commentLock = new(); // Lock for thread-safe comment processing
 
         public DetailsViewModel(
             AuthService authService,
@@ -57,12 +60,12 @@ namespace SocialMauiApp.ViewModel
                 IsPhotoButtonVisible = !HasSelectedImages;
                 OnPropertyChanged(nameof(HasSelectedImages));
                 OnPropertyChanged(nameof(IsPhotoButtonVisible));
-                System.Diagnostics.Debug.WriteLine($"HasSelectedImages updated to: {HasSelectedImages}, Preview count: {SelectedImagePreviews.Count}");
+                Console.WriteLine($"HasSelectedImages updated to: {HasSelectedImages}, Preview count: {SelectedImagePreviews.Count} at {DateTime.Now}.");
             };
             _syncTimer = dispatcher.CreateTimer();
             _syncTimer.Interval = TimeSpan.FromMinutes(5);
             _syncTimer.Tick += async (s, e) => await AutoSynchronizeDataAsync();
-            _lastSyncTime = DateTime.UtcNow; // 05:04 AM UTC (12:04 PM +07, 27/05/2025)
+            _lastSyncTime = DateTime.UtcNow;
             IsPhotoButtonVisible = true;
         }
 
@@ -98,11 +101,30 @@ namespace SocialMauiApp.ViewModel
 
         async partial void OnPostChanged(PostModel? value)
         {
-            if (value is null) return;
+            if (value is null || _isFetchingComments) return;
+            value.SetDetailsViewState(true);
             IsOwnPost = _authService.User != null && value.UserId == _authService.User.Id;
-            _startIndex = 0;
-            Comments.Clear();
-            _processedCommentIds.Clear(); // Reset processed IDs when post changes
+            lock (_commentLock)
+            {
+                _startIndex = 0;
+                Comments.Clear();
+                _processedCommentIds.Clear();
+                foreach (var comment in value.Comments)
+                {
+                    if (!_processedCommentIds.Contains(comment.CommentId))
+                    {
+                        Comments.Add(comment);
+                        _processedCommentIds.Add(comment.CommentId);
+                        if (comment.Replies != null)
+                        {
+                            foreach (var reply in comment.Replies)
+                            {
+                                _processedCommentIds.Add(reply.CommentId);
+                            }
+                        }
+                    }
+                }
+            }
 
             var localPost = await _localDatabase.GetPostAsync(value.PostId);
             if (localPost != null && !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet))
@@ -130,12 +152,37 @@ namespace SocialMauiApp.ViewModel
                 Post = value;
             }
 
-            await FetchCommentsAsync();
+            if (!_hasFetchedComments)
+            {
+                _isFetchingComments = true;
+                try
+                {
+                    await FetchCommentsAsync();
+                    _hasFetchedComments = true;
+                }
+                finally
+                {
+                    _isFetchingComments = false;
+                }
+            }
+
             if (!_isPageActive)
             {
                 _isPageActive = true;
                 ConfigureRealtimeUpdates();
             }
+        }
+
+        public void ResetFetchState()
+        {
+            _hasFetchedComments = false;
+            _isPageActive = false;
+            lock (_commentLock)
+            {
+                Comments.Clear();
+                _processedCommentIds.Clear();
+            }
+            Console.WriteLine($"Reset fetch state for post {Post?.PostId} at {DateTime.Now}.");
         }
 
         [RelayCommand]
@@ -147,7 +194,7 @@ namespace SocialMauiApp.ViewModel
             try
             {
                 var result = await _syncApi.SynchronizeAsync();
-                Console.WriteLine($"Đồng bộ thành công: {result} at 12:29 PM +07, 27/05/2025.");
+                Console.WriteLine($"Synchronize successful: {result} at {DateTime.Now}.");
                 if (Post != null)
                 {
                     var postEntity = new PostEntity
@@ -168,13 +215,20 @@ namespace SocialMauiApp.ViewModel
                     await Task.Run(() => _localDatabase.SavePostAsync(postEntity));
                 }
 
-                // Chỉ tải lại bình luận nếu CommentCount thay đổi
                 if (Post != null)
                 {
                     var remotePost = await PostsApi.GetPostAsync(Post.PostId);
-                    if (remotePost != null && remotePost.CommentCount != Post.CommentCount)
+                    if (remotePost != null && remotePost.CommentCount != Post.CommentCount && !_isFetchingComments)
                     {
-                        await FetchCommentsAsync();
+                        _isFetchingComments = true;
+                        try
+                        {
+                            await FetchCommentsAsync();
+                        }
+                        finally
+                        {
+                            _isFetchingComments = false;
+                        }
                     }
                 }
 
@@ -184,8 +238,8 @@ namespace SocialMauiApp.ViewModel
             }
             catch (ApiException ex)
             {
-                Console.WriteLine($"Lỗi đồng bộ: {ex.Message} at 12:29 PM +07, 27/05/2025.");
-                await ShowErrorAlertAsync($"Lỗi đồng bộ: {ex.Message}");
+                Console.WriteLine($"Synchronize error: {ex.Message} at {DateTime.Now}.");
+                await ShowErrorAlertAsync($"Synchronize error: {ex.Message}");
             }
             finally
             {
@@ -201,64 +255,16 @@ namespace SocialMauiApp.ViewModel
             try
             {
                 var newComments = await _syncApi.GetCommentsSinceAsync(_lastSyncTime, Post.PostId);
-                _lastSyncTime = DateTime.UtcNow; // 05:04 AM UTC (12:04 PM +07, 27/05/2025)
+                _lastSyncTime = DateTime.UtcNow;
 
                 foreach (var comment in newComments.OrderByDescending(c => c.AddedOn))
                 {
-                    if (_processedCommentIds.Contains(comment.CommentId))
+                    if (!_processedCommentIds.Contains(comment.CommentId))
                     {
-                        Console.WriteLine($"Skipped duplicate comment {comment.CommentId} in AutoSync at 12:04 PM +07, 27/05/2025.");
-                        continue;
+                        await AddCommentToCollection(comment, "AutoSync");
+                        await _localDatabase.SaveCommentAsync(comment);
+                        Console.WriteLine($"Saved comment {comment.CommentId} to SQLite via AutoSync at {DateTime.Now}.");
                     }
-
-                    var existingComment = await _localDatabase.GetCommentAsync(comment.CommentId);
-                    if (existingComment != null)
-                    {
-                        Console.WriteLine($"Skipped duplicate comment {comment.CommentId} in AutoSync, already in database at 12:04 PM +07, 27/05/2025.");
-                        continue;
-                    }
-
-                    comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
-                    comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                    comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                    comment.Replies = new ObservableCollection<CommentDto>(
-                        comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
-
-                    await MainThread.InvokeOnMainThreadAsync(() =>
-                    {
-                        if (comment.Level == 0)
-                        {
-                            Comments.Insert(0, comment);
-                            _processedCommentIds.Add(comment.CommentId);
-                            Console.WriteLine($"Added top-level comment {comment.CommentId} with {comment.Replies?.Count ?? 0} replies via AutoSync.");
-                        }
-                        else
-                        {
-                            var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
-                            if (parentComment != null)
-                            {
-                                if (parentComment.Replies == null) parentComment.Replies = new ObservableCollection<CommentDto>();
-                                if (!parentComment.Replies.Any(r => r.CommentId == comment.CommentId))
-                                {
-                                    parentComment.Replies.Insert(0, comment);
-                                    int parentIndex = Comments.IndexOf(parentComment);
-                                    if (parentIndex >= 0) Comments[parentIndex] = parentComment;
-                                    _processedCommentIds.Add(comment.CommentId);
-                                    Console.WriteLine($"Added reply {comment.CommentId} to parent {parentComment.CommentId}.");
-                                }
-                            }
-                            else
-                            {
-                                Comments.Insert(0, comment);
-                                _processedCommentIds.Add(comment.CommentId);
-                                Console.WriteLine($"Parent comment {comment.ParentCommentId} not found, added reply {comment.CommentId} as top-level.");
-                            }
-                        }
-                        OnPropertyChanged(nameof(Comments));
-                    });
-
-                    await _localDatabase.SaveCommentAsync(comment);
-                    Console.WriteLine($"Saved comment {comment.CommentId} to SQLite via AutoSync at 12:04 PM +07, 27/05/2025.");
                 }
 
                 var syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = _lastSyncTime };
@@ -266,7 +272,7 @@ namespace SocialMauiApp.ViewModel
             }
             catch (ApiException ex)
             {
-                await ShowErrorAlertAsync($"Lỗi đồng bộ tự động: {ex.Message}");
+                await ShowErrorAlertAsync($"Auto synchronize error: {ex.Message}");
             }
             finally
             {
@@ -274,161 +280,135 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
+        private async Task AddCommentToCollection(CommentDto comment, string source)
+        {
+            lock (_commentLock)
+            {
+                if (_processedCommentIds.Contains(comment.CommentId))
+                {
+                    Console.WriteLine($"Skipped duplicate comment {comment.CommentId} from {source} at {DateTime.Now}.");
+                    return;
+                }
+
+                comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
+                comment.Level = comment.ParentCommentId == null ? 0 : 1;
+                comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
+                comment.Replies = new ObservableCollection<CommentDto>(
+                    comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (comment.Level == 0)
+                    {
+                        Comments.Insert(0, comment);
+                        _processedCommentIds.Add(comment.CommentId);
+                        Console.WriteLine($"Added top-level comment {comment.CommentId} with {comment.Replies?.Count ?? 0} replies via {source} at {DateTime.Now}.");
+                    }
+                    else
+                    {
+                        var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
+                        if (parentComment != null)
+                        {
+                            parentComment.Replies ??= new ObservableCollection<CommentDto>();
+                            if (!parentComment.Replies.Any(r => r.CommentId == comment.CommentId))
+                            {
+                                parentComment.Replies.Insert(0, comment);
+                                int parentIndex = Comments.IndexOf(parentComment);
+                                if (parentIndex >= 0) Comments[parentIndex] = parentComment;
+                                _processedCommentIds.Add(comment.CommentId);
+                                Console.WriteLine($"Added reply {comment.CommentId} to parent {parentComment.CommentId} via {source} at {DateTime.Now}.");
+                            }
+                        }
+                        else
+                        {
+                            Comments.Insert(0, comment);
+                            _processedCommentIds.Add(comment.CommentId);
+                            Console.WriteLine($"Parent comment {comment.ParentCommentId} not found, added reply {comment.CommentId} as top-level via {source} at {DateTime.Now}.");
+                        }
+                    }
+                    OnPropertyChanged(nameof(Comments));
+                });
+            }
+        }
+
         [RelayCommand]
         private async Task FetchCommentsAsync()
         {
-            if (Post is null || IsBusy) return;
+            if (Post is null || IsBusy || _isFetchingComments) return;
 
+            _isFetchingComments = true;
             IsBusy = true;
             try
             {
-                Console.WriteLine($"Fetching comments for post {Post.PostId} at 12:04 PM +07, 27/05/2025 (startIndex: {_startIndex}, pageSize: {PageSize}).");
+                Console.WriteLine($"Fetching all comments for post {Post.PostId} at {DateTime.Now}.");
 
                 if (!Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet))
                 {
                     var localComments = await _localDatabase.GetCommentsAsync(Post.PostId, _startIndex, PageSize);
-                    await MainThread.InvokeOnMainThreadAsync(() =>
-                    {
-                        var newComments = localComments
-                            .OrderByDescending(c => c.AddedOn)
-                            .Where(c => !_processedCommentIds.Contains(c.CommentId))
-                            .ToList();
-
-                        foreach (var comment in newComments)
-                        {
-                            comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
-                            comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                            comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                            Comments.Add(comment);
-                            _processedCommentIds.Add(comment.CommentId);
-                            Console.WriteLine($"Added local comment {comment.CommentId} with {comment.Replies?.Count ?? 0} replies to Comments collection.");
-                        }
-
-                        _startIndex += newComments.Count;
-                        OnPropertyChanged(nameof(Comments));
-                        Console.WriteLine($"Loaded {newComments.Count} local comments for post {Post.PostId}. Total Comments: {Comments.Count}.");
-                    });
-
-                    if (localComments.Count == 0 && _startIndex == 0)
-                    {
-                        Console.WriteLine($"No local comments available for post {Post.PostId} at 12:04 PM +07, 27/05/2025.");
-                        // No alert; allow empty comment section
-                    }
+                    await UpdateCommentsCollection(localComments.OrderByDescending(c => c.AddedOn).ToList(), "Local");
+                    _startIndex += localComments.Count;
                 }
                 else
                 {
                     var comments = await PostsApi.GetPostsCommentAsync(Post.PostId, _startIndex, PageSize);
-                    Console.WriteLine($"API returned {comments?.Length ?? 0} comments for post {Post.PostId}.");
-                    var newComments = new List<CommentDto>();
-
-                    if (comments?.Length > 0)
-                    {
-                        await MainThread.InvokeOnMainThreadAsync(async () =>
-                        {
-                            var candidateComments = comments
-                                .OrderByDescending(c => c.AddedOn)
-                                .Where(c => !_processedCommentIds.Contains(c.CommentId))
-                                .ToList();
-
-                            foreach (var comment in candidateComments)
-                            {
-                                var existingDbComment = await _localDatabase.GetCommentAsync(comment.CommentId);
-                                if (existingDbComment == null)
-                                {
-                                    comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
-                                    comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                                    comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                                    comment.Replies = new ObservableCollection<CommentDto>(
-                                        comment.Replies?.Select(r => new CommentDto
-                                        {
-                                            CommentId = r.CommentId,
-                                            PostId = r.PostId,
-                                            Content = r.Content,
-                                            PhotoUrl = r.PhotoUrl,
-                                            UserId = r.UserId,
-                                            UserName = r.UserName,
-                                            UserPhotoUrl = r.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png",
-                                            AddedOn = r.AddedOn,
-                                            IsOwnComment = _authService.User != null && r.UserId == _authService.User.Id,
-                                            Level = 1,
-                                            ParentCommentId = r.ParentCommentId,
-                                            Replies = new ObservableCollection<CommentDto>()
-                                        }).Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
-
-                                    Console.WriteLine($"Saving comment {comment.CommentId} with {comment.Replies?.Count ?? 0} replies to SQLite.");
-                                    await _localDatabase.SaveCommentAsync(comment);
-                                    newComments.Add(comment);
-                                    _processedCommentIds.Add(comment.CommentId);
-                                    Console.WriteLine($"Added API comment {comment.CommentId} to Comments collection.");
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"Skipped duplicate comment {comment.CommentId} already in database at 12:04 PM +07, 27/05/2025.");
-                                }
-                            }
-
-                            foreach (var comment in newComments)
-                            {
-                                Comments.Add(comment);
-                            }
-
-                            _startIndex += newComments.Count;
-                            OnPropertyChanged(nameof(Comments));
-                            Console.WriteLine($"Added {newComments.Count} API comments to Comments collection. Total Comments: {Comments.Count}.");
-                        });
-                    }
-
-                    if (newComments.Count == 0 && Comments.Count == 0)
-                    {
-                        var localComments = await _localDatabase.GetCommentsAsync(Post.PostId, _startIndex, PageSize);
-                        await MainThread.InvokeOnMainThreadAsync(() =>
-                        {
-                            newComments = localComments
-                                .OrderByDescending(c => c.AddedOn)
-                                .Where(c => !_processedCommentIds.Contains(c.CommentId))
-                                .ToList();
-
-                            foreach (var comment in newComments)
-                            {
-                                comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
-                                comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                                comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                                Comments.Add(comment);
-                                _processedCommentIds.Add(comment.CommentId);
-                                Console.WriteLine($"Added local comment {comment.CommentId} with {comment.Replies?.Count ?? 0} replies to Comments collection.");
-                            }
-
-                            _startIndex += newComments.Count;
-                            OnPropertyChanged(nameof(Comments));
-                            Console.WriteLine($"Loaded {newComments.Count} local comments for post {Post.PostId}. Total Comments: {Comments.Count}.");
-                        });
-
-                        if (localComments.Count == 0 && _startIndex == 0)
-                        {
-                            Console.WriteLine($"No comments available for post {Post.PostId} at 12:04 PM +07, 27/05/2025.");
-                            // No alert; allow empty comment section
-                        }
-                    }
+                    Console.WriteLine($"API returned {comments?.Length ?? 0} comments for post {Post.PostId} at {DateTime.Now}.");
+                    await UpdateCommentsCollection(comments?.OrderByDescending(c => c.AddedOn).ToList() ?? new List<CommentDto>(), "API");
+                    _startIndex += comments?.Length ?? 0;
                 }
+
+                OnPropertyChanged(nameof(Comments));
             }
             catch (ApiException apiEx)
             {
-                Console.WriteLine($"API error fetching comments: {apiEx.Message} at 12:04 PM +07, 27/05/2025.");
+                Console.WriteLine($"API error fetching comments: {apiEx.Message} at {DateTime.Now}.");
                 await ShowErrorAlertAsync($"API error: {apiEx.Message}");
             }
             catch (SQLiteException sqlEx)
             {
-                Console.WriteLine($"SQLite error fetching comments: {sqlEx.Message} at 12:04 PM +07, 27/05/2025.");
+                Console.WriteLine($"SQLite error fetching comments: {sqlEx.Message} at {DateTime.Now}.");
                 await ShowErrorAlertAsync($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error fetching comments: {ex.Message} at 12:04 PM +07, 27/05/2025.");
+                Console.WriteLine($"Unexpected error fetching comments: {ex.Message} at {DateTime.Now}.");
                 await ShowErrorAlertAsync($"Unexpected error: {ex.Message}");
             }
             finally
             {
                 IsBusy = false;
+                _isFetchingComments = false;
+            }
+        }
+
+        private async Task UpdateCommentsCollection(List<CommentDto> newComments, string source)
+        {
+            lock (_commentLock)
+            {
+                foreach (var comment in newComments)
+                {
+                    if (!_processedCommentIds.Contains(comment.CommentId))
+                    {
+                        comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
+                        comment.Level = comment.ParentCommentId == null ? 0 : 1;
+                        comment.UserPhotoUrl = comment.UserPhotoUrl ?? "default_avatar.png";
+                        comment.Replies = new ObservableCollection<CommentDto>(
+                            comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
+                        Comments.Add(comment);
+                        _processedCommentIds.Add(comment.CommentId);
+                        if (comment.Replies != null)
+                        {
+                            foreach (var reply in comment.Replies)
+                            {
+                                _processedCommentIds.Add(reply.CommentId);
+                            }
+                        }
+                        if (source == "API")
+                        {
+                            _localDatabase.SaveCommentAsync(comment);
+                        }
+                    }
+                }
+                Console.WriteLine($"Loaded {newComments.Count} {source} comments for post {Post.PostId} at {DateTime.Now}.");
             }
         }
 
@@ -490,7 +470,7 @@ namespace SocialMauiApp.ViewModel
                             Replies = _commentBeingEdited.Replies ?? new ObservableCollection<CommentDto>()
                         };
 
-                        await MainThread.InvokeOnMainThreadAsync(() =>
+                        lock (_commentLock)
                         {
                             if (_commentBeingEdited.Level == 0)
                             {
@@ -520,12 +500,11 @@ namespace SocialMauiApp.ViewModel
                                 }
                             }
                             OnPropertyChanged(nameof(Comments));
-                            // Xóa ô nhập liệu
                             Comment = string.Empty;
                             OnPropertyChanged(nameof(Comment));
                             IsEditing = false;
                             _commentBeingEdited = null;
-                        });
+                        }
 
                         await ClearPhotos();
                         await _localDatabase.SaveCommentAsync(updatedComment);
@@ -577,58 +556,24 @@ namespace SocialMauiApp.ViewModel
                     var result = await PostsApi.SaveCommentWithImagesAsync(Post.PostId, imgPart, serialized);
                     if (result.IsSuccess && result.Data != null)
                     {
-                        if (_processedCommentIds.Contains(result.Data.CommentId))
-                        {
-                            Console.WriteLine($"Skipped adding duplicate comment {result.Data.CommentId} in AddCommentAsync at 12:04 PM +07, 27/05/2025.");
-                            return;
-                        }
-
                         result.Data.IsOwnComment = _authService.User != null && result.Data.UserId == _authService.User.Id;
                         result.Data.Level = isReply ? 1 : 0;
                         result.Data.UserPhotoUrl = result.Data.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "";
                         result.Data.Replies = new ObservableCollection<CommentDto>(
                             result.Data.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
 
-                        await MainThread.InvokeOnMainThreadAsync(() =>
+                        await AddCommentToCollection(result.Data, "AddComment");
+                        await _localDatabase.SaveCommentAsync(result.Data);
+                        Console.WriteLine($"Saved comment {result.Data.CommentId} to SQLite at {DateTime.Now}.");
+
+                        lock (_commentLock)
                         {
-                            if (isReply)
-                            {
-                                var parentComment = Comments.FirstOrDefault(c => c.CommentId == parentCommentId);
-                                if (parentComment != null)
-                                {
-                                    parentComment.Replies ??= new ObservableCollection<CommentDto>();
-                                    if (!parentComment.Replies.Any(r => r.CommentId == result.Data.CommentId))
-                                    {
-                                        parentComment.Replies.Insert(0, result.Data);
-                                        int parentIndex = Comments.IndexOf(parentComment);
-                                        if (parentIndex >= 0) Comments[parentIndex] = parentComment;
-                                        _processedCommentIds.Add(result.Data.CommentId);
-                                        Console.WriteLine($"Added reply {result.Data.CommentId} to parent {parentCommentId} at 12:04 PM +07, 27/05/2025.");
-                                    }
-                                }
-                                else
-                                {
-                                    Comments.Insert(0, result.Data);
-                                    _processedCommentIds.Add(result.Data.CommentId);
-                                    Console.WriteLine($"Parent comment {parentCommentId} not found, added reply {result.Data.CommentId} as top-level at 12:04 PM +07, 27/05/2025.");
-                                }
-                            }
-                            else
-                            {
-                                Comments.Insert(0, result.Data);
-                                _processedCommentIds.Add(result.Data.CommentId);
-                                Console.WriteLine($"Added top-level comment {result.Data.CommentId} at 12:04 PM +07, 27/05/2025.");
-                            }
-                            OnPropertyChanged(nameof(Comments));
-                            // Xóa ô nhập liệu
                             Comment = string.Empty;
                             OnPropertyChanged(nameof(Comment));
                             _replyingToComment = null;
-                        });
+                        }
 
-                        await _localDatabase.SaveCommentAsync(result.Data);
                         await ClearPhotos();
-                        Console.WriteLine($"Saved comment {result.Data.CommentId} to SQLite at 12:04 PM +07, 27/05/2025.");
                         await ToastAsync(isReply ? "Reply added" : "Comment added");
                     }
                     else
@@ -643,15 +588,14 @@ namespace SocialMauiApp.ViewModel
             }
             finally
             {
-                // Đảm bảo ô nhập liệu trống ngay cả khi có lỗi
-                await MainThread.InvokeOnMainThreadAsync(() =>
+                lock (_commentLock)
                 {
                     Comment = string.Empty;
                     OnPropertyChanged(nameof(Comment));
                     _replyingToComment = null;
                     IsEditing = false;
                     _commentBeingEdited = null;
-                });
+                }
                 await ClearPhotos();
                 IsBusy = false;
             }
@@ -659,67 +603,24 @@ namespace SocialMauiApp.ViewModel
 
         private void OnCommentAdded(CommentDto comment)
         {
-            MainThread.BeginInvokeOnMainThread(async () =>
+            if (Post == null || comment.PostId != Post.PostId)
             {
-                if (Post == null || comment.PostId != Post.PostId)
-                {
-                    Console.WriteLine($"Comment {comment.CommentId} ignored: Post null or mismatched PostId at 12:04 PM +07, 27/05/2025.");
-                    return;
-                }
+                Console.WriteLine($"Comment {comment.CommentId} ignored: Post null or mismatched PostId at {DateTime.Now}.");
+                return;
+            }
 
-                if (_processedCommentIds.Contains(comment.CommentId))
-                {
-                    Console.WriteLine($"Comment {comment.CommentId} already processed, skipping at 12:04 PM +07, 27/05/2025.");
-                    return;
-                }
-
+            Task.Run(async () =>
+            {
                 var existingComment = await _localDatabase.GetCommentAsync(comment.CommentId);
                 if (existingComment != null)
                 {
-                    Console.WriteLine($"Comment {comment.CommentId} already exists in database, skipping at 12:04 PM +07, 27/05/2025.");
+                    Console.WriteLine($"Comment {comment.CommentId} already exists in database, skipping SignalR at {DateTime.Now}.");
                     return;
                 }
 
-                comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
-                comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "";
-                comment.Replies = new ObservableCollection<CommentDto>(
-                    comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
-
-                if (comment.Level == 0)
-                {
-                    Comments.Insert(0, comment);
-                    _processedCommentIds.Add(comment.CommentId);
-                    Console.WriteLine($"Added top-level comment {comment.CommentId} with {comment.Replies?.Count ?? 0} replies via SignalR at 12:04 PM +07, 27/05/2025.");
-                }
-                else
-                {
-                    var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
-                    if (parentComment != null)
-                    {
-                        parentComment.Replies ??= new ObservableCollection<CommentDto>();
-                        if (!parentComment.Replies.Any(r => r.CommentId == comment.CommentId))
-                        {
-                            parentComment.Replies.Insert(0, comment);
-                            int parentIndex = Comments.IndexOf(parentComment);
-                            if (parentIndex >= 0) Comments[parentIndex] = parentComment;
-                            _processedCommentIds.Add(comment.CommentId);
-                            Console.WriteLine($"Added reply {comment.CommentId} to parent {parentComment.CommentId} via SignalR at 12:04 PM +07, 27/05/2025.");
-                        }
-                    }
-                    else
-                    {
-                        Comments.Insert(0, comment);
-                        _processedCommentIds.Add(comment.CommentId);
-                        Console.WriteLine($"Parent comment {comment.ParentCommentId} not found for reply {comment.CommentId}, added as top-level at 12:04 PM +07, 27/05/2025.");
-                    }
-                }
-
+                await AddCommentToCollection(comment, "SignalR");
                 await _localDatabase.SaveCommentAsync(comment);
-                Console.WriteLine($"Saved comment {comment.CommentId} to SQLite via SignalR at 12:04 PM +07, 27/05/2025.");
-
-                OnPropertyChanged(nameof(Comments));
-                Console.WriteLine($"Added comment {comment.CommentId} via SignalR for post {Post.PostId} at 12:04 PM +07, 27/05/2025. Total Comments: {Comments.Count}.");
+                Console.WriteLine($"Saved comment {comment.CommentId} to SQLite via SignalR at {DateTime.Now}.");
             });
         }
 
@@ -807,52 +708,27 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task RemovePhoto(string imageId)
         {
-            if (string.IsNullOrEmpty(imageId) || IsBusy)
-            {
-                System.Diagnostics.Debug.WriteLine($"RemovePhoto: Invalid imageId or IsBusy. imageId: {imageId}, IsBusy: {IsBusy}");
-                return;
-            }
+            if (string.IsNullOrEmpty(imageId) || IsBusy) return;
 
-            System.Diagnostics.Debug.WriteLine($"RemovePhoto: Attempting to remove image with ID: {imageId}");
             IsBusy = true;
             try
             {
                 var mapEntry = _imageFileMap.FirstOrDefault(x => x.Id == imageId);
-                if (mapEntry.ImageSource == null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"RemovePhoto: No mapEntry found for imageId: {imageId}");
-                    return;
-                }
+                if (mapEntry.ImageSource == null) return;
 
                 var preview = SelectedImagePreviews.FirstOrDefault(p => p.Id == imageId);
-                if (preview == null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"RemovePhoto: No preview found for imageId: {imageId}");
-                    return;
-                }
+                if (preview == null) return;
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"RemovePhoto: Removing preview and mapEntry for imageId: {imageId}");
                     SelectedImagePreviews.Remove(preview);
                     _selectedFiles.Remove(mapEntry.FileResult);
                     _imageFileMap.Remove(mapEntry);
 
                     if (mapEntry.ImageSource is StreamImageSource streamImageSource)
                     {
-                        try
-                        {
-                            var stream = streamImageSource.Stream?.Invoke(CancellationToken.None);
-                            if (stream != null)
-                            {
-                                stream.Dispose();
-                                System.Diagnostics.Debug.WriteLine($"RemovePhoto: Disposed StreamImageSource for imageId: {imageId}");
-                            }
-                        }
-                        catch (Exception disposeEx)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"RemovePhoto: Error disposing ImageSource for imageId: {imageId}, Error: {disposeEx.Message}");
-                        }
+                        var stream = streamImageSource.Stream?.Invoke(CancellationToken.None);
+                        stream?.Dispose();
                     }
 
                     HasSelectedImages = SelectedImagePreviews.Count > 0;
@@ -860,18 +736,15 @@ namespace SocialMauiApp.ViewModel
                     OnPropertyChanged(nameof(SelectedImagePreviews));
                     OnPropertyChanged(nameof(HasSelectedImages));
                     OnPropertyChanged(nameof(IsPhotoButtonVisible));
-                    System.Diagnostics.Debug.WriteLine($"RemovePhoto: Updated state - HasSelectedImages: {HasSelectedImages}, IsPhotoButtonVisible: {IsPhotoButtonVisible}, Previews Count: {SelectedImagePreviews.Count}");
                 });
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"RemovePhoto: Exception occurred: {ex.Message}");
                 await ToastAsync($"Error removing image: {ex.Message}");
             }
             finally
             {
                 IsBusy = false;
-                System.Diagnostics.Debug.WriteLine($"RemovePhoto: Completed for imageId: {imageId}");
             }
         }
 
@@ -885,15 +758,8 @@ namespace SocialMauiApp.ViewModel
                     {
                         if (mapEntry.ImageSource is StreamImageSource streamImageSource)
                         {
-                            try
-                            {
-                                var stream = streamImageSource.Stream?.Invoke(CancellationToken.None);
-                                stream?.Dispose();
-                            }
-                            catch (Exception disposeEx)
-                            {
-                                System.Diagnostics.Debug.WriteLine($"ClearPhotos: Error disposing ImageSource: {disposeEx.Message}");
-                            }
+                            var stream = streamImageSource.Stream?.Invoke(CancellationToken.None);
+                            stream?.Dispose();
                         }
                     }
 
@@ -1035,20 +901,18 @@ namespace SocialMauiApp.ViewModel
                     return;
                 }
 
-                await MainThread.InvokeOnMainThreadAsync(async () =>
+                lock (_commentLock)
                 {
                     if (IsEditing && _commentBeingEdited?.CommentId == commentDto.CommentId)
                     {
                         IsEditing = false;
                         _commentBeingEdited = null;
                         Comment = string.Empty;
-                        await ClearPhotos();
                     }
                     if (ReplyingToComment?.CommentId == commentDto.CommentId)
                     {
                         ReplyingToComment = null;
                         Comment = string.Empty;
-                        await ClearPhotos();
                     }
 
                     if (commentDto.Level == 1)
@@ -1074,10 +938,10 @@ namespace SocialMauiApp.ViewModel
                         }
                     }
                     OnPropertyChanged(nameof(Comments));
+                    _processedCommentIds.Remove(commentDto.CommentId);
+                }
 
-                    await _localDatabase.DeleteCommentAsync(commentDto);
-                });
-
+                await _localDatabase.DeleteCommentAsync(commentDto);
                 await ToastAsync($"{(commentDto.Level == 1 ? "Reply" : "Comment")} deleted");
             }
             catch (Exception ex)
@@ -1086,6 +950,7 @@ namespace SocialMauiApp.ViewModel
             }
             finally
             {
+                await ClearPhotos();
                 IsBusy = false;
             }
         }
@@ -1124,7 +989,7 @@ namespace SocialMauiApp.ViewModel
                 var result = await PostsApi.DeleteCommentAsync(child.CommentId);
                 if (result.IsSuccess)
                 {
-                    await MainThread.InvokeOnMainThreadAsync(() =>
+                    lock (_commentLock)
                     {
                         var parentComment = allComments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == child.CommentId) == true);
                         if (parentComment != null)
@@ -1149,7 +1014,8 @@ namespace SocialMauiApp.ViewModel
                             Comments.Remove(localComment);
                         }
                         OnPropertyChanged(nameof(Comments));
-                    });
+                        _processedCommentIds.Remove(child.CommentId);
+                    }
 
                     await _localDatabase.DeleteCommentAsync(child);
                 }
@@ -1201,11 +1067,10 @@ namespace SocialMauiApp.ViewModel
             {
                 if (Post?.PostId != changedPost.PostId)
                 {
-                    Console.WriteLine($"Post {changedPost.PostId} ignored: Mismatched PostId at 12:29 PM +07, 27/05/2025.");
+                    Console.WriteLine($"Post {changedPost.PostId} ignored: Mismatched PostId at {DateTime.Now}.");
                     return;
                 }
 
-                // Tạo PostModel mới từ DTO
                 var updatedPost = new PostModel(PostsApi, _realtimeUpdatesService)
                 {
                     PostId = changedPost.PostId,
@@ -1218,15 +1083,13 @@ namespace SocialMauiApp.ViewModel
                     UserPhotoUrl = changedPost.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png",
                     LikeCount = changedPost.LikeCount,
                     CommentCount = changedPost.CommentCount,
-                    PostedOnDisplay = Post.PostedOnDisplay // Giữ nguyên giá trị gốc nếu không thay đổi
+                    PostedOnDisplay = Post.PostedOnDisplay
                 };
 
-                // Cập nhật Post và thông báo UI
                 Post = updatedPost;
                 OnPropertyChanged(nameof(Post));
-                OnPropertyChanged(nameof(IsOwnPost)); // Cập nhật lại IsOwnPost nếu cần
+                OnPropertyChanged(nameof(IsOwnPost));
 
-                // Lưu vào database trên luồng phụ
                 var postEntity = new PostEntity
                 {
                     PostId = Post.PostId,
@@ -1246,21 +1109,25 @@ namespace SocialMauiApp.ViewModel
                 try
                 {
                     await Task.Run(() => _localDatabase.SavePostAsync(postEntity));
-                    Console.WriteLine($"Saved updated post {Post.PostId} to SQLite at 12:29 PM +07, 27/05/2025.");
+                    Console.WriteLine($"Saved updated post {Post.PostId} to SQLite at {DateTime.Now}.");
                 }
                 catch (SQLiteException ex)
                 {
-                    Console.WriteLine($"SQLite error saving post: {ex.Message} at 12:29 PM +07, 27/05/2025.");
+                    Console.WriteLine($"SQLite error saving post: {ex.Message} at {DateTime.Now}.");
                     await ShowErrorAlertAsync($"Database error: {ex.Message}");
                 }
 
-                // Tải lại bình luận nếu CommentCount thay đổi
-                if (Post.CommentCount != changedPost.CommentCount)
+                if (Post.CommentCount != changedPost.CommentCount && !_isFetchingComments)
                 {
-                    _startIndex = 0;
-                    Comments.Clear();
-                    _processedCommentIds.Clear();
-                    await FetchCommentsAsync();
+                    _isFetchingComments = true;
+                    try
+                    {
+                        await FetchCommentsAsync();
+                    }
+                    finally
+                    {
+                        _isFetchingComments = false;
+                    }
                 }
             });
         }
@@ -1307,40 +1174,43 @@ namespace SocialMauiApp.ViewModel
             {
                 if (Post != null && comment.PostId == Post.PostId)
                 {
-                    comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                    comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
-                    comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
-                    comment.Replies = new ObservableCollection<CommentDto>(comment.Replies ?? Enumerable.Empty<CommentDto>());
-
-                    if (comment.Level == 0)
+                    lock (_commentLock)
                     {
-                        var existing = Comments.FirstOrDefault(c => c.CommentId == comment.CommentId);
-                        if (existing != null)
+                        comment.Level = comment.ParentCommentId == null ? 0 : 1;
+                        comment.UserPhotoUrl = comment.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png";
+                        comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
+                        comment.Replies = new ObservableCollection<CommentDto>(comment.Replies ?? Enumerable.Empty<CommentDto>());
+
+                        if (comment.Level == 0)
                         {
-                            int index = Comments.IndexOf(existing);
-                            if (index >= 0)
+                            var existing = Comments.FirstOrDefault(c => c.CommentId == comment.CommentId);
+                            if (existing != null)
                             {
-                                comment.Replies = existing.Replies ?? new ObservableCollection<CommentDto>();
-                                Comments[index] = comment;
-                                OnPropertyChanged(nameof(Comments));
+                                int index = Comments.IndexOf(existing);
+                                if (index >= 0)
+                                {
+                                    comment.Replies = existing.Replies ?? new ObservableCollection<CommentDto>();
+                                    Comments[index] = comment;
+                                    OnPropertyChanged(nameof(Comments));
+                                }
                             }
                         }
-                    }
-                    else if (comment.Level == 1)
-                    {
-                        var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
-                        if (parentComment != null)
+                        else if (comment.Level == 1)
                         {
-                            if (parentComment.Replies == null) parentComment.Replies = new ObservableCollection<CommentDto>();
-                            var existingReply = parentComment.Replies.FirstOrDefault(r => r.CommentId == comment.CommentId);
-                            if (existingReply != null)
+                            var parentComment = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
+                            if (parentComment != null)
                             {
-                                int replyIndex = parentComment.Replies.IndexOf(existingReply);
-                                if (replyIndex >= 0) parentComment.Replies[replyIndex] = comment;
+                                if (parentComment.Replies == null) parentComment.Replies = new ObservableCollection<CommentDto>();
+                                var existingReply = parentComment.Replies.FirstOrDefault(r => r.CommentId == comment.CommentId);
+                                if (existingReply != null)
+                                {
+                                    int replyIndex = parentComment.Replies.IndexOf(existingReply);
+                                    if (replyIndex >= 0) parentComment.Replies[replyIndex] = comment;
+                                }
+                                int parentIndex = Comments.IndexOf(parentComment);
+                                if (parentIndex >= 0) Comments[parentIndex] = parentComment;
+                                OnPropertyChanged(nameof(Comments));
                             }
-                            int parentIndex = Comments.IndexOf(parentComment);
-                            if (parentIndex >= 0) Comments[parentIndex] = parentComment;
-                            OnPropertyChanged(nameof(Comments));
                         }
                     }
 
@@ -1353,42 +1223,45 @@ namespace SocialMauiApp.ViewModel
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                var parentComment = Comments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == commentId) == true);
-                if (parentComment != null)
+                lock (_commentLock)
                 {
-                    var reply = parentComment.Replies.FirstOrDefault(r => r.CommentId == commentId);
-                    if (reply != null)
+                    var parentComment = Comments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == commentId) == true);
+                    if (parentComment != null)
                     {
-                        parentComment.Replies.Remove(reply);
-                        int parentIndex = Comments.IndexOf(parentComment);
-                        if (parentIndex >= 0) Comments[parentIndex] = parentComment;
-                        OnPropertyChanged(nameof(Comments));
+                        var reply = parentComment.Replies.FirstOrDefault(r => r.CommentId == commentId);
+                        if (reply != null)
+                        {
+                            parentComment.Replies.Remove(reply);
+                            int parentIndex = Comments.IndexOf(parentComment);
+                            if (parentIndex >= 0) Comments[parentIndex] = parentComment;
+                            OnPropertyChanged(nameof(Comments));
+                        }
                     }
-                }
-                else
-                {
-                    var existing = Comments.FirstOrDefault(c => c.CommentId == commentId);
-                    if (existing != null)
+                    else
                     {
-                        Comments.Remove(existing);
-                        OnPropertyChanged(nameof(Comments));
+                        var existing = Comments.FirstOrDefault(c => c.CommentId == commentId);
+                        if (existing != null)
+                        {
+                            Comments.Remove(existing);
+                            OnPropertyChanged(nameof(Comments));
+                        }
                     }
+
+                    if (IsEditing && _commentBeingEdited?.CommentId == commentId)
+                    {
+                        IsEditing = false;
+                        _commentBeingEdited = null;
+                        Comment = string.Empty;
+                    }
+                    if (ReplyingToComment?.CommentId == commentId)
+                    {
+                        ReplyingToComment = null;
+                        Comment = string.Empty;
+                    }
+                    _processedCommentIds.Remove(commentId);
                 }
 
-                if (IsEditing && _commentBeingEdited?.CommentId == commentId)
-                {
-                    IsEditing = false;
-                    _commentBeingEdited = null;
-                    Comment = string.Empty;
-                    await ClearPhotos();
-                }
-                if (ReplyingToComment?.CommentId == commentId)
-                {
-                    ReplyingToComment = null;
-                    Comment = string.Empty;
-                    await ClearPhotos();
-                }
-
+                await ClearPhotos();
                 await _localDatabase.DeleteCommentByIdAsync(commentId);
             });
         }
@@ -1397,8 +1270,9 @@ namespace SocialMauiApp.ViewModel
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                if (Post is not null && Post.PostId == dto.PostId)
+                if (Post != null && Post.PostId == dto.PostId)
                 {
+                    bool commentCountChanged = Post.CommentCount != dto.CommentCount;
                     Post.LikeCount = dto.LikeCount;
                     Post.CommentCount = dto.CommentCount;
 
@@ -1418,6 +1292,19 @@ namespace SocialMauiApp.ViewModel
                         IsSync = 1
                     };
                     await _localDatabase.SavePostAsync(postEntity);
+
+                    if (commentCountChanged && !_isFetchingComments)
+                    {
+                        _isFetchingComments = true;
+                        try
+                        {
+                            await FetchCommentsAsync();
+                        }
+                        finally
+                        {
+                            _isFetchingComments = false;
+                        }
+                    }
                 }
             });
         }
@@ -1432,7 +1319,6 @@ namespace SocialMauiApp.ViewModel
             _realtimeUpdatesService.AddCommentUpdatedHandler(nameof(DetailsViewModel), OnCommentUpdated);
             _realtimeUpdatesService.AddCommentDeletedHandler(nameof(DetailsViewModel), OnCommentDeleted);
             _realtimeUpdatesService.AddPostCountsUpdatedHandler(nameof(DetailsViewModel), OnPostCountsUpdated);
-            _realtimeUpdatesService.AddUserPhotoChangedHandler(nameof(DetailsViewModel), OnUserPhotoChanged);
         }
 
         public void OnAppearing()
@@ -1449,7 +1335,7 @@ namespace SocialMauiApp.ViewModel
 
         private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            if (e.NetworkAccess.HasFlag(NetworkAccess.Internet) && _isPageActive && Post != null)
+            if (e.NetworkAccess.HasFlag(NetworkAccess.Internet) && _isPageActive && Post != null && !_isFetchingComments)
             {
                 await SynchronizeDataAsync();
                 if (!_syncTimer.IsRunning)
@@ -1469,6 +1355,7 @@ namespace SocialMauiApp.ViewModel
             _syncTimer.Stop();
             Connectivity.ConnectivityChanged -= OnConnectivityChanged;
             Cleanup();
+            Console.WriteLine($"Cleaned up DetailsViewModel for post {Post?.PostId} at {DateTime.Now}.");
         }
 
         public void Cleanup()

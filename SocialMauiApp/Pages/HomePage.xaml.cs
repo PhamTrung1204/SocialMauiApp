@@ -45,7 +45,7 @@ namespace SocialMauiApp.Pages
 
         private async void GoToNotification(object sender, TappedEventArgs e)
         {
-            _homeViewModel.IsThereNewNotification = false;
+            _homeViewModel. IsThereNewNotification = false;
             await Shell.Current.GoToAsync(nameof(NotificationPage), animate: true);
         }
     }
