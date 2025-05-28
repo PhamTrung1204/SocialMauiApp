@@ -134,7 +134,7 @@ namespace SocialMauiApp.ViewModel
                     var newPosts = localPosts.OrderByDescending(p => p.PostedOnDisplay)
                                              .Skip(_startIndex)
                                              .Take(PageSize)
-                                             .Select(p => p.ToPostModel(PostsApi, _realtimeUpdatesService))
+                                             .Select(p => p.ToPostModel(PostsApi, _realtimeUpdatesService, _authService))
                                              .Where(p => !Posts.Any(x => x.PostId == p.PostId));
                     foreach (var post in newPosts)
                     {
@@ -153,7 +153,7 @@ namespace SocialMauiApp.ViewModel
                         {
                             if (!Posts.Any(p => p.PostId == dto.PostId))
                             {
-                                var postModel = PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService);
+                                var postModel = PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService, _authService);
                                 Posts.Add(postModel);
                                 var postEntity = new PostEntity
                                 {
@@ -202,7 +202,7 @@ namespace SocialMauiApp.ViewModel
                 {
                     if (!Posts.Any(p => p.PostId == dto.PostId))
                     {
-                        var postModel = PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService);
+                        var postModel = PostModel.FromDto(dto, PostsApi, _realtimeUpdatesService, _authService);
                         Posts.Insert(0, postModel);
                         _startIndex++;
                         var postEntity = new PostEntity
@@ -300,7 +300,7 @@ namespace SocialMauiApp.ViewModel
                 }
                 else
                 {
-                    Posts.Insert(0, PostModel.FromDto(updated, PostsApi, _realtimeUpdatesService));
+                    Posts.Insert(0, PostModel.FromDto(updated, PostsApi, _realtimeUpdatesService, _authService));
                     _startIndex++;
                 }
             });
@@ -312,7 +312,7 @@ namespace SocialMauiApp.ViewModel
             {
                 if (!Posts.Any(p => p.PostId == newPost.PostId))
                 {
-                    var postModel = PostModel.FromDto(newPost, PostsApi, _realtimeUpdatesService);
+                    var postModel = PostModel.FromDto(newPost, PostsApi, _realtimeUpdatesService, _authService);
                     Posts.Insert(0, postModel);
                     _startIndex++;
                     var postEntity = new PostEntity

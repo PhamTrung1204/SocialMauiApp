@@ -24,6 +24,14 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.UserId">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._userId"/>
@@ -39,6 +47,9 @@
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.PhotoUrl">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._photoUrl"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.Comment">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel.comment"/>
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.PostedOnDisplay">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._postedOnDisplay"/>
@@ -66,6 +77,21 @@
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.CommentInput">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._commentInput"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsEditing">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isEditing"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.CommentBeingEdited">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._commentBeingEdited"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ReplyingToComment">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._replyingToComment"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.HasSelectedImages">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._hasSelectedImages"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsPhotoButtonVisible">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isPhotoButtonVisible"/>
         </member>
         <member name="M:SocialMauiApp.Models.PostModel.OnIsLikedChanged(System.Boolean,System.Boolean)">
             <summary>Executes the logic for when <see cref="P:SocialMauiApp.Models.PostModel.IsLiked"/> just changed.</summary>
@@ -96,6 +122,54 @@
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.AddCommentCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.AddCommentAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.removePhotoCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.RemovePhotoCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.RemovePhotoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.RemovePhoto(System.String)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.saveEditedCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.SaveEditedCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.SaveEditedCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.SaveEditedCommentAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.selectPhotoCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.SelectPhotoCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.SelectPhotoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.SelectPhoto"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.deleteCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.DeleteCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.DeleteCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.DeleteCommentAsync(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.replyCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.ReplyCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ReplyCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.ReplyComment(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.cancelReplyCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.CancelReplyCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.CancelReplyCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.CancelReply"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.cancelEditCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.CancelEditCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.CancelEditCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.CancelEditAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.editCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.EditCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.EditCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.EditCommentAsync(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
         </member>
         <member name="M:SocialMauiApp.Services.AuthService.Login(SocialMediaMaui.Shared.Dtos.LoginResponseDto)">
             <summary>
@@ -938,6 +1012,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PhotoUrl">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PhotoUrl" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Comment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Comment" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PostedOnDisplay">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PostedOnDisplay" generated properties.</summary>
         </member>
@@ -965,6 +1042,18 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CommentInput">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CommentInput" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CommentBeingEdited">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CommentBeingEdited" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ReplyingToComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ReplyingToComment" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasSelectedImages">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasSelectedImages" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsPhotoButtonVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsPhotoButtonVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PostCount">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PostCount" generated properties.</summary>
         </member>
@@ -983,26 +1072,11 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBusy">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBusy" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CommentBeingEdited">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CommentBeingEdited" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ReplyingToComment">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ReplyingToComment" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Post">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Post" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsOwnPost">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsOwnPost" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasSelectedImages">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasSelectedImages" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsPhotoButtonVisible">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsPhotoButtonVisible" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Comment">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Comment" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.User">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "User" generated properties.</summary>
@@ -1139,6 +1213,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PhotoUrl">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoUrl" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Comment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Comment" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PostedOnDisplay">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PostedOnDisplay" generated properties.</summary>
         </member>
@@ -1166,6 +1243,18 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CommentInput">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CommentInput" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CommentBeingEdited">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CommentBeingEdited" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ReplyingToComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ReplyingToComment" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasSelectedImages">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasSelectedImages" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPhotoButtonVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPhotoButtonVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PostCount">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PostCount" generated properties.</summary>
         </member>
@@ -1184,26 +1273,11 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBusy">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBusy" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CommentBeingEdited">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CommentBeingEdited" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ReplyingToComment">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ReplyingToComment" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Post">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Post" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsOwnPost">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsOwnPost" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasSelectedImages">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasSelectedImages" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPhotoButtonVisible">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPhotoButtonVisible" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Comment">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Comment" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.User">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "User" generated properties.</summary>

@@ -47,7 +47,10 @@
                     <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
                     <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
                     <converters:CountToBoolConverter x:Key="CountToBoolConverter"/>
+                    <converters:BooleanToSourceConverter x:Key="BooleanToSourceConverter" />
                     <behaviors:AnimationBehavior x:Key="AnimationBehavior"/>
+                    <converters:BooleanToCommandConverter x:Key="CommandConverter" />
+                    <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

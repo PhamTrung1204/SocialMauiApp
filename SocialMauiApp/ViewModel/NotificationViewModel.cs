@@ -102,7 +102,7 @@ namespace SocialMauiApp.ViewModel
                 // Sửa lại: truyền thêm realtimeUpdatesService cho PostModel.FromDto để hỗ trợ realtime toggle cập nhật icon ngay lập tức
                 await NavigateAsync(nameof(PostDetailsPage), new Dictionary<string, object>
                 {
-                    [nameof(DetailsViewModel.Post)] = PostModel.FromDto(post, PostsApi, _realtimeUpdatesService)
+                    [nameof(DetailsViewModel.Post)] = PostModel.FromDto(post, PostsApi, _realtimeUpdatesService, _authService)
                 });
             });
         }

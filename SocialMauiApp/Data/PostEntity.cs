@@ -38,9 +38,9 @@ namespace SocialMauiApp.Data
         public PostEntity() { }
 
         // Optional: Method to convert to PostModel
-        public PostModel ToPostModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService)
+        public PostModel ToPostModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
         {
-            return new PostModel(postApi, realtimeUpdatesService)
+            return new PostModel(postApi, realtimeUpdatesService, authService)
             {
                 PostId = this.PostId,
                 UserId = this.UserId,

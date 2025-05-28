@@ -129,7 +129,7 @@ namespace SocialMauiApp.ViewModel
             var localPost = await _localDatabase.GetPostAsync(value.PostId);
             if (localPost != null && !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet))
             {
-                Post = localPost.ToPostModel(PostsApi, _realtimeUpdatesService);
+                Post = localPost.ToPostModel(PostsApi, _realtimeUpdatesService, _authService);
             }
             else
             {
@@ -1071,7 +1071,7 @@ namespace SocialMauiApp.ViewModel
                     return;
                 }
 
-                var updatedPost = new PostModel(PostsApi, _realtimeUpdatesService)
+                var updatedPost = new PostModel(PostsApi, _realtimeUpdatesService, _authService)
                 {
                     PostId = changedPost.PostId,
                     Content = changedPost.Content,

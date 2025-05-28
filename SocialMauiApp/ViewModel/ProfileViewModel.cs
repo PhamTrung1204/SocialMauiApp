@@ -443,7 +443,7 @@ namespace SocialMauiApp.ViewModel
                     _myPostsStartIndex += posts.Length;
                     foreach (var p in posts.OrderByDescending(p => p.PostedOn))
                     {
-                        MyPosts.Add(PostModel.FromDto(p, PostsApi, _realtimeUpdatesService));
+                        MyPosts.Add(PostModel.FromDto(p, PostsApi, _realtimeUpdatesService, _authService));
                     }
                 }
             });
@@ -465,7 +465,7 @@ namespace SocialMauiApp.ViewModel
                     _bookmarkedPostsStartIndex += posts.Length;
                     foreach (var p in posts.OrderByDescending(p => p.PostedOn))
                     {
-                        var newPost = PostModel.FromDto(p, PostsApi, _realtimeUpdatesService);
+                        var newPost = PostModel.FromDto(p, PostsApi, _realtimeUpdatesService, _authService);
                         if (!BookmarkedPosts.Any(existing => existing.PostId == newPost.PostId))
                         {
                             BookmarkedPosts.Add(newPost);

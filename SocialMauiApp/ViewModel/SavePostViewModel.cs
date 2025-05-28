@@ -188,7 +188,7 @@ namespace SocialMauiApp.ViewModel
                         return;
                     }
 
-                    var saved = new PostModel(_postApi, _realtimeUpdatesService)
+                    var saved = new PostModel(_postApi, _realtimeUpdatesService, _authService)
                     {
                         PostId = result.Data.PostId,
                         Content = result.Data.Content,
