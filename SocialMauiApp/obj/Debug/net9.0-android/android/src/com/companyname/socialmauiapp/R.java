@@ -11782,17 +11782,18 @@ public final class R {
     public static final int plus=0x7f0800f2;
     public static final int plus_fab=0x7f0800f3;
     public static final int power_off=0x7f0800f4;
-    public static final int send=0x7f0800f5;
-    public static final int share=0x7f0800f6;
-    public static final int share_f=0x7f0800f7;
-    public static final int social_media=0x7f0800f8;
-    public static final int splash=0x7f0800f9;
-    public static final int test_level_drawable=0x7f0800fa;
-    public static final int tooltip_frame_dark=0x7f0800fb;
-    public static final int tooltip_frame_light=0x7f0800fc;
-    public static final int trash=0x7f0800fd;
-    public static final int user=0x7f0800fe;
-    public static final int x=0x7f0800ff;
+    public static final int save=0x7f0800f5;
+    public static final int send=0x7f0800f6;
+    public static final int share=0x7f0800f7;
+    public static final int share_f=0x7f0800f8;
+    public static final int social_media=0x7f0800f9;
+    public static final int splash=0x7f0800fa;
+    public static final int test_level_drawable=0x7f0800fb;
+    public static final int tooltip_frame_dark=0x7f0800fc;
+    public static final int tooltip_frame_light=0x7f0800fd;
+    public static final int trash=0x7f0800fe;
+    public static final int user=0x7f0800ff;
+    public static final int x=0x7f080100;
   }
   public static final class id {
     public static final int ALT=0x7f090000;

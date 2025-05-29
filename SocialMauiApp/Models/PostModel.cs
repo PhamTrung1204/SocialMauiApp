@@ -36,8 +36,10 @@ namespace SocialMauiApp.Models
 
         [ObservableProperty]
         private string? _photoUrl;
+
         [ObservableProperty]
-        private string? comment;
+        private string? _comment;
+
         [ObservableProperty]
         private string _postedOnDisplay;
 
@@ -68,7 +70,9 @@ namespace SocialMauiApp.Models
 
         [Ignore]
         public ObservableCollection<CommentDto> Comments { get; } = new ObservableCollection<CommentDto>();
+
         public ObservableCollection<ImagePreview> SelectedImagePreviews { get; } = new();
+
         [ObservableProperty]
         private bool _isCommentsExpanded;
 
@@ -100,15 +104,18 @@ namespace SocialMauiApp.Models
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
         private readonly ObservableCollection<FileResult> _selectedFiles = new();
         private readonly List<(string Id, ImageSource ImageSource, FileResult FileResult)> _imageFileMap = new();
+        private readonly object _commentLock = new object();
+
         public PostModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
             : base(postApi, realtimeUpdatesService)
         {
-            _authService = authService;
+            _authService = authService ?? throw new ArgumentNullException(nameof(authService));
+            _postsApi = postApi ?? throw new ArgumentNullException(nameof(postApi));
+            _realtimeUpdatesService = realtimeUpdatesService ?? throw new ArgumentNullException(nameof(realtimeUpdatesService));
             ConfigureRealtimeUpdates();
-            Task.Run(() => LoadCommentsAsync(1)); // Load 1 comment initially
+            Task.Run(() => LoadCommentsAsync(1));
             IsPhotoButtonVisible = true;
         }
-
 
         public static PostModel FromDto(PostDto dto, IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService) =>
             new PostModel(postApi, realtimeUpdatesService, authService)
@@ -137,14 +144,14 @@ namespace SocialMauiApp.Models
             }
             else
             {
-                await LoadCommentsAsync(1); // Show 1 comment when collapsed
+                await LoadCommentsAsync(1);
             }
         }
 
         [RelayCommand]
         private void ToggleCommentsDisplay()
         {
-            if (_isInDetailsView) return; // Skip in details view
+            if (_isInDetailsView) return;
             IsCommentsVisible = !IsCommentsVisible;
         }
 
@@ -152,30 +159,43 @@ namespace SocialMauiApp.Models
         private async Task AddCommentAsync()
         {
             if (string.IsNullOrWhiteSpace(CommentInput) || IsBusy) return;
+
+            if (_authService.User == null)
+            {
+                await ShowErrorAlertAsync("Please log in to comment.");
+                return;
+            }
+
+            if (IsEditing)
+            {
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    IsEditing = false;
+                    CommentBeingEdited = null;
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(CommentBeingEdited));
+                });
+            }
+
             IsBusy = true;
             try
             {
-                if (_realtimeUpdatesService == null)
+                await _realtimeUpdatesService.EnsureConnectedAsync();
+                Guid? parentCommentId = null;
+                if (ReplyingToComment != null)
                 {
-                    await ShowErrorAlertAsync("Error: Realtime service is not initialized.");
-                    return;
-                }
-                if (_postsApi == null)
-                {
-                    await ShowErrorAlertAsync("Error: Post API service is not initialized.");
-                    return;
+                    parentCommentId = ReplyingToComment.Level == 1 ? ReplyingToComment.ParentCommentId : ReplyingToComment.CommentId;
+                    Console.WriteLine($"Replying to comment with ParentCommentId: {parentCommentId}");
                 }
 
-                await _realtimeUpdatesService.EnsureConnectedAsync();
                 var dto = new SaveCommentDto
                 {
                     PostId = PostId,
                     Content = CommentInput,
-                    ParentCommentId = ReplyingToComment?.CommentId // Hỗ trợ trả lời comment
+                    ParentCommentId = parentCommentId
                 };
                 var serialized = JsonSerializer.Serialize(dto);
 
-                // Xử lý ảnh nếu có
                 StreamPart? photoPart = null;
                 FileResult? imageFile = _selectedFiles.FirstOrDefault();
                 if (imageFile != null)
@@ -189,22 +209,23 @@ namespace SocialMauiApp.Models
                 {
                     if (!_processedCommentIds.Contains(result.Data.CommentId))
                     {
-                        result.Data.Level = dto.ParentCommentId == null ? 0 : 1;
+                        result.Data.Level = parentCommentId == null ? 0 : 1;
+                        result.Data.UserName = result.Data.UserName ?? "Unknown User";
                         result.Data.UserPhotoUrl = result.Data.UserPhotoUrl ?? "default_avatar.png";
-                        result.Data.IsOwnComment = _authService.User != null && result.Data.UserId == _authService.User.Id;
+                        result.Data.IsOwnComment = result.Data.UserId == _authService.User.Id;
                         result.Data.Replies = new ObservableCollection<CommentDto>();
 
                         await MainThread.InvokeOnMainThreadAsync(() =>
                         {
-                            if (!_isInDetailsView)
+                            lock (_commentLock)
                             {
-                                if (result.Data.Level == 0)
+                                if (result.Data.Level == 0 || parentCommentId == null)
                                 {
                                     Comments.Insert(0, result.Data);
                                 }
                                 else
                                 {
-                                    var parent = Comments.FirstOrDefault(c => c.CommentId == dto.ParentCommentId);
+                                    var parent = Comments.FirstOrDefault(c => c.CommentId == parentCommentId);
                                     if (parent != null)
                                     {
                                         parent.Replies ??= new ObservableCollection<CommentDto>();
@@ -212,17 +233,24 @@ namespace SocialMauiApp.Models
                                         int parentIndex = Comments.IndexOf(parent);
                                         if (parentIndex >= 0) Comments[parentIndex] = parent;
                                     }
+                                    else
+                                    {
+                                        Comments.Insert(0, result.Data);
+                                        Console.WriteLine($"Warning: Parent comment {parentCommentId} not found, added as new comment.");
+                                    }
                                 }
                                 _processedCommentIds.Add(result.Data.CommentId);
+                                CommentInput = string.Empty;
+                                ReplyingToComment = null;
+                                CommentCount++;
+                                OnPropertyChanged(nameof(CommentInput));
+                                OnPropertyChanged(nameof(CommentCount));
+                                OnPropertyChanged(nameof(Comments));
+                                OnPropertyChanged(nameof(ReplyingToComment));
                             }
-                            CommentInput = string.Empty;
-                            ClearPhotos();
-                            CommentCount++;
-                            OnPropertyChanged(nameof(CommentInput));
-                            OnPropertyChanged(nameof(CommentCount));
-                            OnPropertyChanged(nameof(Comments));
                         });
-                        _realtimeUpdatesService?.NotifyCommentAddedAsync(result.Data);
+                        await ClearPhotosAsync();
+                        _realtimeUpdatesService.NotifyCommentAddedAsync(result.Data);
                         await ToastAsync("Comment added successfully.");
                     }
                 }
@@ -252,16 +280,30 @@ namespace SocialMauiApp.Models
                 if (mapEntry.ImageSource == null) return;
                 var preview = SelectedImagePreviews.FirstOrDefault(p => p.Id == imageId);
                 if (preview == null) return;
-                await MainThread.InvokeOnMainThreadAsync(() =>
+
+                await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     SelectedImagePreviews.Remove(preview);
                     _selectedFiles.Remove(mapEntry.FileResult);
                     _imageFileMap.Remove(mapEntry);
-                    if (mapEntry.ImageSource is StreamImageSource stream)
+
+                    if (mapEntry.ImageSource is StreamImageSource streamImageSource)
                     {
-                        var s = stream.Stream?.Invoke(CancellationToken.None);
-                        s?.Dispose();
+                        var streamTask = streamImageSource.Stream?.Invoke(CancellationToken.None);
+                        if (streamTask != null)
+                        {
+                            try
+                            {
+                                var stream = await streamTask;
+                                stream?.Dispose();
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error disposing stream: {ex.Message} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
+                            }
+                        }
                     }
+
                     HasSelectedImages = SelectedImagePreviews.Any();
                     IsPhotoButtonVisible = !HasSelectedImages;
                     OnPropertyChanged(nameof(SelectedImagePreviews));
@@ -281,6 +323,13 @@ namespace SocialMauiApp.Models
         private async Task SaveEditedCommentAsync()
         {
             if (IsBusy || !IsEditing || CommentBeingEdited == null || string.IsNullOrWhiteSpace(CommentInput)) return;
+
+            if (_authService.User == null)
+            {
+                await ShowErrorAlertAsync("Please log in to edit comment.");
+                return;
+            }
+
             IsBusy = true;
             try
             {
@@ -292,27 +341,27 @@ namespace SocialMauiApp.Models
                 };
                 var serialized = JsonSerializer.Serialize(dto);
 
-                // Xử lý ảnh
                 StreamPart? photoPart = null;
                 FileResult? imageFile = _selectedFiles.FirstOrDefault();
                 if (imageFile != null)
                 {
                     var stream = await imageFile.OpenReadAsync();
                     photoPart = new StreamPart(stream, imageFile.FileName, imageFile.ContentType);
-                    dto.IsExistingPhotoRemoved = true; // Thay ảnh cũ bằng ảnh mới
+                    dto.IsExistingPhotoRemoved = true;
                 }
 
                 var result = await _postsApi.UpdateCommentWithImagesAsync(CommentBeingEdited.CommentId, photoPart, serialized);
                 if (result.IsSuccess && result.Data != null)
                 {
                     result.Data.Level = CommentBeingEdited.Level;
-                    result.Data.UserPhotoUrl = result.Data.UserPhotoUrl ?? "default_avatar.png";
-                    result.Data.IsOwnComment = _authService.User != null && result.Data.UserId == _authService.User.Id;
+                    result.Data.UserName = result.Data.UserName ?? "Unknown User";
+                    result.Data.UserPhotoUrl = _authService.User.PhotoUrl ?? "user.png";
+                    result.Data.IsOwnComment = result.Data.UserId == _authService.User.Id;
                     result.Data.Replies = CommentBeingEdited.Replies ?? new ObservableCollection<CommentDto>();
 
                     await MainThread.InvokeOnMainThreadAsync(() =>
                     {
-                        if (!_isInDetailsView)
+                        lock (_commentLock)
                         {
                             if (result.Data.Level == 0)
                             {
@@ -339,14 +388,12 @@ namespace SocialMauiApp.Models
                                 }
                             }
                             OnPropertyChanged(nameof(Comments));
+                            CommentInput = string.Empty;
+                            OnPropertyChanged(nameof(CommentInput));
                         }
-                        CommentInput = string.Empty;
-                        ClearPhotos();
-                        IsEditing = false;
-                        CommentBeingEdited = null;
-                        OnPropertyChanged(nameof(CommentInput));
                     });
-                    _realtimeUpdatesService?.NotifyCommentUpdated(result.Data);
+                    await ClearPhotosAsync();
+                    _realtimeUpdatesService.NotifyCommentUpdated(result.Data);
                     await ToastAsync("Comment updated successfully.");
                 }
                 else
@@ -361,6 +408,13 @@ namespace SocialMauiApp.Models
             finally
             {
                 IsBusy = false;
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    IsEditing = false;
+                    CommentBeingEdited = null;
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(CommentBeingEdited));
+                });
             }
         }
 
@@ -414,9 +468,9 @@ namespace SocialMauiApp.Models
                 var imageSource = ImageSource.FromStream(() => new MemoryStream(imageData));
                 var imageId = Guid.NewGuid().ToString();
                 var imagePreview = new ImagePreview { Id = imageId, Source = imageSource };
+                await ClearPhotosAsync();
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    ClearPhotos();
                     _selectedFiles.Add(file);
                     SelectedImagePreviews.Add(imagePreview);
                     _imageFileMap.Add((imageId, imageSource, file));
@@ -452,53 +506,55 @@ namespace SocialMauiApp.Models
                 {
                     await MainThread.InvokeOnMainThreadAsync(() =>
                     {
-                        if (!_isInDetailsView)
+                        lock (_commentLock)
                         {
-                            if (commentDto.Level == 0)
+                            if (!_isInDetailsView)
                             {
-                                var existing = Comments.FirstOrDefault(c => c.CommentId == commentDto.CommentId);
-                                if (existing != null)
+                                if (commentDto.Level == 0)
                                 {
-                                    Comments.Remove(existing);
-                                    _processedCommentIds.Remove(commentDto.CommentId);
-                                    if (existing.Replies != null)
+                                    var existing = Comments.FirstOrDefault(c => c.CommentId == commentDto.CommentId);
+                                    if (existing != null)
                                     {
-                                        foreach (var reply in existing.Replies)
+                                        Comments.Remove(existing);
+                                        _processedCommentIds.Remove(commentDto.CommentId);
+                                        if (existing.Replies != null)
                                         {
-                                            _processedCommentIds.Remove(reply.CommentId);
+                                            foreach (var reply in existing.Replies)
+                                            {
+                                                _processedCommentIds.Remove(reply.CommentId);
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            else
-                            {
-                                var parent = Comments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == commentDto.CommentId) == true);
-                                if (parent != null && parent.Replies != null)
+                                else
                                 {
-                                    var reply = parent.Replies.FirstOrDefault(r => r.CommentId == commentDto.CommentId);
-                                    if (reply != null)
+                                    var parent = Comments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == commentDto.CommentId) == true);
+                                    if (parent != null && parent.Replies != null)
                                     {
-                                        parent.Replies.Remove(reply);
-                                        _processedCommentIds.Remove(commentDto.CommentId);
-                                        int parentIndex = Comments.IndexOf(parent);
-                                        if (parentIndex >= 0) Comments[parentIndex] = parent;
+                                        var reply = parent.Replies.FirstOrDefault(r => r.CommentId == commentDto.CommentId);
+                                        if (reply != null)
+                                        {
+                                            parent.Replies.Remove(reply);
+                                            _processedCommentIds.Remove(commentDto.CommentId);
+                                            int parentIndex = Comments.IndexOf(parent);
+                                            if (parentIndex >= 0) Comments[parentIndex] = parent;
+                                        }
                                     }
                                 }
+                                CommentCount--;
+                                OnPropertyChanged(nameof(Comments));
+                                OnPropertyChanged(nameof(CommentCount));
                             }
-                            CommentCount--;
-                            OnPropertyChanged(nameof(Comments));
-                            OnPropertyChanged(nameof(CommentCount));
-                        }
-                        if (IsEditing && CommentBeingEdited?.CommentId == commentDto.CommentId)
-                        {
-                            IsEditing = false;
-                            CommentBeingEdited = null;
-                            CommentInput = string.Empty;
-                            OnPropertyChanged(nameof(CommentInput));
+                            if (IsEditing && CommentBeingEdited?.CommentId == commentDto.CommentId)
+                            {
+                                IsEditing = false;
+                                CommentBeingEdited = null;
+                                CommentInput = string.Empty;
+                                OnPropertyChanged(nameof(CommentInput));
+                            }
                         }
                     });
-                    //_realtimeUpdatesService?.NotifyCommentDeleted(commentDto.CommentId);
-                    Console.WriteLine($"Deleted comment {commentDto.CommentId} at {DateTime.Now:HH:mm tt zzz}, 28/05/2025.");
+                    Console.WriteLine($"Deleted comment {commentDto.CommentId} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
                 }
                 else
                 {
@@ -522,9 +578,12 @@ namespace SocialMauiApp.Models
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 ReplyingToComment = commentDto;
-                Comment = $"@{commentDto.UserName} ";
+                CommentInput = $"@{commentDto.UserName} ";
+                OnPropertyChanged(nameof(ReplyingToComment));
+                OnPropertyChanged(nameof(CommentInput));
             });
         }
+
         [RelayCommand]
         private async Task CancelReply()
         {
@@ -533,10 +592,12 @@ namespace SocialMauiApp.Models
             {
                 ReplyingToComment = null;
                 CommentInput = string.Empty;
-                ClearPhotos();
+                OnPropertyChanged(nameof(ReplyingToComment));
                 OnPropertyChanged(nameof(CommentInput));
             });
+            await ClearPhotosAsync();
         }
+
         [RelayCommand]
         private async Task CancelEditAsync()
         {
@@ -546,14 +607,22 @@ namespace SocialMauiApp.Models
                 IsEditing = false;
                 CommentBeingEdited = null;
                 CommentInput = string.Empty;
-                ClearPhotos();
                 OnPropertyChanged(nameof(CommentInput));
             });
+            await ClearPhotosAsync();
         }
+
         [RelayCommand]
         private async Task EditCommentAsync(CommentDto commentDto)
         {
             if (IsBusy || commentDto == null || !commentDto.IsOwnComment) return;
+
+            if (_authService.User == null)
+            {
+                await ShowErrorAlertAsync("Please log in to edit comment.");
+                return;
+            }
+
             IsBusy = true;
             try
             {
@@ -564,7 +633,7 @@ namespace SocialMauiApp.Models
                     CommentInput = commentDto.Content ?? "";
                     IsCommentsVisible = true;
                 });
-                ClearPhotos();
+                await ClearPhotosAsync();
                 if (!string.IsNullOrEmpty(commentDto.PhotoUrl))
                 {
                     var httpClient = new HttpClient();
@@ -600,22 +669,38 @@ namespace SocialMauiApp.Models
                 IsBusy = false;
             }
         }
-        private void ClearPhotos()
+
+        private async Task ClearPhotosAsync()
         {
             foreach (var mapEntry in _imageFileMap.ToList())
             {
-                if (mapEntry.ImageSource is StreamImageSource stream)
+                if (mapEntry.ImageSource is StreamImageSource streamImageSource)
                 {
-                    var s = stream.Stream?.Invoke(CancellationToken.None);
-                    s?.Dispose();
+                    var streamTask = streamImageSource.Stream?.Invoke(CancellationToken.None);
+                    if (streamTask != null)
+                    {
+                        try
+                        {
+                            var stream = await streamTask;
+                            stream?.Dispose();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error disposing stream in ClearPhotos: {ex.Message} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
+                        }
+                    }
                 }
             }
-            SelectedImagePreviews.Clear();
-            _selectedFiles.Clear();
-            _imageFileMap.Clear();
-            HasSelectedImages = false;
-            IsPhotoButtonVisible = true;
-            OnPropertyChanged(nameof(SelectedImagePreviews));
+
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                SelectedImagePreviews.Clear();
+                _selectedFiles.Clear();
+                _imageFileMap.Clear();
+                HasSelectedImages = false;
+                IsPhotoButtonVisible = true;
+                OnPropertyChanged(nameof(SelectedImagePreviews));
+            });
         }
 
         private async Task LoadCommentsAsync(int limit)
@@ -627,36 +712,42 @@ namespace SocialMauiApp.Models
                 var comments = await PostsApi.GetPostsCommentAsync(PostId, 0, limit);
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    Comments.Clear();
-                    _processedCommentIds.Clear();
-                    foreach (var comment in comments.OrderByDescending(c => c.AddedOn))
+                    lock (_commentLock)
                     {
-                        if (!_processedCommentIds.Contains(comment.CommentId))
+                        Comments.Clear();
+                        _processedCommentIds.Clear();
+                        foreach (var comment in comments.OrderByDescending(c => c.AddedOn))
                         {
-                            comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                            comment.UserPhotoUrl = comment.UserPhotoUrl ?? "default_avatar.png";
-                            comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
-                            comment.Replies = new ObservableCollection<CommentDto>(
-                                comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
-                            Comments.Add(comment);
-                            _processedCommentIds.Add(comment.CommentId);
-                            if (comment.Replies != null)
+                            if (!_processedCommentIds.Contains(comment.CommentId))
                             {
-                                foreach (var reply in comment.Replies)
+                                comment.Level = comment.ParentCommentId == null ? 0 : 1;
+                                comment.UserName = comment.UserName ?? "Unknown User";
+                                comment.UserPhotoUrl = comment.UserPhotoUrl ?? "default_avatar.png";
+                                comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
+                                comment.Replies = new ObservableCollection<CommentDto>(
+                                    comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
+                                Comments.Add(comment);
+                                _processedCommentIds.Add(comment.CommentId);
+                                if (comment.Replies != null)
                                 {
-                                    reply.IsOwnComment = _authService.User != null && reply.UserId == _authService.User.Id;
-                                    _processedCommentIds.Add(reply.CommentId);
+                                    foreach (var reply in comment.Replies)
+                                    {
+                                        reply.UserName = reply.UserName ?? "Unknown User";
+                                        reply.UserPhotoUrl = reply.UserPhotoUrl ?? "default_avatar.png";
+                                        reply.IsOwnComment = _authService.User != null && reply.UserId == _authService.User.Id;
+                                        _processedCommentIds.Add(reply.CommentId);
+                                    }
                                 }
                             }
                         }
+                        OnPropertyChanged(nameof(Comments));
                     }
-                    OnPropertyChanged(nameof(Comments));
-                    Console.WriteLine($"Loaded {Comments.Count} comments for post {PostId} at {DateTime.Now:HH:mm tt zzz}, 28/05/2025.");
+                    Console.WriteLine($"Loaded {Comments.Count} comments for post {PostId} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
                 });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading comments: {ex.Message} at {DateTime.Now:HH:mm tt zzz}, 28/05/2025.");
+                Console.WriteLine($"Error loading comments: {ex.Message} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
                 await ShowErrorAlertAsync($"Error loading comments: {ex.Message}");
             }
             finally
@@ -679,7 +770,7 @@ namespace SocialMauiApp.Models
             _isInDetailsView = isInDetailsView;
             if (isInDetailsView)
             {
-                IsCommentsVisible = false; // Hide comment UI in details view
+                IsCommentsVisible = false;
             }
         }
 
@@ -708,41 +799,47 @@ namespace SocialMauiApp.Models
         {
             OnPropertyChanged(nameof(IsBookmarkIcon));
         }
+
         private void OnCommentAdded(CommentDto comment)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 if (_isInDetailsView || _processedCommentIds.Contains(comment.CommentId)) return;
                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                comment.UserPhotoUrl = comment.UserPhotoUrl ?? "default_avatar.png";
+                comment.UserName = comment.UserName ?? "Unknown User";
+                comment.UserPhotoUrl = comment.UserPhotoUrl ?? "user.png";
                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                 comment.Replies = new ObservableCollection<CommentDto>(
                     comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
-                if (comment.Level == 0)
+
+                lock (_commentLock)
                 {
-                    Comments.Insert(0, comment);
-                    _processedCommentIds.Add(comment.CommentId);
-                }
-                else
-                {
-                    var parent = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
-                    if (parent != null)
+                    if (comment.Level == 0)
                     {
-                        parent.Replies ??= new ObservableCollection<CommentDto>();
-                        parent.Replies.Insert(0, comment);
-                        int parentIndex = Comments.IndexOf(parent);
-                        if (parentIndex >= 0) Comments[parentIndex] = parent;
+                        Comments.Insert(0, comment);
+                        _processedCommentIds.Add(comment.CommentId);
                     }
                     else
                     {
-                        Comments.Insert(0, comment);
+                        var parent = Comments.FirstOrDefault(c => c.CommentId == comment.ParentCommentId);
+                        if (parent != null)
+                        {
+                            parent.Replies ??= new ObservableCollection<CommentDto>();
+                            parent.Replies.Insert(0, comment);
+                            int parentIndex = Comments.IndexOf(parent);
+                            if (parentIndex >= 0) Comments[parentIndex] = parent;
+                        }
+                        else
+                        {
+                            Comments.Insert(0, comment);
+                        }
+                        _processedCommentIds.Add(comment.CommentId);
                     }
-                    _processedCommentIds.Add(comment.CommentId);
+                    CommentCount++;
+                    OnPropertyChanged(nameof(Comments));
+                    OnPropertyChanged(nameof(CommentCount));
                 }
-                CommentCount++;
-                OnPropertyChanged(nameof(Comments));
-                OnPropertyChanged(nameof(CommentCount));
-                Console.WriteLine($"Added comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm tt zzz}, 28/05/2025.");
+                Console.WriteLine($"Added comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
             });
         }
 
@@ -752,42 +849,46 @@ namespace SocialMauiApp.Models
             {
                 if (_isInDetailsView) return;
                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
+                comment.UserName = comment.UserName ?? "Unknown User";
                 comment.UserPhotoUrl = comment.UserPhotoUrl ?? "default.png";
                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                 comment.Replies = new ObservableCollection<CommentDto>(
                     comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
 
-                if (comment.Level == 0)
+                lock (_commentLock)
                 {
-                    var existing = Comments.FirstOrDefault(c => c.CommentId == comment.CommentId);
-                    if (existing != null)
+                    if (comment.Level == 0)
                     {
-                        int index = Comments.IndexOf(existing);
-                        if (index >= 0)
+                        var existing = Comments.FirstOrDefault(c => c.CommentId == comment.CommentId);
+                        if (existing != null)
                         {
-                            comment.Replies = existing.Replies ?? new ObservableCollection<CommentDto>();
-                            Comments[index] = comment;
+                            int index = Comments.IndexOf(existing);
+                            if (index >= 0)
+                            {
+                                comment.Replies = existing.Replies ?? new ObservableCollection<CommentDto>();
+                                Comments[index] = comment;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    var parent = Comments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == comment.CommentId) == true);
-                    if (parent != null && parent.Replies != null)
+                    else
                     {
-                        var reply = parent.Replies?.FirstOrDefault(r => r.CommentId == comment.CommentId);
-                        if (reply != null)
+                        var parent = Comments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == comment.CommentId) == true);
+                        if (parent != null && parent.Replies != null)
                         {
-                            int replyIndex = parent.Replies.IndexOf(reply);
-                            if (replyIndex >= 0) parent.Replies[replyIndex] = comment;
+                            var reply = parent.Replies?.FirstOrDefault(r => r.CommentId == comment.CommentId);
+                            if (reply != null)
+                            {
+                                int replyIndex = parent.Replies.IndexOf(reply);
+                                if (replyIndex >= 0) parent.Replies[replyIndex] = comment;
+                            }
+                            var parentIndex = Comments.IndexOf(parent);
+                            if (parentIndex >= 0) Comments[parentIndex] = parent;
                         }
-                        var parentIndex = Comments.IndexOf(parent);
-                        if (parentIndex >= 0) Comments[parentIndex] = parent;
                     }
+                    OnPropertyChanged(nameof(Comments));
+                   
                 }
-
-                OnPropertyChanged(nameof(Comments));
-                Console.WriteLine($"Updated comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm tt zzz}, 28/05/2025.");
+                Console.WriteLine($"Updated comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
             });
         }
 
@@ -796,45 +897,49 @@ namespace SocialMauiApp.Models
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 if (_isInDetailsView) return;
-                var parent = Comments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == commentId) == true);
-                if (parent != null && parent.Replies != null)
+
+                lock (_commentLock)
                 {
-                    var reply = parent.Replies.FirstOrDefault(r => r.CommentId == commentId);
-                    if (reply != null)
+                    var parent = Comments.FirstOrDefault(c => c.Replies?.Any(r => r.CommentId == commentId) == true);
+                    if (parent != null && parent.Replies != null)
                     {
-                        parent.Replies.Remove(reply);
-                        _processedCommentIds.Remove(commentId);
-                        int parentIndex = Comments.IndexOf(parent);
-                        if (parentIndex >= 0) Comments[parentIndex] = parent;
-                    }
-                }
-                else
-                {
-                    var existing = Comments.FirstOrDefault(c => c.CommentId == commentId);
-                    if (existing != null)
-                    {
-                        Comments.Remove(existing);
-                        _processedCommentIds.Remove(commentId);
-                        if (existing.Replies != null)
+                        var reply = parent.Replies.FirstOrDefault(r => r.CommentId == commentId);
+                        if (reply != null)
                         {
-                            foreach (var reply in existing.Replies)
+                            parent.Replies.Remove(reply);
+                            _processedCommentIds.Remove(commentId);
+                            int parentIndex = Comments.IndexOf(parent);
+                            if (parentIndex >= 0) Comments[parentIndex] = parent;
+                        }
+                    }
+                    else
+                    {
+                        var existing = Comments.FirstOrDefault(c => c.CommentId == commentId);
+                        if (existing != null)
+                        {
+                            Comments.Remove(existing);
+                            _processedCommentIds.Remove(commentId);
+                            if (existing.Replies != null)
                             {
-                                _processedCommentIds.Remove(reply.CommentId);
+                                foreach (var reply in existing.Replies)
+                                {
+                                    _processedCommentIds.Remove(reply.CommentId);
+                                }
                             }
                         }
                     }
+                    CommentCount--;
+                    OnPropertyChanged(nameof(Comments));
+                    OnPropertyChanged(nameof(CommentCount));
+                    if (IsEditing && CommentBeingEdited?.CommentId == commentId)
+                    {
+                        IsEditing = false;
+                        CommentBeingEdited = null;
+                        CommentInput = string.Empty;
+                        OnPropertyChanged(nameof(CommentInput));
+                    }
                 }
-                CommentCount--;
-                OnPropertyChanged(nameof(Comments));
-                OnPropertyChanged(nameof(CommentCount));
-                if (IsEditing && CommentBeingEdited?.CommentId == commentId)
-                {
-                    IsEditing = false;
-                    CommentBeingEdited = null;
-                    CommentInput = string.Empty;
-                    OnPropertyChanged(nameof(CommentInput));
-                }
-                Console.WriteLine($"Deleted comment {commentId} via SignalR at {DateTime.Now:HH:mm tt zzz}, 28/05/2025.");
+                Console.WriteLine($"Deleted comment {commentId} via SignalR at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
             });
         }
 
@@ -849,6 +954,7 @@ namespace SocialMauiApp.Models
                 }
             });
         }
+
         private async Task ShowErrorAlertAsync(string message)
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>

@@ -15,7 +15,8 @@
         <converters:CountToBoolConverter x:Key="CountToBoolConverter" />
         <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        <!-- MenuFlyout giữ nguyên nhưng không sử dụng trực tiếp, có thể loại bỏ nếu không cần -->
+
+        <!-- MenuFlyout giữ nguyên để sử dụng cho comment -->
         <MenuFlyout x:Key="CommentOptionsMenu" x:DataType="dto:CommentDto">
             <MenuFlyoutItem
                 Command="{Binding Source={x:RelativeSource AncestorType={x:Type models:PostModel}}, Path=EditCommentCommand}"
@@ -248,7 +249,7 @@
                     </HorizontalStackLayout>
                 </FlexLayout>
             </VerticalStackLayout>
-            <!-- Comments Section -->
+            <!-- Grid.Row="5" (Comments Section) -->
             <VerticalStackLayout
                 Grid.Row="5"
                 IsVisible="{Binding IsCommentsVisible}"
@@ -259,14 +260,16 @@
                         AbsoluteLayout.LayoutBounds="0,0,1,AutoSize"
                         AbsoluteLayout.LayoutFlags="WidthProportional"
                         ItemsSource="{Binding Comments}"
+                        RemainingItemsThreshold="1"
                         SelectionMode="None"
                         VerticalOptions="Start">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout ItemSpacing="8" Orientation="Vertical" />
+                            <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.EmptyView>
                             <Label
-                                FontSize="13"
+                                Margin="0,0,0,10"
+                                FontSize="15"
                                 HorizontalOptions="Center"
                                 Text="No comments yet."
                                 TextColor="Gray" />
@@ -274,49 +277,49 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="dto:CommentDto">
                                 <Grid
-                                    Margin="10,3,10,3"
+                                    Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}}"
                                     ColumnDefinitions="Auto,*"
-                                    ColumnSpacing="5"
+                                    ColumnSpacing="8"
                                     RowDefinitions="Auto,Auto">
+                                    <!-- Avatar -->
                                     <Border
                                         Grid.Column="0"
-                                        HeightRequest="32"
-                                        StrokeShape="RoundRectangle 16"
+                                        Margin="10,0,0,0"
+                                        HeightRequest="40"
+                                        StrokeShape="RoundRectangle 20"
                                         VerticalOptions="Start"
-                                        WidthRequest="32">
+                                        WidthRequest="40">
                                         <Image
                                             Aspect="AspectFill"
-                                            HeightRequest="32"
+                                            HeightRequest="40"
                                             Source="{Binding UserPhotoUrl}"
-                                            WidthRequest="32" />
+                                            WidthRequest="40" />
                                     </Border>
+                                    <!-- Comment Content -->
                                     <Border
                                         Grid.Column="1"
-                                        Padding="6,3,6,6"
-                                        BackgroundColor="#F8F9AD"
+                                        Padding="10,5,5,5"
+                                        BackgroundColor="#F8F9FA"
                                         Stroke="#E0E0E0"
-                                        StrokeShape="RoundRectangle 8"
-                                        StrokeThickness="1">
+                                        StrokeShape="RoundRectangle 12"
+                                        StrokeThickness="1"
+                                        VerticalOptions="Start">
                                         <Grid
                                             ColumnDefinitions="*,Auto"
                                             RowDefinitions="Auto,Auto,Auto,Auto"
-                                            RowSpacing="1"
-                                            VerticalOptions="Start">
+                                            RowSpacing="1">
                                             <!-- Username and Timestamp -->
                                             <StackLayout
                                                 Grid.Row="0"
                                                 Grid.Column="0"
                                                 Orientation="Horizontal"
-                                                Spacing="5">
+                                                Spacing="6"
+                                                VerticalOptions="Start">
                                                 <Label
                                                     FontAttributes="Bold"
-                                                    FontSize="13"
+                                                    FontSize="15"
                                                     Text="{Binding UserName}"
                                                     TextColor="#1C2526" />
-                                                <Label
-                                                    FontSize="11"
-                                                    Text="{Binding AddedOn, StringFormat='{0:MMM dd, yyyy HH:mm}'}"
-                                                    TextColor="#65676B" />
                                             </StackLayout>
                                             <!-- More Options -->
                                             <Label
@@ -325,6 +328,7 @@
                                                 Padding="4"
                                                 BackgroundColor="Transparent"
                                                 HeightRequest="24"
+                                                IsVisible="{Binding IsOwnComment}"
                                                 Text="⋮"
                                                 TextColor="Black"
                                                 VerticalOptions="Start">
@@ -337,7 +341,7 @@
                                                 Grid.Row="1"
                                                 Grid.Column="0"
                                                 Grid.ColumnSpan="2"
-                                                FontSize="13"
+                                                FontSize="15"
                                                 LineBreakMode="WordWrap"
                                                 Text="{Binding Content}"
                                                 TextColor="#1C2526" />
@@ -345,27 +349,35 @@
                                             <Border
                                                 Grid.Row="2"
                                                 Grid.Column="0"
-                                                Grid.ColumnSpan="2"
+                                                Grid.ColumnSpan="1"
                                                 IsVisible="{Binding PhotoUrl, Converter={StaticResource StringToBoolConverter}}"
                                                 StrokeShape="RoundRectangle 10">
                                                 <Image
                                                     Aspect="AspectFit"
-                                                    HeightRequest="100"
+                                                    HorizontalOptions="Start"
                                                     Source="{Binding PhotoUrl}" />
                                             </Border>
                                             <!-- Reply Button -->
-                                            <Label
+                                            <HorizontalStackLayout
                                                 Grid.Row="3"
                                                 Grid.Column="0"
-                                                BackgroundColor="Transparent"
-                                                FontSize="12"
-                                                HorizontalOptions="Start"
-                                                Text="Reply"
-                                                TextColor="{StaticResource Primary}">
-                                                <Label.GestureRecognizers>
-                                                    <TapGestureRecognizer Tapped="OnReplyTapped" />
-                                                </Label.GestureRecognizers>
-                                            </Label>
+                                                Spacing="10">
+                                                <Label
+                                                    FontSize="12"
+                                                    Text="{Binding AddedOn, Converter={StaticResource HumanizedTimeConverter}}"
+                                                    TextColor="#65676B"
+                                                    VerticalOptions="Center" />
+                                                <Label
+                                                    BackgroundColor="Transparent"
+                                                    FontSize="14"
+                                                    HorizontalOptions="Start"
+                                                    Text="Reply"
+                                                    TextColor="{StaticResource Primary}">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnReplyTapped" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                            </HorizontalStackLayout>
                                         </Grid>
                                     </Border>
                                     <!-- Replies -->
@@ -373,58 +385,58 @@
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
-                                        Margin="30,3,0,0"
+                                        Margin="30,8,0,0"
+                                        IsVisible="{Binding Replies.Count, Converter={StaticResource CountToBoolConverter}}"
                                         ItemsSource="{Binding Replies}"
                                         SelectionMode="None">
                                         <CollectionView.ItemsLayout>
-                                            <LinearItemsLayout ItemSpacing="6" Orientation="Vertical" />
+                                            <LinearItemsLayout ItemSpacing="8" Orientation="Vertical" />
                                         </CollectionView.ItemsLayout>
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate x:DataType="dto:CommentDto">
                                                 <Grid
-                                                    Margin="0,3,0,3"
+                                                    Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}}"
                                                     ColumnDefinitions="Auto,*"
-                                                    ColumnSpacing="6"
+                                                    ColumnSpacing="8"
                                                     RowDefinitions="Auto">
+                                                    <!-- Reply Avatar -->
                                                     <Border
                                                         Grid.Column="0"
-                                                        HeightRequest="28"
-                                                        StrokeShape="RoundRectangle 14"
+                                                        HeightRequest="32"
+                                                        StrokeShape="RoundRectangle 16"
                                                         VerticalOptions="Start"
-                                                        WidthRequest="28">
+                                                        WidthRequest="32">
                                                         <Image
                                                             Aspect="AspectFill"
-                                                            HeightRequest="28"
+                                                            HeightRequest="32"
                                                             Source="{Binding UserPhotoUrl}"
-                                                            WidthRequest="28" />
+                                                            WidthRequest="32" />
                                                     </Border>
+                                                    <!-- Reply Content -->
                                                     <Border
                                                         Grid.Column="1"
-                                                        Padding="5,3"
+                                                        Padding="10"
                                                         BackgroundColor="#EDF1F4"
                                                         Stroke="#E0E0E0"
-                                                        StrokeShape="RoundRectangle 8"
-                                                        StrokeThickness="1">
+                                                        StrokeShape="RoundRectangle 10"
+                                                        StrokeThickness="1"
+                                                        VerticalOptions="Start">
                                                         <Grid
                                                             ColumnDefinitions="*,Auto"
                                                             RowDefinitions="Auto,Auto,Auto,Auto"
-                                                            RowSpacing="1"
-                                                            VerticalOptions="Start">
+                                                            RowSpacing="4">
                                                             <!-- Username and Timestamp -->
                                                             <StackLayout
                                                                 Grid.Row="0"
                                                                 Grid.Column="0"
                                                                 Orientation="Horizontal"
-                                                                Spacing="5">
+                                                                Spacing="5"
+                                                                VerticalOptions="Start">
                                                                 <Label
                                                                     FontAttributes="Bold"
-                                                                    FontSize="12"
+                                                                    FontSize="13"
                                                                     Text="{Binding UserName}"
                                                                     TextColor="#1C2526" />
-                                                                <Label
-                                                                    FontSize="10"
-                                                                    Text="{Binding AddedOn, StringFormat='{0:MMM dd, yyyy HH:mm}'}"
-                                                                    TextColor="#65676B" />
                                                             </StackLayout>
                                                             <!-- More Options -->
                                                             <Label
@@ -433,6 +445,7 @@
                                                                 Padding="2"
                                                                 BackgroundColor="Transparent"
                                                                 HeightRequest="24"
+                                                                IsVisible="{Binding IsOwnComment}"
                                                                 Text="⋮"
                                                                 TextColor="Black"
                                                                 VerticalOptions="Start">
@@ -444,8 +457,8 @@
                                                             <Label
                                                                 Grid.Row="1"
                                                                 Grid.Column="0"
-                                                                Grid.ColumnSpan="2"
-                                                                FontSize="12"
+                                                                Grid.ColumnSpan="1"
+                                                                FontSize="13"
                                                                 LineBreakMode="WordWrap"
                                                                 Text="{Binding Content}"
                                                                 TextColor="#1C2526" />
@@ -453,27 +466,30 @@
                                                             <Border
                                                                 Grid.Row="2"
                                                                 Grid.Column="0"
-                                                                Grid.ColumnSpan="2"
+                                                                Grid.ColumnSpan="1"
                                                                 IsVisible="{Binding PhotoUrl, Converter={StaticResource StringToBoolConverter}}"
                                                                 StrokeShape="RoundRectangle 10">
                                                                 <Image
                                                                     Aspect="AspectFit"
-                                                                    HeightRequest="80"
+                                                                    HorizontalOptions="Start"
                                                                     Source="{Binding PhotoUrl}" />
                                                             </Border>
-                                                            <!-- Reply Button -->
-                                                            <Label
-                                                                Grid.Row="3"
-                                                                Grid.Column="0"
-                                                                BackgroundColor="Transparent"
-                                                                FontSize="12"
-                                                                HorizontalOptions="Start"
-                                                                Text="Reply"
-                                                                TextColor="{StaticResource Primary}">
-                                                                <Label.GestureRecognizers>
-                                                                    <TapGestureRecognizer Tapped="OnReplyTapped" />
-                                                                </Label.GestureRecognizers>
-                                                            </Label>
+                                                            <HorizontalStackLayout Grid.Row="3" Grid.Column="0">
+                                                                <Label
+                                                                    Padding="0,0,10,0"
+                                                                    FontSize="11"
+                                                                    Text="{Binding AddedOn, Converter={StaticResource HumanizedTimeConverter}}"
+                                                                    TextColor="#65676B"
+                                                                    VerticalOptions="Center" />
+                                                                <Label
+                                                                    FontSize="12"
+                                                                    Text="Reply"
+                                                                    TextColor="{StaticResource Primary}">
+                                                                    <Label.GestureRecognizers>
+                                                                        <TapGestureRecognizer Tapped="OnReplyTapped" />
+                                                                    </Label.GestureRecognizers>
+                                                                </Label>
+                                                            </HorizontalStackLayout>
                                                         </Grid>
                                                     </Border>
                                                 </Grid>
@@ -514,17 +530,17 @@
                 <!-- Comment Input Section -->
                 <Grid
                     Padding="8,5"
-                    ColumnDefinitions="Auto,*,Auto"
-                    ColumnSpacing="5"
+                    ColumnDefinitions="Auto,*,Auto,Auto"
+                    ColumnSpacing="8"
                     RowDefinitions="Auto,Auto,Auto">
-                    <!-- Reply/Edit Indicator -->
+                    <!-- Reply Indicator or Edit Indicator -->
                     <HorizontalStackLayout
                         Grid.Row="0"
                         Grid.Column="0"
-                        Grid.ColumnSpan="3"
+                        Grid.ColumnSpan="4"
                         Spacing="8">
                         <Label
-                            FontSize="12"
+                            FontSize="14"
                             IsVisible="{Binding ReplyingToComment, Converter={StaticResource ObjectToBoolConverter}}"
                             Text="{Binding ReplyingToComment.UserName, StringFormat='Replying to {0}'}"
                             TextColor="{StaticResource Primary}"
@@ -534,26 +550,26 @@
                             </Label.GestureRecognizers>
                         </Label>
                         <Label
-                            FontSize="12"
+                            FontSize="14"
                             IsVisible="{Binding IsEditing}"
                             Text="Editing comment"
                             TextColor="{StaticResource Primary}"
                             VerticalOptions="Center" />
                         <Border
                             BackgroundColor="White"
-                            HeightRequest="20"
+                            HeightRequest="24"
                             IsVisible="{Binding IsEditing}"
                             Stroke="{StaticResource Gray200}"
-                            StrokeShape="RoundRectangle 10"
+                            StrokeShape="RoundRectangle 12"
                             StrokeThickness="1"
                             VerticalOptions="Center"
-                            WidthRequest="20">
+                            WidthRequest="24">
                             <Image
-                                HeightRequest="12"
+                                HeightRequest="16"
                                 HorizontalOptions="Center"
                                 Source="x.png"
                                 VerticalOptions="Center"
-                                WidthRequest="12" />
+                                WidthRequest="16" />
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding CancelEditCommand}" />
                             </Border.GestureRecognizers>
@@ -563,15 +579,15 @@
                     <Border
                         Grid.Row="1"
                         Grid.Column="0"
-                        Padding="8,3"
+                        Padding="10,5"
                         IsVisible="{Binding IsPhotoButtonVisible}"
                         Stroke="{StaticResource Primary}"
                         StrokeShape="RoundRectangle 5">
                         <controls:PrimaryColorImage
-                            HeightRequest="20"
+                            HeightRequest="25"
                             Source="photo.png"
                             VerticalOptions="Center"
-                            WidthRequest="20" />
+                            WidthRequest="25" />
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding SelectPhotoCommand}" />
                         </Border.GestureRecognizers>
@@ -580,31 +596,52 @@
                     <controls:NoBorderEntry
                         Grid.Row="1"
                         Grid.Column="1"
-                        Placeholder="Write a comment..."
+                        Placeholder="Write a comment or reply..."
                         Text="{Binding CommentInput, Mode=TwoWay}"
                         TextColor="Black"
                         VerticalOptions="Center" />
-                    <!-- Send Button -->
+                    <!-- Send Button (for new comments/replies) -->
                     <Border
                         Grid.Row="1"
                         Grid.Column="2"
                         BackgroundColor="{StaticResource Primary}"
-                        HeightRequest="32"
+                        HeightRequest="40"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                        IsVisible="{Binding IsEditing, Converter={StaticResource InverseBooleanConverter}}"
                         StrokeShape="RoundRectangle 8"
-                        WidthRequest="32">
-                        <controls:WhiteImage
-                            HeightRequest="16"
-                            Source="send.png"
-                            WidthRequest="16" />
+                        WidthRequest="40">
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding AddCommentCommand}" />
                         </Border.GestureRecognizers>
+                        <controls:WhiteImage
+                            HeightRequest="20"
+                            Source="send.png"
+                            WidthRequest="20" />
+                    </Border>
+                    <!-- Save Button (for edited comments) -->
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        BackgroundColor="{StaticResource Primary}"
+                        HeightRequest="40"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                        IsVisible="{Binding IsEditing}"
+                        StrokeShape="RoundRectangle 8"
+                        WidthRequest="40">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SaveEditedCommentCommand}" />
+                        </Border.GestureRecognizers>
+                        <controls:WhiteImage
+                            HeightRequest="20"
+                            Source="save.png"
+                            Aspect="AspectFill"
+                            WidthRequest="20" />
                     </Border>
                     <!-- Selected Images Preview -->
                     <CollectionView
                         Grid.Row="2"
                         Grid.Column="0"
-                        Grid.ColumnSpan="3"
+                        Grid.ColumnSpan="4"
                         IsVisible="{Binding HasSelectedImages}"
                         ItemsLayout="HorizontalList"
                         ItemsSource="{Binding SelectedImagePreviews}"
@@ -614,38 +651,38 @@
                                 <Grid Margin="5,0,5,0">
                                     <HorizontalStackLayout Padding="5">
                                         <Border
-                                            HeightRequest="80"
+                                            HeightRequest="100"
                                             Stroke="LightGray"
                                             StrokeShape="RoundRectangle 10"
                                             StrokeThickness="2"
-                                            WidthRequest="60">
+                                            WidthRequest="80">
                                             <Image
                                                 Aspect="AspectFill"
-                                                HeightRequest="80"
+                                                HeightRequest="100"
                                                 Source="{Binding Source}"
-                                                WidthRequest="60" />
+                                                WidthRequest="80" />
                                         </Border>
                                         <Border
                                             BackgroundColor="#CC000000"
-                                            HeightRequest="24"
+                                            HeightRequest="30"
                                             HorizontalOptions="End"
                                             InputTransparent="False"
-                                            StrokeShape="RoundRectangle 12"
+                                            StrokeShape="RoundRectangle 15"
                                             VerticalOptions="Start"
-                                            WidthRequest="24"
+                                            WidthRequest="30"
                                             ZIndex="10">
                                             <Label
                                                 BackgroundColor="Transparent"
-                                                FontSize="14"
+                                                FontSize="16"
                                                 HorizontalOptions="Center"
                                                 Text="✕"
                                                 TextColor="White"
                                                 VerticalOptions="Center" />
                                             <Border.GestureRecognizers>
                                                 <TapGestureRecognizer
-                                                    Tapped="OnRemovePhotoTapped"
-                                                    Command="{Binding Path=RemovePhotoCommand, Source={x:RelativeSource AncestorType={x:Type models:PostModel}}}"
-                                                    CommandParameter="{Binding Id}" />
+                                                    Command="{Binding Path=BindingContext.RemovePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentView}, Mode=FindAncestor}}"
+                                                    CommandParameter="{Binding Id}"
+                                                    Tapped="OnRemovePhotoTapped" />
                                             </Border.GestureRecognizers>
                                         </Border>
                                     </HorizontalStackLayout>

@@ -49,7 +49,7 @@
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._photoUrl"/>
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.Comment">
-            <inheritdoc cref="F:SocialMauiApp.Models.PostModel.comment"/>
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._comment"/>
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.PostedOnDisplay">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._postedOnDisplay"/>

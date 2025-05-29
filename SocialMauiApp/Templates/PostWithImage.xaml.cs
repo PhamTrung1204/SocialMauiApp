@@ -15,23 +15,27 @@ public partial class PostWithImage : ContentView
     {
         if (sender is VisualElement element && element.BindingContext is CommentDto comment && BindingContext is PostModel viewModel)
         {
-            // Hiển thị menu ngữ cảnh bằng DisplayActionSheet
             string action = await Shell.Current.DisplayActionSheet("Comment Options", "Cancel",
                 comment.IsOwnComment ? "Edit" : null,
-                comment.IsOwnComment ? "Delete" : null
-              );
+                comment.IsOwnComment ? "Delete" : null,
+                "Reply"
+            );
 
             if (action == "Edit")
             {
-                viewModel.EditCommentCommand.Execute(comment);
+                await viewModel.EditCommentCommand.ExecuteAsync(comment);
             }
             else if (action == "Delete")
             {
-                viewModel.DeleteCommentCommand.Execute(comment);
+                await viewModel.DeleteCommentCommand.ExecuteAsync(comment);
             }
-          
+            else if (action == "Reply")
+            {
+                await viewModel.ReplyCommentCommand.ExecuteAsync(comment);
+            }
         }
     }
+
     private void OnRemovePhotoTapped(object sender, EventArgs e)
     {
         System.Diagnostics.Debug.WriteLine("RemovePhotoTapped: Tap event triggered on '✕' button.");
@@ -41,6 +45,7 @@ public partial class PostWithImage : ContentView
             viewModel?.RemovePhotoCommand.Execute(preview.Id);
         }
     }
+
     private void OnReplyTapped(object sender, TappedEventArgs e)
     {
         if (sender is VisualElement element && element.BindingContext is CommentDto comment && BindingContext is PostModel viewModel)

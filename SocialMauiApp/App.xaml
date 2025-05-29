@@ -48,9 +48,10 @@
                     <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
                     <converters:CountToBoolConverter x:Key="CountToBoolConverter"/>
                     <converters:BooleanToSourceConverter x:Key="BooleanToSourceConverter" />
-                    <behaviors:AnimationBehavior x:Key="AnimationBehavior"/>
                     <converters:BooleanToCommandConverter x:Key="CommandConverter" />
                     <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
+                    <converters:LevelToMarginConverter x:Key="LevelToMarginConverter"/>
+                    <behaviors:AnimationBehavior x:Key="AnimationBehavior"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
