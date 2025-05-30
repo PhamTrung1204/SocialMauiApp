@@ -173,13 +173,13 @@
         </member>
         <member name="M:SocialMauiApp.Services.AuthService.Login(SocialMediaMaui.Shared.Dtos.LoginResponseDto)">
             <summary>
-            Thực hiện đăng nhập, lưu thông tin người dùng và token vào Preferences.
+            Thực hiện đăng nhập, lưu thông tin người dùng, JWT và refresh token vào Preferences và SecureStorage.
             </summary>
-            <param name="loginResponseDto">Đối tượng chứa thông tin người dùng và token.</param>
+            <param name="loginResponseDto">Đối tượng chứa thông tin người dùng, JWT và refresh token.</param>
         </member>
         <member name="M:SocialMauiApp.Services.AuthService.Logout">
             <summary>
-            Thực hiện đăng xuất, xóa thông tin người dùng và token.
+            Thực hiện đăng xuất, xóa thông tin người dùng, JWT và refresh token.
             </summary>
         </member>
         <member name="M:SocialMauiApp.Services.AuthService.Initialize">
@@ -461,6 +461,11 @@
             <inheritdoc/>
             <inheritdoc/>
         </member>
+        <member name="M:SocialMauiApp.ViewModel.LoginWithFingerprintViewModel.CheckLoginStatusAsync">
+            <summary>
+            Kiểm tra trạng thái đăng nhập bằng token đã lưu và làm mới nếu cần.
+            </summary>
+        </member>
         <member name="P:SocialMauiApp.ViewModel.LoginWithFingerprintViewModel.GreetingText">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.LoginWithFingerprintViewModel._greetingText"/>
         </member>
@@ -595,6 +600,12 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+        </member>
+        <member name="M:SocialMauiApp.ViewModel.ProfileViewModel.TryRefreshTokenAsync">
+            <summary>
+            Làm mới token nếu JWT hết hạn.
+            </summary>
+            <returns>True nếu token được làm mới thành công hoặc không cần làm mới, False nếu thất bại.</returns>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.User">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._user"/>
@@ -1498,6 +1509,9 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.ResetPasswordAsync(SocialMediaMaui.Shared.Dtos.ResetPasswordDto)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.RefreshTokenAsync(SocialMediaMaui.Shared.Dtos.RefreshTokenDto)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#RegisterAsync(SocialMediaMaui.Shared.Dtos.RegisterDto)">
             <inheritdoc />
         </member>
@@ -1523,6 +1537,9 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#ResetPasswordAsync(SocialMediaMaui.Shared.Dtos.ResetPasswordDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#RefreshTokenAsync(SocialMediaMaui.Shared.Dtos.RefreshTokenDto)">
             <inheritdoc />
         </member>
         <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIPostApi">

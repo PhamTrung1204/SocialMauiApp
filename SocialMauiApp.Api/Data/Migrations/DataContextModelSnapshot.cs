@@ -196,6 +196,12 @@ namespace SocialMauiApp.Api.Data.Migrations
                     b.Property<string>("PhotoUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiry")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ResetToken")
                         .HasColumnType("nvarchar(max)");
 

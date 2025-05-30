@@ -131,7 +131,7 @@
                     Spacing="6">
                     <Image
                         HeightRequest="18"
-                        Source="{Binding IsLikeIcon}"
+                        Source="heart_f.png"
                         VerticalOptions="Center"
                         WidthRequest="18" />
                     <Label
@@ -181,7 +181,6 @@
             </Grid>
             <!-- Grid.Row="4" (Action Buttons) -->
             <VerticalStackLayout Grid.Row="4">
-                <BoxView Style="{StaticResource fadedLine}" />
                 <FlexLayout Margin="0,7,0,0" JustifyContent="SpaceAround">
                     <HorizontalStackLayout Spacing="2">
                         <controls:PrimaryColorImage

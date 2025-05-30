@@ -15,32 +15,35 @@ namespace SocialMauiApp.Services
         }
 
         public string? Token { get; private set; }
+        public string? RefreshToken { get; private set; }
         public LoggedInUser? User { get; private set; }
         public bool IsLoggedIn => User is not null && User.Id != default && !string.IsNullOrWhiteSpace(Token);
 
         /// <summary>
-        /// Thực hiện đăng nhập, lưu thông tin người dùng và token vào Preferences.
+        /// Thực hiện đăng nhập, lưu thông tin người dùng, JWT và refresh token vào Preferences và SecureStorage.
         /// </summary>
-        /// <param name="loginResponseDto">Đối tượng chứa thông tin người dùng và token.</param>
+        /// <param name="loginResponseDto">Đối tượng chứa thông tin người dùng, JWT và refresh token.</param>
         public void Login(LoginResponseDto loginResponseDto)
         {
-            // Gán các giá trị từ loginResponseDto
             User = loginResponseDto.User;
             Token = loginResponseDto.Token;
+            RefreshToken = loginResponseDto.RefreshToken;
 
-            // Lưu dữ liệu dưới dạng JSON
             var serializedData = JsonSerializer.Serialize(loginResponseDto);
             Preferences.Default.Set(UserDataKey, serializedData);
         }
 
         /// <summary>
-        /// Thực hiện đăng xuất, xóa thông tin người dùng và token.
+        /// Thực hiện đăng xuất, xóa thông tin người dùng, JWT và refresh token.
         /// </summary>
         public void Logout()
         {
             User = null;
             Token = null;
+            RefreshToken = null;
             Preferences.Default.Remove(UserDataKey);
+            SecureStorage.Remove("AuthToken");
+            SecureStorage.Remove("RefreshToken");
         }
 
         /// <summary>
@@ -58,16 +61,15 @@ namespace SocialMauiApp.Services
                     {
                         User = loginResponse.User;
                         Token = loginResponse.Token;
+                        RefreshToken = loginResponse.RefreshToken;
                     }
                     else
                     {
-                        // Dữ liệu không hợp lệ, xóa Preferences
                         Preferences.Default.Remove(UserDataKey);
                     }
                 }
                 catch (Exception)
                 {
-                    // Nếu có lỗi khi deserialize, xóa dữ liệu đã lưu
                     Preferences.Default.Remove(UserDataKey);
                 }
             }

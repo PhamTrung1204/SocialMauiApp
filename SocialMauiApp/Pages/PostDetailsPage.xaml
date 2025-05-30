@@ -119,7 +119,7 @@
 
         <!--  Content  -->
         <ScrollView Grid.Row="1">
-            <Grid RowDefinitions="Auto,*" RowSpacing="10">
+            <Grid RowDefinitions="Auto,*">
                 <!--  Post Display  -->
                 <ContentView Grid.Row="0" BindingContext="{Binding Post}">
                     <ContentView.Resources>

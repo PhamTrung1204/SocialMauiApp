@@ -49,6 +49,48 @@ public partial class LoginViewModel : BaseViewModel
             Username = savedUser;
             ShowFingerprintOption = await _fingerprint.IsAvailableAsync();
         }
+
+        // Kiểm tra token khi khởi động
+        await CheckLoginStatusAsync();
+    }
+
+    private async Task CheckLoginStatusAsync()
+    {
+        var jwt = await SecureStorage.GetAsync("AuthToken");
+        if (!string.IsNullOrEmpty(jwt))
+        {
+            var validateResult = await _authApi.ValidateTokenAsync($"Bearer {jwt}");
+            if (validateResult.IsSuccess && validateResult.Data is not null)
+            {
+                _authService.Login(new LoginResponseDto(validateResult.Data, jwt, await SecureStorage.GetAsync("RefreshToken")));
+                Username = validateResult.Data.Name;
+                string targetPage = validateResult.Data.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
+                await NavigateAsync($"//{targetPage}");
+                return;
+            }
+            else
+            {
+                // Thử làm mới token
+                var refreshToken = await SecureStorage.GetAsync("RefreshToken");
+                if (!string.IsNullOrEmpty(refreshToken))
+                {
+                    var refreshResult = await _authApi.RefreshTokenAsync(new RefreshTokenDto { RefreshToken = refreshToken });
+                    if (refreshResult.IsSuccess && refreshResult.Data is not null)
+                    {
+                        await SecureStorage.SetAsync("AuthToken", refreshResult.Data.Token);
+                        await SecureStorage.SetAsync("RefreshToken", refreshResult.Data.RefreshToken);
+                        _authService.Login(refreshResult.Data);
+                        Username = refreshResult.Data.User.Name;
+                        string targetPage = refreshResult.Data.User.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
+                        await NavigateAsync($"//{targetPage}");
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Nếu không có token hoặc làm mới thất bại, giữ ở trang đăng nhập
+        await NavigateAsync($"//{nameof(LoginPage)}");
     }
 
     [RelayCommand]
@@ -56,7 +98,7 @@ public partial class LoginViewModel : BaseViewModel
     {
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
-            await ShowErrorAlertAsync("Email & Password required.");
+            await ShowErrorAlertAsync("Yêu cầu nhập Email và Mật khẩu.");
             return;
         }
 
@@ -65,19 +107,20 @@ public partial class LoginViewModel : BaseViewModel
             var resp = await _authApi.LoginAsync(new LoginDto(Email, Password));
             if (!resp.IsSuccess)
             {
-                await ShowErrorAlertAsync(resp.Error ?? "Login failed");
+                await ShowErrorAlertAsync(resp.Error ?? "Đăng nhập thất bại");
                 return;
             }
 
             // Đăng nhập thành công
             _authService.Login(resp.Data);
+            await SecureStorage.SetAsync("AuthToken", resp.Data.Token);
+            await SecureStorage.SetAsync("RefreshToken", resp.Data.RefreshToken);
 
             // Lưu để biometric
             _pref.SetBool("FingerprintAuthEnabled", true);
             _pref.SetString("LastEmail", resp.Data.User.Email);
             _pref.SetString("Username", resp.Data.User.Name);
             _pref.SetInt(FailKey, 0);
-            await SecureStorage.SetAsync("AuthToken", resp.Data.Token);
 
             // Kiểm tra Role để điều hướng
             string targetPage = resp.Data.User.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
@@ -93,41 +136,37 @@ public partial class LoginViewModel : BaseViewModel
 
         if (failCount >= 3)
         {
-            // Quá 3 lần, buộc dùng mật khẩu
-            await ShowErrorAlertAsync("Too many failed attempts. Please login with your password.");
+            await ShowErrorAlertAsync("Quá nhiều lần thử thất bại. Vui lòng đăng nhập bằng mật khẩu.");
             return;
         }
 
         var result = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
-            "Login", "Use fingerprint to login"));
+            "Đăng nhập", "Sử dụng vân tay để đăng nhập"));
 
         if (!result.Authenticated)
         {
-            // Tăng bộ đếm và lưu
             failCount++;
             _pref.SetInt(FailKey, failCount);
 
             if (failCount >= 3)
             {
-                // Ẩn tuỳ chọn vân tay, buộc nhập lại mật khẩu
                 ShowFingerprintOption = false;
-                _pref.SetBool("FingerprintAuthEnabled", false); // Cập nhật để tắt tính năng
-                await ShowErrorAlertAsync("Too many failed attempts. Please login with your password.");
+                _pref.SetBool("FingerprintAuthEnabled", false);
+                await ShowErrorAlertAsync("Quá nhiều lần thử thất bại. Vui lòng đăng nhập bằng mật khẩu.");
             }
             return;
         }
 
-        // Thành công reset bộ đếm
         _pref.SetInt(FailKey, 0);
 
-        // Tiếp tục flow
         var token = await SecureStorage.GetAsync("AuthToken");
+        var refreshToken = await SecureStorage.GetAsync("RefreshToken");
         var email = _pref.GetString("LastEmail");
         var user = _pref.GetString("Username");
 
         if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
         {
-            await ShowErrorAlertAsync("Please login with password first.");
+            await ShowErrorAlertAsync("Vui lòng đăng nhập bằng mật khẩu trước.");
             return;
         }
 
@@ -136,15 +175,28 @@ public partial class LoginViewModel : BaseViewModel
             var v = await _authApi.ValidateTokenAsync($"Bearer {token}");
             if (v.IsSuccess && v.Data is not null)
             {
-                _authService.Login(new LoginResponseDto(v.Data, token));
+                _authService.Login(new LoginResponseDto(v.Data, token, refreshToken));
                 Username = user;
-                // Kiểm tra Role để điều hướng
                 string targetPage = v.Data.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
                 await NavigateAsync($"//{targetPage}");
             }
             else
             {
-                await ShowErrorAlertAsync("Session expired, please login again.");
+                // Thử làm mới token
+                var refreshResult = await _authApi.RefreshTokenAsync(new RefreshTokenDto { RefreshToken = refreshToken });
+                if (refreshResult.IsSuccess && refreshResult.Data is not null)
+                {
+                    await SecureStorage.SetAsync("AuthToken", refreshResult.Data.Token);
+                    await SecureStorage.SetAsync("RefreshToken", refreshResult.Data.RefreshToken);
+                    _authService.Login(refreshResult.Data);
+                    Username = refreshResult.Data.User.Name;
+                    string targetPage = refreshResult.Data.User.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
+                    await NavigateAsync($"//{targetPage}");
+                }
+                else
+                {
+                    await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.");
+                }
             }
         });
     }
@@ -154,7 +206,7 @@ public partial class LoginViewModel : BaseViewModel
     {
         if (IsBusy || string.IsNullOrWhiteSpace(Email) || !IsValidGmail(Email))
         {
-            await Shell.Current.DisplayAlert("Error", "Please enter a valid Gmail address", "OK");
+            await Shell.Current.DisplayAlert("Lỗi", "Vui lòng nhập địa chỉ Gmail hợp lệ", "OK");
             return;
         }
 
@@ -177,12 +229,12 @@ public partial class LoginViewModel : BaseViewModel
         _pref.SetString("Username", "");
         _pref.SetInt(FailKey, 0);
         SecureStorage.Remove("AuthToken");
+        SecureStorage.Remove("RefreshToken");
         ShowFingerprintOption = false;
 
         await NavigateAsync($"//{nameof(LoginPage)}");
     }
 
-    // Định nghĩa phương thức IsValidGmail
     private bool IsValidGmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email)) return false;

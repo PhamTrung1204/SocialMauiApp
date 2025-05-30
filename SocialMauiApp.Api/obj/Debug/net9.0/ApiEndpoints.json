@@ -338,6 +338,34 @@
   },
   {
     "ContainingType": "SocialMauiApp.Api.Endpoints.AuthEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapAuthEndpoints\u003Eb__0_9",
+    "RelativePath": "api/auth/refresh-token",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SocialMediaMaui.Shared.Dtos.RefreshTokenDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SocialMediaMaui.Shared.Dtos.ApiResult\u00601[[SocialMediaMaui.Shared.Dtos.LoginResponseDto, SocialMediaMaui.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Auth"
+    ],
+    "EndpointName": "Auth-RefreshToken"
+  },
+  {
+    "ContainingType": "SocialMauiApp.Api.Endpoints.AuthEndpoints\u002B\u003C\u003Ec",
     "Method": "\u003CMapAuthEndpoints\u003Eb__0_0",
     "RelativePath": "api/auth/register",
     "HttpMethod": "POST",
