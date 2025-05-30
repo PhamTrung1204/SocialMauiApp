@@ -52,6 +52,7 @@
                     <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
                     <converters:LevelToMarginConverter x:Key="LevelToMarginConverter"/>
                     <behaviors:AnimationBehavior x:Key="AnimationBehavior"/>
+                    <behaviors:AutoFocusBehavior x:Key="AutoFocusBehavior"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

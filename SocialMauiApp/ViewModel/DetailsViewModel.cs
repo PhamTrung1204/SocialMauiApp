@@ -1124,7 +1124,7 @@ namespace SocialMauiApp.ViewModel
                     IsBookmarked = changedPost.IsBookmarked,
                     UserId = Post.UserId,
                     UserName = Post.UserName,
-                    UserPhotoUrl = changedPost.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "default_avatar.png",
+                    UserPhotoUrl = changedPost.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "user.png",
                     LikeCount = changedPost.LikeCount,
                     CommentCount = changedPost.CommentCount,
                     PostedOnDisplay = Post.PostedOnDisplay
@@ -1133,7 +1133,8 @@ namespace SocialMauiApp.ViewModel
                 Post = updatedPost;
                 OnPropertyChanged(nameof(Post));
                 OnPropertyChanged(nameof(IsOwnPost));
-
+                OnPropertyChanged(nameof(Post.IsLikeIcon));
+                OnPropertyChanged(nameof(Post.IsBookmarkIcon));
                 var postEntity = new PostEntity
                 {
                     PostId = Post.PostId,
@@ -1173,6 +1174,7 @@ namespace SocialMauiApp.ViewModel
                         _isFetchingComments = false;
                     }
                 }
+
             });
         }
 

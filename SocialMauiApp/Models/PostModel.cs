@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static SQLite.SQLite3;
 
 namespace SocialMauiApp.Models
 {
@@ -211,7 +212,7 @@ namespace SocialMauiApp.Models
                     {
                         result.Data.Level = parentCommentId == null ? 0 : 1;
                         result.Data.UserName = result.Data.UserName ?? "Unknown User";
-                        result.Data.UserPhotoUrl = result.Data.UserPhotoUrl ?? "default_avatar.png";
+                        result.Data.UserPhotoUrl = _authService.User.Photo ?? "user.png";
                         result.Data.IsOwnComment = result.Data.UserId == _authService.User.Id;
                         result.Data.Replies = new ObservableCollection<CommentDto>();
 
@@ -655,6 +656,8 @@ namespace SocialMauiApp.Models
                         _imageFileMap.Add((imageId, imageSource, fileResult));
                         HasSelectedImages = true;
                         IsPhotoButtonVisible = false;
+                        UserPhotoUrl = _authService.User.Photo ??"";
+                        OnPropertyChanged(nameof(UserPhotoUrl));
                         OnPropertyChanged(nameof(SelectedImagePreviews));
                     });
                 }

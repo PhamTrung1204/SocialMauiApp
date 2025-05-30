@@ -8,6 +8,7 @@
     xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
     xmlns:models="clr-namespace:SocialMauiApp.Models"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
+    xmlns:behaviors="clr-namespace:SocialMauiApp.Behaviors"
     x:DataType="models:PostModel">
     <ContentView.Resources>
         <converters:LevelToMarginConverter x:Key="LevelToMarginConverter" />
@@ -599,7 +600,11 @@
                         Placeholder="Write a comment or reply..."
                         Text="{Binding CommentInput, Mode=TwoWay}"
                         TextColor="Black"
-                        VerticalOptions="Center" />
+                        VerticalOptions="Center">
+                        <controls:NoBorderEntry.Behaviors>
+                            <behaviors:AutoFocusBehavior ShouldFocus="{Binding ReplyingToComment, Converter={StaticResource ObjectToBoolConverter}}" />
+                        </controls:NoBorderEntry.Behaviors>
+                    </controls:NoBorderEntry>
                     <!-- Send Button (for new comments/replies) -->
                     <Border
                         Grid.Row="1"
@@ -634,7 +639,7 @@
                         <controls:WhiteImage
                             HeightRequest="20"
                             Source="save.png"
-                            Aspect="AspectFill"
+                            Aspect="AspectFit"
                             WidthRequest="20" />
                     </Border>
                     <!-- Selected Images Preview -->

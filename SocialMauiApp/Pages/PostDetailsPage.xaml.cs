@@ -62,5 +62,6 @@ namespace SocialMauiApp.Pages
             var viewModel = (DetailsViewModel)BindingContext;
             viewModel.FetchCommentsCommand.Execute(null);
         }
+
     }
 }

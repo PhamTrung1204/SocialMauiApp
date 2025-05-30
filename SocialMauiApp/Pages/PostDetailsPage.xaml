@@ -10,6 +10,7 @@
     xmlns:templates="clr-namespace:SocialMauiApp.Templates"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
+    xmlns:behaviors="clr-namespace:SocialMauiApp.Behaviors"
     x:DataType="vm:DetailsViewModel"
     BackgroundColor="{StaticResource Gray100}"
     Shell.PresentationMode="ModalAnimated">
@@ -480,7 +481,11 @@
                 Placeholder="Write a comment or reply..."
                 Text="{Binding Comment, Mode=TwoWay}"
                 TextColor="Black"
-                VerticalOptions="Center" />
+                VerticalOptions="Center">
+                <controls:NoBorderEntry.Behaviors>
+                    <behaviors:AutoFocusBehavior ShouldFocus="{Binding ReplyingToComment, Converter={StaticResource ObjectToBoolConverter}}" />
+                </controls:NoBorderEntry.Behaviors>
+            </controls:NoBorderEntry>
             <!--  Send Button  -->
             <Border
                 Grid.Row="1"

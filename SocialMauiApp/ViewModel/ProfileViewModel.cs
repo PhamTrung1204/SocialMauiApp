@@ -497,6 +497,8 @@ namespace SocialMauiApp.ViewModel
                 bookmarkedPost.Content = post.Content;
                 bookmarkedPost.PhotoUrl = post.PhotoUrl;
             }
+            OnPropertyChanged(post.IsLikeIcon);
+            OnPropertyChanged(post.IsBookmarkIcon);
         }
 
         private void OnPostDeleted(Guid postId)
