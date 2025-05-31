@@ -2304,24 +2304,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\comments\6db66328-f764-433e-ba71-eb94de518558_638841035174741573.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\comments\8958d35e-6e84-4bc6-b02f-581dac2e5064_638841001075593371.jpg'))">
-      <SourceType>Package</SourceType>
-      <SourceId>SocialMauiApp.Api</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/SocialMauiApp.Api</BasePath>
-      <RelativePath>uploads/images/users/cde27984-87ce-4342-1ddb-08dd9cd74073/comments/8958d35e-6e84-4bc6-b02f-581dac2e5064_638841001075593371.jpg</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>sk72by607k</Fingerprint>
-      <Integrity>JFq5RaLamhf+84B4mLO34XcLxqf47+LfNdTWMUXmK7A=</Integrity>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\comments\8958d35e-6e84-4bc6-b02f-581dac2e5064_638841001075593371.jpg'))</OriginalItemSpec>
-    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\comments\bca14c32-eeb7-4ab0-911f-1b993f400562_638839579994741226.jpg'))">
       <SourceType>Package</SourceType>
       <SourceId>SocialMauiApp.Api</SourceId>

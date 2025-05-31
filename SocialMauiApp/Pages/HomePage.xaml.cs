@@ -25,11 +25,10 @@ namespace SocialMauiApp.Pages
             });
         }
 
-
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            // Hủy đăng ký các handler khi trang không còn hiển thị
+            // Unregister handlers when page is no longer visible
             _realtimeUpdatesService.RemoveHandlers(nameof(HomeViewModel));
         }
 
@@ -45,7 +44,7 @@ namespace SocialMauiApp.Pages
 
         private async void GoToNotification(object sender, TappedEventArgs e)
         {
-            _homeViewModel. IsThereNewNotification = false;
+            _homeViewModel.IsThereNewNotification = false;
             await Shell.Current.GoToAsync(nameof(NotificationPage), animate: true);
         }
     }

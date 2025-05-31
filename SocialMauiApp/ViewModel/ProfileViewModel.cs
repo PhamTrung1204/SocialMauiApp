@@ -106,7 +106,7 @@ namespace SocialMauiApp.ViewModel
             var refreshToken = await SecureStorage.GetAsync("RefreshToken");
             if (string.IsNullOrEmpty(refreshToken))
             {
-                await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                await ShowErrorAlertAsync("Your session has expired. Please log in again.");
                 await NavigateAsync($"//{nameof(LoginPage)}");
                 return false;
             }
@@ -128,7 +128,7 @@ namespace SocialMauiApp.ViewModel
                 Console.WriteLine($"Lỗi làm mới token: {ex.Message}");
             }
 
-            await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+            await ShowErrorAlertAsync("Your session has expired. Please log in again.");
             await NavigateAsync($"//{nameof(LoginPage)}");
             return false;
         }
@@ -146,8 +146,8 @@ namespace SocialMauiApp.ViewModel
 
             if (!canAuthenticate)
             {
-                await Shell.Current.DisplayAlert("Không khả dụng",
-                    "Xác thực vân tay không khả dụng trên thiết bị này.", "OK");
+                await Shell.Current.DisplayAlert("Not available",
+                    "Fingerprint authentication is not available on this device.", "OK");
                 IsFingerprintEnabled = false;
                 return;
             }
@@ -155,18 +155,18 @@ namespace SocialMauiApp.ViewModel
             if (!IsFingerprintEnabled)
             {
                 var result = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
-                    "Bật đăng nhập bằng vân tay",
-                    "Xác minh vân tay của bạn để bật đăng nhập bằng vân tay")
+                    "Enable fingerprint login",
+                    "Verify your fingerprint to enable fingerprint login")
                 {
                     AllowAlternativeAuthentication = true,
-                    CancelTitle = "Hủy"
+                    CancelTitle = "Cancel"
                 });
 
                 if (result.Authenticated)
                 {
                     IsFingerprintEnabled = true;
-                    await Shell.Current.DisplayAlert("Thành công",
-                        "Đăng nhập bằng vân tay đã được bật thành công.", "OK");
+                    await Shell.Current.DisplayAlert("Success",
+                        "Fingerprint login has been successfully enabled.", "OK");
                 }
                 else
                 {
@@ -175,14 +175,14 @@ namespace SocialMauiApp.ViewModel
             }
             else
             {
-                var confirm = await Shell.Current.DisplayAlert("Tắt đăng nhập bằng vân tay",
-                    "Bạn có chắc chắn muốn tắt đăng nhập bằng vân tay không?", "Có", "Không");
+                var confirm = await Shell.Current.DisplayAlert("Turn off fingerprint login",
+                    "Are you sure you want to turn off fingerprint login?", "Yes", "No");
 
                 if (confirm)
                 {
                     IsFingerprintEnabled = false;
-                    await Shell.Current.DisplayAlert("Thành công",
-                        "Đăng nhập bằng vân tay đã bị tắt.", "OK");
+                    await Shell.Current.DisplayAlert("Success",
+                        "Fingerprint login is disabled.", "OK");
                 }
             }
         }
@@ -190,7 +190,7 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task LogoutAsync()
         {
-            if (await Shell.Current.DisplayAlert("Xác nhận đăng xuất?", "Bạn có thực sự muốn đăng xuất không?", "Có", "Không"))
+            if (await Shell.Current.DisplayAlert("Confirm logout?", "Are you sure you want to logout?", "Yes", "No"))
             {
                 _authService.Logout();
                 SecureStorage.Remove("AuthToken");
@@ -209,22 +209,22 @@ namespace SocialMauiApp.ViewModel
             IsChangePasswordVisible = true;
             IsProfileMenuOpen = false;
 
-            var currentPasswordEntry = new Entry { Placeholder = "Mật khẩu hiện tại", IsPassword = true };
-            var newPasswordEntry = new Entry { Placeholder = "Mật khẩu mới", IsPassword = true };
-            var confirmNewPasswordEntry = new Entry { Placeholder = "Xác nhận mật khẩu mới", IsPassword = true };
+            var currentPasswordEntry = new Entry { Placeholder = "Current Password", IsPassword = true };
+            var newPasswordEntry = new Entry { Placeholder = "New Password", IsPassword = true };
+            var confirmNewPasswordEntry = new Entry { Placeholder = "Confirm new password", IsPassword = true };
 
             var stackLayout = new VerticalStackLayout
             {
                 Spacing = 10,
                 Children =
                 {
-                    new Label { Text = "Đổi mật khẩu", FontAttributes = FontAttributes.Bold, FontSize = 18 },
+                    new Label { Text = "Change password", FontAttributes = FontAttributes.Bold, FontSize = 18 },
                     currentPasswordEntry,
                     newPasswordEntry,
                     confirmNewPasswordEntry,
                     new Button
                     {
-                        Text = "Lưu",
+                        Text = "Save",
                         Command = new Command(async () =>
                         {
                             CurrentPassword = currentPasswordEntry.Text;
@@ -235,7 +235,7 @@ namespace SocialMauiApp.ViewModel
                     },
                     new Button
                     {
-                        Text = "Hủy",
+                        Text = "Cancel",
                         Command = new Command(async () =>
                         {
                             await CancelChangePasswordAsync();
@@ -260,19 +260,19 @@ namespace SocialMauiApp.ViewModel
                 string.IsNullOrWhiteSpace(NewPassword) ||
                 string.IsNullOrWhiteSpace(ConfirmNewPassword))
             {
-                await ShowErrorAlertAsync("Tất cả các trường đều bắt buộc.");
+                await ShowErrorAlertAsync("All fields are required.");
                 return;
             }
 
             if (NewPassword != ConfirmNewPassword)
             {
-                await ShowErrorAlertAsync("Mật khẩu mới và xác nhận không khớp.");
+                await ShowErrorAlertAsync("New password and confirmation do not match.");
                 return;
             }
 
             if (NewPassword.Length < 6)
             {
-                await ShowErrorAlertAsync("Mật khẩu mới phải dài ít nhất 6 ký tự.");
+                await ShowErrorAlertAsync("New password must be at least 6 characters long.");
                 return;
             }
 
@@ -289,12 +289,12 @@ namespace SocialMauiApp.ViewModel
                     var result = await _userApi.ChangePasswordAsync(token, dto);
                     if (result.IsSuccess)
                     {
-                        await ToastAsync("Đổi mật khẩu thành công.");
+                        await ToastAsync("Password changed successfully.");
                         await CancelChangePasswordAsync();
                     }
                     else
                     {
-                        await ShowErrorAlertAsync(result.Error ?? "Không thể đổi mật khẩu.");
+                        await ShowErrorAlertAsync(result.Error ?? "Unable to change password.");
                     }
                 }
                 catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -306,12 +306,12 @@ namespace SocialMauiApp.ViewModel
                         var result = await _userApi.ChangePasswordAsync(token, dto);
                         if (result.IsSuccess)
                         {
-                            await ToastAsync("Đổi mật khẩu thành công.");
+                            await ToastAsync("Password changed successfully.");
                             await CancelChangePasswordAsync();
                         }
                         else
                         {
-                            await ShowErrorAlertAsync(result.Error ?? "Không thể đổi mật khẩu.");
+                            await ShowErrorAlertAsync(result.Error ?? "Unable to change password.");
                         }
                     }
                 }
@@ -333,18 +333,18 @@ namespace SocialMauiApp.ViewModel
         {
             IsProfileMenuOpen = false;
 
-            var nameEntry = new Entry { Placeholder = "Tên mới", Text = User.Name };
+            var nameEntry = new Entry { Placeholder = "New name", Text = User.Name };
 
             var stackLayout = new VerticalStackLayout
             {
                 Spacing = 10,
                 Children =
                 {
-                    new Label { Text = "Đổi tên", FontAttributes = FontAttributes.Bold, FontSize = 18 },
+                    new Label { Text = "Change name", FontAttributes = FontAttributes.Bold, FontSize = 18 },
                     nameEntry,
                     new Button
                     {
-                        Text = "Lưu",
+                        Text = "Save",
                         Command = new Command(async () =>
                         {
                             NewName = nameEntry.Text;
@@ -353,7 +353,7 @@ namespace SocialMauiApp.ViewModel
                     },
                     new Button
                     {
-                        Text = "Hủy",
+                        Text = "Cancel",
                         Command = new Command(async () =>
                         {
                             await CancelChangeNameAsync();
@@ -376,7 +376,7 @@ namespace SocialMauiApp.ViewModel
         {
             if (string.IsNullOrWhiteSpace(NewName))
             {
-                await ShowErrorAlertAsync("Tên là bắt buộc.");
+                await ShowErrorAlertAsync("Name is required.");
                 return;
             }
 
@@ -392,12 +392,12 @@ namespace SocialMauiApp.ViewModel
                         User = User with { Name = NewName };
                         _authService.Login(new LoginResponseDto(User, _authService.Token, await SecureStorage.GetAsync("RefreshToken")));
                         _preferencesService.SetString("DisplayName", NewName);
-                        await ToastAsync("Đổi tên thành công.");
+                        await ToastAsync("Rename successful.");
                         await CancelChangeNameAsync();
                     }
                     else
                     {
-                        await ShowErrorAlertAsync(result.Error ?? "Không thể đổi tên.");
+                        await ShowErrorAlertAsync(result.Error ?? "Cannot change name.");
                     }
                 }
                 catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -412,12 +412,12 @@ namespace SocialMauiApp.ViewModel
                             User = User with { Name = NewName };
                             _authService.Login(new LoginResponseDto(User, _authService.Token, await SecureStorage.GetAsync("RefreshToken")));
                             _preferencesService.SetString("DisplayName", NewName);
-                            await ToastAsync("Đổi tên thành công.");
+                            await ToastAsync("Rename successful.");
                             await CancelChangeNameAsync();
                         }
                         else
                         {
-                            await ShowErrorAlertAsync(result.Error ?? "Không thể đổi tên.");
+                            await ShowErrorAlertAsync(result.Error ?? "Cannot change name.");
                         }
                     }
                 }
@@ -445,11 +445,11 @@ namespace SocialMauiApp.ViewModel
         {
             if (string.IsNullOrWhiteSpace(newValue) || !File.Exists(newValue))
             {
-                await ShowErrorAlertAsync("Hình ảnh đã cắt không hợp lệ hoặc không tồn tại.");
+                await ShowErrorAlertAsync("Cropped image is invalid or does not exist.");
                 return;
             }
 
-            var confirm = await Shell.Current.DisplayAlert("Xác nhận", "Sử dụng ảnh này làm ảnh đại diện mới của bạn?", "Có", "Không");
+            var confirm = await Shell.Current.DisplayAlert("Confirm", "Use this photo as your new profile picture?", "Yes", "No");
             if (!confirm)
             {
                 try
@@ -458,7 +458,7 @@ namespace SocialMauiApp.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Không thể xóa tệp tạm: {ex.Message}");
+                    Console.WriteLine($"Cannot delete temporary files: {ex.Message}");
                 }
                 return;
             }
@@ -491,7 +491,7 @@ namespace SocialMauiApp.ViewModel
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Không thể xóa tệp tạm: {ex.Message}");
+                            Console.WriteLine($"Cannot delete temporary files: {ex.Message}");
                         }
                     }
                     catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -516,14 +516,14 @@ namespace SocialMauiApp.ViewModel
                             }
                             catch (Exception)
                             {
-                                Console.WriteLine($"Không thể xóa tệp tạm: {ex.Message}");
+                                Console.WriteLine($"Cannot delete temporary files: {ex.Message}");
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    await ShowErrorAlertAsync($"Không thể tải ảnh lên: {ex.Message}");
+                    await ShowErrorAlertAsync($"Unable to upload image: {ex.Message}");
                 }
                 finally
                 {

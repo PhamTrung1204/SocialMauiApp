@@ -65,82 +65,82 @@ namespace SocialMauiApp.Services
 
                 _hubConnection.Closed += error =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"SignalR connection closed: {error?.Message} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"SignalR connection closed: {error?.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     return Task.CompletedTask;
                 };
 
                 _hubConnection.Reconnecting += error =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"SignalR reconnecting: {error?.Message} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"SignalR reconnecting: {error?.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     return Task.CompletedTask;
                 };
 
                 _hubConnection.Reconnected += connectionId =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"SignalR reconnected with ID: {connectionId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"SignalR reconnected with ID: {connectionId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     return Task.CompletedTask;
                 };
 
                 _hubConnection.On<PostDto>(nameof(ISocialHubClient.PostChanged), post =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"Received PostChanged event for post {post.PostId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Received PostChanged event for post {post.PostId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     foreach (var action in _postChangedActions.Values)
                     {
-                        try { action.Invoke(post); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in PostChanged handler: {ex.Message} at 04:04 PM +07, 28/05/2025."); }
+                        try { action.Invoke(post); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in PostChanged handler: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025."); }
                     }
                 });
 
                 _hubConnection.On<Guid>(nameof(ISocialHubClient.PostDeleted), postId =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"Received PostDeleted event for post {postId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Received PostDeleted event for post {postId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     foreach (var action in _postDeletedActions.Values)
                     {
-                        try { action.Invoke(postId); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in PostDeleted handler: {ex.Message} at 04:04 PM +07, 28/05/2025."); }
+                        try { action.Invoke(postId); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in PostDeleted handler: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025."); }
                     }
                 });
 
                 _hubConnection.On<CommentDto>(nameof(ISocialHubClient.CommentAddedToThePost), comment =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"Received CommentAddedToThePost event for comment {comment.CommentId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Received CommentAddedToThePost event for comment {comment.CommentId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     foreach (var action in _commentAddedActions.Values)
                     {
-                        try { action.Invoke(comment); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in CommentAdded handler: {ex.Message} at 04:04 PM +07, 28/05/2025."); }
+                        try { action.Invoke(comment); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in CommentAdded handler: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025."); }
                     }
                 });
 
                 _hubConnection.On<UserPhotoChangedDto>(nameof(ISocialHubClient.UserPhotoChanged), userPhotoDto =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"Received UserPhotoChanged event for user {userPhotoDto.UserId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Received UserPhotoChanged event for user {userPhotoDto.UserId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     foreach (var action in _userPhotoChangedActions.Values)
                     {
-                        try { action.Invoke(userPhotoDto); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in UserPhotoChanged handler: {ex.Message} at 04:04 PM +07, 28/05/2025."); }
+                        try { action.Invoke(userPhotoDto); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in UserPhotoChanged handler: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025."); }
                     }
                 });
 
                 _hubConnection.On<NotificationDto>(nameof(ISocialHubClient.NotificationGenerated), notificationDto =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"Received NotificationGenerated event for notification {notificationDto.ForUserId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Received NotificationGenerated event for notification {notificationDto.ForUserId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     foreach (var action in _notificationGeneratedActions.Values)
                     {
-                        try { action.Invoke(notificationDto); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in NotificationGenerated handler: {ex.Message} at 04:04 PM +07, 28/05/2025."); }
+                        try { action.Invoke(notificationDto); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in NotificationGenerated handler: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025."); }
                     }
                 });
 
                 _hubConnection.On<PostDto>(nameof(ISocialHubClient.PostCountsUpdated), counts =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"Received PostCountsUpdated event for post {counts.PostId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Received PostCountsUpdated event for post {counts.PostId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     foreach (var action in _postCountsUpdatedActions.Values)
                     {
-                        try { action.Invoke(counts); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in PostCountsUpdated handler: {ex.Message} at 04:04 PM +07, 28/05/2025."); }
+                        try { action.Invoke(counts); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in PostCountsUpdated handler: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025."); }
                     }
                 });
 
                 _hubConnection.On<PostDto>("PostAdded", post =>
                 {
-                    System.Diagnostics.Debug.WriteLine($"Received PostAdded event for post {post.PostId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Received PostAdded event for post {post.PostId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     foreach (var action in _postAddedActions.Values)
                     {
-                        try { action.Invoke(post); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in PostAdded handler: {ex.Message} at 04:04 PM +07, 28/05/2025."); }
+                        try { action.Invoke(post); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in PostAdded handler: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025."); }
                     }
                 });
 
@@ -152,11 +152,11 @@ namespace SocialMauiApp.Services
                 RegisterCommentDeleteHandler("CommentRemoved");
 
                 await _hubConnection.StartAsync();
-                System.Diagnostics.Debug.WriteLine("SignalR connection started successfully at 04:04 PM +07, 28/05/2025.");
+                System.Diagnostics.Debug.WriteLine($"SignalR connection started successfully at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"SignalR connection error: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                System.Diagnostics.Debug.WriteLine($"SignalR connection error: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
         }
 
@@ -164,10 +164,10 @@ namespace SocialMauiApp.Services
         {
             _hubConnection.On<CommentDto>(methodName, comment =>
             {
-                System.Diagnostics.Debug.WriteLine($"Received {methodName} event for comment {comment.CommentId} at 04:04 PM +07, 28/05/2025.");
+                System.Diagnostics.Debug.WriteLine($"Received {methodName} event for comment {comment.CommentId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 foreach (var action in _commentUpdatedActions.Values)
                 {
-                    try { action.Invoke(comment); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in {methodName} handler: {ex.Message} at 04:04 PM +07, 28/05/2025."); }
+                    try { action.Invoke(comment); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in {methodName} handler: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025."); }
                 }
             });
         }
@@ -176,10 +176,10 @@ namespace SocialMauiApp.Services
         {
             _hubConnection.On<Guid>(methodName, commentId =>
             {
-                System.Diagnostics.Debug.WriteLine($"Received {methodName} event for comment {commentId} at 04:04 PM +07, 28/05/2025.");
+                System.Diagnostics.Debug.WriteLine($"Received {methodName} event for comment {commentId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 foreach (var action in _commentDeletedActions.Values)
                 {
-                    try { action.Invoke(commentId); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in {methodName} handler: {ex.Message} at 04:04 PM +07, 28/05/2025."); }
+                    try { action.Invoke(commentId); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Error in {methodName} handler: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025."); }
                 }
             });
         }
@@ -190,11 +190,11 @@ namespace SocialMauiApp.Services
             {
                 await EnsureConnectedAsync();
                 await _hubConnection.InvokeAsync("PostChanged", postDto);
-                Console.WriteLine($"Notified PostChanged for post {postDto.PostId} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Notified PostChanged for post {postDto.PostId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error notifying PostChanged: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Error notifying PostChanged: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
         }
 
@@ -204,11 +204,11 @@ namespace SocialMauiApp.Services
             {
                 await EnsureConnectedAsync();
                 await _hubConnection.InvokeAsync("PostAdded", postDto);
-                Console.WriteLine($"Notified PostAdded for post {postDto.PostId} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Notified PostAdded for post {postDto.PostId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error notifying PostAdded: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Error notifying PostAdded: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
         }
 
@@ -218,11 +218,11 @@ namespace SocialMauiApp.Services
             {
                 await EnsureConnectedAsync();
                 await _hubConnection.InvokeAsync("UserPhotoChanged", userPhotoDto);
-                Console.WriteLine($"Notified UserPhotoChanged for user {userPhotoDto.UserId} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Notified UserPhotoChanged for user {userPhotoDto.UserId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error notifying UserPhotoChanged: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Error notifying UserPhotoChanged: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
         }
 
@@ -232,11 +232,11 @@ namespace SocialMauiApp.Services
             {
                 await EnsureConnectedAsync();
                 await _hubConnection.InvokeAsync("CommentAddedToThePost", comment);
-                Console.WriteLine($"Notified CommentAdded for comment {comment.CommentId} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Notified CommentAdded for comment {comment.CommentId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error notifying CommentAdded: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Error notifying CommentAdded: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
         }
 
@@ -247,16 +247,16 @@ namespace SocialMauiApp.Services
                 try
                 {
                     _hubConnection.SendAsync("UpdatePostStatus", postId);
-                    System.Diagnostics.Debug.WriteLine($"Sent UpdatePostStatus for post {postId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Sent UpdatePostStatus for post {postId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Error sending UpdatePostStatus: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Error sending UpdatePostStatus: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 }
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Cannot send UpdatePostStatus: hub not connected at 04:04 PM +07, 28/05/2025.");
+                System.Diagnostics.Debug.WriteLine($"Cannot send UpdatePostStatus: hub not connected at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
         }
 
@@ -267,18 +267,18 @@ namespace SocialMauiApp.Services
                 try
                 {
                     _hubConnection.SendAsync("UpdateComment", comment);
-                    System.Diagnostics.Debug.WriteLine($"Sent UpdateComment for comment {comment.CommentId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Sent UpdateComment for comment {comment.CommentId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     _hubConnection.SendAsync("CommentUpdated", comment);
-                    System.Diagnostics.Debug.WriteLine($"Sent CommentUpdated for comment {comment.CommentId} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Sent CommentUpdated for comment {comment.CommentId} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Error sending comment update: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Error sending comment update: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 }
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Cannot send comment update: hub not connected at 04:04 PM +07, 28/05/2025.");
+                System.Diagnostics.Debug.WriteLine($"Cannot send comment update: hub not connected at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
         }
 
@@ -311,7 +311,7 @@ namespace SocialMauiApp.Services
             if (_postAddedActions.ContainsKey(key))
                 _postAddedActions.Remove(key);
 
-            System.Diagnostics.Debug.WriteLine($"Removed handlers for key: {key} at 04:04 PM +07, 28/05/2025.");
+            System.Diagnostics.Debug.WriteLine($"Removed handlers for key: {key} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
         }
 
         public bool IsConnected => _hubConnection?.State == HubConnectionState.Connected;
@@ -320,14 +320,32 @@ namespace SocialMauiApp.Services
         {
             if (_hubConnection?.State != HubConnectionState.Connected)
             {
-                try
+                int maxRetries = 3;
+                int retryDelayMs = 2000;
+                int attempt = 0;
+
+                while (attempt < maxRetries && _hubConnection?.State != HubConnectionState.Connected)
                 {
-                    await _hubConnection.StartAsync();
-                    System.Diagnostics.Debug.WriteLine("SignalR connection reestablished at 04:04 PM +07, 28/05/2025.");
+                    try
+                    {
+                        await _hubConnection.StartAsync();
+                        System.Diagnostics.Debug.WriteLine($"SignalR connection reestablished at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        attempt++;
+                        System.Diagnostics.Debug.WriteLine($"Failed to reconnect SignalR (attempt {attempt}/{maxRetries}): {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+                        if (attempt < maxRetries)
+                        {
+                            await Task.Delay(retryDelayMs);
+                        }
+                    }
                 }
-                catch (Exception ex)
+
+                if (_hubConnection?.State != HubConnectionState.Connected)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Failed to reconnect SignalR: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Failed to reconnect SignalR after {maxRetries} attempts at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 }
             }
         }

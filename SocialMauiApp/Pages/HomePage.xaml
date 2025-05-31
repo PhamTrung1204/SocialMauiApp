@@ -10,7 +10,7 @@
     BackgroundColor="{DynamicResource Gray100}"
     Shell.BackgroundColor="{DynamicResource Primary}">
 
-    <!--  TitleView của Shell  -->
+    <!-- Shell TitleView -->
     <Shell.TitleView>
         <Grid Padding="5" ColumnDefinitions="Auto,*,Auto">
             <Label
@@ -71,6 +71,7 @@
         <Grid Padding="0" RowDefinitions="Auto,*">
             <Grid
                 Padding="5"
+                Margin="0,0,0,5"
                 BackgroundColor="White"
                 ColumnDefinitions="Auto, Auto"
                 ColumnSpacing="5">
@@ -94,7 +95,7 @@
                         </Image.Clip>
                     </Image>
                 </Border>
-                <!--  Entry mới ở đầu trang  -->
+                <!-- New post entry at top -->
                 <Border
                     Grid.Row="0"
                     Grid.Column="1"
@@ -103,7 +104,7 @@
                     BackgroundColor="{DynamicResource White}"
                     HeightRequest="50"
                     StrokeShape="RoundRectangle 25"
-                    WidthRequest="325">
+                    WidthRequest="345">
                     <controls:NoUnderLine
                         FontSize="16"
                         Placeholder="What's on your mind?"

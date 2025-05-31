@@ -98,7 +98,7 @@ public partial class LoginViewModel : BaseViewModel
     {
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
-            await ShowErrorAlertAsync("Yêu cầu nhập Email và Mật khẩu.");
+            await ShowErrorAlertAsync("Email and Password required.");
             return;
         }
 
@@ -107,7 +107,7 @@ public partial class LoginViewModel : BaseViewModel
             var resp = await _authApi.LoginAsync(new LoginDto(Email, Password));
             if (!resp.IsSuccess)
             {
-                await ShowErrorAlertAsync(resp.Error ?? "Đăng nhập thất bại");
+                await ShowErrorAlertAsync(resp.Error ?? "Login failed");
                 return;
             }
 
@@ -136,12 +136,12 @@ public partial class LoginViewModel : BaseViewModel
 
         if (failCount >= 3)
         {
-            await ShowErrorAlertAsync("Quá nhiều lần thử thất bại. Vui lòng đăng nhập bằng mật khẩu.");
+            await ShowErrorAlertAsync("Too many failed attempts. Please log in with your password.");
             return;
         }
 
         var result = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
-            "Đăng nhập", "Sử dụng vân tay để đăng nhập"));
+           "Login", "Use fingerprint to log in"));
 
         if (!result.Authenticated)
         {
@@ -152,7 +152,7 @@ public partial class LoginViewModel : BaseViewModel
             {
                 ShowFingerprintOption = false;
                 _pref.SetBool("FingerprintAuthEnabled", false);
-                await ShowErrorAlertAsync("Quá nhiều lần thử thất bại. Vui lòng đăng nhập bằng mật khẩu.");
+                await ShowErrorAlertAsync("Too many failed attempts. Please log in with your password.");
             }
             return;
         }
@@ -166,7 +166,7 @@ public partial class LoginViewModel : BaseViewModel
 
         if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
         {
-            await ShowErrorAlertAsync("Vui lòng đăng nhập bằng mật khẩu trước.");
+            await ShowErrorAlertAsync("Please log in with password first.");
             return;
         }
 
@@ -195,7 +195,7 @@ public partial class LoginViewModel : BaseViewModel
                 }
                 else
                 {
-                    await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.");
+                    await ShowErrorAlertAsync("Your session has expired, please log in again.");
                 }
             }
         });
@@ -206,7 +206,7 @@ public partial class LoginViewModel : BaseViewModel
     {
         if (IsBusy || string.IsNullOrWhiteSpace(Email) || !IsValidGmail(Email))
         {
-            await Shell.Current.DisplayAlert("Lỗi", "Vui lòng nhập địa chỉ Gmail hợp lệ", "OK");
+            await Shell.Current.DisplayAlert("Error", "Please enter a valid Gmail address", "OK");
             return;
         }
 
