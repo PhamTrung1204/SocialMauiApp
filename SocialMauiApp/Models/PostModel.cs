@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Graphics;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Dispatching;
 using Refit;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Services;
@@ -9,9 +10,11 @@ using SocialMediaMaui.Shared.Dtos;
 using SQLite;
 using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using CommunityToolkit.Maui.Alerts;
 using static SQLite.SQLite3;
 
 namespace SocialMauiApp.Models
@@ -39,7 +42,13 @@ namespace SocialMauiApp.Models
         private string? _photoUrl;
 
         [ObservableProperty]
-        private string? _comment;
+        private string? _commentInput;
+
+        [ObservableProperty]
+        private DateTime? _postedOn;
+
+        [ObservableProperty]
+        private DateTime _modifiedOn;
 
         [ObservableProperty]
         private string _postedOnDisplay;
@@ -60,12 +69,6 @@ namespace SocialMauiApp.Models
         [ObservableProperty]
         private int _commentCount;
 
-        [Ignore]
-        public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
-
-        [Ignore]
-        public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
-
         [ObservableProperty]
         private int _isSync;
 
@@ -79,9 +82,6 @@ namespace SocialMauiApp.Models
 
         [ObservableProperty]
         private bool _isCommentsVisible;
-
-        [ObservableProperty]
-        private string _commentInput;
 
         [ObservableProperty]
         private bool _isEditing;
@@ -106,6 +106,7 @@ namespace SocialMauiApp.Models
         private readonly ObservableCollection<FileResult> _selectedFiles = new();
         private readonly List<(string Id, ImageSource ImageSource, FileResult FileResult)> _imageFileMap = new();
         private readonly object _commentLock = new object();
+        private IDispatcherTimer _updateTimer;
 
         public PostModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
             : base(postApi, realtimeUpdatesService)
@@ -116,10 +117,20 @@ namespace SocialMauiApp.Models
             ConfigureRealtimeUpdates();
             Task.Run(() => LoadCommentsAsync(1));
             IsPhotoButtonVisible = true;
+
+            // Khởi tạo timer bằng IDispatcherTimer
+            _updateTimer = Application.Current.Dispatcher.CreateTimer();
+            _updateTimer.Interval = TimeSpan.FromSeconds(60); // Cập nhật mỗi phút
+            //_updateTimer.Tick += OnUpdateTimerTick;
+            _updateTimer.Start();
+
+            // Gọi UpdatePostedOnDisplay ngay sau khi khởi tạo để đảm bảo giá trị ban đầu
+            //UpdatePostedOnDisplay();
         }
 
-        public static PostModel FromDto(PostDto dto, IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService) =>
-            new PostModel(postApi, realtimeUpdatesService, authService)
+        public static PostModel FromDto(PostDto dto, IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
+        {
+            var model = new PostModel(postApi, realtimeUpdatesService, authService)
             {
                 PostId = dto.PostId,
                 UserId = dto.UserId,
@@ -127,13 +138,56 @@ namespace SocialMauiApp.Models
                 UserPhotoUrl = dto.UserPhotoUrl,
                 Content = dto.Content,
                 PhotoUrl = dto.PhotoUrl,
-                PostedOnDisplay = dto.PostedOnDisplay,
+                PostedOn = dto.PostedOn,
+                ModifiedOn = dto.ModifiedOn,
                 IsLiked = dto.IsLiked,
                 IsBookmarked = dto.IsBookmarked,
                 LikeCount = dto.LikeCount,
                 CommentCount = dto.CommentCount,
+                PostedOnDisplay = dto.PostedOnDisplay,
                 IsSync = 0
             };
+
+            // Không gán PostedOnDisplay từ PostDto, để UpdatePostedOnDisplay tự tính toán
+            //model.UpdatePostedOnDisplay();
+            return model;
+        }
+
+        [Ignore]
+        public string IsLikeIcon => IsLiked ? "heart_f.png" : "heart.png";
+
+        [Ignore]
+        public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
+
+        //private void OnUpdateTimerTick(object sender, EventArgs e)
+        //{
+        //    UpdatePostedOnDisplay();
+        //    // Bỏ dòng này vì IDispatcherTimer tự động lặp lại
+        //    // ((IDispatcherTimer)sender).IsRepeating = true;
+        //}
+
+        //private void UpdatePostedOnDisplay()
+        //{
+        //    var postTime = PostedOn ?? ModifiedOn;
+        //    var now = DateTime.UtcNow;
+        //    var timeSpan = now - postTime;
+
+        //    string newDisplay;
+        //    if (timeSpan.TotalMinutes < 1)
+        //        newDisplay = "Just posted";
+        //    else if (timeSpan.TotalMinutes < 60)
+        //        newDisplay = $"{(int)timeSpan.TotalMinutes} minutes ago";
+        //    else if (timeSpan.TotalHours < 24)
+        //        newDisplay = $"{(int)timeSpan.TotalHours} hours ago";
+        //    else if (timeSpan.TotalDays < 7)
+        //        newDisplay = $"{(int)timeSpan.TotalDays} days ago";
+        //    else
+        //        newDisplay = postTime.ToString("MMM dd yyyy", new CultureInfo("en-US"));
+
+        //    // Luôn cập nhật PostedOnDisplay, không cần so sánh
+        //    PostedOnDisplay = newDisplay;
+        //    OnPropertyChanged(nameof(PostedOnDisplay));
+        //}
 
         [RelayCommand]
         private async Task ToggleCommentsVisibility()
@@ -157,177 +211,13 @@ namespace SocialMauiApp.Models
         }
 
         [RelayCommand]
-        private async Task AddCommentAsync()
-        {
-            if (string.IsNullOrWhiteSpace(CommentInput) || IsBusy) return;
-
-            if (_authService.User == null)
-            {
-                await ShowErrorAlertAsync("Please log in to comment.");
-                return;
-            }
-
-            if (IsEditing)
-            {
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    IsEditing = false;
-                    CommentBeingEdited = null;
-                    OnPropertyChanged(nameof(IsEditing));
-                    OnPropertyChanged(nameof(CommentBeingEdited));
-                });
-            }
-
-            IsBusy = true;
-            try
-            {
-                await _realtimeUpdatesService.EnsureConnectedAsync();
-                Guid? parentCommentId = null;
-                if (ReplyingToComment != null)
-                {
-                    parentCommentId = ReplyingToComment.Level == 1 ? ReplyingToComment.ParentCommentId : ReplyingToComment.CommentId;
-                    Console.WriteLine($"Replying to comment with ParentCommentId: {parentCommentId}");
-                }
-
-                var dto = new SaveCommentDto
-                {
-                    PostId = PostId,
-                    Content = CommentInput,
-                    ParentCommentId = parentCommentId
-                };
-                var serialized = JsonSerializer.Serialize(dto);
-
-                StreamPart? photoPart = null;
-                FileResult? imageFile = _selectedFiles.FirstOrDefault();
-                if (imageFile != null)
-                {
-                    var stream = await imageFile.OpenReadAsync();
-                    photoPart = new StreamPart(stream, imageFile.FileName, imageFile.ContentType);
-                }
-
-                var result = await _postsApi.SaveCommentWithImagesAsync(PostId, photoPart, serialized);
-                if (result.IsSuccess && result.Data != null)
-                {
-                    if (!_processedCommentIds.Contains(result.Data.CommentId))
-                    {
-                        result.Data.Level = parentCommentId == null ? 0 : 1;
-                        result.Data.UserName = result.Data.UserName ?? "Unknown User";
-                        result.Data.UserPhotoUrl = _authService.User.Photo ?? "user.png";
-                        result.Data.IsOwnComment = result.Data.UserId == _authService.User.Id;
-                        result.Data.Replies = new ObservableCollection<CommentDto>();
-
-                        await MainThread.InvokeOnMainThreadAsync(() =>
-                        {
-                            lock (_commentLock)
-                            {
-                                if (result.Data.Level == 0 || parentCommentId == null)
-                                {
-                                    Comments.Insert(0, result.Data);
-                                }
-                                else
-                                {
-                                    var parent = Comments.FirstOrDefault(c => c.CommentId == parentCommentId);
-                                    if (parent != null)
-                                    {
-                                        parent.Replies ??= new ObservableCollection<CommentDto>();
-                                        parent.Replies.Insert(0, result.Data);
-                                        int parentIndex = Comments.IndexOf(parent);
-                                        if (parentIndex >= 0) Comments[parentIndex] = parent;
-                                    }
-                                    else
-                                    {
-                                        Comments.Insert(0, result.Data);
-                                        Console.WriteLine($"Warning: Parent comment {parentCommentId} not found, added as new comment.");
-                                    }
-                                }
-                                _processedCommentIds.Add(result.Data.CommentId);
-                                CommentInput = string.Empty;
-                                ReplyingToComment = null;
-                                CommentCount++;
-                                OnPropertyChanged(nameof(CommentInput));
-                                OnPropertyChanged(nameof(CommentCount));
-                                OnPropertyChanged(nameof(Comments));
-                                OnPropertyChanged(nameof(ReplyingToComment));
-                            }
-                        });
-                        await ClearPhotosAsync();
-                        _realtimeUpdatesService.NotifyCommentAddedAsync(result.Data);
-                        await ToastAsync("Comment added successfully.");
-                    }
-                }
-                else
-                {
-                    await ShowErrorAlertAsync($"Failed to add comment: {result.Error}");
-                }
-            }
-            catch (Exception ex)
-            {
-                await ShowErrorAlertAsync($"Error adding comment: {ex.Message}");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        [RelayCommand]
-        private async Task RemovePhoto(string imageId)
-        {
-            if (string.IsNullOrEmpty(imageId) || IsBusy) return;
-            IsBusy = true;
-            try
-            {
-                var mapEntry = _imageFileMap.FirstOrDefault(x => x.Id == imageId);
-                if (mapEntry.ImageSource == null) return;
-                var preview = SelectedImagePreviews.FirstOrDefault(p => p.Id == imageId);
-                if (preview == null) return;
-
-                await MainThread.InvokeOnMainThreadAsync(async () =>
-                {
-                    SelectedImagePreviews.Remove(preview);
-                    _selectedFiles.Remove(mapEntry.FileResult);
-                    _imageFileMap.Remove(mapEntry);
-
-                    if (mapEntry.ImageSource is StreamImageSource streamImageSource)
-                    {
-                        var streamTask = streamImageSource.Stream?.Invoke(CancellationToken.None);
-                        if (streamTask != null)
-                        {
-                            try
-                            {
-                                var stream = await streamTask;
-                                stream?.Dispose();
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"Error disposing stream: {ex.Message} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
-                            }
-                        }
-                    }
-
-                    HasSelectedImages = SelectedImagePreviews.Any();
-                    IsPhotoButtonVisible = !HasSelectedImages;
-                    OnPropertyChanged(nameof(SelectedImagePreviews));
-                });
-            }
-            catch (Exception ex)
-            {
-                await ShowErrorAlertAsync($"Error removing image: {ex.Message}");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        [RelayCommand]
         private async Task SaveEditedCommentAsync()
         {
             if (IsBusy || !IsEditing || CommentBeingEdited == null || string.IsNullOrWhiteSpace(CommentInput)) return;
 
             if (_authService.User == null)
             {
-                await ShowErrorAlertAsync("Please log in to edit comment.");
+                await ToastAsync("Please log in to edit comment.");
                 return;
             }
 
@@ -399,12 +289,12 @@ namespace SocialMauiApp.Models
                 }
                 else
                 {
-                    await ShowErrorAlertAsync($"Failed to update comment: {result.Error}");
+                    await ToastAsync($"Failed to update comment: {result.Error}");
                 }
             }
             catch (Exception ex)
             {
-                await ShowErrorAlertAsync($"Error updating comment: {ex.Message}");
+                await ToastAsync($"Error updating comment: {ex.Message}");
             }
             finally
             {
@@ -482,7 +372,7 @@ namespace SocialMauiApp.Models
             }
             catch (Exception ex)
             {
-                await ShowErrorAlertAsync($"Error selecting image: {ex.Message}");
+                await ToastAsync($"Error selecting image: {ex.Message}");
             }
             finally
             {
@@ -502,7 +392,7 @@ namespace SocialMauiApp.Models
                     "Yes", "No");
                 if (!confirm) return;
 
-                var result = await PostsApi.DeleteCommentAsync(commentDto.CommentId);
+                var result = await _postsApi.DeleteCommentAsync(commentDto.CommentId);
                 if (result.IsSuccess)
                 {
                     await MainThread.InvokeOnMainThreadAsync(() =>
@@ -555,16 +445,331 @@ namespace SocialMauiApp.Models
                             }
                         }
                     });
-                    Console.WriteLine($"Deleted comment {commentDto.CommentId} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
+                    Console.WriteLine($"Deleted comment {commentDto.CommentId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
                 }
                 else
                 {
-                    await ShowErrorAlertAsync($"Failed to delete comment: {result.Error}");
+                    await ToastAsync($"Failed to delete comment: {result.Error}");
                 }
             }
             catch (Exception ex)
             {
-                await ShowErrorAlertAsync($"Error deleting comment: {ex.Message}");
+                await ToastAsync($"Error deleting comment: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task AddCommentAsync()
+        {
+            if (string.IsNullOrWhiteSpace(CommentInput) && _selectedFiles.Count == 0) return;
+            if (IsBusy) return;
+
+            if (_authService.User == null)
+            {
+                await ToastAsync("Please log in to comment.");
+                return;
+            }
+
+            IsBusy = true;
+            Console.WriteLine($"AddCommentAsync started at {DateTime.Now:HH:mm:ss} +07, 04/06/2025. IsBusy: {IsBusy}, Comment: {CommentInput}, IsEditing: {IsEditing}");
+
+            try
+            {
+                await _realtimeUpdatesService.EnsureConnectedAsync();
+                Console.WriteLine($"EnsureConnectedAsync completed at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+
+                if (PostId == Guid.Empty || _authService.User == null)
+                {
+                    Console.WriteLine($"AddCommentAsync aborted: PostId or User is invalid at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    return;
+                }
+
+                StreamPart? imgPart = null;
+                MemoryStream? memoryStream = null;
+                try
+                {
+                    if (_selectedFiles.Count > 0)
+                    {
+                        var f = _selectedFiles.FirstOrDefault();
+                        if (f != null)
+                        {
+                            var fileName = f.FileName ?? $"{Guid.NewGuid()}.jpg";
+                            var srcStream = await f.OpenReadAsync();
+                            memoryStream = new MemoryStream();
+                            await srcStream.CopyToAsync(memoryStream);
+                            srcStream.Close();
+                            memoryStream.Position = 0;
+                            imgPart = new StreamPart(memoryStream, fileName, f.ContentType ?? "image/jpeg");
+                            Console.WriteLine($"Image prepared for comment at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                        }
+                    }
+
+                    if (IsEditing && _commentBeingEdited != null)
+                    {
+                        // Logic chỉnh sửa comment
+                        var updateDto = new UpdateCommentDto
+                        {
+                            CommentId = _commentBeingEdited.CommentId,
+                            Content = CommentInput ?? "",
+                            IsExistingPhotoRemoved = _selectedFiles.Count == 0 && !string.IsNullOrEmpty(_commentBeingEdited.PhotoUrl),
+                            Photo = null
+                        };
+                        var serializedUpdate = JsonSerializer.Serialize(updateDto);
+                        Console.WriteLine($"Serialized UpdateCommentDto for comment {_commentBeingEdited.CommentId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+
+                        var updateResult = await _postsApi.UpdateCommentWithImagesAsync(_commentBeingEdited.CommentId, imgPart, serializedUpdate);
+                        Console.WriteLine($"API UpdateCommentWithImagesAsync completed for comment {_commentBeingEdited.CommentId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025. Success: {updateResult.IsSuccess}");
+
+                        if (updateResult.IsSuccess && updateResult.Data != null)
+                        {
+                            var updatedComment = new CommentDto
+                            {
+                                CommentId = _commentBeingEdited.CommentId,
+                                PostId = PostId,
+                                Content = CommentInput ?? "",
+                                PhotoUrl = imgPart != null ? updateResult.Data.PhotoUrl : (updateDto.IsExistingPhotoRemoved ? null : _commentBeingEdited.PhotoUrl),
+                                UserId = _commentBeingEdited.UserId,
+                                UserName = _authService.User?.Name ?? updateResult.Data.UserName ?? _commentBeingEdited.UserName ?? "Unknown",
+                                UserPhotoUrl = updateResult.Data.UserPhotoUrl ?? _authService.User?.PhotoUrl ?? "",
+                                AddedOn = updateResult.Data.AddedOn != default ? updateResult.Data.AddedOn : _commentBeingEdited.AddedOn,
+                                IsOwnComment = _authService.User != null && _commentBeingEdited.UserId == _authService.User.Id,
+                                Level = _commentBeingEdited.Level,
+                                ParentCommentId = _commentBeingEdited.ParentCommentId,
+                                Replies = _commentBeingEdited.Replies ?? new ObservableCollection<CommentDto>()
+                            };
+
+                            await MainThread.InvokeOnMainThreadAsync(() =>
+                            {
+                                lock (_commentLock)
+                                {
+                                    if (_commentBeingEdited.Level == 0)
+                                    {
+                                        var existingComment = Comments.FirstOrDefault(c => c.CommentId == _commentBeingEdited.CommentId);
+                                        if (existingComment != null)
+                                        {
+                                            int index = Comments.IndexOf(existingComment);
+                                            if (index >= 0) Comments[index] = updatedComment;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var parentComment = Comments.FirstOrDefault(c => c.CommentId == _commentBeingEdited.ParentCommentId);
+                                        if (parentComment != null && parentComment.Replies != null)
+                                        {
+                                            var existingReply = parentComment.Replies.FirstOrDefault(r => r.CommentId == _commentBeingEdited.CommentId);
+                                            if (existingReply != null)
+                                            {
+                                                int replyIndex = parentComment.Replies.IndexOf(existingReply);
+                                                if (replyIndex >= 0) parentComment.Replies[replyIndex] = updatedComment;
+                                            }
+                                        }
+                                    }
+                                    OnPropertyChanged(nameof(Comments));
+                                    Console.WriteLine($"Updated UI for comment {updatedComment.CommentId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                                }
+                            });
+
+                            try
+                            {
+                                await ToastAsync("Comment updated");
+                                Console.WriteLine($"ToastAsync completed at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error in ToastAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                            }
+                        }
+                        else
+                        {
+                            await ToastAsync(updateResult.Error ?? "Failed to update comment");
+                            Console.WriteLine($"Failed to update comment: {updateResult.Error} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                        }
+                    }
+                    else
+                    {
+                        // Logic thêm comment mới
+                        Guid? parentCommentId = null;
+                        if (ReplyingToComment != null)
+                        {
+                            parentCommentId = ReplyingToComment.Level == 1 ? ReplyingToComment.ParentCommentId : ReplyingToComment.CommentId;
+                            Console.WriteLine($"Replying to comment with ParentCommentId: {parentCommentId}");
+                        }
+
+                        var saveDto = new SaveCommentDto
+                        {
+                            PostId = PostId,
+                            Content = CommentInput ?? "",
+                            ParentCommentId = parentCommentId
+                        };
+                        var serializedSave = JsonSerializer.Serialize(saveDto);
+                        Console.WriteLine($"Serialized SaveCommentDto for post {PostId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+
+                        var saveResult = await _postsApi.SaveCommentWithImagesAsync(PostId, imgPart, serializedSave);
+                        Console.WriteLine($"API SaveCommentWithImagesAsync completed for post {PostId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025. Success: {saveResult.IsSuccess}");
+
+                        if (saveResult.IsSuccess && saveResult.Data != null)
+                        {
+                            if (!_processedCommentIds.Contains(saveResult.Data.CommentId))
+                            {
+                                saveResult.Data.Level = parentCommentId == null ? 0 : 1;
+                                saveResult.Data.UserName = saveResult.Data.UserName ?? "Unknown User";
+                                saveResult.Data.UserPhotoUrl = _authService.User?.PhotoUrl ?? "user.png";
+                                saveResult.Data.IsOwnComment = saveResult.Data.UserId == _authService.User.Id;
+                                saveResult.Data.Replies = new ObservableCollection<CommentDto>();
+
+                                await MainThread.InvokeOnMainThreadAsync(() =>
+                                {
+                                    lock (_commentLock)
+                                    {
+                                        if (saveResult.Data.Level == 0 || parentCommentId == null)
+                                        {
+                                            Comments.Insert(0, saveResult.Data);
+                                        }
+                                        else
+                                        {
+                                            var parent = Comments.FirstOrDefault(c => c.CommentId == parentCommentId);
+                                            if (parent != null)
+                                            {
+                                                parent.Replies ??= new ObservableCollection<CommentDto>();
+                                                parent.Replies.Insert(0, saveResult.Data);
+                                                int parentIndex = Comments.IndexOf(parent);
+                                                if (parentIndex >= 0) Comments[parentIndex] = parent;
+                                            }
+                                            else
+                                            {
+                                                Comments.Insert(0, saveResult.Data);
+                                                Console.WriteLine($"Warning: Parent comment {parentCommentId} not found, added as new comment.");
+                                            }
+                                        }
+                                        _processedCommentIds.Add(saveResult.Data.CommentId);
+                                        CommentCount++;
+                                        OnPropertyChanged(nameof(CommentCount));
+                                        OnPropertyChanged(nameof(Comments));
+                                    }
+                                });
+
+                                try
+                                {
+                                    await ToastAsync(parentCommentId == null ? "Comment added" : "Reply added");
+                                    Console.WriteLine($"ToastAsync completed at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Error in ToastAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                                }
+
+                                _realtimeUpdatesService.NotifyCommentAddedAsync(saveResult.Data);
+                            }
+                        }
+                        else
+                        {
+                            await ToastAsync(saveResult.Error ?? "Failed to add comment");
+                            Console.WriteLine($"Failed to add comment: {saveResult.Error} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                        }
+                    }
+                }
+                finally
+                {
+                    if (memoryStream != null)
+                    {
+                        try
+                        {
+                            memoryStream.Dispose();
+                            Console.WriteLine($"MemoryStream disposed at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error disposing MemoryStream: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in AddCommentAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                await ToastAsync($"Error processing comment: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+                Console.WriteLine($"IsBusy set to false in finally at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    lock (_commentLock)
+                    {
+                        CommentInput = string.Empty;
+                        ReplyingToComment = null;
+                        IsEditing = false;
+                        _commentBeingEdited = null;
+                        OnPropertyChanged(nameof(CommentInput));
+                        OnPropertyChanged(nameof(ReplyingToComment));
+                        OnPropertyChanged(nameof(IsEditing));
+                        OnPropertyChanged(nameof(CommentBeingEdited));
+                    }
+                });
+
+                try
+                {
+                    await ClearPhotosAsync();
+                    Console.WriteLine($"ClearPhotosAsync completed at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error in ClearPhotosAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task RemovePhoto(string imageId)
+        {
+            if (string.IsNullOrEmpty(imageId) || IsBusy) return;
+            IsBusy = true;
+            try
+            {
+                var mapEntry = _imageFileMap.FirstOrDefault(x => x.Id == imageId);
+                if (mapEntry.ImageSource == null) return;
+                var preview = SelectedImagePreviews.FirstOrDefault(p => p.Id == imageId);
+                if (preview == null) return;
+
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    SelectedImagePreviews.Remove(preview);
+                    _selectedFiles.Remove(mapEntry.FileResult);
+                    _imageFileMap.Remove(mapEntry);
+
+                    if (mapEntry.ImageSource is StreamImageSource streamImageSource)
+                    {
+                        var streamTask = streamImageSource.Stream?.Invoke(CancellationToken.None);
+                        if (streamTask != null)
+                        {
+                            try
+                            {
+                                var stream = await streamTask;
+                                stream?.Dispose();
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error disposing stream: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                            }
+                        }
+                    }
+
+                    HasSelectedImages = SelectedImagePreviews.Any();
+                    IsPhotoButtonVisible = !HasSelectedImages;
+                    OnPropertyChanged(nameof(SelectedImagePreviews));
+                    OnPropertyChanged(nameof(HasSelectedImages));
+                    OnPropertyChanged(nameof(IsPhotoButtonVisible));
+                });
+            }
+            catch (Exception ex)
+            {
+                await ToastAsync($"Error removing image: {ex.Message}");
             }
             finally
             {
@@ -609,6 +814,8 @@ namespace SocialMauiApp.Models
                 CommentBeingEdited = null;
                 CommentInput = string.Empty;
                 OnPropertyChanged(nameof(CommentInput));
+                OnPropertyChanged(nameof(IsEditing));
+                OnPropertyChanged(nameof(CommentBeingEdited));
             });
             await ClearPhotosAsync();
         }
@@ -620,7 +827,7 @@ namespace SocialMauiApp.Models
 
             if (_authService.User == null)
             {
-                await ShowErrorAlertAsync("Please log in to edit comment.");
+                await ToastAsync("Please log in to edit comment.");
                 return;
             }
 
@@ -633,6 +840,10 @@ namespace SocialMauiApp.Models
                     CommentBeingEdited = commentDto;
                     CommentInput = commentDto.Content ?? "";
                     IsCommentsVisible = true;
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(CommentBeingEdited));
+                    OnPropertyChanged(nameof(CommentInput));
+                    OnPropertyChanged(nameof(IsCommentsVisible));
                 });
                 await ClearPhotosAsync();
                 if (!string.IsNullOrEmpty(commentDto.PhotoUrl))
@@ -656,16 +867,18 @@ namespace SocialMauiApp.Models
                         _imageFileMap.Add((imageId, imageSource, fileResult));
                         HasSelectedImages = true;
                         IsPhotoButtonVisible = false;
-                        UserPhotoUrl = _authService.User.Photo ??"";
+                        UserPhotoUrl = _authService.User?.PhotoUrl ?? "";
                         OnPropertyChanged(nameof(UserPhotoUrl));
                         OnPropertyChanged(nameof(SelectedImagePreviews));
+                        OnPropertyChanged(nameof(HasSelectedImages));
+                        OnPropertyChanged(nameof(IsPhotoButtonVisible));
                     });
                 }
                 await ToastAsync("You are now editing a comment");
             }
             catch (Exception ex)
             {
-                await ShowErrorAlertAsync($"Error preparing comment for edit: {ex.Message}");
+                await ToastAsync($"Error preparing comment for edit: {ex.Message}");
             }
             finally
             {
@@ -689,7 +902,7 @@ namespace SocialMauiApp.Models
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Error disposing stream in ClearPhotos: {ex.Message} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
+                            Console.WriteLine($"Error disposing stream in ClearPhotos: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
                         }
                     }
                 }
@@ -703,6 +916,8 @@ namespace SocialMauiApp.Models
                 HasSelectedImages = false;
                 IsPhotoButtonVisible = true;
                 OnPropertyChanged(nameof(SelectedImagePreviews));
+                OnPropertyChanged(nameof(HasSelectedImages));
+                OnPropertyChanged(nameof(IsPhotoButtonVisible));
             });
         }
 
@@ -712,7 +927,7 @@ namespace SocialMauiApp.Models
             IsBusy = true;
             try
             {
-                var comments = await PostsApi.GetPostsCommentAsync(PostId, 0, limit);
+                var comments = await _postsApi.GetPostsCommentAsync(PostId, 0, limit);
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     lock (_commentLock)
@@ -745,13 +960,13 @@ namespace SocialMauiApp.Models
                         }
                         OnPropertyChanged(nameof(Comments));
                     }
-                    Console.WriteLine($"Loaded {Comments.Count} comments for post {PostId} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
+                    Console.WriteLine($"Loaded {Comments.Count} comments for post {PostId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
                 });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading comments: {ex.Message} at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
-                await ShowErrorAlertAsync($"Error loading comments: {ex.Message}");
+                Console.WriteLine($"Error loading comments: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                await ToastAsync($"Error loading comments: {ex.Message}");
             }
             finally
             {
@@ -842,7 +1057,7 @@ namespace SocialMauiApp.Models
                     OnPropertyChanged(nameof(Comments));
                     OnPropertyChanged(nameof(CommentCount));
                 }
-                Console.WriteLine($"Added comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
+                Console.WriteLine($"Added comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
             });
         }
 
@@ -889,9 +1104,8 @@ namespace SocialMauiApp.Models
                         }
                     }
                     OnPropertyChanged(nameof(Comments));
-                   
                 }
-                Console.WriteLine($"Updated comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
+                Console.WriteLine($"Updated comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
             });
         }
 
@@ -940,9 +1154,11 @@ namespace SocialMauiApp.Models
                         CommentBeingEdited = null;
                         CommentInput = string.Empty;
                         OnPropertyChanged(nameof(CommentInput));
+                        OnPropertyChanged(nameof(IsEditing));
+                        OnPropertyChanged(nameof(CommentBeingEdited));
                     }
                 }
-                Console.WriteLine($"Deleted comment {commentId} via SignalR at {DateTime.Now:HH:mm tt zzz}, 29/05/2025.");
+                Console.WriteLine($"Deleted comment {commentId} via SignalR at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
             });
         }
 
@@ -958,12 +1174,18 @@ namespace SocialMauiApp.Models
             });
         }
 
-        private async Task ShowErrorAlertAsync(string message)
+        private async Task ToastAsync(string message)
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                await Application.Current.MainPage.DisplayAlert("Error", message, "OK");
+                var toast = Toast.Make(message, CommunityToolkit.Maui.Core.ToastDuration.Short, 14);
+                await toast.Show();
             });
+        }
+
+        ~PostModel()
+        {
+            _updateTimer?.Stop();
         }
     }
 }

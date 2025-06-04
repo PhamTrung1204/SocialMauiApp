@@ -12,13 +12,20 @@ using SocialMediaMaui.Shared;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<IWebHostEnvironment>(builder.Environment);
 builder.Services.AddDbContext<SQLiteContext>((serviceProvider, options) =>
 {
     var env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
-    var dbPath = Path.Combine(env.ContentRootPath, "Data", "socialmauiapp.db");
+    var dataDirectory = Path.Combine(env.ContentRootPath, "Data");
+    if (!Directory.Exists(dataDirectory))
+    {
+        Directory.CreateDirectory(dataDirectory);
+        Console.WriteLine($"Created Data directory at {dataDirectory} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+    }
+
+    var dbPath = Path.Combine(dataDirectory, "socialmauiapp.db");
+    Console.WriteLine($"SQLite database path: {dbPath} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
     options.UseSqlite($"Filename={dbPath}");
 });
 
@@ -30,7 +37,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddTransient<AuthService>()
     .AddTransient<PostService>()
     .AddTransient<AdminService>()
-    .AddTransient<SyncService>()
+    .AddScoped<SyncService>()
     .AddTransient<IPasswordHasher<User>, PasswordHasher<User>>()
     .AddScoped<UserService>()
     .AddTransient<PhotoUploadService>();
@@ -57,10 +64,8 @@ builder.Services.AddAuthentication(options =>
 });
 builder.WebHost.ConfigureKestrel(options =>
 {
-    // Tăng giới hạn tổng kích thước header lên 32KB (32768 bytes)
     options.Limits.MaxRequestHeadersTotalSize = 32768;
 });
-// Cấu hình Logging (ví dụ thêm Debug logger cho môi trường Development)
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 #if DEBUG
@@ -71,10 +76,16 @@ builder.Services.AddAuthorization();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var sqliteContext = scope.ServiceProvider.GetRequiredService<SQLiteContext>();
+    sqliteContext.Database.EnsureCreated();
+    Console.WriteLine($"SQLite database ensured created at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+}
 #if DEBUG
 AutoMigrationDb(app.Services);
-#endif 
-// Configure the HTTP request pipeline.
+#endif
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -96,6 +107,7 @@ app.MapAuthEndpoints()
     .MapUserEndpoints();
 app.MapHub<SocialHub>(AppConstants.HubPattern);
 app.Run();
+
 static void AutoMigrationDb(IServiceProvider sp)
 {
     var scope = sp.CreateScope();

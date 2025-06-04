@@ -104,7 +104,7 @@
                     BackgroundColor="{DynamicResource White}"
                     HeightRequest="50"
                     StrokeShape="RoundRectangle 25"
-                    WidthRequest="345">
+                    WidthRequest="325">
                     <controls:NoUnderLine
                         FontSize="16"
                         Placeholder="What's on your mind?"

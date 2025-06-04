@@ -22,6 +22,7 @@ namespace SocialMauiApp.Pages
             Shell.Current.Dispatcher.DispatchAsync(() =>
             {
                 _homeViewModel.ConfigureRealtimeUpdates();
+                _homeViewModel.OnAppearing(); // Call OnAppearing to ensure full initialization
             });
         }
 

@@ -107,21 +107,36 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task SynchronizeDataAsync()
         {
-            if (IsBusy || !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet)) return;
+            if (IsBusy || !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet))
+            {
+                Console.WriteLine($"Synchronization skipped: IsBusy={IsBusy}, NetworkAccess={Connectivity.NetworkAccess} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                return;
+            }
 
             IsBusy = true;
             try
             {
+                Console.WriteLine($"Starting synchronization at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
                 var result = await _syncApi.SynchronizeAsync();
-                Console.WriteLine($"Synchronization successful: {result} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+                Console.WriteLine($"Synchronization API call result: {result} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+
                 _startIndex = 0;
                 await FetchPostsAsync();
-                var syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = DateTime.UtcNow };
+
+                var syncMetadata = await _localDatabase.GetSyncMetadataAsync();
+                syncMetadata.LastSyncTime = DateTime.UtcNow;
                 await _localDatabase.SaveSyncMetadataAsync(syncMetadata);
+                Console.WriteLine($"Saved SyncMetadata with LastSyncTime={syncMetadata.LastSyncTime} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
             }
             catch (ApiException ex)
             {
-                await ShowErrorAlertAsync($"Synchronization error: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+                Console.WriteLine($"Synchronization API error: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                await ShowErrorAlertAsync($"Synchronization error: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error during synchronization: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                await ShowErrorAlertAsync($"Unexpected error during synchronization: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
             }
             finally
             {

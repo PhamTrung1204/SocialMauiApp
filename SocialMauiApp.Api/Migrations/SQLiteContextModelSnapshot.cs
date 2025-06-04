@@ -112,6 +112,12 @@ namespace SocialMauiApp.Api.Migrations
                     b.Property<DateTime>("LastSyncTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
                     b.HasKey("Id");
 
                     b.ToTable("SyncMetadata", (string)null);
@@ -147,6 +153,12 @@ namespace SocialMauiApp.Api.Migrations
                     b.Property<string>("PhotoUrl")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("RefreshTokenExpiry")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ResetToken")
                         .HasColumnType("TEXT");
 
@@ -172,8 +184,7 @@ namespace SocialMauiApp.Api.Migrations
                 {
                     b.HasOne("SocialMauiApp.Api.Data.Entities.Comment", "ParentComment")
                         .WithMany("Replies")
-                        .HasForeignKey("ParentCommentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ParentCommentId");
 
                     b.HasOne("SocialMauiApp.Api.Data.Entities.Post", "Post")
                         .WithMany()
@@ -184,7 +195,7 @@ namespace SocialMauiApp.Api.Migrations
                     b.HasOne("SocialMauiApp.Api.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ParentComment");
@@ -199,7 +210,7 @@ namespace SocialMauiApp.Api.Migrations
                     b.HasOne("SocialMauiApp.Api.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");

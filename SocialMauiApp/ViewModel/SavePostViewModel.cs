@@ -205,16 +205,7 @@ namespace SocialMauiApp.ViewModel
                     saved.NotifyIsLikeIconChanged();
                     saved.NotifyIsBookmarkIconChanged();
 
-                    await MainThread.InvokeOnMainThreadAsync(() =>
-                    {
-                        Content = string.Empty;
-                        PhotoPath = string.IsNullOrWhiteSpace(saved.PhotoUrl) ? string.Empty : saved.PhotoUrl;
-                        Post = saved;
-                        OnPropertyChanged(nameof(Content));
-                        OnPropertyChanged(nameof(PhotoPath));
-                        OnPropertyChanged(nameof(Post));
-                    });
-
+                    // Notify SignalR first to ensure the HomePage receives the update
                     try
                     {
                         await _realtimeUpdatesService.EnsureConnectedAsync();
@@ -244,6 +235,18 @@ namespace SocialMauiApp.ViewModel
                         Console.WriteLine($"SignalR error: {signalREx.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     }
 
+                    // Update UI after SignalR notification
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        Content = string.Empty;
+                        PhotoPath = string.IsNullOrWhiteSpace(saved.PhotoUrl) ? string.Empty : saved.PhotoUrl;
+                        Post = saved;
+                        OnPropertyChanged(nameof(Content));
+                        OnPropertyChanged(nameof(PhotoPath));
+                        OnPropertyChanged(nameof(Post));
+                    });
+
+                    // Navigate after notifying to ensure HomePage is ready
                     try
                     {
                         if (Post != null && Post.PostId != default)

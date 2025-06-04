@@ -14,7 +14,7 @@ namespace SocialMauiApp.Api.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<User> Users { get; set; }
-
+        public DbSet<SyncMetadata> SyncMetadatas { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -67,7 +67,7 @@ namespace SocialMauiApp.Api.Data
                 e.HasOne(b => b.User).WithMany().OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(b => b.Post).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
-
+            modelBuilder.Entity<SyncMetadata>().ToTable("SyncMetadata");
         }
 
     }
