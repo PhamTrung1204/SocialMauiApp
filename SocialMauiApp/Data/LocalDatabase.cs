@@ -169,64 +169,48 @@ namespace SocialMauiApp.Data
 
         private readonly SemaphoreSlim _commentSaveSemaphore = new SemaphoreSlim(1, 1);
 
-        public async Task<int> SaveCommentAsync(CommentDto comment)
+        public async Task SaveCommentAsync(CommentDto comment)
         {
             try
             {
-                await InitializeAsync();
-                var tableInfo = await _database.ExecuteScalarAsync<int>("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='Comments'");
-                if (tableInfo == 0)
+                var entity = new CommentEntity
                 {
-                    Console.WriteLine($"Comments table does not exist at 11:44 AM +07, 27/05/2025.");
-                    return 0;
+                    CommentId = comment.CommentId,
+                    PostId = comment.PostId,
+                    Content = comment.Content,
+                    PhotoUrl = comment.PhotoUrl,
+                    UserId = comment.UserId,
+                    UserName = comment.UserName,
+                    UserPhotoUrl = comment.UserPhotoUrl,
+                    AddedOn = comment.AddedOn,
+                    ParentCommentId = comment.ParentCommentId
+                };
+
+                var existingComment = await _database.Table<CommentEntity>().Where(c => c.CommentId == comment.CommentId).FirstOrDefaultAsync();
+                if (existingComment == null)
+                {
+                    await _database.InsertAsync(entity);
+                    Console.WriteLine($"Inserted comment {comment.CommentId} into SQLite at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                }
+                else
+                {
+                    entity.CommentId = existingComment.CommentId;
+                    await _database.UpdateAsync(entity);
+                    Console.WriteLine($"Updated comment {comment.CommentId} in SQLite at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
                 }
 
-                var entity = ToCommentEntity(comment);
-                int result = 0;
-
-                await _commentSaveSemaphore.WaitAsync();
-                try
+                if (comment.Replies != null)
                 {
-                    var existingComment = await _database.Table<CommentEntity>().FirstOrDefaultAsync(c => c.CommentId == comment.CommentId);
-                    if (existingComment != null)
+                    foreach (var reply in comment.Replies)
                     {
-                        entity.CommentId = existingComment.CommentId;
-                        result = await _database.UpdateAsync(entity);
-                        Console.WriteLine($"Updated comment {comment.CommentId} in database at 11:44 AM +07, 27/05/2025.");
-                    }
-                    else
-                    {
-                        result = await _database.InsertAsync(entity);
-                        Console.WriteLine($"Inserted comment {comment.CommentId} into database at 11:44 AM +07, 27/05/2025.");
-                    }
-
-                    if (comment.Replies != null && comment.Replies.Any())
-                    {
-                        var allCommentEntities = await _database.Table<CommentEntity>().Where(c => c.PostId == comment.PostId).ToListAsync();
-                        allCommentEntities.Add(entity); // Thêm comment mới vào danh sách
-                        var replies = BuildReplyHierarchy(allCommentEntities, comment.CommentId, comment.Level, maxDepth: 5);
-                        foreach (var reply in replies)
-                        {
-                            await SaveCommentAsync(reply);
-                        }
+                        await SaveCommentAsync(reply);
                     }
                 }
-                finally
-                {
-                    _commentSaveSemaphore.Release();
-                }
-
-                return result;
-            }
-            catch (SQLiteException ex)
-            {
-                Console.WriteLine($"SQLite error saving comment {comment.CommentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
-                throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error saving comment {comment.CommentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
-                throw;
+                Console.WriteLine($"Error in SaveCommentAsync for comment {comment.CommentId}: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                throw; // Ném lại để tầng trên xử lý
             }
         }
 
@@ -302,17 +286,27 @@ namespace SocialMauiApp.Data
             return await _database.Table<SyncMetadata>().FirstOrDefaultAsync(m => m.Id == 1);
         }
 
-        public async Task<int> SaveSyncMetadataAsync(SyncMetadata metadata)
+        public async Task SaveSyncMetadataAsync(SyncMetadata syncMetadata)
         {
-            await InitializeAsync();
-            var existingMetadata = await _database.Table<SyncMetadata>().FirstOrDefaultAsync(m => m.Id == metadata.Id);
-            if (existingMetadata != null)
+            try
             {
-                return await _database.UpdateAsync(metadata);
+                var existingMetadata = await _database.Table<SyncMetadata>().FirstOrDefaultAsync(m => m.Id == syncMetadata.Id);
+                if (existingMetadata == null)
+                {
+                    await _database.InsertAsync(syncMetadata);
+                }
+                else
+                {
+                    syncMetadata.Id = existingMetadata.Id;
+                    await _database.UpdateAsync(syncMetadata);
+                }
             }
-            return await _database.InsertAsync(metadata);
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine($"SQLite error saving SyncMetadata: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                throw; // Ném lại để xử lý ở tầng trên
+            }
         }
-
         // Helper methods to convert between CommentDto and CommentEntity
         private CommentEntity ToCommentEntity(CommentDto dto)
         {

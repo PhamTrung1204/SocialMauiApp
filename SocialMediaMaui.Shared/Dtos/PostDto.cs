@@ -19,7 +19,7 @@ namespace SocialMediaMaui.Shared.Dtos
             get
             {
                 var postTime = PostedOn ?? ModifiedOn;
-                var now = DateTime.UtcNow;
+                var now = DateTime.Now;
                 var timeSpan = now - postTime;
 
                 if (timeSpan.TotalMinutes < 1)

@@ -7,10 +7,10 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     x:DataType="vm:HomeViewModel"
-    BackgroundColor="{DynamicResource LightBackground}"
+    BackgroundColor="{DynamicResource Gray100}"
     Shell.BackgroundColor="{DynamicResource Primary}">
 
-    <!--  TitleView của Shell  -->
+    <!-- Shell TitleView -->
     <Shell.TitleView>
         <Grid Padding="5" ColumnDefinitions="Auto,*,Auto">
             <Label
@@ -71,6 +71,8 @@
         <Grid Padding="0" RowDefinitions="Auto,*">
             <Grid
                 Padding="5"
+                Margin="0,0,0,5"
+                BackgroundColor="White"
                 ColumnDefinitions="Auto, Auto"
                 ColumnSpacing="5">
                 <Border
@@ -93,7 +95,7 @@
                         </Image.Clip>
                     </Image>
                 </Border>
-                <!--  Entry mới ở đầu trang  -->
+                <!-- New post entry at top -->
                 <Border
                     Grid.Row="0"
                     Grid.Column="1"

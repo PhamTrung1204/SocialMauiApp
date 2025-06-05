@@ -65,17 +65,20 @@ namespace SocialMauiApp.ViewModel
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    // Xóa bài viết cũ nếu trùng PostId
                     var existingPost = Posts.FirstOrDefault(p => p.PostId == value.PostId);
                     if (existingPost != null)
                     {
                         Posts.Remove(existingPost);
-                        _startIndex--;
+                        Posts.Insert(0, value);
+                        Console.WriteLine($"Updated existing post {value.PostId} on HomePage at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                     }
-                    // Thêm bài viết mới vào đầu danh sách
-                    Posts.Insert(0, value);
-                    _startIndex++;
-                    // Lưu vào SQLite
+                    else
+                    {
+                        Posts.Insert(0, value);
+                        _startIndex++;
+                        Console.WriteLine($"Added new post {value.PostId} to HomePage at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+                    }
+
                     var postEntity = new PostEntity
                     {
                         PostId = value.PostId,
@@ -92,29 +95,48 @@ namespace SocialMauiApp.ViewModel
                         IsSync = 1
                     };
                     Task.Run(() => _localDatabase.SavePostAsync(postEntity));
-                    Console.WriteLine($"Added new post {value.PostId} to HomePage at 04:04 PM +07, 28/05/2025.");
+                    Console.WriteLine($"Saved post {value.PostId} to SQLite at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 });
+            }
+            else
+            {
+                Console.WriteLine($"OnNewPostChanged called with null value at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
         }
 
         [RelayCommand]
         private async Task SynchronizeDataAsync()
         {
-            if (IsBusy || !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet)) return;
+            if (IsBusy || !Connectivity.NetworkAccess.HasFlag(NetworkAccess.Internet))
+            {
+                Console.WriteLine($"Synchronization skipped: IsBusy={IsBusy}, NetworkAccess={Connectivity.NetworkAccess} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                return;
+            }
 
             IsBusy = true;
             try
             {
+                Console.WriteLine($"Starting synchronization at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
                 var result = await _syncApi.SynchronizeAsync();
-                Console.WriteLine($"Đồng bộ thành công: {result} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Synchronization API call result: {result} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+
                 _startIndex = 0;
                 await FetchPostsAsync();
-                var syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = DateTime.UtcNow };
+
+                var syncMetadata = await _localDatabase.GetSyncMetadataAsync();
+                syncMetadata.LastSyncTime = DateTime.UtcNow;
                 await _localDatabase.SaveSyncMetadataAsync(syncMetadata);
+                Console.WriteLine($"Saved SyncMetadata with LastSyncTime={syncMetadata.LastSyncTime} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
             }
             catch (ApiException ex)
             {
-                await ShowErrorAlertAsync($"Lỗi đồng bộ: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                Console.WriteLine($"Synchronization API error: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                await ShowErrorAlertAsync($"Synchronization error: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error during synchronization: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                await ShowErrorAlertAsync($"Unexpected error during synchronization: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
             }
             finally
             {
@@ -228,7 +250,7 @@ namespace SocialMauiApp.ViewModel
             }
             catch (ApiException ex)
             {
-                await ShowErrorAlertAsync($"Lỗi đồng bộ tự động: {ex.Message} at 04:04 PM +07, 28/05/2025.");
+                await ShowErrorAlertAsync($"Auto-sync error: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
             }
             finally
             {
@@ -244,20 +266,21 @@ namespace SocialMauiApp.ViewModel
                 try
                 {
                     await _realtimeUpdatesService.EnsureConnectedAsync();
-                    System.Diagnostics.Debug.WriteLine("Kết nối SignalR thành công tại 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"SignalR connection ensured at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+                    if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                    {
+                        await SynchronizeDataAsync();
+                        Console.WriteLine($"Synchronized data on HomePage appearing at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Lỗi kết nối SignalR: {ex.Message} tại 04:04 PM +07, 28/05/2025.");
+                    System.Diagnostics.Debug.WriteLine($"Error ensuring SignalR connection: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 }
             });
             ConfigureRealtimeUpdates();
             Connectivity.ConnectivityChanged += OnConnectivityChanged;
             _syncTimer.Start();
-            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-            {
-                Task.Run(() => SynchronizeDataAsync());
-            }
         }
 
         private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -331,7 +354,11 @@ namespace SocialMauiApp.ViewModel
                         IsSync = 1
                     };
                     Task.Run(() => _localDatabase.SavePostAsync(postEntity));
-                    Console.WriteLine($"Added new post {postModel.PostId} via SignalR at 04:04 PM +07, 28/05/2025.");
+                    Console.WriteLine($"Added new post {postModel.PostId} via SignalR at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+                }
+                else
+                {
+                    Console.WriteLine($"Post {newPost.PostId} already exists, skipping addition via SignalR at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
                 }
             });
         }

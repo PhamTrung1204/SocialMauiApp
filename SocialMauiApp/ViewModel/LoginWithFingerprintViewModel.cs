@@ -3,13 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using Plugin.Fingerprint.Abstractions;
 using Plugin.Fingerprint;
 using SocialMediaMaui.Shared.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SocialMauiApp.Services;
 using SocialMauiApp.Apis;
+using Microsoft.Maui.Storage;
 
 namespace SocialMauiApp.ViewModel
 {
@@ -49,13 +46,51 @@ namespace SocialMauiApp.ViewModel
         private void LoadData()
         {
             var name = _prefs.GetString("DisplayName", "");
-            GreetingText = $"Welcome, {name}";
+            GreetingText = $"Chào mừng, {name}";
             AvatarUrl = _prefs.GetString("AvatarUrl", "default_avatar.png");
         }
 
         private async Task CheckBiometricAsync()
         {
             IsBiometricAvailable = await _fingerprint.IsAvailableAsync();
+            // Kiểm tra trạng thái đăng nhập khi khởi động
+            await CheckLoginStatusAsync();
+        }
+
+        /// <summary>
+        /// Kiểm tra trạng thái đăng nhập bằng token đã lưu và làm mới nếu cần.
+        /// </summary>
+        private async Task CheckLoginStatusAsync()
+        {
+            var jwt = await SecureStorage.GetAsync("AuthToken");
+            if (!string.IsNullOrEmpty(jwt))
+            {
+                var validateResult = await _authApi.ValidateTokenAsync($"Bearer {jwt}");
+                if (validateResult.IsSuccess && validateResult.Data != null)
+                {
+                    var refreshToken = await SecureStorage.GetAsync("RefreshToken");
+                    _authService.Login(new LoginResponseDto(validateResult.Data, jwt, refreshToken));
+                    await NavigateAsync($"//{nameof(HomePage)}");
+                    return;
+                }
+                else
+                {
+                    // Thử làm mới token
+                    var refreshToken = await SecureStorage.GetAsync("RefreshToken");
+                    if (!string.IsNullOrEmpty(refreshToken))
+                    {
+                        var refreshResult = await _authApi.RefreshTokenAsync(new RefreshTokenDto { RefreshToken = refreshToken });
+                        if (refreshResult.IsSuccess && refreshResult.Data != null)
+                        {
+                            await SecureStorage.SetAsync("AuthToken", refreshResult.Data.Token);
+                            await SecureStorage.SetAsync("RefreshToken", refreshResult.Data.RefreshToken);
+                            _authService.Login(refreshResult.Data);
+                            await NavigateAsync($"//{nameof(HomePage)}");
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
         [RelayCommand]
@@ -63,7 +98,7 @@ namespace SocialMauiApp.ViewModel
         {
             if (string.IsNullOrWhiteSpace(Password))
             {
-                await ShowErrorAlertAsync("Please enter your password.");
+                await ShowErrorAlertAsync("Vui lòng nhập mật khẩu.");
                 return;
             }
 
@@ -75,12 +110,18 @@ namespace SocialMauiApp.ViewModel
                 var resp = await _authApi.LoginAsync(dto);
                 if (resp.IsSuccess)
                 {
+                    // Lưu token vào SecureStorage
+                    await SecureStorage.SetAsync("AuthToken", resp.Data.Token);
+                    await SecureStorage.SetAsync("RefreshToken", resp.Data.RefreshToken);
                     _authService.Login(resp.Data);
+                    // Cập nhật thông tin hiển thị
+                    _prefs.SetString("DisplayName", resp.Data.User.Name);
+                    _prefs.SetString("AvatarUrl", resp.Data.User.PhotoUrl ?? "default_avatar.png");
                     await NavigateAsync($"//{nameof(HomePage)}");
                 }
                 else
                 {
-                    await ShowErrorAlertAsync("Password incorrect.");
+                    await ShowErrorAlertAsync("Mật khẩu không đúng.");
                 }
             });
         }
@@ -89,13 +130,18 @@ namespace SocialMauiApp.ViewModel
         private async Task LoginWithFingerprintAsync()
         {
             var auth = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
-                "Login", "Authenticate to login"));
-            if (!auth.Authenticated) return;
+                "Đăng nhập", "Xác thực để đăng nhập"));
+            if (!auth.Authenticated)
+            {
+                await ShowErrorAlertAsync("Xác thực vân tay thất bại.");
+                return;
+            }
 
-            var token = _prefs.GetString("AuthToken", "");
+            var token = await SecureStorage.GetAsync("AuthToken");
+            var refreshToken = await SecureStorage.GetAsync("RefreshToken");
             if (string.IsNullOrEmpty(token))
             {
-                await ShowErrorAlertAsync("Session expired. Please login again.");
+                await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
                 return;
             }
 
@@ -104,18 +150,46 @@ namespace SocialMauiApp.ViewModel
                 var resp = await _authApi.ValidateTokenAsync($"Bearer {token}");
                 if (resp.IsSuccess && resp.Data != null)
                 {
-                    _authService.Login(new LoginResponseDto(resp.Data, token));
+                    _authService.Login(new LoginResponseDto(resp.Data, token, refreshToken));
                     await NavigateAsync($"//{nameof(HomePage)}");
                 }
                 else
                 {
-                    await ShowErrorAlertAsync("Session expired. Please login again.");
+                    // Thử làm mới token
+                    if (!string.IsNullOrEmpty(refreshToken))
+                    {
+                        var refreshResult = await _authApi.RefreshTokenAsync(new RefreshTokenDto { RefreshToken = refreshToken });
+                        if (refreshResult.IsSuccess && refreshResult.Data != null)
+                        {
+                            await SecureStorage.SetAsync("AuthToken", refreshResult.Data.Token);
+                            await SecureStorage.SetAsync("RefreshToken", refreshResult.Data.RefreshToken);
+                            _authService.Login(refreshResult.Data);
+                            await NavigateAsync($"//{nameof(HomePage)}");
+                        }
+                        else
+                        {
+                            await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                        }
+                    }
+                    else
+                    {
+                        await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                    }
                 }
             });
         }
 
         [RelayCommand]
         private async Task LoginWithAnotherAsync()
-            => await NavigateAsync(nameof(LoginPage));
+        {
+            // Xóa thông tin đăng nhập
+            _prefs.SetString("LastEmail", "");
+            _prefs.SetString("DisplayName", "");
+            _prefs.SetString("AvatarUrl", "default_avatar.png");
+            SecureStorage.Remove("AuthToken");
+            SecureStorage.Remove("RefreshToken");
+            _authService.Logout();
+            await NavigateAsync($"//{nameof(LoginPage)}");
+        }
     }
 }

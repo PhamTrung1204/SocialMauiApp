@@ -4,6 +4,7 @@ using SocialMauiApp.Models;
 using SocialMediaMaui.Shared.Dtos;
 
 namespace SocialMauiApp.Apis;
+
 public interface IUserApi
 {
     [Multipart]

@@ -1,4 +1,4 @@
 ﻿namespace SocialMediaMaui.Shared.Dtos
 {
-    public record LoginResponseDto(LoggedInUser User, string Token);
+    public record LoginResponseDto(LoggedInUser User, string Token, string RefreshToken);
 }

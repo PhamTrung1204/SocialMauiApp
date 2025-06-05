@@ -54,7 +54,7 @@ namespace SocialMauiApp.Api.Endpoints
             authGroup.MapGet("/verify-reset-token", async (string token, AuthService authService) =>
             {
                 var result = await authService.VerifyResetTokenAsync(token);
-                return Results.Ok(result); // Trả về JSON thay vì redirect
+                return Results.Ok(result);
             })
                 .Produces<ApiResult<string>>()
                 .WithName("Auth-VerifyResetToken");
@@ -72,10 +72,18 @@ namespace SocialMauiApp.Api.Endpoints
             authGroup.MapPost("/reset-password", async (ResetPasswordDto dto, AuthService authService) =>
             {
                 var result = await authService.ResetPasswordAsync(dto);
-                return Results.Ok(result); // Trả về JSON thay vì redirect
+                return Results.Ok(result);
             })
                 .Produces<ApiResult<string>>()
                 .WithName("Auth-ResetPassword");
+
+            authGroup.MapPost("/refresh-token", async (RefreshTokenDto dto, AuthService authService) =>
+            {
+                var result = await authService.RefreshTokenAsync(dto);
+                return Results.Ok(result);
+            })
+                .Produces<ApiResult<LoginResponseDto>>()
+                .WithName("Auth-RefreshToken");
 
             return app;
         }

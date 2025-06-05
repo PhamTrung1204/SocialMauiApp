@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Plugin.Fingerprint;
 using Plugin.Fingerprint.Abstractions;
+using Microsoft.Maui.Storage;
 
 namespace SocialMauiApp.ViewModel
 {
@@ -22,6 +23,7 @@ namespace SocialMauiApp.ViewModel
     {
         private readonly AuthService _authService;
         private readonly IUserApi _userApi;
+        private readonly IAuthApi _authApi;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
         private readonly IFingerprint _fingerprint;
         private readonly IPreferencesService _preferencesService;
@@ -29,6 +31,7 @@ namespace SocialMauiApp.ViewModel
         public ProfileViewModel(
             IPostApi postsApi,
             AuthService authService,
+            IAuthApi authApi,
             IUserApi userApi,
             RealtimeUpdatesService realtimeUpdatesService,
             IPreferencesService preferencesService)
@@ -36,6 +39,7 @@ namespace SocialMauiApp.ViewModel
         {
             User = authService.User!;
             _authService = authService;
+            _authApi = authApi;
             _userApi = userApi;
             _realtimeUpdatesService = realtimeUpdatesService;
             _fingerprint = CrossFingerprint.Current;
@@ -93,6 +97,42 @@ namespace SocialMauiApp.ViewModel
             _preferencesService.SetBool("FingerprintAuthEnabled", value);
         }
 
+        /// <summary>
+        /// Làm mới token nếu JWT hết hạn.
+        /// </summary>
+        /// <returns>True nếu token được làm mới thành công hoặc không cần làm mới, False nếu thất bại.</returns>
+        private async Task<bool> TryRefreshTokenAsync()
+        {
+            var refreshToken = await SecureStorage.GetAsync("RefreshToken");
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                await ShowErrorAlertAsync("Your session has expired. Please log in again.");
+                await NavigateAsync($"//{nameof(LoginPage)}");
+                return false;
+            }
+
+            try
+            {
+                var refreshResult = await _authApi.RefreshTokenAsync(new RefreshTokenDto { RefreshToken = refreshToken });
+                if (refreshResult.IsSuccess && refreshResult.Data != null)
+                {
+                    await SecureStorage.SetAsync("AuthToken", refreshResult.Data.Token);
+                    await SecureStorage.SetAsync("RefreshToken", refreshResult.Data.RefreshToken);
+                    _authService.Login(refreshResult.Data);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Lỗi khi làm mới token
+                Console.WriteLine($"Lỗi làm mới token: {ex.Message}");
+            }
+
+            await ShowErrorAlertAsync("Your session has expired. Please log in again.");
+            await NavigateAsync($"//{nameof(LoginPage)}");
+            return false;
+        }
+
         [RelayCommand]
         private void ToggleProfileMenu()
         {
@@ -106,7 +146,7 @@ namespace SocialMauiApp.ViewModel
 
             if (!canAuthenticate)
             {
-                await Shell.Current.DisplayAlert("Not Available",
+                await Shell.Current.DisplayAlert("Not available",
                     "Fingerprint authentication is not available on this device.", "OK");
                 IsFingerprintEnabled = false;
                 return;
@@ -115,7 +155,7 @@ namespace SocialMauiApp.ViewModel
             if (!IsFingerprintEnabled)
             {
                 var result = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
-                    "Enable Fingerprint Login",
+                    "Enable fingerprint login",
                     "Verify your fingerprint to enable fingerprint login")
                 {
                     AllowAlternativeAuthentication = true,
@@ -126,7 +166,7 @@ namespace SocialMauiApp.ViewModel
                 {
                     IsFingerprintEnabled = true;
                     await Shell.Current.DisplayAlert("Success",
-                        "Fingerprint login has been enabled successfully.", "OK");
+                        "Fingerprint login has been successfully enabled.", "OK");
                 }
                 else
                 {
@@ -135,14 +175,14 @@ namespace SocialMauiApp.ViewModel
             }
             else
             {
-                var confirm = await Shell.Current.DisplayAlert("Disable Fingerprint",
-                    "Are you sure you want to disable fingerprint login?", "Yes", "No");
+                var confirm = await Shell.Current.DisplayAlert("Turn off fingerprint login",
+                    "Are you sure you want to turn off fingerprint login?", "Yes", "No");
 
                 if (confirm)
                 {
                     IsFingerprintEnabled = false;
                     await Shell.Current.DisplayAlert("Success",
-                        "Fingerprint login has been disabled.", "OK");
+                        "Fingerprint login is disabled.", "OK");
                 }
             }
         }
@@ -150,9 +190,15 @@ namespace SocialMauiApp.ViewModel
         [RelayCommand]
         private async Task LogoutAsync()
         {
-            if (await Shell.Current.DisplayAlert("Confirm Logout?", "Do you really want to logout?", "Yes", "No"))
+            if (await Shell.Current.DisplayAlert("Confirm logout?", "Are you sure you want to logout?", "Yes", "No"))
             {
                 _authService.Logout();
+                SecureStorage.Remove("AuthToken");
+                SecureStorage.Remove("RefreshToken");
+                _preferencesService.SetBool("FingerprintAuthEnabled", false);
+                _preferencesService.SetString("LastEmail", "");
+                _preferencesService.SetString("DisplayName", "");
+                _preferencesService.SetString("AvatarUrl", "");
                 await NavigateAsync($"//{nameof(LoginPage)}");
             }
         }
@@ -165,14 +211,14 @@ namespace SocialMauiApp.ViewModel
 
             var currentPasswordEntry = new Entry { Placeholder = "Current Password", IsPassword = true };
             var newPasswordEntry = new Entry { Placeholder = "New Password", IsPassword = true };
-            var confirmNewPasswordEntry = new Entry { Placeholder = "Confirm New Password", IsPassword = true };
+            var confirmNewPasswordEntry = new Entry { Placeholder = "Confirm new password", IsPassword = true };
 
             var stackLayout = new VerticalStackLayout
             {
                 Spacing = 10,
                 Children =
                 {
-                    new Label { Text = "Change Password", FontAttributes = FontAttributes.Bold, FontSize = 18 },
+                    new Label { Text = "Change password", FontAttributes = FontAttributes.Bold, FontSize = 18 },
                     currentPasswordEntry,
                     newPasswordEntry,
                     confirmNewPasswordEntry,
@@ -238,15 +284,36 @@ namespace SocialMauiApp.ViewModel
                     CurrentPassword = CurrentPassword,
                     NewPassword = NewPassword
                 };
-                var result = await _userApi.ChangePasswordAsync(token, dto);
-                if (result.IsSuccess)
+                try
                 {
-                    await ToastAsync("Password changed successfully.");
-                    await CancelChangePasswordAsync();
+                    var result = await _userApi.ChangePasswordAsync(token, dto);
+                    if (result.IsSuccess)
+                    {
+                        await ToastAsync("Password changed successfully.");
+                        await CancelChangePasswordAsync();
+                    }
+                    else
+                    {
+                        await ShowErrorAlertAsync(result.Error ?? "Unable to change password.");
+                    }
                 }
-                else
+                catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    await ShowErrorAlertAsync(result.Error ?? "Failed to change password.");
+                    // Token hết hạn, thử làm mới
+                    if (await TryRefreshTokenAsync())
+                    {
+                        token = "Bearer " + _authService.Token;
+                        var result = await _userApi.ChangePasswordAsync(token, dto);
+                        if (result.IsSuccess)
+                        {
+                            await ToastAsync("Password changed successfully.");
+                            await CancelChangePasswordAsync();
+                        }
+                        else
+                        {
+                            await ShowErrorAlertAsync(result.Error ?? "Unable to change password.");
+                        }
+                    }
                 }
             });
         }
@@ -266,14 +333,14 @@ namespace SocialMauiApp.ViewModel
         {
             IsProfileMenuOpen = false;
 
-            var nameEntry = new Entry { Placeholder = "New Name", Text = User.Name };
+            var nameEntry = new Entry { Placeholder = "New name", Text = User.Name };
 
             var stackLayout = new VerticalStackLayout
             {
                 Spacing = 10,
                 Children =
                 {
-                    new Label { Text = "Change Name", FontAttributes = FontAttributes.Bold, FontSize = 18 },
+                    new Label { Text = "Change name", FontAttributes = FontAttributes.Bold, FontSize = 18 },
                     nameEntry,
                     new Button
                     {
@@ -317,17 +384,42 @@ namespace SocialMauiApp.ViewModel
             {
                 var token = "Bearer " + _authService.Token;
                 var dto = new ChangeNameDto { NewName = NewName };
-                var result = await _userApi.ChangeNameAsync(token, dto);
-                if (result.IsSuccess)
+                try
                 {
-                    User = User with { Name = NewName };
-                    _authService.Login(new LoginResponseDto(User, _authService.Token));
-                    await ToastAsync("Name changed successfully.");
-                    await CancelChangeNameAsync();
+                    var result = await _userApi.ChangeNameAsync(token, dto);
+                    if (result.IsSuccess)
+                    {
+                        User = User with { Name = NewName };
+                        _authService.Login(new LoginResponseDto(User, _authService.Token, await SecureStorage.GetAsync("RefreshToken")));
+                        _preferencesService.SetString("DisplayName", NewName);
+                        await ToastAsync("Rename successful.");
+                        await CancelChangeNameAsync();
+                    }
+                    else
+                    {
+                        await ShowErrorAlertAsync(result.Error ?? "Cannot change name.");
+                    }
                 }
-                else
+                catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    await ShowErrorAlertAsync(result.Error ?? "Failed to change name.");
+                    // Token hết hạn, thử làm mới
+                    if (await TryRefreshTokenAsync())
+                    {
+                        token = "Bearer " + _authService.Token;
+                        var result = await _userApi.ChangeNameAsync(token, dto);
+                        if (result.IsSuccess)
+                        {
+                            User = User with { Name = NewName };
+                            _authService.Login(new LoginResponseDto(User, _authService.Token, await SecureStorage.GetAsync("RefreshToken")));
+                            _preferencesService.SetString("DisplayName", NewName);
+                            await ToastAsync("Rename successful.");
+                            await CancelChangeNameAsync();
+                        }
+                        else
+                        {
+                            await ShowErrorAlertAsync(result.Error ?? "Cannot change name.");
+                        }
+                    }
                 }
             });
         }
@@ -366,7 +458,7 @@ namespace SocialMauiApp.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to delete temp file: {ex.Message}");
+                    Console.WriteLine($"Cannot delete temporary files: {ex.Message}");
                 }
                 return;
             }
@@ -381,29 +473,57 @@ namespace SocialMauiApp.ViewModel
                     var photoStreamPart = new StreamPart(fs, fileName, "image/jpeg");
 
                     var token = "Bearer " + _authService.Token;
-                    var result = await _userApi.ChangePhotoAsync(token, photoStreamPart);
-
-                    if (!result.IsSuccess)
-                    {
-                        await ShowErrorAlertAsync(result.Error);
-                        return;
-                    }
-
-                    User = User with { PhotoUrl = result.Data };
-                    _authService.Login(new LoginResponseDto(User, _authService.Token));
-
                     try
                     {
-                        File.Delete(newValue);
+                        var result = await _userApi.ChangePhotoAsync(token, photoStreamPart);
+                        if (!result.IsSuccess)
+                        {
+                            await ShowErrorAlertAsync(result.Error);
+                            return;
+                        }
+
+                        User = User with { PhotoUrl = result.Data };
+                        _authService.Login(new LoginResponseDto(User, _authService.Token, await SecureStorage.GetAsync("RefreshToken")));
+                        _preferencesService.SetString("AvatarUrl", result.Data);
+                        try
+                        {
+                            File.Delete(newValue);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Cannot delete temporary files: {ex.Message}");
+                        }
                     }
-                    catch (Exception ex)
+                    catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
-                        Console.WriteLine($"Failed to delete temp file: {ex.Message}");
+                        // Token hết hạn, thử làm mới
+                        if (await TryRefreshTokenAsync())
+                        {
+                            token = "Bearer " + _authService.Token;
+                            var result = await _userApi.ChangePhotoAsync(token, photoStreamPart);
+                            if (!result.IsSuccess)
+                            {
+                                await ShowErrorAlertAsync(result.Error);
+                                return;
+                            }
+
+                            User = User with { PhotoUrl = result.Data };
+                            _authService.Login(new LoginResponseDto(User, _authService.Token, await SecureStorage.GetAsync("RefreshToken")));
+                            _preferencesService.SetString("AvatarUrl", result.Data);
+                            try
+                            {
+                                File.Delete(newValue);
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine($"Cannot delete temporary files: {ex.Message}");
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    await ShowErrorAlertAsync($"Failed to upload photo: {ex.Message}");
+                    await ShowErrorAlertAsync($"Unable to upload image: {ex.Message}");
                 }
                 finally
                 {
@@ -434,16 +554,37 @@ namespace SocialMauiApp.ViewModel
             await MakeApiCall(async () =>
             {
                 var token = "Bearer " + _authService.Token;
-                var posts = await _userApi.GetUserPostsAsync(token, _myPostsStartIndex, PageSize);
-
-                if (posts.Length > 0)
+                try
                 {
-                    if (_myPostsStartIndex == 0)
-                        MyPosts.Clear();
-                    _myPostsStartIndex += posts.Length;
-                    foreach (var p in posts.OrderByDescending(p => p.PostedOn))
+                    var posts = await _userApi.GetUserPostsAsync(token, _myPostsStartIndex, PageSize);
+                    if (posts.Length > 0)
                     {
-                        MyPosts.Add(PostModel.FromDto(p, PostsApi, _realtimeUpdatesService, _authService));
+                        if (_myPostsStartIndex == 0)
+                            MyPosts.Clear();
+                        _myPostsStartIndex += posts.Length;
+                        foreach (var p in posts.OrderByDescending(p => p.PostedOn))
+                        {
+                            MyPosts.Add(PostModel.FromDto(p, PostsApi, _realtimeUpdatesService, _authService));
+                        }
+                    }
+                }
+                catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    // Token hết hạn, thử làm mới
+                    if (await TryRefreshTokenAsync())
+                    {
+                        token = "Bearer " + _authService.Token;
+                        var posts = await _userApi.GetUserPostsAsync(token, _myPostsStartIndex, PageSize);
+                        if (posts.Length > 0)
+                        {
+                            if (_myPostsStartIndex == 0)
+                                MyPosts.Clear();
+                            _myPostsStartIndex += posts.Length;
+                            foreach (var p in posts.OrderByDescending(p => p.PostedOn))
+                            {
+                                MyPosts.Add(PostModel.FromDto(p, PostsApi, _realtimeUpdatesService, _authService));
+                            }
+                        }
                     }
                 }
             });
@@ -455,20 +596,46 @@ namespace SocialMauiApp.ViewModel
             await MakeApiCall(async () =>
             {
                 var token = "Bearer " + _authService.Token;
-                var posts = await _userApi.GetUserBookmarkedPostsAsync(token, _bookmarkedPostsStartIndex, PageSize);
-
-                if (posts.Length > 0)
+                try
                 {
-                    if (_bookmarkedPostsStartIndex == 0)
-                        BookmarkedPosts.Clear();
-
-                    _bookmarkedPostsStartIndex += posts.Length;
-                    foreach (var p in posts.OrderByDescending(p => p.PostedOn))
+                    var posts = await _userApi.GetUserBookmarkedPostsAsync(token, _bookmarkedPostsStartIndex, PageSize);
+                    if (posts.Length > 0)
                     {
-                        var newPost = PostModel.FromDto(p, PostsApi, _realtimeUpdatesService, _authService);
-                        if (!BookmarkedPosts.Any(existing => existing.PostId == newPost.PostId))
+                        if (_bookmarkedPostsStartIndex == 0)
+                            BookmarkedPosts.Clear();
+
+                        _bookmarkedPostsStartIndex += posts.Length;
+                        foreach (var p in posts.OrderByDescending(p => p.PostedOn))
                         {
-                            BookmarkedPosts.Add(newPost);
+                            var newPost = PostModel.FromDto(p, PostsApi, _realtimeUpdatesService, _authService);
+                            if (!BookmarkedPosts.Any(existing => existing.PostId == newPost.PostId))
+                            {
+                                BookmarkedPosts.Add(newPost);
+                            }
+                        }
+                    }
+                }
+                catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    // Token hết hạn, thử làm mới
+                    if (await TryRefreshTokenAsync())
+                    {
+                        token = "Bearer " + _authService.Token;
+                        var posts = await _userApi.GetUserBookmarkedPostsAsync(token, _bookmarkedPostsStartIndex, PageSize);
+                        if (posts.Length > 0)
+                        {
+                            if (_bookmarkedPostsStartIndex == 0)
+                                BookmarkedPosts.Clear();
+
+                            _bookmarkedPostsStartIndex += posts.Length;
+                            foreach (var p in posts.OrderByDescending(p => p.PostedOn))
+                            {
+                                var newPost = PostModel.FromDto(p, PostsApi, _realtimeUpdatesService, _authService);
+                                if (!BookmarkedPosts.Any(existing => existing.PostId == newPost.PostId))
+                                {
+                                    BookmarkedPosts.Add(newPost);
+                                }
+                            }
                         }
                     }
                 }

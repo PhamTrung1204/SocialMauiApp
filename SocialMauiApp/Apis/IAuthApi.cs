@@ -34,5 +34,8 @@ namespace SocialMauiApp.Apis
 
         [Post("/api/auth/reset-password")]
         Task<ApiResult<string>> ResetPasswordAsync([Body] ResetPasswordDto dto);
+
+        [Post("/api/auth/refresh-token")]
+        Task<ApiResult<LoginResponseDto>> RefreshTokenAsync([Body] RefreshTokenDto dto);
     }
 }
