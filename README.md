@@ -1,107 +1,122 @@
-##📱 SocialMauiApp
-SocialMauiApp is a cross-platform social media application built with .NET MAUI and .NET 9. It enables users to register via email, post content, comment on others' posts, and manage their personal accounts. The app also includes a basic user administration feature for admin users.
+# 📱 SocialMauiApp
 
-🚀 Features
-📧 Email Registration – Sign up using an email address.
+[![.NET 9](https://img.shields.io/badge/.NET-9-blueviolet)](https://dotnet.microsoft.com/en-us/)
+[![Platform](https://img.shields.io/badge/Platform-Android-green)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-🔐 Login / Logout – Secure authentication.
+**SocialMauiApp** is a simple social media application built with **.NET MAUI** and **.NET 9**.  
+It allows users to register, post content, and interact with others.  
+The app supports basic user account management and is currently optimized for **Android only**.
 
-🔄 Change Password – Update password directly in-app.
+---
 
-📝 Create Posts – Share posts with text and images.
+## 📚 Table of Contents
 
-💬 Comment on Posts – Interact with others through comments.
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [System Requirements](#system-requirements)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Development Status](#development-status)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-📰 User Feed – Scrollable list of shared posts.
+---
 
-🛠️ Basic User Administration – View and manage registered users (admin only).
+## ✨ Features
 
-⚠️ Limitations:
+### ✅ Available
 
-❌ Friend list management is not implemented.
+- 📧 Email registration and login  
+- 🔐 Password change  
+- 📝 Create and view posts  
+- 💬 Comment on posts  
+- 📰 View all user feeds  
+- 👤 Basic user administration (admin-only)
 
-❌ QR code scanning is not integrated yet.
+### 🚫 Not yet implemented
 
-⚠️ User administration is available but still limited in features (e.g., no role management, filtering, or audit logs).
+- ❌ Friend list management  
+- ❌ QR code scanning  
+- ⚠️ User administration is currently limited (e.g., no role filtering)
 
-✅ Only Android is fully supported. iOS, Windows, and macOS may compile but could crash or misbehave.
+---
 
-🛠️ Tech Stack
-.NET MAUI – UI for mobile and desktop apps
+## 🛠 Technology Stack
 
-.NET 9 – Latest SDK/runtime
+- [.NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui/) – Cross-platform UI framework  
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
+- [ASP.NET Core Web API](https://learn.microsoft.com/en-us/aspnet/core/web-api/) – Backend services  
+- [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) – ORM  
+- [SQLite](https://www.sqlite.org/index.html) – Local data storage  
+- C# – Programming language
 
-ASP.NET Core Web API – Backend services
+---
 
-Entity Framework Core – ORM for data handling
+## ⚙️ System Requirements
 
-SQLite – Local storage for mobile clients
+- **Visual Studio 2022** or later
+- **.NET 9 SDK**
+- **.NET MAUI workload** installed  
+  Run the following command if not installed:
+  dotnet workload install maui
+Android Emulator or Physical Android Device
 
-C# – Main programming language
-
-📁 Project Structure
-less
-Sao chép
-Chỉnh sửa
-SocialMauiApp/           // .NET MAUI frontend
-SocialMauiApp.Api/       // ASP.NET Core Web API backend
-SocialMediaMaui.Shared/  // Shared DTOs and models
-⚙️ Requirements
-Visual Studio 2022 or later
-
-.NET 9 SDK
-
-.NET MAUI workload installed
-
-Android emulator or real device
-
-🧪 Current Status
-Feature	Status
-Android Support	✅ Stable
-iOS / Windows / macOS	⚠️ Builds but may crash
-Email Registration	✅ Complete
-Change Password	✅ Complete
-Friend Management	❌ Not available
-QR Code Scanning	❌ Not available
-User Administration (Admin)	⚠️ Basic view-only management
+⚠️ The app is currently tested and stable only on Android.
+Other platforms (iOS, macOS, Windows) may build successfully but are not fully functional yet.
 
 🚀 Getting Started
-Clone the repository:
-
-bash
-Sao chép
-Chỉnh sửa
+1. Clone the repository
 git clone https://github.com/PhamTrung1204/SocialMauiApp.git
-Open the solution:
 
-Use Visual Studio 2022.
+3. Open the solution
+Open SocialMauiApp.sln using Visual Studio 2022+
 
-Open the SocialMauiApp.sln file.
+4. Build & Run
+Set SocialMauiApp as the startup project
 
-Run on Android:
+Choose an Android device/emulator
 
-Set startup project to SocialMauiApp.
+Click Run or press F5
 
-Choose Android device/emulator.
+📁 Project Structure
 
-Press F5 or click Run.
+SocialMauiApp/            -> .NET MAUI mobile frontend (Android UI)
+SocialMauiApp.Api/        -> ASP.NET Core Web API backend
+SocialMediaMaui.Shared/   -> Shared DTOs and models between client and server
+📊 Development Status
+Feature	Status
+Android Support	✅ Stable
+iOS / macOS / Windows	⚠️ Builds but unstable
+Email Registration	✅ Complete
+Change Password	✅ Complete
+Post & Comment	✅ Complete
+QR Code Scanning	❌ Not available
+Friend List Management	❌ Not available
+User Administration (Admin)	⚠️ Limited
 
 🤝 Contributing
-Contributions are welcome!
+Contributions are welcome! 🚀
 
-Fork the repository
+Fork this repo
 
-Create a feature branch
+Create a new branch:
 
-Commit and push changes
+git checkout -b feature/my-feature
+Make changes and commit:
 
-Submit a pull request
+git commit -m "Add feature XYZ"
+Push to the branch:
+
+git push origin feature/my-feature
+Open a Pull Request
 
 📄 License
-This project is licensed under the MIT License. See the LICENSE file for more information.
+This project is licensed under the MIT License.
+See the LICENSE file for more information.
 
 📬 Contact
 Author: PhamTrung1204
-
 Email: phamtrung2004py@gmail.com
 
