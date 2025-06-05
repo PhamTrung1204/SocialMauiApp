@@ -193,6 +193,7 @@ namespace SocialMauiApp.Models
         private async Task ToggleCommentsVisibility()
         {
             IsCommentsExpanded = !IsCommentsExpanded;
+            IsCommentsVisible = true; // Ensure comments section is visible when toggling
             if (IsCommentsExpanded)
             {
                 await LoadCommentsAsync(int.MaxValue);
@@ -201,6 +202,7 @@ namespace SocialMauiApp.Models
             {
                 await LoadCommentsAsync(1);
             }
+            OnPropertyChanged(nameof(Comments)); // Force UI refresh
         }
 
         [RelayCommand]
@@ -208,6 +210,12 @@ namespace SocialMauiApp.Models
         {
             if (_isInDetailsView) return;
             IsCommentsVisible = !IsCommentsVisible;
+            if (IsCommentsVisible && Comments.Count == 0)
+            {
+                // Load comments if none are present when showing the comments section
+                Task.Run(() => LoadCommentsAsync(IsCommentsExpanded ? int.MaxValue : 1));
+            }
+            OnPropertyChanged(nameof(Comments)); // Force UI refresh
         }
 
         [RelayCommand]
@@ -484,7 +492,7 @@ namespace SocialMauiApp.Models
 
                 if (PostId == Guid.Empty || _authService.User == null)
                 {
-                    Console.WriteLine($"AddCommentAsync aborted: PostId or User is invalid at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    Console.WriteLine($"AddCommentAsync aborted: PostId or User is invalid at {DateTime.Now:HH:mm:ss}.");
                     return;
                 }
 
@@ -504,7 +512,7 @@ namespace SocialMauiApp.Models
                             srcStream.Close();
                             memoryStream.Position = 0;
                             imgPart = new StreamPart(memoryStream, fileName, f.ContentType ?? "image/jpeg");
-                            Console.WriteLine($"Image prepared for comment at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                            Console.WriteLine($"Image prepared for comment at {DateTime.Now:HH:mm:ss}");
                         }
                     }
 
@@ -519,10 +527,10 @@ namespace SocialMauiApp.Models
                             Photo = null
                         };
                         var serializedUpdate = JsonSerializer.Serialize(updateDto);
-                        Console.WriteLine($"Serialized UpdateCommentDto for comment {_commentBeingEdited.CommentId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                        Console.WriteLine($"Serialized UpdateCommentDto for comment {_commentBeingEdited.CommentId} at {DateTime.Now:HH:mm:ss}.");
 
                         var updateResult = await _postsApi.UpdateCommentWithImagesAsync(_commentBeingEdited.CommentId, imgPart, serializedUpdate);
-                        Console.WriteLine($"API UpdateCommentWithImagesAsync completed for comment {_commentBeingEdited.CommentId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025. Success: {updateResult.IsSuccess}");
+                        Console.WriteLine($"API UpdateCommentWithImagesAsync completed for comment {_commentBeingEdited.CommentId} at {DateTime.Now:HH:mm:ss} . Success: {updateResult.IsSuccess}");
 
                         if (updateResult.IsSuccess && updateResult.Data != null)
                         {
@@ -569,24 +577,24 @@ namespace SocialMauiApp.Models
                                         }
                                     }
                                     OnPropertyChanged(nameof(Comments));
-                                    Console.WriteLine($"Updated UI for comment {updatedComment.CommentId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                                    Console.WriteLine($"Updated UI for comment {updatedComment.CommentId} at {DateTime.Now:HH:mm:ss}");
                                 }
                             });
 
                             try
                             {
                                 await ToastAsync("Comment updated");
-                                Console.WriteLine($"ToastAsync completed at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                                Console.WriteLine($"ToastAsync completed at {DateTime.Now:HH:mm:ss}.");
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine($"Error in ToastAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                                Console.WriteLine($"Error in ToastAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss}.");
                             }
                         }
                         else
                         {
                             await ToastAsync(updateResult.Error ?? "Failed to update comment");
-                            Console.WriteLine($"Failed to update comment: {updateResult.Error} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                            Console.WriteLine($"Failed to update comment: {updateResult.Error} at {DateTime.Now:HH:mm:ss}.");
                         }
                     }
                     else
@@ -606,10 +614,10 @@ namespace SocialMauiApp.Models
                             ParentCommentId = parentCommentId
                         };
                         var serializedSave = JsonSerializer.Serialize(saveDto);
-                        Console.WriteLine($"Serialized SaveCommentDto for post {PostId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                        Console.WriteLine($"Serialized SaveCommentDto for post {PostId} at {DateTime.Now:HH:mm:ss}.");
 
                         var saveResult = await _postsApi.SaveCommentWithImagesAsync(PostId, imgPart, serializedSave);
-                        Console.WriteLine($"API SaveCommentWithImagesAsync completed for post {PostId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025. Success: {saveResult.IsSuccess}");
+                        Console.WriteLine($"API SaveCommentWithImagesAsync completed for post {PostId} at {DateTime.Now:HH:mm:ss}. Success: {saveResult.IsSuccess}");
 
                         if (saveResult.IsSuccess && saveResult.Data != null)
                         {
@@ -655,11 +663,11 @@ namespace SocialMauiApp.Models
                                 try
                                 {
                                     await ToastAsync(parentCommentId == null ? "Comment added" : "Reply added");
-                                    Console.WriteLine($"ToastAsync completed at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                                    Console.WriteLine($"ToastAsync completed at {DateTime.Now:HH:mm:ss}.");
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine($"Error in ToastAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                                    Console.WriteLine($"Error in ToastAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss}.");
                                 }
 
                                 _realtimeUpdatesService.NotifyCommentAddedAsync(saveResult.Data);
@@ -668,7 +676,7 @@ namespace SocialMauiApp.Models
                         else
                         {
                             await ToastAsync(saveResult.Error ?? "Failed to add comment");
-                            Console.WriteLine($"Failed to add comment: {saveResult.Error} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                            Console.WriteLine($"Failed to add comment: {saveResult.Error} at {DateTime.Now:HH:mm:ss}.");
                         }
                     }
                 }
@@ -679,24 +687,24 @@ namespace SocialMauiApp.Models
                         try
                         {
                             memoryStream.Dispose();
-                            Console.WriteLine($"MemoryStream disposed at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                            Console.WriteLine($"MemoryStream disposed at {DateTime.Now:HH:mm:ss}.");
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Error disposing MemoryStream: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                            Console.WriteLine($"Error disposing MemoryStream: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss}.");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in AddCommentAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                Console.WriteLine($"Error in AddCommentAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss}.");
                 await ToastAsync($"Error processing comment: {ex.Message}");
             }
             finally
             {
                 IsBusy = false;
-                Console.WriteLine($"IsBusy set to false in finally at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                Console.WriteLine($"IsBusy set to false in finally at {DateTime.Now:HH:mm:ss}.");
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
@@ -716,11 +724,11 @@ namespace SocialMauiApp.Models
                 try
                 {
                     await ClearPhotosAsync();
-                    Console.WriteLine($"ClearPhotosAsync completed at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    Console.WriteLine($"ClearPhotosAsync completed at {DateTime.Now:HH:mm:ss}.");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error in ClearPhotosAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    Console.WriteLine($"Error in ClearPhotosAsync: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss}.");
                 }
             }
         }
@@ -755,7 +763,7 @@ namespace SocialMauiApp.Models
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine($"Error disposing stream: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                                Console.WriteLine($"Error disposing stream: {ex.Message} at {DateTime.Now:HH:mm:ss}.");
                             }
                         }
                     }
@@ -902,7 +910,7 @@ namespace SocialMauiApp.Models
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Error disposing stream in ClearPhotos: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                            Console.WriteLine($"Error disposing stream in ClearPhotos: {ex.Message} at {DateTime.Now:HH:mm:ss} .");
                         }
                     }
                 }
@@ -940,7 +948,7 @@ namespace SocialMauiApp.Models
                             {
                                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
                                 comment.UserName = comment.UserName ?? "Unknown User";
-                                comment.UserPhotoUrl = comment.UserPhotoUrl ?? "default_avatar.png";
+                                comment.UserPhotoUrl = _authService.User.Photo ?? "user.png";
                                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                                 comment.Replies = new ObservableCollection<CommentDto>(
                                     comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
@@ -951,21 +959,21 @@ namespace SocialMauiApp.Models
                                     foreach (var reply in comment.Replies)
                                     {
                                         reply.UserName = reply.UserName ?? "Unknown User";
-                                        reply.UserPhotoUrl = reply.UserPhotoUrl ?? "default_avatar.png";
+                                        reply.UserPhotoUrl = _authService.User.PhotoUrl ?? "user.png";
                                         reply.IsOwnComment = _authService.User != null && reply.UserId == _authService.User.Id;
                                         _processedCommentIds.Add(reply.CommentId);
                                     }
                                 }
                             }
                         }
-                        OnPropertyChanged(nameof(Comments));
+                        OnPropertyChanged(nameof(Comments)); // Force UI refresh
                     }
-                    Console.WriteLine($"Loaded {Comments.Count} comments for post {PostId} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    Console.WriteLine($"Loaded {Comments.Count} comments for post {PostId} at {DateTime.Now:HH:mm:ss}.");
                 });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading comments: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                Console.WriteLine($"Error loading comments: {ex.Message} at {DateTime.Now:HH:mm:ss}.");
                 await ToastAsync($"Error loading comments: {ex.Message}");
             }
             finally
@@ -1025,7 +1033,7 @@ namespace SocialMauiApp.Models
                 if (_isInDetailsView || _processedCommentIds.Contains(comment.CommentId)) return;
                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
                 comment.UserName = comment.UserName ?? "Unknown User";
-                comment.UserPhotoUrl = comment.UserPhotoUrl ?? "user.png";
+                comment.UserPhotoUrl = _authService.User.PhotoUrl ?? "user.png";
                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                 comment.Replies = new ObservableCollection<CommentDto>(
                     comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
@@ -1057,7 +1065,7 @@ namespace SocialMauiApp.Models
                     OnPropertyChanged(nameof(Comments));
                     OnPropertyChanged(nameof(CommentCount));
                 }
-                Console.WriteLine($"Added comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                Console.WriteLine($"Added comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm:ss}.");
             });
         }
 
@@ -1068,7 +1076,7 @@ namespace SocialMauiApp.Models
                 if (_isInDetailsView) return;
                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
                 comment.UserName = comment.UserName ?? "Unknown User";
-                comment.UserPhotoUrl = comment.UserPhotoUrl ?? "default.png";
+                comment.UserPhotoUrl = _authService.User.PhotoUrl ?? "user.png";
                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                 comment.Replies = new ObservableCollection<CommentDto>(
                     comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
@@ -1105,7 +1113,7 @@ namespace SocialMauiApp.Models
                     }
                     OnPropertyChanged(nameof(Comments));
                 }
-                Console.WriteLine($"Updated comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                Console.WriteLine($"Updated comment {comment.CommentId} via SignalR at {DateTime.Now:HH:mm:ss}.");
             });
         }
 
@@ -1158,7 +1166,7 @@ namespace SocialMauiApp.Models
                         OnPropertyChanged(nameof(CommentBeingEdited));
                     }
                 }
-                Console.WriteLine($"Deleted comment {commentId} via SignalR at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                Console.WriteLine($"Deleted comment {commentId} via SignalR at {DateTime.Now:HH:mm:ss}");
             });
         }
 
