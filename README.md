@@ -1,4 +1,4 @@
-📱 SocialMauiApp
+##📱 SocialMauiApp
 SocialMauiApp is a cross-platform social media application built with .NET MAUI and .NET 9. It enables users to register via email, post content, comment on others' posts, and manage their personal accounts. The app also includes a basic user administration feature for admin users.
 
 🚀 Features
