@@ -83,17 +83,27 @@ Click Run or press F5
 📁 Project Structure
 
 SocialMauiApp/            -> .NET MAUI mobile frontend (Android UI)
+
 SocialMauiApp.Api/        -> ASP.NET Core Web API backend
+
 SocialMediaMaui.Shared/   -> Shared DTOs and models between client and server
+
 📊 Development Status
 Feature	Status
 Android Support	✅ Stable
+
 iOS / macOS / Windows	⚠️ Builds but unstable
+
 Email Registration	✅ Complete
+
 Change Password	✅ Complete
+
 Post & Comment	✅ Complete
+
 QR Code Scanning	❌ Not available
+
 Friend List Management	❌ Not available
+
 User Administration (Admin)	⚠️ Limited
 
 🤝 Contributing
