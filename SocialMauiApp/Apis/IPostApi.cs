@@ -62,6 +62,7 @@ namespace SocialMauiApp.Apis
 
         [Get("/api/posts/{postId}")]
         Task<PostDto?> GetPostAsync(Guid postId);
-
+        [Get("/api/posts/{postId}/likers")]
+        Task<string[]> GetPostLikersAsync(Guid postId);
     }
 }

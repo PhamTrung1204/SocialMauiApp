@@ -53,6 +53,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.AddPos
 build_metadata.AdditionalFiles.TargetPath = Pages\AddPostPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\AddPostPage.xaml
 
+[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/AdminDashboardPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.AdminDashboardPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\AdminDashboardPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\AdminDashboardPage.xaml
+
 [C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/CropPhotoPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.CropPhotoPage.xaml
@@ -70,12 +76,6 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.LoginPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\LoginPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\LoginPage.xaml
-
-[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/LoginWithFingerprintPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.LoginWithFingerprintPage.xaml
-build_metadata.AdditionalFiles.TargetPath = Pages\LoginWithFingerprintPage.xaml
-build_metadata.AdditionalFiles.RelativePath = Pages\LoginWithFingerprintPage.xaml
 
 [C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/NotificationPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
@@ -95,6 +95,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.PostDe
 build_metadata.AdditionalFiles.TargetPath = Pages\PostDetailsPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\PostDetailsPage.xaml
 
+[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/PostManagementPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.PostManagementPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\PostManagementPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\PostManagementPage.xaml
+
 [C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/ProfilePage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.ProfilePage.xaml
@@ -106,6 +112,12 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.RegisterPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Pages\RegisterPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Pages\RegisterPage.xaml
+
+[C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Pages/ResetPasswordPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SocialMauiApp.Pages.ResetPasswordPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\ResetPasswordPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\ResetPasswordPage.xaml
 
 [C:/Users/PhamTrung/Desktop/Fast/SocialMauiApp/SocialMauiApp/Resources/Styles/AppStyles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

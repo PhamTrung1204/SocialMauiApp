@@ -442,7 +442,25 @@ namespace SocialMauiApp.Api.Services
                 .ToArrayAsync();
             return comments;
         }
+        public async Task<string[]> GetPostLikersAsync(Guid postId)
+        {
+            var postExists = await _context.Posts.AnyAsync(p => p.Id == postId);
+            if (!postExists)
+            {
+                return Array.Empty<string>();
+            }
 
+            var likers = await _context.Likes
+                .Where(l => l.PostId == postId)
+                .Join(_context.Users,
+                    like => like.UserId,
+                    user => user.Id,
+                    (like, user) => user.Name)
+                .Distinct()
+                .ToArrayAsync();
+
+            return likers;
+        }
         public async Task<ApiResult> ToggleLikeAsync(Guid postId, LoggedInUser currentUser)
         {
             var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p => p.UserId).FirstOrDefaultAsync();

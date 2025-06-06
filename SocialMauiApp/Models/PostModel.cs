@@ -159,35 +159,33 @@ namespace SocialMauiApp.Models
         [Ignore]
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
 
-        //private void OnUpdateTimerTick(object sender, EventArgs e)
-        //{
-        //    UpdatePostedOnDisplay();
-        //    // Bỏ dòng này vì IDispatcherTimer tự động lặp lại
-        //    // ((IDispatcherTimer)sender).IsRepeating = true;
-        //}
-
-        //private void UpdatePostedOnDisplay()
-        //{
-        //    var postTime = PostedOn ?? ModifiedOn;
-        //    var now = DateTime.UtcNow;
-        //    var timeSpan = now - postTime;
-
-        //    string newDisplay;
-        //    if (timeSpan.TotalMinutes < 1)
-        //        newDisplay = "Just posted";
-        //    else if (timeSpan.TotalMinutes < 60)
-        //        newDisplay = $"{(int)timeSpan.TotalMinutes} minutes ago";
-        //    else if (timeSpan.TotalHours < 24)
-        //        newDisplay = $"{(int)timeSpan.TotalHours} hours ago";
-        //    else if (timeSpan.TotalDays < 7)
-        //        newDisplay = $"{(int)timeSpan.TotalDays} days ago";
-        //    else
-        //        newDisplay = postTime.ToString("MMM dd yyyy", new CultureInfo("en-US"));
-
-        //    // Luôn cập nhật PostedOnDisplay, không cần so sánh
-        //    PostedOnDisplay = newDisplay;
-        //    OnPropertyChanged(nameof(PostedOnDisplay));
-        //}
+        [RelayCommand]
+        private async Task ShowLikersAsync()
+        {
+            if (IsBusy || LikeCount == 0) return;
+            IsBusy = true;
+            try
+            {
+                var likers = await _postsApi.GetPostLikersAsync(PostId);
+                if (likers != null && likers.Any())
+                {
+                    var likersList = string.Join("\n", likers);
+                    await Shell.Current.DisplayAlert("Users Who Liked This Post", likersList, "OK");
+                }
+                else
+                {
+                    await ToastAsync("No users have liked this post.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await ToastAsync($"Error fetching likers: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
 
         [RelayCommand]
         private async Task ToggleCommentsVisibility()

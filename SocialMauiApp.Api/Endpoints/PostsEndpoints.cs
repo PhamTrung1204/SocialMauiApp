@@ -135,7 +135,11 @@ namespace SocialMauiApp.Api.Endpoints
                 .Accepts<IFormFile>("multipart/form-data")
                 .Produces<ApiResult<CommentDto>>()
                 .WithName("ReplyCommentWithImages");
-
+            postsGroup.MapGet("/{postId:guid}/likers",
+                 async (Guid postId, PostService postService) =>
+                 Results.Ok(await postService.GetPostLikersAsync(postId)))
+                 .Produces<string[]>()
+                 .WithName("GetPostLikers");
             return app;
         }
     }

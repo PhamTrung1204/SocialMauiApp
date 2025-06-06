@@ -9,6 +9,8 @@ C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-i
 --refs 
  C:\Users\PhamTrung\.nuget\packages\communitytoolkit.mvvm\8.4.0\lib\net8.0\CommunityToolkit.Mvvm.dll
 --refs 
+ C:\Users\PhamTrung\.nuget\packages\humanizer.core\2.14.1\lib\net6.0\Humanizer.dll
+--refs 
  C:\Users\PhamTrung\.nuget\packages\microsoft.aspnetcore.connections.abstractions\9.0.2\lib\net9.0\Microsoft.AspNetCore.Connections.Abstractions.dll
 --refs 
  C:\Users\PhamTrung\.nuget\packages\microsoft.aspnetcore.http.connections.client\9.0.2\lib\net9.0\Microsoft.AspNetCore.Http.Connections.Client.dll
@@ -86,6 +88,14 @@ C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMauiApp\obj\Release\net9.0-i
  C:\Users\PhamTrung\.nuget\packages\refit.httpclientfactory\8.0.0\lib\net8.0\Refit.HttpClientFactory.dll
 --refs 
  C:\Users\PhamTrung\Desktop\Fast\SocialMauiApp\SocialMediaMaui.Shared\obj\Release\net9.0\ref\SocialMediaMaui.Shared.dll
+--refs 
+ C:\Users\PhamTrung\.nuget\packages\sqlite-net-pcl\1.9.172\lib\netstandard2.0\SQLite-net.dll
+--refs 
+ C:\Users\PhamTrung\.nuget\packages\sqlitepclraw.bundle_green\2.1.2\lib\net6.0-ios14.2\SQLitePCLRaw.batteries_v2.dll
+--refs 
+ C:\Users\PhamTrung\.nuget\packages\sqlitepclraw.core\2.1.2\lib\netstandard2.0\SQLitePCLRaw.core.dll
+--refs 
+ C:\Users\PhamTrung\.nuget\packages\sqlitepclraw.provider.sqlite3\2.1.2\lib\net6.0\SQLitePCLRaw.provider.sqlite3.dll
 --refs 
  C:\Users\PhamTrung\.nuget\packages\syncfusion.licensing\28.1.38\lib\net9.0\Syncfusion.Licensing.dll
 --refs 
