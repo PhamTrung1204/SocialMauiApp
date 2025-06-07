@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "z/y6DNmC2ysJAzqK33gRVntvXn24HJp9x6gLm0E9BXE=",
+  "Hash": "bgsBCal0QrpsW/3QPYnV6cvnFSFr+aGKwYQOgEToCxE=",
   "Source": "SocialMauiApp.Api",
   "BasePath": "_content/SocialMauiApp.Api",
   "Mode": "Default",
@@ -57,6 +57,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\images\\users\\36796edc-20e2-4ac4-a38c-6961b5e3d75f_638807964362553527.jpeg"
+    },
+    {
+      "Identity": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\4321c198-54bc-4128-9a4d-dae77135293c_638848589380860689.jpeg",
+      "SourceId": "SocialMauiApp.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\",
+      "BasePath": "_content/SocialMauiApp.Api",
+      "RelativePath": "uploads/images/users/4321c198-54bc-4128-9a4d-dae77135293c_638848589380860689#[.{fingerprint}]?.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "0viw23t8nh",
+      "Integrity": "hNojo7dJ3TKuZOG1KxCzMuQ31bFscBlKdTTrrViWQgk=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\images\\users\\4321c198-54bc-4128-9a4d-dae77135293c_638848589380860689.jpeg"
     },
     {
       "Identity": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\526749fd-83b9-4906-b561-710060ba879d_638776640127461838.jpg",
@@ -3287,6 +3308,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-kJu/LrFzd6cYYOTbf6Q6N6ovSUlqeBBAQ5aW9IUZZrg="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/images/users/4321c198-54bc-4128-9a4d-dae77135293c_638848589380860689.0viw23t8nh.jpeg",
+      "AssetFile": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\4321c198-54bc-4128-9a4d-dae77135293c_638848589380860689.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1389620"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"hNojo7dJ3TKuZOG1KxCzMuQ31bFscBlKdTTrrViWQgk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 07 Jun 2025 02:08:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "0viw23t8nh"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/images/users/4321c198-54bc-4128-9a4d-dae77135293c_638848589380860689.jpeg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-hNojo7dJ3TKuZOG1KxCzMuQ31bFscBlKdTTrrViWQgk="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/images/users/4321c198-54bc-4128-9a4d-dae77135293c_638848589380860689.jpeg",
+      "AssetFile": "C:\\Users\\PhamTrung\\Desktop\\Fast\\SocialMauiApp\\SocialMauiApp.Api\\wwwroot\\uploads\\images\\users\\4321c198-54bc-4128-9a4d-dae77135293c_638848589380860689.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1389620"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"hNojo7dJ3TKuZOG1KxCzMuQ31bFscBlKdTTrrViWQgk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 07 Jun 2025 02:08:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-hNojo7dJ3TKuZOG1KxCzMuQ31bFscBlKdTTrrViWQgk="
         }
       ]
     },

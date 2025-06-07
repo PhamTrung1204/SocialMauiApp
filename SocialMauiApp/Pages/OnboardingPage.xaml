@@ -8,7 +8,7 @@
 
     <Grid RowDefinitions="*, Auto, *, Auto">
         <Grid x:Name="MainContent" Grid.Row="1" RowDefinitions="Auto, Auto, Auto" RowSpacing="20" Opacity="0">
-            <Image Grid.Row="0" Source="social_media.png" HeightRequest="200" Aspect="AspectFit"/>
+            <Image Grid.Row="0" Source="logomaui.png" HeightRequest="200" Aspect="AspectFit"/>
             <Label Grid.Row="1" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" TextColor="White" Text="Hello there!"/>
             <VerticalStackLayout Grid.Row="2" Spacing="10">
                 <Label Text="Welcome to this" HorizontalOptions="Center" FontSize="25" FontAttributes="Bold" TextColor="White"/>

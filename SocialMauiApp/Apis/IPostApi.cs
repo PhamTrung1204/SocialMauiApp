@@ -38,17 +38,11 @@ namespace SocialMauiApp.Apis
 
         [Multipart]
         [Post("/api/posts/{postId}/upload-photo")]
-        Task<ApiResult<CommentDto>> SaveCommentWithImagesAsync(
-            Guid postId,
-            [AliasAs("photo")] StreamPart? photo,
-            [AliasAs("serializedCommentDto")] string serializedCommentDto);
+        Task<ApiResult<CommentDto>> SaveCommentWithImagesAsync( Guid postId, [AliasAs("photo")] StreamPart? photo, [AliasAs("serializedCommentDto")] string serializedCommentDto);
 
         [Multipart]
         [Put("/api/posts/comments/{commentId}/upload-photo")]
-        Task<ApiResult<CommentDto>> UpdateCommentWithImagesAsync(
-            Guid commentId,
-            [AliasAs("photo")] StreamPart? photo,
-            [AliasAs("serializedCommentDto")] string serializedCommentDto);
+        Task<ApiResult<CommentDto>> UpdateCommentWithImagesAsync(Guid commentId, [AliasAs("photo")] StreamPart? photo, [AliasAs("serializedCommentDto")] string serializedCommentDto);
         [Delete("/api/post/delete-comment-with-children/{commentId}")]
         Task<ApiResult> DeleteCommentWithChildrenAsync(Guid commentId);
         [Post("/api/posts/{postId}/toggle-like")]
