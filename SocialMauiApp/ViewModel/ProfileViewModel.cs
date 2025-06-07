@@ -45,7 +45,7 @@ namespace SocialMauiApp.ViewModel
             _fingerprint = CrossFingerprint.Current;
             _preferencesService = preferencesService;
 
-            IsFingerprintEnabled = _preferencesService.GetBool("FingerprintAuthEnabled", false);
+            IsFingerprintEnabled = _preferencesService.GetBool("FingerprintAuthEnabled", true); // Default to true
             ConfigureRealtimeUpdates();
         }
 
@@ -97,10 +97,6 @@ namespace SocialMauiApp.ViewModel
             _preferencesService.SetBool("FingerprintAuthEnabled", value);
         }
 
-        /// <summary>
-        /// Làm mới token nếu JWT hết hạn.
-        /// </summary>
-        /// <returns>True nếu token được làm mới thành công hoặc không cần làm mới, False nếu thất bại.</returns>
         private async Task<bool> TryRefreshTokenAsync()
         {
             var refreshToken = await SecureStorage.GetAsync("RefreshToken");
@@ -124,7 +120,6 @@ namespace SocialMauiApp.ViewModel
             }
             catch (Exception ex)
             {
-                // Lỗi khi làm mới token
                 Console.WriteLine($"Lỗi làm mới token: {ex.Message}");
             }
 
@@ -299,7 +294,6 @@ namespace SocialMauiApp.ViewModel
                 }
                 catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    // Token hết hạn, thử làm mới
                     if (await TryRefreshTokenAsync())
                     {
                         token = "Bearer " + _authService.Token;
@@ -391,9 +385,15 @@ namespace SocialMauiApp.ViewModel
                     {
                         User = User with { Name = NewName };
                         _authService.Login(new LoginResponseDto(User, _authService.Token, await SecureStorage.GetAsync("RefreshToken")));
+
                         _preferencesService.SetString("DisplayName", NewName);
                         await ToastAsync("Rename successful.");
                         await CancelChangeNameAsync();
+                        await _realtimeUpdatesService.NotifyUserNameChangedAsync(new UserNameChangedDto
+                        {
+                            UserId = User.Id,
+                            NewName = NewName
+                        });
                     }
                     else
                     {
@@ -402,7 +402,6 @@ namespace SocialMauiApp.ViewModel
                 }
                 catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    // Token hết hạn, thử làm mới
                     if (await TryRefreshTokenAsync())
                     {
                         token = "Bearer " + _authService.Token;
@@ -496,7 +495,6 @@ namespace SocialMauiApp.ViewModel
                     }
                     catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
-                        // Token hết hạn, thử làm mới
                         if (await TryRefreshTokenAsync())
                         {
                             token = "Bearer " + _authService.Token;
@@ -570,7 +568,6 @@ namespace SocialMauiApp.ViewModel
                 }
                 catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    // Token hết hạn, thử làm mới
                     if (await TryRefreshTokenAsync())
                     {
                         token = "Bearer " + _authService.Token;
@@ -617,7 +614,6 @@ namespace SocialMauiApp.ViewModel
                 }
                 catch (ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    // Token hết hạn, thử làm mới
                     if (await TryRefreshTokenAsync())
                     {
                         token = "Bearer " + _authService.Token;

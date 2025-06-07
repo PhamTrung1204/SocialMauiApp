@@ -21,11 +21,11 @@ builder.Services.AddDbContext<SQLiteContext>((serviceProvider, options) =>
     if (!Directory.Exists(dataDirectory))
     {
         Directory.CreateDirectory(dataDirectory);
-        Console.WriteLine($"Created Data directory at {dataDirectory} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+        Console.WriteLine($"Created Data directory at {dataDirectory} at {DateTime.Now:HH:mm:ss}.");
     }
 
     var dbPath = Path.Combine(dataDirectory, "socialmauiapp.db");
-    Console.WriteLine($"SQLite database path: {dbPath} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+    Console.WriteLine($"SQLite database path: {dbPath} at {DateTime.Now:HH:mm:ss}.");
     options.UseSqlite($"Filename={dbPath}");
 });
 
@@ -80,7 +80,7 @@ using (var scope = app.Services.CreateScope())
 {
     var sqliteContext = scope.ServiceProvider.GetRequiredService<SQLiteContext>();
     sqliteContext.Database.EnsureCreated();
-    Console.WriteLine($"SQLite database ensured created at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+    Console.WriteLine($"SQLite database ensured created at {DateTime.Now:HH:mm:ss}.");
 }
 #if DEBUG
 AutoMigrationDb(app.Services);

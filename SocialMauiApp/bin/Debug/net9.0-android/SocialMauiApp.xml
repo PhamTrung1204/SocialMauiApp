@@ -611,12 +611,6 @@
             <inheritdoc/>
             <inheritdoc/>
         </member>
-        <member name="M:SocialMauiApp.ViewModel.ProfileViewModel.TryRefreshTokenAsync">
-            <summary>
-            Làm mới token nếu JWT hết hạn.
-            </summary>
-            <returns>True nếu token được làm mới thành công hoặc không cần làm mới, False nếu thất bại.</returns>
-        </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.User">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._user"/>
         </member>

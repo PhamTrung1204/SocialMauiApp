@@ -8,6 +8,7 @@ namespace SocialMediaMaui.Shared.Dtos
         public Guid PostId { get; set; }
         public Guid CommentId { get; set; }
         public Guid? ParentCommentId { get; set; }
+        public string UserName { get; set; }
         public IFormFile Photo { get; set; }
         [Required]
         public string Content { get; set; }

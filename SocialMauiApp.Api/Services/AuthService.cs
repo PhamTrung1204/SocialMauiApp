@@ -36,32 +36,32 @@ namespace SocialMauiApp.Api.Services
 
         public async Task<ApiResult<Guid>> RegisterAsync(RegisterDto dto)
         {
-            _logger.LogInformation("Đang thử đăng ký người dùng với email: {Email}", dto.Email);
+            _logger.LogInformation("Attempting to register user with email: {Email}", dto.Email);
 
             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
             if (existingUser != null)
             {
                 if (existingUser.EmailConfirmed)
                 {
-                    _logger.LogWarning("Đăng ký thất bại: Email {Email} đã tồn tại và được xác thực.", dto.Email);
-                    return ApiResult<Guid>.Fail("Email đã tồn tại và đã xác thực. Vui lòng đăng nhập hoặc dùng email khác.");
+                    _logger.LogWarning("Registration failed: Email {Email} already exists and is verified.", dto.Email);
+                    return ApiResult<Guid>.Fail("Email already exists and is verified. Please log in or use a different email.");
                 }
 
-                _logger.LogInformation("Email {Email} tồn tại nhưng chưa xác thực. Gửi lại email xác minh.", dto.Email);
+                _logger.LogInformation("Email {Email} exists but is not verified. Resending verification email.", dto.Email);
                 var verificationToken = Guid.NewGuid().ToString();
                 existingUser.VerificationToken = verificationToken;
                 existingUser.VerificationTokenExpiry = DateTime.UtcNow.AddHours(48);
                 await _context.SaveChangesAsync();
 
-                _logger.LogDebug("Tạo mã xác minh cho email chưa xác thực {Email}: {Token}", dto.Email, verificationToken);
+                _logger.LogDebug("Generated verification token for unverified email {Email}: {Token}", dto.Email, verificationToken);
                 await SendVerificationEmail(existingUser.Email, verificationToken);
-                return ApiResult<Guid>.Fail($"Email đã tồn tại nhưng chưa xác thực. Email xác minh mới đã được gửi đến {dto.Email}.");
+                return ApiResult<Guid>.Fail($"Email already exists but is not verified. A new verification email has been sent to {dto.Email}.");
             }
 
             if (!dto.Email.ToLower().EndsWith("@gmail.com"))
             {
-                _logger.LogWarning("Đăng ký thất bại: Email {Email} không phải địa chỉ Gmail.", dto.Email);
-                return ApiResult<Guid>.Fail("Vui lòng sử dụng địa chỉ Gmail.");
+                _logger.LogWarning("Registration failed: Email {Email} is not a Gmail address.", dto.Email);
+                return ApiResult<Guid>.Fail("Please use a Gmail address.");
             }
 
             try
@@ -82,28 +82,28 @@ namespace SocialMauiApp.Api.Services
                 user.VerificationTokenExpiry = DateTime.UtcNow.AddHours(48);
                 await _context.SaveChangesAsync();
 
-                _logger.LogDebug("Tạo mã xác minh cho người dùng mới {Email}: {Token}", user.Email, verificationToken);
+                _logger.LogDebug("Generated verification token for new user {Email}: {Token}", user.Email, verificationToken);
                 await SendVerificationEmail(user.Email, verificationToken);
 
-                _logger.LogInformation("Người dùng {Email} đăng ký thành công với ID: {UserId}", user.Email, user.Id);
+                _logger.LogInformation("User {Email} registered successfully with ID: {UserId}", user.Email, user.Id);
                 return ApiResult<Guid>.Success(user.Id);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Đăng ký thất bại cho email {Email}.", dto.Email);
-                return ApiResult<Guid>.Fail($"Đăng ký thất bại: {ex.Message}");
+                _logger.LogError(ex, "Registration failed for email {Email}.", dto.Email);
+                return ApiResult<Guid>.Fail($"Registration failed: {ex.Message}");
             }
         }
 
         public async Task<ApiResult> UploadPhotoAsync(Guid userId, IFormFile photo)
         {
-            _logger.LogInformation("Đang thử tải ảnh lên cho người dùng ID: {UserId}", userId);
+            _logger.LogInformation("Attempting to upload photo for user ID: {UserId}", userId);
 
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
-                _logger.LogWarning("Tải ảnh thất bại: Không tìm thấy người dùng ID {UserId}.", userId);
-                return ApiResult.Fail("Không tìm thấy người dùng.");
+                _logger.LogWarning("Photo upload failed: User ID {UserId} not found.", userId);
+                return ApiResult.Fail("User not found.");
             }
 
             try
@@ -114,38 +114,38 @@ namespace SocialMauiApp.Api.Services
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("Tải ảnh thành công cho người dùng ID: {UserId}", userId);
+                _logger.LogInformation("Photo uploaded successfully for user ID: {UserId}", userId);
                 return ApiResult.Success();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Tải ảnh thất bại cho người dùng ID {UserId}.", userId);
-                return ApiResult.Fail($"Tải ảnh thất bại: {ex.Message}");
+                _logger.LogError(ex, "Photo upload failed for user ID {UserId}.", userId);
+                return ApiResult.Fail($"Photo upload failed: {ex.Message}");
             }
         }
 
         public async Task<ApiResult<LoginResponseDto>> LoginAsync(LoginDto dto)
         {
-            _logger.LogInformation("Đang thử đăng nhập cho email: {Email}", dto.Email);
+            _logger.LogInformation("Attempting to log in for email: {Email}", dto.Email);
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
             if (user == null || user.IsLocked)
             {
-                _logger.LogWarning("Đăng nhập thất bại: Thông tin không hợp lệ hoặc tài khoản bị khóa cho email {Email}.", dto.Email);
-                return ApiResult<LoginResponseDto>.Fail("Thông tin không hợp lệ hoặc tài khoản bị khóa.");
+                _logger.LogWarning("Login failed: Invalid credentials or account locked for email {Email}.", dto.Email);
+                return ApiResult<LoginResponseDto>.Fail("Invalid credentials or account locked.");
             }
 
             var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if (passwordVerificationResult != PasswordVerificationResult.Success)
             {
-                _logger.LogWarning("Đăng nhập thất bại: Mật khẩu không hợp lệ cho email {Email}.", dto.Email);
-                return ApiResult<LoginResponseDto>.Fail("Thông tin không hợp lệ.");
+                _logger.LogWarning("Login failed: Invalid password for email {Email}.", dto.Email);
+                return ApiResult<LoginResponseDto>.Fail("Invalid credentials.");
             }
 
             if (!user.EmailConfirmed)
             {
-                _logger.LogWarning("Đăng nhập thất bại: Email {Email} chưa được xác thực.", dto.Email);
-                return ApiResult<LoginResponseDto>.Fail("Vui lòng xác thực email trước.");
+                _logger.LogWarning("Login failed: Email {Email} not verified.", dto.Email);
+                return ApiResult<LoginResponseDto>.Fail("Please verify your email first.");
             }
 
             var jwt = GenerateJwtToken(user);
@@ -155,19 +155,19 @@ namespace SocialMauiApp.Api.Services
             await _context.SaveChangesAsync();
 
             var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl, user.Role);
-            _logger.LogInformation("Đăng nhập thành công cho email: {Email}", dto.Email);
+            _logger.LogInformation("Login successful for email: {Email}", dto.Email);
             return ApiResult<LoginResponseDto>.Success(new LoginResponseDto(loggedInUser, jwt, refreshToken));
         }
 
         public async Task<ApiResult<LoginResponseDto>> RefreshTokenAsync(RefreshTokenDto dto)
         {
-            _logger.LogInformation("Đang thử làm mới token.");
+            _logger.LogInformation("Attempting to refresh token.");
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == dto.RefreshToken);
             if (user == null || user.RefreshTokenExpiry < DateTime.UtcNow)
             {
-                _logger.LogWarning("Refresh token không hợp lệ hoặc đã hết hạn.");
-                return ApiResult<LoginResponseDto>.Fail("Refresh token không hợp lệ hoặc đã hết hạn.");
+                _logger.LogWarning("Refresh token invalid or expired.");
+                return ApiResult<LoginResponseDto>.Fail("Refresh token invalid or expired.");
             }
 
             var jwt = GenerateJwtToken(user);
@@ -177,21 +177,21 @@ namespace SocialMauiApp.Api.Services
             await _context.SaveChangesAsync();
 
             var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl, user.Role);
-            _logger.LogInformation("Token được làm mới thành công cho người dùng: {Email}", user.Email);
+            _logger.LogInformation("Token refreshed successfully for user: {Email}", user.Email);
             return ApiResult<LoginResponseDto>.Success(new LoginResponseDto(loggedInUser, jwt, newRefreshToken));
         }
 
         public async Task<ApiResult<LoggedInUser>> ValidateTokenAsync(string token)
         {
-            _logger.LogInformation("Đang xác thực JWT token.");
+            _logger.LogInformation("Validating JWT token.");
 
             try
             {
                 var secretKey = _configuration.GetValue<string>("Jwt:SecretKey");
                 if (string.IsNullOrEmpty(secretKey))
                 {
-                    _logger.LogError("Xác thực JWT thất bại: Thiếu SecretKey trong cấu hình.");
-                    return ApiResult<LoggedInUser>.Fail("Thiếu cấu hình JWT.");
+                    _logger.LogError("JWT validation failed: SecretKey missing in configuration.");
+                    return ApiResult<LoggedInUser>.Fail("JWT configuration missing.");
                 }
 
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -213,85 +213,85 @@ namespace SocialMauiApp.Api.Services
                 var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
                 {
-                    _logger.LogWarning("Xác thực JWT thất bại: ID người dùng trong token không hợp lệ.");
-                    return ApiResult<LoggedInUser>.Fail("Token không hợp lệ.");
+                    _logger.LogWarning("JWT validation failed: Invalid user ID in token.");
+                    return ApiResult<LoggedInUser>.Fail("Invalid token.");
                 }
 
                 var user = await _context.Users.FindAsync(userId);
                 if (user == null)
                 {
-                    _logger.LogWarning("Xác thực JWT thất bại: Không tìm thấy người dùng ID {UserId}.", userId);
-                    return ApiResult<LoggedInUser>.Fail("Không tìm thấy người dùng.");
+                    _logger.LogWarning("JWT validation failed: User ID {UserId} not found.", userId);
+                    return ApiResult<LoggedInUser>.Fail("User not found.");
                 }
 
                 var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl, user.Role);
-                _logger.LogInformation("Xác thực JWT thành công cho người dùng ID: {UserId}", userId);
+                _logger.LogInformation("JWT validation successful for user ID: {UserId}", userId);
                 return ApiResult<LoggedInUser>.Success(loggedInUser);
             }
             catch (SecurityTokenExpiredException)
             {
-                _logger.LogWarning("Xác thực JWT thất bại: Token đã hết hạn.");
-                return ApiResult<LoggedInUser>.Fail("Token đã hết hạn.");
+                _logger.LogWarning("JWT validation failed: Token expired.");
+                return ApiResult<LoggedInUser>.Fail("Token expired.");
             }
             catch (SecurityTokenValidationException ex)
             {
-                _logger.LogWarning(ex, "Xác thực JWT thất bại: Token không hợp lệ.");
-                return ApiResult<LoggedInUser>.Fail("Token không hợp lệ.");
+                _logger.LogWarning(ex, "JWT validation failed: Invalid token.");
+                return ApiResult<LoggedInUser>.Fail("Invalid token.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Lỗi bất ngờ khi xác thực JWT.");
-                return ApiResult<LoggedInUser>.Fail("Lỗi xác thực.");
+                _logger.LogError(ex, "Unexpected error during JWT validation.");
+                return ApiResult<LoggedInUser>.Fail("Validation error.");
             }
         }
 
         public async Task<ApiResult<string>> SendVerificationEmailAsync(SendVerificationEmailDto dto)
         {
-            _logger.LogInformation("Yêu cầu gửi lại email xác minh cho: {Email}", dto.Email);
+            _logger.LogInformation("Requesting to resend verification email for: {Email}", dto.Email);
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
             if (user == null || user.EmailConfirmed || string.IsNullOrEmpty(user.VerificationToken))
             {
-                _logger.LogWarning("Gửi lại email xác minh thất bại: Yêu cầu không hợp lệ cho email {Email}.", dto.Email);
-                return ApiResult<string>.Fail("Yêu cầu không hợp lệ.");
+                _logger.LogWarning("Resending verification email failed: Invalid request for email {Email}.", dto.Email);
+                return ApiResult<string>.Fail("Invalid request.");
             }
 
             try
             {
                 await SendVerificationEmail(user.Email, user.VerificationToken);
-                _logger.LogInformation("Email xác minh được gửi lại thành công đến: {Email}", dto.Email);
-                return ApiResult<string>.Success("Email xác minh đã được gửi.");
+                _logger.LogInformation("Verification email resent successfully to: {Email}", dto.Email);
+                return ApiResult<string>.Success("Verification email sent.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Gửi lại email xác minh thất bại cho {Email}.", dto.Email);
-                return ApiResult<string>.Fail($"Gửi email xác minh thất bại: {ex.Message}");
+                _logger.LogError(ex, "Resending verification email failed for {Email}.", dto.Email);
+                return ApiResult<string>.Fail($"Failed to send verification email: {ex.Message}");
             }
         }
 
         public async Task<ApiResult<string>> VerifyEmailAsync(string token)
         {
-            _logger.LogInformation("Đang thử xác minh email với mã: {Token}", token);
+            _logger.LogInformation("Attempting to verify email with token: {Token}", token);
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                _logger.LogWarning("Mã xác minh rỗng hoặc không hợp lệ.");
-                return ApiResult<string>.Fail("Mã xác minh không hợp lệ.");
+                _logger.LogWarning("Verification token empty or invalid.");
+                return ApiResult<string>.Fail("Invalid verification token.");
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
             if (user == null)
             {
-                _logger.LogWarning("Mã {Token} không tìm thấy trong cơ sở dữ liệu.", token);
-                return ApiResult<string>.Fail("Mã xác minh không hợp lệ hoặc đã hết hạn.");
+                _logger.LogWarning("Token {Token} not found in database.", token);
+                return ApiResult<string>.Fail("Invalid or expired verification token.");
             }
 
-            _logger.LogInformation("Tìm thấy mã. Người dùng: {Email}, Hết hạn: {Expiry}, Hiện tại UTC: {UtcNow}, EmailConfirmed: {EmailConfirmed}",
+            _logger.LogInformation("Token found. User: {Email}, Expiry: {Expiry}, Current UTC: {UtcNow}, EmailConfirmed: {EmailConfirmed}",
                 user.Email, user.VerificationTokenExpiry, DateTime.UtcNow, user.EmailConfirmed);
 
             if (user.VerificationTokenExpiry.HasValue && user.VerificationTokenExpiry.Value < DateTime.UtcNow)
             {
-                _logger.LogWarning("Mã hết hạn cho người dùng {Email}. Tạo mã mới.", user.Email);
+                _logger.LogWarning("Token expired for user {Email}. Generating new token.", user.Email);
                 var newToken = Guid.NewGuid().ToString();
                 user.VerificationToken = newToken;
                 user.VerificationTokenExpiry = DateTime.UtcNow.AddHours(48);
@@ -299,26 +299,26 @@ namespace SocialMauiApp.Api.Services
                 try
                 {
                     await _context.SaveChangesAsync();
-                    _logger.LogInformation("Mã mới {NewToken} được lưu cho người dùng {Email}.", newToken, user.Email);
+                    _logger.LogInformation("New token {NewToken} saved for user {Email}.", newToken, user.Email);
                     await SendVerificationEmail(user.Email, newToken);
-                    _logger.LogInformation("Email xác minh mới được gửi đến {Email} với mã {NewToken}.", user.Email, newToken);
-                    return ApiResult<string>.Fail("Mã xác minh đã hết hạn. Email xác minh mới đã được gửi.");
+                    _logger.LogInformation("New verification email sent to {Email} with token {NewToken}.", user.Email, newToken);
+                    return ApiResult<string>.Fail("Verification token expired. A new verification email has been sent.");
                 }
                 catch (DbUpdateException ex)
                 {
-                    _logger.LogError(ex, "Cập nhật cơ sở dữ liệu thất bại cho mã mới của người dùng {Email}. Lỗi chi tiết: {Inner}", user.Email, ex.InnerException?.Message);
-                    return ApiResult<string>.Fail("Xử lý mã hết hạn thất bại do lỗi cơ sở dữ liệu. Vui lòng thử lại.");
+                    _logger.LogError(ex, "Database update failed for new token for user {Email}. Details: {Inner}", user.Email, ex.InnerException?.Message);
+                    return ApiResult<string>.Fail("Failed to process expired token due to database error. Please try again.");
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Lưu mã mới hoặc gửi email thất bại cho người dùng {Email}.", user.Email);
-                    return ApiResult<string>.Fail("Xử lý mã hết hạn thất bại. Vui lòng thử lại.");
+                    _logger.LogError(ex, "Failed to save new token or send email for user {Email}.", user.Email);
+                    return ApiResult<string>.Fail("Failed to process expired token. Please try again.");
                 }
             }
 
             if (user.EmailConfirmed)
             {
-                _logger.LogWarning("Email của người dùng {Email} đã được xác thực.", user.Email);
+                _logger.LogWarning("User email {Email} already verified.", user.Email);
                 return ApiResult<string>.Success("socialmauiapp://RegisterPage?verified=true");
             }
 
@@ -332,36 +332,36 @@ namespace SocialMauiApp.Api.Services
                 var changes = await _context.SaveChangesAsync();
                 if (changes > 0)
                 {
-                    _logger.LogInformation("Xác minh email thành công cho người dùng: {Email}. EmailConfirmed được đặt thành true. Lưu thay đổi: {Changes}", user.Email, changes);
+                    _logger.LogInformation("Email verification successful for user: {Email}. EmailConfirmed set to true. Changes saved: {Changes}", user.Email, changes);
                     return ApiResult<string>.Success("socialmauiapp://RegisterPage?verified=true");
                 }
                 else
                 {
-                    _logger.LogWarning("Không có thay đổi nào được lưu vào cơ sở dữ liệu cho người dùng {Email}.", user.Email);
-                    return ApiResult<string>.Fail("Xác minh email thất bại: Không có thay đổi nào được lưu.");
+                    _logger.LogWarning("No changes saved to database for user {Email}.", user.Email);
+                    return ApiResult<string>.Fail("Email verification failed: No changes saved.");
                 }
             }
             catch (DbUpdateException ex)
             {
-                _logger.LogError(ex, "Cập nhật cơ sở dữ liệu thất bại khi xác minh email cho người dùng {Email}. Lỗi chi tiết: {Inner}", user.Email, ex.InnerException?.Message);
-                return ApiResult<string>.Fail("Xác minh email thất bại do lỗi cơ sở dữ liệu. Vui lòng thử lại.");
+                _logger.LogError(ex, "Database update failed during email verification for user {Email}. Details: {Inner}", user.Email, ex.InnerException?.Message);
+                return ApiResult<string>.Fail("Email verification failed due to database error. Please try again.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Lưu xác minh email thất bại cho người dùng {Email}.", user.Email);
-                return ApiResult<string>.Fail("Xác minh email thất bại. Vui lòng thử lại.");
+                _logger.LogError(ex, "Failed to save email verification for user {Email}.", user.Email);
+                return ApiResult<string>.Fail("Email verification failed. Please try again.");
             }
         }
 
         public async Task<ApiResult<string>> RequestPasswordResetAsync(PasswordResetRequestDto dto)
         {
-            _logger.LogInformation("Yêu cầu đặt lại mật khẩu cho email: {Email}", dto.Email);
+            _logger.LogInformation("Requesting password reset for email: {Email}", dto.Email);
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email && u.EmailConfirmed);
             if (user == null)
             {
-                _logger.LogWarning("Đặt lại mật khẩu thất bại: Không tìm thấy người dùng hoặc email chưa xác thực cho {Email}.", dto.Email);
-                return ApiResult<string>.Fail("Không tìm thấy người dùng hoặc email chưa xác thực.");
+                _logger.LogWarning("Password reset failed: User not found or email not verified for {Email}.", dto.Email);
+                return ApiResult<string>.Fail("User not found or email not verified.");
             }
 
             var resetCode = GenerateResetCode();
@@ -372,34 +372,34 @@ namespace SocialMauiApp.Api.Services
             var saveResult = await _context.SaveChangesAsync();
             if (saveResult <= 0)
             {
-                _logger.LogError("Lưu ResetCode và ResetTokenExpiry thất bại cho email {Email}.", dto.Email);
-                return ApiResult<string>.Fail("Lưu yêu cầu đặt lại thất bại. Vui lòng thử lại.");
+                _logger.LogError("Failed to save ResetCode and ResetTokenExpiry for email {Email}.", dto.Email);
+                return ApiResult<string>.Fail("Failed to save reset request. Please try again.");
             }
 
-            _logger.LogInformation("ResetCode {ResetCode} và ResetTokenExpiry {Expiry} được lưu cho email {Email}", resetCode, user.ResetTokenExpiry, dto.Email);
+            _logger.LogInformation("ResetCode {ResetCode} and ResetTokenExpiry {Expiry} saved for email {Email}", resetCode, user.ResetTokenExpiry, dto.Email);
 
             try
             {
                 await SendResetPasswordEmail(user.Email, resetCode);
-                _logger.LogInformation("Mã đặt lại mật khẩu được gửi đến: {Email}", dto.Email);
-                return ApiResult<string>.Success("Mã đặt lại mật khẩu đã được gửi.");
+                _logger.LogInformation("Password reset code sent to: {Email}", dto.Email);
+                return ApiResult<string>.Success("Password reset code sent.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Gửi mã đặt lại mật khẩu thất bại cho {Email}.", dto.Email);
-                return ApiResult<string>.Fail($"Gửi mã đặt lại thất bại: {ex.Message}");
+                _logger.LogError(ex, "Failed to send password reset code for {Email}.", dto.Email);
+                return ApiResult<string>.Fail($"Failed to send reset code: {ex.Message}");
             }
         }
 
         public async Task<ApiResult<string>> ResetPasswordAsync(ResetPasswordDto dto)
         {
-            _logger.LogInformation("Đang thử đặt lại mật khẩu với mã: {Token}", dto.Token);
+            _logger.LogInformation("Attempting to reset password with token: {Token}", dto.Token);
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == dto.Token && u.ResetTokenExpiry > DateTime.UtcNow);
             if (user == null)
             {
-                _logger.LogWarning("Đặt lại mật khẩu thất bại: Mã không hợp lệ hoặc đã hết hạn {Token}.", dto.Token);
-                return ApiResult<string>.Fail("Mã đặt lại không hợp lệ hoặc đã hết hạn.");
+                _logger.LogWarning("Password reset failed: Invalid or expired token {Token}.", dto.Token);
+                return ApiResult<string>.Fail("Invalid or expired reset token.");
             }
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.NewPassword);
@@ -411,32 +411,32 @@ namespace SocialMauiApp.Api.Services
             var saveResult = await _context.SaveChangesAsync();
             if (saveResult <= 0)
             {
-                _logger.LogError("Lưu mật khẩu mới thất bại cho người dùng: {Email}. Không có thay đổi nào được lưu.", user.Email);
-                return ApiResult<string>.Fail("Lưu mật khẩu mới thất bại. Vui lòng thử lại.");
+                _logger.LogError("Failed to save new password for user: {Email}. No changes saved.", user.Email);
+                return ApiResult<string>.Fail("Failed to save new password. Please try again.");
             }
 
-            _logger.LogInformation("Đặt lại mật khẩu thành công cho người dùng: {Email}", user.Email);
-            return ApiResult<string>.Success("Đặt lại mật khẩu thành công.");
+            _logger.LogInformation("Password reset successful for user: {Email}", user.Email);
+            return ApiResult<string>.Success("Password reset successful.");
         }
 
         public async Task<ApiResult<string>> VerifyResetTokenAsync(string token)
         {
-            _logger.LogInformation("Nhận yêu cầu xác minh mã đặt lại: {Token}", token);
+            _logger.LogInformation("Received request to verify reset token: {Token}", token);
 
             if (string.IsNullOrWhiteSpace(token) || token.Length != 6)
             {
-                _logger.LogWarning("Định dạng mã đặt lại không hợp lệ: {Token}", token);
-                return ApiResult<string>.Fail("Mã đặt lại không hợp lệ.");
+                _logger.LogWarning("Invalid reset token format: {Token}", token);
+                return ApiResult<string>.Fail("Invalid reset token.");
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == token && u.ResetTokenExpiry > DateTime.UtcNow);
             if (user == null)
             {
-                _logger.LogWarning("Mã đặt lại {Token} không tìm thấy hoặc đã hết hạn.", token);
-                return ApiResult<string>.Fail("Mã đặt lại không hợp lệ hoặc đã hết hạn.");
+                _logger.LogWarning("Reset token {Token} not found or expired.", token);
+                return ApiResult<string>.Fail("Invalid or expired reset token.");
             }
 
-            _logger.LogInformation("Xác minh mã đặt lại thành công cho người dùng: {Email}.", user.Email);
+            _logger.LogInformation("Reset token verification successful for user: {Email}.", user.Email);
             return ApiResult<string>.Success(token);
         }
 
@@ -451,7 +451,7 @@ namespace SocialMauiApp.Api.Services
 
             if (string.IsNullOrEmpty(senderEmail) || string.IsNullOrEmpty(appPassword) || string.IsNullOrEmpty(baseUrl))
             {
-                throw new InvalidOperationException("Thiếu cấu hình SMTP hoặc ứng dụng.");
+                throw new InvalidOperationException("SMTP or application configuration missing.");
             }
 
             using var smtpClient = new SmtpClient(host)
@@ -465,11 +465,11 @@ namespace SocialMauiApp.Api.Services
             using var mailMessage = new MailMessage
             {
                 From = new MailAddress(senderEmail),
-                Subject = "Xác minh địa chỉ Email của bạn",
-                Body = $@"<p>Chào mừng bạn đến với SocialMauiApp!</p>
-                          <p>Vui lòng nhấp vào liên kết bên dưới để xác minh địa chỉ email của bạn:</p>
-                          <p><a href=""{deepLink}"">Xác minh Email</a></p>
-                          <p>Liên kết này sẽ hết hạn sau 48 giờ.</p>",
+                Subject = "Verify Your Email Address",
+                Body = $@"<p>Welcome to SocialMauiApp!</p>
+                          <p>Please click the link below to verify your email address:</p>
+                          <p><a href=""{deepLink}"">Verify Email</a></p>
+                          <p>This link will expire in 48 hours.</p>",
                 IsBodyHtml = true
             };
             mailMessage.To.Add(email);
@@ -503,8 +503,8 @@ namespace SocialMauiApp.Api.Services
 
             if (string.IsNullOrEmpty(senderEmail) || string.IsNullOrEmpty(appPassword))
             {
-                _logger.LogError("Thiếu cấu hình SMTP.");
-                throw new InvalidOperationException("Thiếu cấu hình SMTP.");
+                _logger.LogError("SMTP configuration missing.");
+                throw new InvalidOperationException("SMTP configuration missing.");
             }
 
             using var smtpClient = new SmtpClient(host)
@@ -517,11 +517,11 @@ namespace SocialMauiApp.Api.Services
             using var mailMessage = new MailMessage
             {
                 From = new MailAddress(senderEmail),
-                Subject = "Đặt lại mật khẩu của bạn",
-                Body = $@"<p>Bạn đã yêu cầu đặt lại mật khẩu cho SocialMauiApp!</p>
-                          <p>Mã đặt lại của bạn là: <strong>{resetCode}</strong></p>
-                          <p>Vui lòng sao chép mã này và nhập vào ứng dụng để đặt lại mật khẩu.</p>
-                          <p>Mã này sẽ hết hạn sau 1 giờ.</p>",
+                Subject = "Reset Your Password",
+                Body = $@"<p>You have requested to reset your password for SocialMauiApp!</p>
+                          <p>Your reset code is: <strong>{resetCode}</strong></p>
+                          <p>Please copy this code and enter it into the app to reset your password.</p>
+                          <p>This code will expire in 1 hour.</p>",
                 IsBodyHtml = true
             };
             mailMessage.To.Add(email);
@@ -531,7 +531,7 @@ namespace SocialMauiApp.Api.Services
 
         private string GenerateJwtToken(User user)
         {
-            _logger.LogInformation("Tạo JWT token cho người dùng: {Email}", user.Email);
+            _logger.LogInformation("Generating JWT token for user: {Email}", user.Email);
 
             var claims = new[]
             {
@@ -544,8 +544,8 @@ namespace SocialMauiApp.Api.Services
             var secretKey = _configuration.GetValue<string>("Jwt:SecretKey");
             if (string.IsNullOrWhiteSpace(secretKey))
             {
-                _logger.LogError("Tạo JWT thất bại: SecretKey chưa được cấu hình.");
-                throw new InvalidOperationException("SecretKey của JWT chưa được cấu hình.");
+                _logger.LogError("JWT generation failed: SecretKey not configured.");
+                throw new InvalidOperationException("JWT SecretKey not configured.");
             }
 
             var securityKey = Encoding.UTF8.GetBytes(secretKey);
@@ -562,7 +562,7 @@ namespace SocialMauiApp.Api.Services
                 signingCredentials: signingCredentials);
 
             var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            _logger.LogDebug("Tạo JWT token thành công cho người dùng: {Email}", user.Email);
+            _logger.LogDebug("JWT token generated successfully for user: {Email}", user.Email);
             return token;
         }
     }

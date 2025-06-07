@@ -26,7 +26,7 @@ namespace SocialMauiApp.Data
             try
             {
                 var dbPath = Path.Combine(FileSystem.AppDataDirectory, "local_socialmauiapp.db");
-                Console.WriteLine($"Initializing database at: {dbPath} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"Initializing database at: {dbPath}.");
 
                 await _database.CreateTableAsync<PostEntity>();
                 Console.WriteLine("Posts table created or verified.");
@@ -42,7 +42,7 @@ namespace SocialMauiApp.Data
                 Console.WriteLine("Indexes created or verified for Comments and Posts.");
 
                 _isInitialized = true;
-                Console.WriteLine("Database initialized successfully at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine("Database initialized successfully.");
             }
             catch (SQLiteException ex)
             {
@@ -56,7 +56,6 @@ namespace SocialMauiApp.Data
             }
         }
 
-        // Methods for Posts
         public async Task<List<PostEntity>> GetPostsAsync()
         {
             await InitializeAsync();
@@ -100,7 +99,7 @@ namespace SocialMauiApp.Data
                 var tableInfo = await _database.ExecuteScalarAsync<int>("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='Comments'");
                 if (tableInfo == 0)
                 {
-                    Console.WriteLine($"Comments table does not exist at 11:44 AM +07, 27/05/2025.");
+                    Console.WriteLine($"Comments table does not exist.");
                     return new List<CommentDto>();
                 }
 
@@ -131,12 +130,12 @@ namespace SocialMauiApp.Data
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine($"SQLite error loading comments for post {postId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"SQLite error loading comments for post {postId}: {ex.Message}.");
                 return new List<CommentDto>();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error loading comments for post {postId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"Unexpected error loading comments for post {postId}: {ex.Message}.");
                 return new List<CommentDto>();
             }
         }
@@ -145,7 +144,7 @@ namespace SocialMauiApp.Data
         {
             if (level >= maxDepth)
             {
-                Console.WriteLine($"Reached max reply depth ({maxDepth}) for parent comment {parentCommentId} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"Reached max reply depth ({maxDepth}) for parent comment {parentCommentId}.");
                 return new List<CommentDto>();
             }
 
@@ -171,6 +170,7 @@ namespace SocialMauiApp.Data
 
         public async Task SaveCommentAsync(CommentDto comment)
         {
+            await _commentSaveSemaphore.WaitAsync();
             try
             {
                 var entity = new CommentEntity
@@ -190,13 +190,13 @@ namespace SocialMauiApp.Data
                 if (existingComment == null)
                 {
                     await _database.InsertAsync(entity);
-                    Console.WriteLine($"Inserted comment {comment.CommentId} into SQLite at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    Console.WriteLine($"Inserted comment {comment.CommentId} into SQLite at {DateTime.Now:HH:mm:ss}.");
                 }
                 else
                 {
                     entity.CommentId = existingComment.CommentId;
                     await _database.UpdateAsync(entity);
-                    Console.WriteLine($"Updated comment {comment.CommentId} in SQLite at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    Console.WriteLine($"Updated comment {comment.CommentId} in SQLite at {DateTime.Now:HH:mm:ss}.");
                 }
 
                 if (comment.Replies != null)
@@ -210,7 +210,11 @@ namespace SocialMauiApp.Data
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in SaveCommentAsync for comment {comment.CommentId}: {ex.Message}, StackTrace: {ex.StackTrace} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
-                throw; // Ném lại để tầng trên xử lý
+                throw; 
+            }
+            finally
+            {
+                _commentSaveSemaphore.Release(); 
             }
         }
 
@@ -235,20 +239,20 @@ namespace SocialMauiApp.Data
                 if (entity != null)
                 {
                     int result = await _database.DeleteAsync(entity);
-                    Console.WriteLine($"Deleted comment {comment.CommentId} from database at 11:44 AM +07, 27/05/2025.");
+                    Console.WriteLine($"Deleted comment {comment.CommentId} from database.");
                     return result;
                 }
-                Console.WriteLine($"Comment {comment.CommentId} not found in database at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"Comment {comment.CommentId} not found in database.");
                 return 0;
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine($"SQLite error deleting comment {comment.CommentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"SQLite error deleting comment {comment.CommentId}: {ex.Message}.");
                 throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error deleting comment {comment.CommentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"Unexpected error deleting comment {comment.CommentId}: {ex.Message}.");
                 throw;
             }
         }
@@ -264,17 +268,17 @@ namespace SocialMauiApp.Data
                     var commentDto = ToCommentDto(comment);
                     return await DeleteCommentAsync(commentDto);
                 }
-                Console.WriteLine($"Comment {commentId} not found for deletion at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"Comment {commentId} not found for deletion.");
                 return 0; // No comment found to delete
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine($"SQLite error deleting comment by ID {commentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"SQLite error deleting comment by ID {commentId}: {ex.Message}.");
                 throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error deleting comment by ID {commentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"Unexpected error deleting comment by ID {commentId}: {ex.Message}.");
                 throw;
             }
         }
@@ -304,26 +308,8 @@ namespace SocialMauiApp.Data
             catch (SQLiteException ex)
             {
                 Console.WriteLine($"SQLite error saving SyncMetadata: {ex.Message} at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
-                throw; // Ném lại để xử lý ở tầng trên
+                throw;
             }
-        }
-        // Helper methods to convert between CommentDto and CommentEntity
-        private CommentEntity ToCommentEntity(CommentDto dto)
-        {
-            return new CommentEntity
-            {
-                CommentId = dto.CommentId,
-                PostId = dto.PostId,
-                Content = dto.Content,
-                PhotoUrl = dto.PhotoUrl,
-                UserId = dto.UserId,
-                UserName = dto.UserName,
-                UserPhotoUrl = dto.UserPhotoUrl,
-                AddedOn = dto.AddedOn,
-                IsOwnComment = dto.IsOwnComment,
-                Level = dto.Level,
-                ParentCommentId = dto.ParentCommentId
-            };
         }
 
         public async Task<CommentDto> GetCommentAsync(Guid commentId)
@@ -334,7 +320,7 @@ namespace SocialMauiApp.Data
                 var tableInfo = await _database.ExecuteScalarAsync<int>("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='Comments'");
                 if (tableInfo == 0)
                 {
-                    Console.WriteLine($"Comments table does not exist at 11:44 AM +07, 27/05/2025.");
+                    Console.WriteLine($"Comments table does not exist.");
                     return null;
                 }
 
@@ -343,7 +329,7 @@ namespace SocialMauiApp.Data
 
                 if (entity == null)
                 {
-                    Console.WriteLine($"No comment found with ID {commentId} at 11:44 AM +07, 27/05/2025.");
+                    Console.WriteLine($"No comment found with ID {commentId}.");
                     return null;
                 }
 
@@ -355,17 +341,17 @@ namespace SocialMauiApp.Data
                 var comment = ToCommentDto(entity);
                 comment.Replies = new ObservableCollection<CommentDto>(
                     BuildReplyHierarchy(allCommentEntities, comment.CommentId, 0));
-                Console.WriteLine($"Loaded comment {commentId} with {comment.Replies.Count} replies at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"Loaded comment {commentId} with {comment.Replies.Count} replies.");
                 return comment;
             }
             catch (SQLiteException ex)
             {
-                Console.WriteLine($"SQLite error loading comment {commentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"SQLite error loading comment {commentId}: {ex.Message}.");
                 throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error loading comment {commentId}: {ex.Message} at 11:44 AM +07, 27/05/2025.");
+                Console.WriteLine($"Unexpected error loading comment {commentId}: {ex.Message}.");
                 throw;
             }
         }

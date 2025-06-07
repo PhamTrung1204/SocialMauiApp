@@ -23,7 +23,7 @@
             Grid.Row="0"
             Padding="15,10,15,8"
             Spacing="5">
-            <!--  Profile Header with Dropmenu  -->
+            <!-- Profile Header with Dropmenu -->
             <Grid>
                 <Border
                     BackgroundColor="White"
@@ -69,13 +69,13 @@
                             Offset="0,2" />
                     </Border.Shadow>
                 </Border>
-                <!--  Đặt GestureRecognizers trước nội dung con  -->
+                <!-- Đặt GestureRecognizers trước nội dung con -->
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ToggleProfileMenuCommand}" />
                 </Grid.GestureRecognizers>
             </Grid>
 
-            <!--  Dropmenu  -->
+            <!-- Dropmenu -->
             <Border
                 x:Name="ProfileMenu"
                 Margin="0,-50,0,0"
@@ -142,12 +142,33 @@
                             </Label.GestureRecognizers>
                         </Label>
                     </Border>
+                    <Border
+                        Margin="0,5,0,0"
+                        Padding="5"
+                        BackgroundColor="{StaticResource LightBackground}"
+                        StrokeShape="RoundRectangle 5">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label
+                                FontSize="14"
+                                Text="{Binding IsFingerprintEnabled, Converter={StaticResource BooleanToStringConverter}, ConverterParameter='Enable Fingerprint Login|Disable Fingerprint Login'}"
+                                TextColor="{StaticResource Primary}"
+                                VerticalOptions="Center" />
+                            <Image
+                                Source="fingerprint.png"
+                                HeightRequest="16"
+                                WidthRequest="16"
+                                VerticalOptions="Center" />
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ShowFingerprintSettingsCommand}" />
+                            </HorizontalStackLayout.GestureRecognizers>
+                        </HorizontalStackLayout>
+                    </Border>
                 </VerticalStackLayout>
             </Border>
 
             <controls:Spacer Space="10" />
 
-            <!--  Post Selection Tabs  -->
+            <!-- Post Selection Tabs -->
             <Border
                 Margin="0,5,0,0"
                 HeightRequest="40"
@@ -211,7 +232,7 @@
             </Border>
         </VerticalStackLayout>
 
-        <!--  Posts Collections  -->
+        <!-- Posts Collections -->
         <CollectionView
             Grid.Row="1"
             IsVisible="{Binding IsMyPostsTabSelected}"

@@ -945,7 +945,7 @@ namespace SocialMauiApp.Models
                             if (!_processedCommentIds.Contains(comment.CommentId))
                             {
                                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                                comment.UserName = comment.UserName ?? "Unknown User";
+                                comment.UserName = _authService.User != null && comment.UserId == _authService.User.Id ? _authService.User.Name : (comment.UserName ?? "Unknown User");
                                 comment.UserPhotoUrl = _authService.User.Photo ?? "user.png";
                                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                                 comment.Replies = new ObservableCollection<CommentDto>(
@@ -987,6 +987,7 @@ namespace SocialMauiApp.Models
             _realtimeUpdatesService?.AddCommentUpdatedHandler($"PostModel_{PostId}", OnCommentUpdated);
             _realtimeUpdatesService?.AddCommentDeletedHandler($"PostModel_{PostId}", OnCommentDeleted);
             _realtimeUpdatesService?.AddPostCountsUpdatedHandler($"PostModel_{PostId}", OnPostCountsUpdated);
+            _realtimeUpdatesService?.AddUserNameChangedHandler($"PostModel_{PostId}", OnUserNameChanged);
         }
 
         public void SetDetailsViewState(bool isInDetailsView)
@@ -1030,7 +1031,9 @@ namespace SocialMauiApp.Models
             {
                 if (_isInDetailsView || _processedCommentIds.Contains(comment.CommentId)) return;
                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                comment.UserName = comment.UserName ?? "Unknown User";
+                comment.UserName = _authService.User != null && comment.UserId == _authService.User.Id
+               ? _authService.User.Name
+               : (comment.UserName ?? "Unknown User");
                 comment.UserPhotoUrl = _authService.User.PhotoUrl ?? "user.png";
                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                 comment.Replies = new ObservableCollection<CommentDto>(
@@ -1073,7 +1076,7 @@ namespace SocialMauiApp.Models
             {
                 if (_isInDetailsView) return;
                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                comment.UserName = comment.UserName ?? "Unknown User";
+                comment.UserName = _authService.User != null && comment.UserId == _authService.User.Id ? _authService.User.Name : (comment.UserName ?? "Unknown User");
                 comment.UserPhotoUrl = _authService.User.PhotoUrl ?? "user.png";
                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                 comment.Replies = new ObservableCollection<CommentDto>(
@@ -1189,6 +1192,33 @@ namespace SocialMauiApp.Models
             });
         }
 
+        private void OnUserNameChanged(UserNameChangedDto dto)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (dto.UserId == UserId)
+                {
+                    UserName = dto.NewName;
+                    OnPropertyChanged(nameof(UserName));
+                }
+
+                lock (_commentLock)
+                {
+                    foreach (var comment in Comments.Where(c => c.UserId == dto.UserId))
+                    {
+                        comment.UserName = dto.NewName;
+                    }
+                    foreach (var comment in Comments.Where(c => c.Replies != null))
+                    {
+                        foreach (var reply in comment.Replies.Where(r => r.UserId == dto.UserId))
+                        {
+                            reply.UserName = dto.NewName;
+                        }
+                    }
+                    OnPropertyChanged(nameof(Comments));
+                }
+            });
+        }
         ~PostModel()
         {
             _updateTimer?.Stop();

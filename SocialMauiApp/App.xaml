@@ -48,6 +48,7 @@
                     <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
                     <converters:CountToBoolConverter x:Key="CountToBoolConverter"/>
                     <converters:BooleanToSourceConverter x:Key="BooleanToSourceConverter" />
+                    <converters:BooleanToStringConverter x:Key="BooleanToStringConverter" />
                     <converters:BooleanToCommandConverter x:Key="CommandConverter" />
                     <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
                     <converters:LevelToMarginConverter x:Key="LevelToMarginConverter"/>
