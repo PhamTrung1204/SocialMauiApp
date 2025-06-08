@@ -2412,6 +2412,24 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\comments\7fd7837d-7337-4e1b-addf-b9bb36066a51_638846867590202715.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\comments\ad4906fa-f4ea-49b4-aec8-cdbf402ee0bc_638849894183306889.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>SocialMauiApp.Api</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/SocialMauiApp.Api</BasePath>
+      <RelativePath>uploads/images/users/cde27984-87ce-4342-1ddb-08dd9cd74073/comments/ad4906fa-f4ea-49b4-aec8-cdbf402ee0bc_638849894183306889.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>9rozrpnz8i</Fingerprint>
+      <Integrity>FZfEdS3ZVZgn/WOW+RXYNN8whCOcX6vHfzDFxgkq2Jo=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\comments\ad4906fa-f4ea-49b4-aec8-cdbf402ee0bc_638849894183306889.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\comments\bca14c32-eeb7-4ab0-911f-1b993f400562_638839579994741226.jpg'))">
       <SourceType>Package</SourceType>
       <SourceId>SocialMauiApp.Api</SourceId>
@@ -2483,6 +2501,24 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\comments\f2d2e73f-2283-4dd6-a902-6041fc137d5e_638846950371112467.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\posts\027533c2-a8a4-422d-b387-6546cb6cab5e_638849894631286799.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>SocialMauiApp.Api</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/SocialMauiApp.Api</BasePath>
+      <RelativePath>uploads/images/users/cde27984-87ce-4342-1ddb-08dd9cd74073/posts/027533c2-a8a4-422d-b387-6546cb6cab5e_638849894631286799.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>m9oj8mvndl</Fingerprint>
+      <Integrity>Zi4PNW4B1tXFEdC62ns3OBCSf03jTFbkmhyngyKI/JQ=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\posts\027533c2-a8a4-422d-b387-6546cb6cab5e_638849894631286799.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\images\users\cde27984-87ce-4342-1ddb-08dd9cd74073\posts\3802e0c3-51a7-4c3d-bb6a-3dbbd80647da_638846910373877649.jpg'))">
       <SourceType>Package</SourceType>

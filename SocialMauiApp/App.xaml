@@ -52,6 +52,7 @@
                     <converters:BooleanToCommandConverter x:Key="CommandConverter" />
                     <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
                     <converters:LevelToMarginConverter x:Key="LevelToMarginConverter"/>
+                    <converters:ContentLengthToFontSizeConverter x:Key="ContentLengthToFontSizeConverter"/>
                     <behaviors:AnimationBehavior x:Key="AnimationBehavior"/>
                     <behaviors:AutoFocusBehavior x:Key="AutoFocusBehavior"/>
                 </ResourceDictionary>

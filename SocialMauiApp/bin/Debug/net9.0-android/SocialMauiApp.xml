@@ -33,6 +33,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.UserId">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._userId"/>
@@ -60,6 +61,12 @@
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.PostedOnDisplay">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._postedOnDisplay"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsContentTruncated">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isContentTruncated"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsSeeMoreVisible">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isSeeMoreVisible"/>
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.IsLiked">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isLiked"/>
@@ -97,6 +104,12 @@
         <member name="P:SocialMauiApp.Models.PostModel.IsPhotoButtonVisible">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isPhotoButtonVisible"/>
         </member>
+        <member name="M:SocialMauiApp.Models.PostModel.OnContentChanged(System.String,System.String)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.Models.PostModel.Content"/> just changed.</summary>
+            <param name="oldValue">The previous property value that was replaced.</param>
+            <param name="newValue">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.Models.PostModel.Content"/> is changed.</remarks>
+        </member>
         <member name="M:SocialMauiApp.Models.PostModel.OnIsLikedChanged(System.Boolean,System.Boolean)">
             <summary>Executes the logic for when <see cref="P:SocialMauiApp.Models.PostModel.IsLiked"/> just changed.</summary>
             <param name="oldValue">The previous property value that was replaced.</param>
@@ -108,6 +121,12 @@
             <param name="oldValue">The previous property value that was replaced.</param>
             <param name="newValue">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.Models.PostModel.IsBookmarked"/> is changed.</remarks>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.toggleContentTruncationCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.ToggleContentTruncationCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ToggleContentTruncationCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.ToggleContentTruncation"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.Models.PostModel.showLikersCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.ShowLikersCommand"/>.</summary>
@@ -1039,6 +1058,12 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PostedOnDisplay">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PostedOnDisplay" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsContentTruncated">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsContentTruncated" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsSeeMoreVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsSeeMoreVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLiked">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLiked" generated properties.</summary>
         </member>
@@ -1245,6 +1270,12 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PostedOnDisplay">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PostedOnDisplay" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsContentTruncated">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsContentTruncated" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsSeeMoreVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsSeeMoreVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLiked">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLiked" generated properties.</summary>

@@ -52,6 +52,24 @@ namespace SocialMauiApp.Models
 
         [ObservableProperty]
         private string _postedOnDisplay;
+        [ObservableProperty]
+        private bool _isContentTruncated = true;
+
+        [ObservableProperty]
+        private bool _isSeeMoreVisible;
+
+        public string DisplayContent
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Content)) return string.Empty;
+                if (IsContentTruncated && Content.Length > 50 && string.IsNullOrWhiteSpace(PhotoUrl)!=null)
+                {
+                    return Content.Substring(0, 50) + "... See More";
+                }
+                return Content + (IsContentTruncated && IsSeeMoreVisible ? " See Less" : "");
+            }
+        }
 
         public string PostTemplateContentViewName =>
             string.IsNullOrWhiteSpace(PhotoUrl) ? "WithNoImage" :
@@ -158,6 +176,20 @@ namespace SocialMauiApp.Models
 
         [Ignore]
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
+
+        partial void OnContentChanged(string? oldValue, string? newValue)
+        {
+            IsSeeMoreVisible = !string.IsNullOrEmpty(newValue) && newValue.Length > 300;
+            OnPropertyChanged(nameof(DisplayContent));
+        }
+
+        [RelayCommand]
+        private void ToggleContentTruncation()
+        {
+            IsContentTruncated = !IsContentTruncated;
+            OnPropertyChanged(nameof(DisplayContent));
+            OnPropertyChanged(nameof(IsSeeMoreVisible));
+        }
 
         [RelayCommand]
         private async Task ShowLikersAsync()
