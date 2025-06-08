@@ -6,7 +6,7 @@
         {
             if (value is int level)
             {
-                return new Thickness(level * 20, 0, 0, 0); // 20 units indent per level
+                return new Thickness(level * 20, 0, 10, 0); // 20 units indent per level
             }
             return new Thickness(0);
         }
