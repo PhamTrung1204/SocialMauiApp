@@ -4,6 +4,7 @@ obj\Release\net9.0-android\android-arm64\aot\SocialMauiApp.dll.so
 obj\Release\net9.0-android\android-arm64\aot\CommunityToolkit.Maui.dll.so
 obj\Release\net9.0-android\android-arm64\aot\CommunityToolkit.Maui.Core.dll.so
 obj\Release\net9.0-android\android-arm64\aot\CommunityToolkit.Mvvm.dll.so
+obj\Release\net9.0-android\android-arm64\aot\Humanizer.dll.so
 obj\Release\net9.0-android\android-arm64\aot\Microsoft.AspNetCore.Connections.Abstractions.dll.so
 obj\Release\net9.0-android\android-arm64\aot\Microsoft.AspNetCore.Http.Connections.Client.dll.so
 obj\Release\net9.0-android\android-arm64\aot\Microsoft.AspNetCore.Http.Connections.Common.dll.so
@@ -32,6 +33,11 @@ obj\Release\net9.0-android\android-arm64\aot\Microsoft.Maui.Graphics.dll.so
 obj\Release\net9.0-android\android-arm64\aot\Plugin.Fingerprint.dll.so
 obj\Release\net9.0-android\android-arm64\aot\Refit.dll.so
 obj\Release\net9.0-android\android-arm64\aot\Refit.HttpClientFactory.dll.so
+obj\Release\net9.0-android\android-arm64\aot\SQLite-net.dll.so
+obj\Release\net9.0-android\android-arm64\aot\SQLitePCLRaw.batteries_v2.dll.so
+obj\Release\net9.0-android\android-arm64\aot\SQLitePCLRaw.core.dll.so
+obj\Release\net9.0-android\android-arm64\aot\SQLitePCLRaw.lib.e_sqlite3.android.dll.so
+obj\Release\net9.0-android\android-arm64\aot\SQLitePCLRaw.provider.e_sqlite3.dll.so
 obj\Release\net9.0-android\android-arm64\aot\Syncfusion.Licensing.dll.so
 obj\Release\net9.0-android\android-arm64\aot\Syncfusion.Maui.Core.dll.so
 obj\Release\net9.0-android\android-arm64\aot\Syncfusion.Maui.ImageEditor.dll.so
@@ -99,6 +105,7 @@ obj\Release\net9.0-android\android-arm64\aot\System.Linq.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Memory.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Net.Http.Json.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Net.Http.dll.so
+obj\Release\net9.0-android\android-arm64\aot\System.Net.Mail.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Net.NameResolution.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Net.NetworkInformation.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Net.Primitives.dll.so
@@ -114,6 +121,7 @@ obj\Release\net9.0-android\android-arm64\aot\System.Private.DataContractSerializ
 obj\Release\net9.0-android\android-arm64\aot\System.Private.Uri.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Private.Xml.Linq.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Private.Xml.dll.so
+obj\Release\net9.0-android\android-arm64\aot\System.Runtime.InteropServices.RuntimeInformation.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Runtime.InteropServices.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Runtime.Loader.dll.so
 obj\Release\net9.0-android\android-arm64\aot\System.Runtime.Numerics.dll.so

@@ -32,6 +32,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.UserId">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._userId"/>
@@ -107,6 +108,12 @@
             <param name="oldValue">The previous property value that was replaced.</param>
             <param name="newValue">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.Models.PostModel.IsBookmarked"/> is changed.</remarks>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.showLikersCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.ShowLikersCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ShowLikersCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.ShowLikersAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.Models.PostModel.toggleCommentsVisibilityCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.ToggleCommentsVisibilityCommand"/>.</summary>
@@ -603,12 +610,6 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
-        </member>
-        <member name="M:SocialMauiApp.ViewModel.ProfileViewModel.TryRefreshTokenAsync">
-            <summary>
-            Làm mới token nếu JWT hết hạn.
-            </summary>
-            <returns>True nếu token được làm mới thành công hoặc không cần làm mới, False nếu thất bại.</returns>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.User">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._user"/>
@@ -1608,6 +1609,9 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.GetPostAsync(System.Guid)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.GetPostLikersAsync(System.Guid)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#SavePostAsync(Refit.StreamPart,System.String)">
             <inheritdoc />
         </member>
@@ -1648,6 +1652,9 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#GetPostAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#GetPostLikersAsync(System.Guid)">
             <inheritdoc />
         </member>
         <member name="T:Refit.Implementation.Generated.SocialMauiAppApisISyncApi">

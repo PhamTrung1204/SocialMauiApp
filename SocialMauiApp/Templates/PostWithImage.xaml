@@ -3,12 +3,12 @@
     x:Class="SocialMauiApp.Templates.PostWithImage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:SocialMauiApp.Behaviors"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:converters="clr-namespace:SocialMauiApp.Converters"
     xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
     xmlns:models="clr-namespace:SocialMauiApp.Models"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
-    xmlns:behaviors="clr-namespace:SocialMauiApp.Behaviors"
     x:DataType="models:PostModel">
     <ContentView.Resources>
         <converters:LevelToMarginConverter x:Key="LevelToMarginConverter" />
@@ -17,7 +17,7 @@
         <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
 
-        <!-- MenuFlyout giữ nguyên để sử dụng cho comment -->
+        <!--  MenuFlyout giữ nguyên để sử dụng cho comment  -->
         <MenuFlyout x:Key="CommentOptionsMenu" x:DataType="dto:CommentDto">
             <MenuFlyoutItem
                 Command="{Binding Source={x:RelativeSource AncestorType={x:Type models:PostModel}}, Path=EditCommentCommand}"
@@ -43,7 +43,7 @@
         BackgroundColor="White"
         StrokeThickness="0">
         <Grid RowDefinitions="Auto,Auto,250,Auto,Auto,Auto" RowSpacing="5">
-            <!-- Grid.Row="0" (User Avatar and Info) -->
+            <!--  Grid.Row="0" (User Avatar and Info)  -->
             <Grid
                 Grid.Row="0"
                 Padding="8,0"
@@ -89,7 +89,7 @@
                         VerticalOptions="Center" />
                 </Grid>
             </Grid>
-            <!-- Grid.Row="1" (Post Content) -->
+            <!--  Grid.Row="1" (Post Content)  -->
             <Label
                 Grid.Row="1"
                 Padding="8,0"
@@ -98,12 +98,10 @@
                 Text="{Binding Content}"
                 TextColor="{StaticResource Gray900}">
                 <Label.GestureRecognizers>
-                    <TapGestureRecognizer
-                        Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}"
-                        CommandParameter="{Binding}" />
+                    <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
                 </Label.GestureRecognizers>
             </Label>
-            <!-- Grid.Row="2" (Post Image) -->
+            <!--  Grid.Row="2" (Post Image)  -->
             <Border
                 Grid.Row="2"
                 HeightRequest="250"
@@ -113,12 +111,10 @@
                     HeightRequest="250"
                     Source="{Binding PhotoUrl}" />
                 <Border.GestureRecognizers>
-                    <TapGestureRecognizer
-                        Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}"
-                        CommandParameter="{Binding}" />
+                    <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
                 </Border.GestureRecognizers>
             </Border>
-            <!-- Grid.Row="3" (Like + Comment Row) -->
+            <!--  Grid.Row="3" (Like + Comment Row)  -->
             <Grid
                 Grid.Row="3"
                 Padding="8,0"
@@ -146,9 +142,7 @@
                         TextColor="Gray"
                         VerticalOptions="Center" />
                     <HorizontalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer
-                            Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}"
-                            CommandParameter="{Binding}" />
+                        <TapGestureRecognizer Command="{Binding ShowLikersCommand}" />
                     </HorizontalStackLayout.GestureRecognizers>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout
@@ -173,13 +167,11 @@
                         TextColor="Gray"
                         VerticalOptions="Center" />
                     <HorizontalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer
-                            Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}"
-                            CommandParameter="{Binding}" />
+                        <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
                     </HorizontalStackLayout.GestureRecognizers>
                 </HorizontalStackLayout>
             </Grid>
-            <!-- Grid.Row="4" (Action Buttons) -->
+            <!--  Grid.Row="4" (Action Buttons)  -->
             <VerticalStackLayout Grid.Row="4">
                 <FlexLayout Margin="0,7,0,0" JustifyContent="SpaceAround">
                     <HorizontalStackLayout Spacing="2">
@@ -193,9 +185,7 @@
                             TextColor="{StaticResource Primary}"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleLikeCommand}"
-                                CommandParameter="{Binding}" />
+                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleLikeCommand}" CommandParameter="{Binding}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="2">
@@ -225,9 +215,7 @@
                             TextColor="{StaticResource Primary}"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleBookmarkCommand}"
-                                CommandParameter="{Binding}" />
+                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=ToggleBookmarkCommand}" CommandParameter="{Binding}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="2">
@@ -242,14 +230,12 @@
                             TextColor="{StaticResource Primary}"
                             VerticalOptions="Center" />
                         <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=SharePostCommand}"
-                                CommandParameter="{Binding}" />
+                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=SharePostCommand}" CommandParameter="{Binding}" />
                         </HorizontalStackLayout.GestureRecognizers>
                     </HorizontalStackLayout>
                 </FlexLayout>
             </VerticalStackLayout>
-            <!-- Grid.Row="5" (Comments Section) -->
+            <!--  Grid.Row="5" (Comments Section)  -->
             <VerticalStackLayout
                 Grid.Row="5"
                 IsVisible="{Binding IsCommentsVisible}"
@@ -281,7 +267,7 @@
                                     ColumnDefinitions="Auto,*"
                                     ColumnSpacing="8"
                                     RowDefinitions="Auto,Auto">
-                                    <!-- Avatar -->
+                                    <!--  Avatar  -->
                                     <Border
                                         Grid.Column="0"
                                         Margin="10,0,0,0"
@@ -295,7 +281,7 @@
                                             Source="{Binding UserPhotoUrl}"
                                             WidthRequest="40" />
                                     </Border>
-                                    <!-- Comment Content -->
+                                    <!--  Comment Content  -->
                                     <Border
                                         Grid.Column="1"
                                         Padding="10,5,5,5"
@@ -308,7 +294,7 @@
                                             ColumnDefinitions="*,Auto"
                                             RowDefinitions="Auto,Auto,Auto,Auto"
                                             RowSpacing="1">
-                                            <!-- Username and Timestamp -->
+                                            <!--  Username and Timestamp  -->
                                             <StackLayout
                                                 Grid.Row="0"
                                                 Grid.Column="0"
@@ -321,7 +307,7 @@
                                                     Text="{Binding UserName}"
                                                     TextColor="#1C2526" />
                                             </StackLayout>
-                                            <!-- More Options -->
+                                            <!--  More Options  -->
                                             <Label
                                                 Grid.Row="0"
                                                 Grid.Column="1"
@@ -336,7 +322,7 @@
                                                     <TapGestureRecognizer Tapped="OnMoreOptionsTapped" />
                                                 </Label.GestureRecognizers>
                                             </Label>
-                                            <!-- Content -->
+                                            <!--  Content  -->
                                             <Label
                                                 Grid.Row="1"
                                                 Grid.Column="0"
@@ -345,7 +331,7 @@
                                                 LineBreakMode="WordWrap"
                                                 Text="{Binding Content}"
                                                 TextColor="#1C2526" />
-                                            <!-- Comment Image -->
+                                            <!--  Comment Image  -->
                                             <Border
                                                 Grid.Row="2"
                                                 Grid.Column="0"
@@ -357,7 +343,7 @@
                                                     HorizontalOptions="Start"
                                                     Source="{Binding PhotoUrl}" />
                                             </Border>
-                                            <!-- Reply Button -->
+                                            <!--  Reply Button  -->
                                             <HorizontalStackLayout
                                                 Grid.Row="3"
                                                 Grid.Column="0"
@@ -380,7 +366,7 @@
                                             </HorizontalStackLayout>
                                         </Grid>
                                     </Border>
-                                    <!-- Replies -->
+                                    <!--  Replies  -->
                                     <CollectionView
                                         Grid.Row="1"
                                         Grid.Column="0"
@@ -399,7 +385,7 @@
                                                     ColumnDefinitions="Auto,*"
                                                     ColumnSpacing="8"
                                                     RowDefinitions="Auto">
-                                                    <!-- Reply Avatar -->
+                                                    <!--  Reply Avatar  -->
                                                     <Border
                                                         Grid.Column="0"
                                                         HeightRequest="32"
@@ -412,7 +398,7 @@
                                                             Source="{Binding UserPhotoUrl}"
                                                             WidthRequest="32" />
                                                     </Border>
-                                                    <!-- Reply Content -->
+                                                    <!--  Reply Content  -->
                                                     <Border
                                                         Grid.Column="1"
                                                         Padding="10"
@@ -425,7 +411,7 @@
                                                             ColumnDefinitions="*,Auto"
                                                             RowDefinitions="Auto,Auto,Auto,Auto"
                                                             RowSpacing="4">
-                                                            <!-- Username and Timestamp -->
+                                                            <!--  Username and Timestamp  -->
                                                             <StackLayout
                                                                 Grid.Row="0"
                                                                 Grid.Column="0"
@@ -438,7 +424,7 @@
                                                                     Text="{Binding UserName}"
                                                                     TextColor="#1C2526" />
                                                             </StackLayout>
-                                                            <!-- More Options -->
+                                                            <!--  More Options  -->
                                                             <Label
                                                                 Grid.Row="0"
                                                                 Grid.Column="1"
@@ -453,7 +439,7 @@
                                                                     <TapGestureRecognizer Tapped="OnMoreOptionsTapped" />
                                                                 </Label.GestureRecognizers>
                                                             </Label>
-                                                            <!-- Content -->
+                                                            <!--  Content  -->
                                                             <Label
                                                                 Grid.Row="1"
                                                                 Grid.Column="0"
@@ -462,7 +448,7 @@
                                                                 LineBreakMode="WordWrap"
                                                                 Text="{Binding Content}"
                                                                 TextColor="#1C2526" />
-                                                            <!-- Reply Image -->
+                                                            <!--  Reply Image  -->
                                                             <Border
                                                                 Grid.Row="2"
                                                                 Grid.Column="0"
@@ -500,7 +486,7 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <!-- Show More/Collapse Button -->
+                    <!--  Show More/Collapse Button  -->
                     <HorizontalStackLayout
                         Margin="0,0,0,5"
                         Padding="5,5"
@@ -527,13 +513,13 @@
                         </Label>
                     </HorizontalStackLayout>
                 </AbsoluteLayout>
-                <!-- Comment Input Section -->
+                <!--  Comment Input Section  -->
                 <Grid
                     Padding="8,5"
                     ColumnDefinitions="Auto,*,Auto,Auto"
                     ColumnSpacing="8"
                     RowDefinitions="Auto,Auto,Auto">
-                    <!-- Reply Indicator or Edit Indicator -->
+                    <!--  Reply Indicator or Edit Indicator  -->
                     <HorizontalStackLayout
                         Grid.Row="0"
                         Grid.Column="0"
@@ -575,7 +561,7 @@
                             </Border.GestureRecognizers>
                         </Border>
                     </HorizontalStackLayout>
-                    <!-- Pick Image Button -->
+                    <!--  Pick Image Button  -->
                     <Border
                         Grid.Row="1"
                         Grid.Column="0"
@@ -592,7 +578,7 @@
                             <TapGestureRecognizer Command="{Binding SelectPhotoCommand}" />
                         </Border.GestureRecognizers>
                     </Border>
-                    <!-- Comment Entry -->
+                    <!--  Comment Entry  -->
                     <controls:NoBorderEntry
                         Grid.Row="1"
                         Grid.Column="1"
@@ -604,7 +590,7 @@
                             <behaviors:AutoFocusBehavior ShouldFocus="{Binding ReplyingToComment, Converter={StaticResource ObjectToBoolConverter}}" />
                         </controls:NoBorderEntry.Behaviors>
                     </controls:NoBorderEntry>
-                    <!-- Send Button (for new comments/replies) -->
+                    <!--  Send Button (for new comments/replies)  -->
                     <Border
                         Grid.Row="1"
                         Grid.Column="2"
@@ -622,7 +608,7 @@
                             Source="send.png"
                             WidthRequest="20" />
                     </Border>
-                    <!-- Save Button (for edited comments) -->
+                    <!--  Save Button (for edited comments)  -->
                     <Border
                         Grid.Row="1"
                         Grid.Column="3"
@@ -636,12 +622,12 @@
                             <TapGestureRecognizer Command="{Binding SaveEditedCommentCommand}" />
                         </Border.GestureRecognizers>
                         <controls:WhiteImage
+                            Aspect="AspectFit"
                             HeightRequest="20"
                             Source="save.png"
-                            Aspect="AspectFit"
                             WidthRequest="20" />
                     </Border>
-                    <!-- Selected Images Preview -->
+                    <!--  Selected Images Preview  -->
                     <CollectionView
                         Grid.Row="2"
                         Grid.Column="0"

@@ -21,6 +21,21 @@
         </member>
         <member name="T:SocialMauiApp.Models.PostModel">
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.UserId">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._userId"/>
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.UserName">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._userName"/>
@@ -34,6 +49,18 @@
         <member name="P:SocialMauiApp.Models.PostModel.PhotoUrl">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._photoUrl"/>
         </member>
+        <member name="P:SocialMauiApp.Models.PostModel.CommentInput">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._commentInput"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.PostedOn">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._postedOn"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ModifiedOn">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._modifiedOn"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.PostedOnDisplay">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._postedOnDisplay"/>
+        </member>
         <member name="P:SocialMauiApp.Models.PostModel.IsLiked">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isLiked"/>
         </member>
@@ -45,6 +72,30 @@
         </member>
         <member name="P:SocialMauiApp.Models.PostModel.CommentCount">
             <inheritdoc cref="F:SocialMauiApp.Models.PostModel._commentCount"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsSync">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isSync"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsCommentsExpanded">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isCommentsExpanded"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsCommentsVisible">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isCommentsVisible"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsEditing">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isEditing"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.CommentBeingEdited">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._commentBeingEdited"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ReplyingToComment">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._replyingToComment"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.HasSelectedImages">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._hasSelectedImages"/>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.IsPhotoButtonVisible">
+            <inheritdoc cref="F:SocialMauiApp.Models.PostModel._isPhotoButtonVisible"/>
         </member>
         <member name="M:SocialMauiApp.Models.PostModel.OnIsLikedChanged(System.Boolean,System.Boolean)">
             <summary>Executes the logic for when <see cref="P:SocialMauiApp.Models.PostModel.IsLiked"/> just changed.</summary>
@@ -58,21 +109,117 @@
             <param name="newValue">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.Models.PostModel.IsBookmarked"/> is changed.</remarks>
         </member>
+        <member name="F:SocialMauiApp.Models.PostModel.showLikersCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.ShowLikersCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ShowLikersCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.ShowLikersAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.toggleCommentsVisibilityCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.ToggleCommentsVisibilityCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ToggleCommentsVisibilityCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.ToggleCommentsVisibility"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.toggleCommentsDisplayCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.ToggleCommentsDisplayCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ToggleCommentsDisplayCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.ToggleCommentsDisplay"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.saveEditedCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.SaveEditedCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.SaveEditedCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.SaveEditedCommentAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.selectPhotoCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.SelectPhotoCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.SelectPhotoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.SelectPhoto"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.deleteCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.DeleteCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.DeleteCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.DeleteCommentAsync(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.addCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.AddCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.AddCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.AddCommentAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.removePhotoCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.RemovePhotoCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.RemovePhotoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.RemovePhoto(System.String)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.replyCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.ReplyCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.ReplyCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.ReplyComment(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.cancelReplyCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.CancelReplyCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.CancelReplyCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.CancelReply"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.cancelEditCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.CancelEditCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.CancelEditCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.CancelEditAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.Models.PostModel.editCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.Models.PostModel.EditCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.Models.PostModel.EditCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.Models.PostModel.EditCommentAsync(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
+        </member>
         <member name="M:SocialMauiApp.Services.AuthService.Login(SocialMediaMaui.Shared.Dtos.LoginResponseDto)">
             <summary>
-            Thực hiện đăng nhập, lưu thông tin người dùng và token vào Preferences.
+            Thực hiện đăng nhập, lưu thông tin người dùng, JWT và refresh token vào Preferences và SecureStorage.
             </summary>
-            <param name="loginResponseDto">Đối tượng chứa thông tin người dùng và token.</param>
+            <param name="loginResponseDto">Đối tượng chứa thông tin người dùng, JWT và refresh token.</param>
         </member>
         <member name="M:SocialMauiApp.Services.AuthService.Logout">
             <summary>
-            Thực hiện đăng xuất, xóa thông tin người dùng và token.
+            Thực hiện đăng xuất, xóa thông tin người dùng, JWT và refresh token.
             </summary>
         </member>
         <member name="M:SocialMauiApp.Services.AuthService.Initialize">
             <summary>
             Khởi tạo AuthService bằng cách đọc dữ liệu đã lưu trong Preferences (nếu có).
             </summary>
+        </member>
+        <member name="T:SocialMauiApp.ViewModel.AdminViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.PostCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._postCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.UserCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._userCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.CommentCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._commentCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.LikeCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._likeCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.IsLoading">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._isLoading"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.Users">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._users"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.AdminViewModel.SelectedUser">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.AdminViewModel._selectedUser"/>
         </member>
         <member name="T:SocialMauiApp.ViewModel.BasePostViewModel">
             <inheritdoc/>
@@ -122,12 +269,17 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.IsEditing">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._isEditing"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.CommentBeingEdited">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._commentBeingEdited"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.ReplyingToComment">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel._replyingToComment"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.Post">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.DetailsViewModel.post"/>
@@ -149,11 +301,23 @@
             <param name="value">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.Post"/> is changed.</remarks>
         </member>
+        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.synchronizeDataCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.SynchronizeDataCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.SynchronizeDataCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.SynchronizeDataAsync"/>.</summary>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.fetchCommentsCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.FetchCommentsCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.FetchCommentsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.FetchCommentsAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.addCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.selectPhotoCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.SelectPhotoCommand"/>.</summary>
@@ -167,17 +331,17 @@
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhotoCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.RemovePhoto(System.String)"/>.</summary>
         </member>
-        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.clearPhotosCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.ClearPhotosCommand"/>.</summary>
+        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.replyCommentCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.ReplyCommentCommand"/>.</summary>
         </member>
-        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.ClearPhotosCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.ClearPhotos"/>.</summary>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.ReplyCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.ReplyComment(SocialMediaMaui.Shared.Dtos.CommentDto)"/>.</summary>
         </member>
-        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.addCommentCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand"/>.</summary>
+        <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.cancelReplyCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelReplyCommand"/>.</summary>
         </member>
-        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.AddCommentAsync"/>.</summary>
+        <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelReplyCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.CancelReply"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.editAndUpdateCommentCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.EditAndUpdateCommentCommand"/>.</summary>
@@ -189,7 +353,7 @@
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelEditCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.DetailsViewModel.CancelEditCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.CancelEdit"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.DetailsViewModel.CancelEdit"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.DetailsViewModel.deleteCommentCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.DetailsViewModel.DeleteCommentCommand"/>.</summary>
@@ -214,6 +378,10 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.HomeViewModel.User">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel._user"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.HomeViewModel.NewPost">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.HomeViewModel.newPost"/>
@@ -229,6 +397,12 @@
             <param name="oldValue">The previous property value that was replaced.</param>
             <param name="newValue">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.NewPost"/> is changed.</remarks>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.HomeViewModel.synchronizeDataCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.SynchronizeDataCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.HomeViewModel.SynchronizeDataCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.HomeViewModel.SynchronizeDataAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.HomeViewModel.fetchPostsCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.HomeViewModel.FetchPostsCommand"/>.</summary>
@@ -249,6 +423,7 @@
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.HomeViewModel.GoToAddPostAsync"/>.</summary>
         </member>
         <member name="T:SocialMauiApp.ViewModel.LoginViewModel">
+            <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
@@ -278,6 +453,12 @@
         <member name="P:SocialMauiApp.ViewModel.LoginViewModel.LoginWithFingerprintCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.LoginViewModel.LoginWithFingerprintAsync"/>.</summary>
         </member>
+        <member name="F:SocialMauiApp.ViewModel.LoginViewModel.forgotPasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.LoginViewModel.ForgotPasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.LoginViewModel.ForgotPasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.LoginViewModel.ForgotPasswordAsync"/>.</summary>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.LoginViewModel.switchAccountCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.LoginViewModel.SwitchAccountCommand"/>.</summary>
         </member>
@@ -289,6 +470,11 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+        </member>
+        <member name="M:SocialMauiApp.ViewModel.LoginWithFingerprintViewModel.CheckLoginStatusAsync">
+            <summary>
+            Kiểm tra trạng thái đăng nhập bằng token đã lưu và làm mới nếu cần.
+            </summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.LoginWithFingerprintViewModel.GreetingText">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.LoginWithFingerprintViewModel._greetingText"/>
@@ -347,6 +533,67 @@
         <member name="P:SocialMauiApp.ViewModel.NotificationViewModel.OpenPostCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.NotificationViewModel.OpenPostAsync(System.Nullable{System.Guid})"/>.</summary>
         </member>
+        <member name="T:SocialMauiApp.ViewModel.PostManageViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.PostCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._postCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.CommentCount">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._commentCount"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.IsLoading">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._isLoading"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.IsRefreshingComments">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._isRefreshingComments"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.Posts">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._posts"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.Comments">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._comments"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.SelectedPost">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._selectedPost"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.SelectedComment">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._selectedComment"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.SelectedPostComments">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._selectedPostComments"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.IsCommentsVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.PostManageViewModel._isCommentsVisible"/>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.PostManageViewModel.selectPostCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.PostManageViewModel.SelectPostCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.SelectPostCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.PostManageViewModel.SelectPostAsync(SocialMediaMaui.Shared.Dtos.PostDto)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.PostManageViewModel.loadMoreCommentsCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.PostManageViewModel.LoadMoreCommentsCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.LoadMoreCommentsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.PostManageViewModel.LoadMoreCommentsAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.PostManageViewModel.refreshPostsCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.PostManageViewModel.RefreshPostsCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.RefreshPostsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.PostManageViewModel.RefreshPostsAsync(System.Threading.CancellationToken)"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.PostManageViewModel.refreshCommentsCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.PostManageViewModel.RefreshCommentsCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.PostManageViewModel.RefreshCommentsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.PostManageViewModel.RefreshCommentsAsync(System.Threading.CancellationToken)"/>.</summary>
+        </member>
         <member name="T:SocialMauiApp.ViewModel.ProfileViewModel">
             <inheritdoc/>
             <inheritdoc/>
@@ -356,6 +603,19 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="M:SocialMauiApp.ViewModel.ProfileViewModel.TryRefreshTokenAsync">
+            <summary>
+            Làm mới token nếu JWT hết hạn.
+            </summary>
+            <returns>True nếu token được làm mới thành công hoặc không cần làm mới, False nếu thất bại.</returns>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.User">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._user"/>
@@ -365,6 +625,24 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.IsFingerprintEnabled">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._isFingerprintEnabled"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.IsProfileMenuOpen">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._isProfileMenuOpen"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.CurrentPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._currentPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.NewPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._newPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ConfirmNewPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._confirmNewPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.NewName">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._newName"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.IsChangePasswordVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._isChangePasswordVisible"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.IsMyPostsTabSelected">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.ProfileViewModel._isMyPostsTabSelected"/>
@@ -383,6 +661,12 @@
             <param name="newValue">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.CroppedPhotoSource"/> is changed.</remarks>
         </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.toggleProfileMenuCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ToggleProfileMenuCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ToggleProfileMenuCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ToggleProfileMenu"/>.</summary>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.showFingerprintSettingsCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowFingerprintSettingsCommand"/>.</summary>
         </member>
@@ -394,6 +678,48 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.LogoutCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.LogoutAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.showChangePasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangePasswordAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.changePasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangePasswordAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.cancelChangePasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangePasswordAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.showChangeNameCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangeNameCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangeNameCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ShowChangeNameAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.changeNameCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangeNameCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangeNameCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangeNameAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.cancelChangeNameCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangeNameCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangeNameCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.CancelChangeNameAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.changePhotoCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoAsync"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.selectMyPostsTabCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.SelectMyPostsTabCommand"/>.</summary>
@@ -419,19 +745,14 @@
         <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.FetchBookmarkedPostsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.FetchBookmarkedPostsAsync"/>.</summary>
         </member>
-        <member name="F:SocialMauiApp.ViewModel.ProfileViewModel.changePhotoCommand">
-            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoCommand"/>.</summary>
-        </member>
-        <member name="P:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ProfileViewModel.ChangePhotoAsync"/>.</summary>
-        </member>
         <member name="T:SocialMauiApp.ViewModel.RegisterViewModel">
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
-        <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.Name">
-            <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._name"/>
+        <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.Username">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._username"/>
         </member>
         <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.Email">
             <inheritdoc cref="F:SocialMauiApp.ViewModel.RegisterViewModel._email"/>
@@ -453,6 +774,12 @@
             <param name="value">The new property value that was set.</param>
             <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.RegisterViewModel.CroppedPhotoSource"/> is changed.</remarks>
         </member>
+        <member name="F:SocialMauiApp.ViewModel.RegisterViewModel.showSuccessAndNavigateToLoginCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.RegisterViewModel.ShowSuccessAndNavigateToLoginCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.ShowSuccessAndNavigateToLoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.RegisterViewModel.ShowSuccessAndNavigateToLogin"/>.</summary>
+        </member>
         <member name="F:SocialMauiApp.ViewModel.RegisterViewModel.registerCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.RegisterViewModel.RegisterCommand"/>.</summary>
         </member>
@@ -464,6 +791,59 @@
         </member>
         <member name="P:SocialMauiApp.ViewModel.RegisterViewModel.SelectPhotoCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.RegisterViewModel.SelectPhotoAsync"/>.</summary>
+        </member>
+        <member name="T:SocialMauiApp.ViewModel.ResetPasswordViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.Email">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._email"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.NewPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._newPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ConfirmPassword">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._confirmPassword"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetToken">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._resetToken"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetCode">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._resetCode"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.IsRequestResetVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._isRequestResetVisible"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.IsEnterCodeVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._isEnterCodeVisible"/>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.IsResetPasswordVisible">
+            <inheritdoc cref="F:SocialMauiApp.ViewModel.ResetPasswordViewModel._isResetPasswordVisible"/>
+        </member>
+        <member name="M:SocialMauiApp.ViewModel.ResetPasswordViewModel.OnResetTokenChanged(System.String)">
+            <summary>Executes the logic for when <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetToken"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetToken"/> is changed.</remarks>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ResetPasswordViewModel.requestResetCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ResetPasswordViewModel.RequestResetAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ResetPasswordViewModel.verifyCodeCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.VerifyCodeCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.VerifyCodeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ResetPasswordViewModel.VerifyCodeAsync"/>.</summary>
+        </member>
+        <member name="F:SocialMauiApp.ViewModel.ResetPasswordViewModel.resetPasswordCommand">
+            <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetPasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetPasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.ResetPasswordViewModel.ResetPasswordAsync"/>.</summary>
         </member>
         <member name="T:SocialMauiApp.ViewModel.SavePostViewModel">
             <inheritdoc/>
@@ -495,7 +875,7 @@
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.SavePostViewModel.RemovePhotoCommand"/>.</summary>
         </member>
         <member name="P:SocialMauiApp.ViewModel.SavePostViewModel.RemovePhotoCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.SavePostViewModel.RemovePhoto"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SocialMauiApp.ViewModel.SavePostViewModel.RemovePhoto"/>.</summary>
         </member>
         <member name="F:SocialMauiApp.ViewModel.SavePostViewModel.savePostCommand">
             <summary>The backing field for <see cref="P:SocialMauiApp.ViewModel.SavePostViewModel.SavePostCommand"/>.</summary>
@@ -647,8 +1027,23 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsEditing">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsEditing" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UserId">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UserId" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PhotoUrl">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PhotoUrl" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CommentInput">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CommentInput" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PostedOn">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PostedOn" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ModifiedOn">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ModifiedOn" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PostedOnDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PostedOnDisplay" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLiked">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLiked" generated properties.</summary>
@@ -662,17 +1057,20 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CommentCount">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CommentCount" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBusy">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsSync">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsSync" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsCommentsExpanded">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsCommentsExpanded" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsCommentsVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsCommentsVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CommentBeingEdited">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CommentBeingEdited" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Post">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Post" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsOwnPost">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsOwnPost" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ReplyingToComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ReplyingToComment" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasSelectedImages">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasSelectedImages" generated properties.</summary>
@@ -680,8 +1078,35 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsPhotoButtonVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsPhotoButtonVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PostCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PostCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UserCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UserCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Users">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Users" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedUser">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedUser" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Post">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Post" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsOwnPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsOwnPost" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Comment">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Comment" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.User">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "User" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewPost">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewPost" generated properties.</summary>
@@ -713,14 +1138,47 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBiometricAvailable">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBiometricAvailable" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.User">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "User" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRefreshingComments">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRefreshingComments" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Posts">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Posts" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Comments">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Comments" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedPost" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedComment" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedPostComments">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedPostComments" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsUploading">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsUploading" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsFingerprintEnabled">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsFingerprintEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsProfileMenuOpen">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsProfileMenuOpen" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CurrentPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CurrentPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmNewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmNewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsChangePasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsChangePasswordVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsMyPostsTabSelected">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsMyPostsTabSelected" generated properties.</summary>
@@ -731,14 +1189,29 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CroppedPhotoSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CroppedPhotoSource" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Name">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Name" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RepeatPassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RepeatPassword" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PhotoImageSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PhotoImageSource" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ResetToken">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ResetToken" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ResetCode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ResetCode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRequestResetVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRequestResetVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsEnterCodeVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsEnterCodeVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsResetPasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsResetPasswordVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PhotoPath">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PhotoPath" generated properties.</summary>
@@ -761,8 +1234,23 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsEditing">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsEditing" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UserId">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UserId" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PhotoUrl">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoUrl" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CommentInput">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CommentInput" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PostedOn">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PostedOn" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ModifiedOn">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ModifiedOn" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PostedOnDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PostedOnDisplay" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLiked">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLiked" generated properties.</summary>
@@ -776,17 +1264,20 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CommentCount">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CommentCount" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBusy">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsSync">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsSync" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsCommentsExpanded">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsCommentsExpanded" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsCommentsVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsCommentsVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CommentBeingEdited">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CommentBeingEdited" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Post">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Post" generated properties.</summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsOwnPost">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsOwnPost" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ReplyingToComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ReplyingToComment" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasSelectedImages">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasSelectedImages" generated properties.</summary>
@@ -794,8 +1285,35 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPhotoButtonVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPhotoButtonVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PostCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PostCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UserCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UserCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Users">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Users" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedUser">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedUser" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Post">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Post" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsOwnPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsOwnPost" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Comment">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Comment" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.User">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "User" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewPost">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewPost" generated properties.</summary>
@@ -827,14 +1345,47 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBiometricAvailable">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBiometricAvailable" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.User">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "User" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRefreshingComments">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRefreshingComments" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Posts">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Posts" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Comments">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Comments" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedPost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedPost" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedComment">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedComment" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedPostComments">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedPostComments" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsUploading">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsUploading" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsFingerprintEnabled">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsFingerprintEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsProfileMenuOpen">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsProfileMenuOpen" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CurrentPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CurrentPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmNewPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmNewPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsChangePasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsChangePasswordVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsMyPostsTabSelected">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsMyPostsTabSelected" generated properties.</summary>
@@ -845,19 +1396,103 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CroppedPhotoSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CroppedPhotoSource" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Name">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Name" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RepeatPassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RepeatPassword" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PhotoImageSource">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoImageSource" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ResetToken">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ResetToken" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ResetCode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ResetCode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRequestResetVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRequestResetVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsEnterCodeVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsEnterCodeVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsResetPasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsResetPasswordVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PhotoPath">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PhotoPath" generated properties.</summary>
         </member>
         <member name="T:Refit.Implementation.Generated">
+            <inheritdoc />
+        </member>
+        <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi">
+            <inheritdoc />
+        </member>
+        <member name="P:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.Client">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.#ctor(System.Net.Http.HttpClient,Refit.IRequestBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetDashboardAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetUsersAsync(System.String,System.String,System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.LockUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.UnlockUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.DeleteUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetPostsAsync(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.DeletePostAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetCommentsAsync(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.GetCommentsForPostAsync(System.Guid,System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.DeleteCommentAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetDashboardAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetUsersAsync(System.String,System.String,System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#LockUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#UnlockUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#DeleteUserAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetPostsAsync(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#DeletePostAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetCommentsAsync(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#GetCommentsForPostAsync(System.Guid,System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAdminApi.SocialMauiApp#Apis#IAdminApi#DeleteCommentAsync(System.Guid)">
             <inheritdoc />
         </member>
         <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi">
@@ -881,6 +1516,24 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.ValidateTokenAsync(System.String)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SendVerificationEmailAsync(SocialMediaMaui.Shared.Dtos.SendVerificationEmailDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.VerifyEmailAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.RequestPasswordResetAsync(SocialMediaMaui.Shared.Dtos.PasswordResetRequestDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.VerifyResetTokenAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.ResetPasswordAsync(SocialMediaMaui.Shared.Dtos.ResetPasswordDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.RefreshTokenAsync(SocialMediaMaui.Shared.Dtos.RefreshTokenDto)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#RegisterAsync(SocialMediaMaui.Shared.Dtos.RegisterDto)">
             <inheritdoc />
         </member>
@@ -891,6 +1544,24 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#ValidateTokenAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#SendVerificationEmailAsync(SocialMediaMaui.Shared.Dtos.SendVerificationEmailDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#VerifyEmailAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#RequestPasswordResetAsync(SocialMediaMaui.Shared.Dtos.PasswordResetRequestDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#VerifyResetTokenAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#ResetPasswordAsync(SocialMediaMaui.Shared.Dtos.ResetPasswordDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIAuthApi.SocialMauiApp#Apis#IAuthApi#RefreshTokenAsync(SocialMediaMaui.Shared.Dtos.RefreshTokenDto)">
             <inheritdoc />
         </member>
         <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIPostApi">
@@ -920,10 +1591,16 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.DeleteCommentAsync(System.Guid)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.ReplyCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SaveCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.UpdateCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.DeleteCommentWithChildrenAsync(System.Guid)">
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.ToggleLikeAsync(System.Guid)">
@@ -936,6 +1613,9 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.GetPostAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.GetPostLikersAsync(System.Guid)">
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#SavePostAsync(Refit.StreamPart,System.String)">
@@ -956,10 +1636,16 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#DeleteCommentAsync(System.Guid)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#ReplyCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#SaveCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#UpdateCommentWithImagesAsync(System.Guid,Refit.StreamPart,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#DeleteCommentWithChildrenAsync(System.Guid)">
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#ToggleLikeAsync(System.Guid)">
@@ -972,6 +1658,48 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#GetPostAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIPostApi.SocialMauiApp#Apis#IPostApi#GetPostLikersAsync(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="T:Refit.Implementation.Generated.SocialMauiAppApisISyncApi">
+            <inheritdoc />
+        </member>
+        <member name="P:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.Client">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.#ctor(System.Net.Http.HttpClient,Refit.IRequestBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.SynchronizeAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.GetPostsSinceAsync(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.UpsertPostsAsync(System.Collections.Generic.List{SocialMediaMaui.Shared.Dtos.PostDto})">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.GetCommentsSinceAsync(System.DateTime,System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.UpsertCommentsAsync(System.Collections.Generic.List{SocialMediaMaui.Shared.Dtos.CommentDto})">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.SocialMauiApp#Apis#ISyncApi#SynchronizeAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.SocialMauiApp#Apis#ISyncApi#GetPostsSinceAsync(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.SocialMauiApp#Apis#ISyncApi#UpsertPostsAsync(System.Collections.Generic.List{SocialMediaMaui.Shared.Dtos.PostDto})">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.SocialMauiApp#Apis#ISyncApi#GetCommentsSinceAsync(System.DateTime,System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisISyncApi.SocialMauiApp#Apis#ISyncApi#UpsertCommentsAsync(System.Collections.Generic.List{SocialMediaMaui.Shared.Dtos.CommentDto})">
             <inheritdoc />
         </member>
         <member name="T:Refit.Implementation.Generated.SocialMauiAppApisIUserApi">
@@ -995,6 +1723,12 @@
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.GetNotificationAsync(System.String,System.Int32,System.Int32)">
             <inheritdoc />
         </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.ChangePasswordAsync(System.String,SocialMediaMaui.Shared.Dtos.ChangePasswordDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.ChangeNameAsync(System.String,SocialMediaMaui.Shared.Dtos.ChangeNameDto)">
+            <inheritdoc />
+        </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#ChangePhotoAsync(System.String,Refit.StreamPart)">
             <inheritdoc />
         </member>
@@ -1005,6 +1739,12 @@
             <inheritdoc />
         </member>
         <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#GetNotificationAsync(System.String,System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#ChangePasswordAsync(System.String,SocialMediaMaui.Shared.Dtos.ChangePasswordDto)">
+            <inheritdoc />
+        </member>
+        <member name="M:Refit.Implementation.Generated.SocialMauiAppApisIUserApi.SocialMauiApp#Apis#IUserApi#ChangeNameAsync(System.String,SocialMediaMaui.Shared.Dtos.ChangeNameDto)">
             <inheritdoc />
         </member>
     </members>

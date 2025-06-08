@@ -232,7 +232,7 @@ namespace SocialMauiApp.ViewModel
                             PostId = postModel.PostId,
                             UserId = postModel.UserId,
                             UserName = postModel.UserName,
-                            UserPhotoUrl = postModel.UserPhotoUrl,
+                            UserPhotoUrl = postModel.UserPhoto,
                             Content = postModel.Content,
                             PhotoUrl = postModel.PhotoUrl,
                             PostedOnDisplay = postModel.PostedOnDisplay,

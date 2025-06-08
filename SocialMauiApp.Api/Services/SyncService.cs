@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SocialMauiApp.Api.Data;
 using SocialMauiApp.Api.Data.Entities;
 
@@ -11,89 +14,104 @@ namespace SocialMauiApp.Api.Services
     {
         private readonly SQLiteContext _sqliteContext;
         private readonly DataContext _dataContext;
+        private readonly ILogger<SyncService> _logger;
+        private readonly SemaphoreSlim _syncSemaphore = new SemaphoreSlim(1, 1);
 
-        public SyncService(SQLiteContext sqliteContext, DataContext dataContext)
+        public SyncService(SQLiteContext sqliteContext, DataContext dataContext, ILogger<SyncService> logger)
         {
-            _sqliteContext = sqliteContext;
-            _dataContext = dataContext;
+            _sqliteContext = sqliteContext ?? throw new ArgumentNullException(nameof(sqliteContext));
+            _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task SynchronizeAsync()
+        public async Task SynchronizeAsync(CancellationToken cancellationToken = default)
         {
+            await _syncSemaphore.WaitAsync(cancellationToken);
             try
             {
-                Console.WriteLine($"Bắt đầu đồng bộ hóa tại {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                _logger.LogInformation("Starting synchronization at {Time}.", DateTime.Now.ToString("HH:mm:ss"));
 
-                if (!_sqliteContext.Database.CanConnect())
+                if (!await _sqliteContext.Database.CanConnectAsync(cancellationToken))
                 {
-                    Console.WriteLine($"Không thể kết nối đến cơ sở dữ liệu SQLite tại {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
-                    throw new Exception("Không thể kết nối đến cơ sở dữ liệu SQLite.");
+                    _logger.LogError("Cannot connect to SQLite database at {Time}.", DateTime.Now.ToString("HH:mm:ss"));
+                    throw new InvalidOperationException("Cannot connect to SQLite database.");
                 }
 
-                var syncMetadata = await _sqliteContext.SyncMetadata.FirstOrDefaultAsync();
+                var syncMetadata = await _sqliteContext.SyncMetadata.FirstOrDefaultAsync(cancellationToken);
                 if (syncMetadata == null)
                 {
                     syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = DateTime.MinValue };
-                    await _sqliteContext.SyncMetadata.AddAsync(syncMetadata);
-                    await _sqliteContext.SaveChangesAsync();
-                    Console.WriteLine($"Đã khởi tạo bản ghi SyncMetadata mới tại {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    await _sqliteContext.SyncMetadata.AddAsync(syncMetadata, cancellationToken);
+                    await _sqliteContext.SaveChangesAsync(cancellationToken);
+                    _logger.LogInformation("Initialized new SyncMetadata record at {Time}.", DateTime.Now.ToString("HH:mm:ss"));
                 }
 
                 var lastSyncTime = syncMetadata.LastSyncTime;
-                Console.WriteLine($"Thời gian đồng bộ gần nhất: {lastSyncTime} tại {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                _logger.LogInformation("Last synchronization time: {LastSyncTime} at {Time}.", lastSyncTime, DateTime.Now.ToString("HH:mm:ss"));
 
-                await SyncLocalToServerAsync();
-                await SyncServerToLocalAsync(lastSyncTime);
+                await SyncLocalToServerAsync(cancellationToken);
+                await SyncServerToLocalAsync(lastSyncTime, cancellationToken);
 
-                // Cập nhật SyncMetadata với xử lý đồng thời
+                // Update SyncMetadata with concurrency handling
                 syncMetadata.LastSyncTime = DateTime.UtcNow;
 
                 try
                 {
                     _sqliteContext.SyncMetadata.Update(syncMetadata);
-                    await _sqliteContext.SaveChangesAsync();
-                    Console.WriteLine($"Đã cập nhật SyncMetadata với LastSyncTime={syncMetadata.LastSyncTime} tại {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    await _sqliteContext.SaveChangesAsync(cancellationToken);
+                    _logger.LogInformation("Updated SyncMetadata with LastSyncTime={LastSyncTime} at {Time}.", syncMetadata.LastSyncTime, DateTime.Now.ToString("HH:mm:ss"));
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    Console.WriteLine($"Phát hiện xung đột đồng thời tại {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    _logger.LogWarning(ex, "Detected concurrency conflict at {Time}.", DateTime.Now.ToString("HH:mm:ss"));
                     var entry = ex.Entries.Single();
-                    var databaseValues = entry.GetDatabaseValues();
+                    var databaseValues = await entry.GetDatabaseValuesAsync(cancellationToken);
                     if (databaseValues == null)
                     {
-                        Console.WriteLine($"Bản ghi SyncMetadata (Id={syncMetadata.Id}) không tồn tại. Thêm mới bản ghi.");
-                        await _sqliteContext.SyncMetadata.AddAsync(syncMetadata);
+                        _logger.LogInformation("SyncMetadata record (Id={Id}) does not exist. Adding new record.", syncMetadata.Id);
+                        await _sqliteContext.SyncMetadata.AddAsync(syncMetadata, cancellationToken);
                     }
                     else
                     {
                         entry.OriginalValues.SetValues(databaseValues);
                         _sqliteContext.SyncMetadata.Update(syncMetadata);
                     }
-                    await _sqliteContext.SaveChangesAsync();
-                    Console.WriteLine($"Đã giải quyết xung đột đồng thời và cập nhật SyncMetadata tại {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                    await _sqliteContext.SaveChangesAsync(cancellationToken);
+                    _logger.LogInformation("Resolved concurrency conflict and updated SyncMetadata at {Time}.", DateTime.Now.ToString("HH:mm:ss"));
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogWarning("Synchronization was canceled at {Time}.", DateTime.Now.ToString("HH:mm:ss"));
+                throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lỗi đồng bộ: {ex.Message} tại {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                _logger.LogError(ex, "Synchronization error at {Time}: {Message}", DateTime.Now.ToString("HH:mm:ss"), ex.Message);
                 throw;
+            }
+            finally
+            {
+                _syncSemaphore.Release();
             }
         }
 
-        private async Task SyncLocalToServerAsync()
+        private async Task SyncLocalToServerAsync(CancellationToken cancellationToken)
         {
-            // Đồng bộ Post
+            _logger.LogDebug("Starting local-to-server synchronization.");
+
+            // Sync Posts
             var localPendingPosts = await _sqliteContext.Posts
                 .Where(p => !p.IsSynced && !p.IsDeleted)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             if (localPendingPosts.Any())
             {
                 foreach (var post in localPendingPosts)
                 {
-                    var serverPost = await _dataContext.Posts.FindAsync(post.Id);
+                    var serverPost = await _dataContext.Posts.FindAsync(new object[] { post.Id }, cancellationToken);
                     if (serverPost == null)
                     {
-                        _dataContext.Posts.Add(post);
+                        await _dataContext.Posts.AddAsync(post, cancellationToken);
                     }
                     else
                     {
@@ -105,28 +123,29 @@ namespace SocialMauiApp.Api.Services
                         _dataContext.Posts.Update(serverPost);
                     }
                 }
-                await _dataContext.SaveChangesAsync();
+                await _dataContext.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("Synced {Count} posts to server.", localPendingPosts.Count);
 
-                // Cập nhật trạng thái đồng bộ trong SQLite
+                // Update sync status in SQLite
                 foreach (var post in localPendingPosts)
                 {
                     post.IsSynced = true;
                 }
-                await _sqliteContext.SaveChangesAsync();
+                await _sqliteContext.SaveChangesAsync(cancellationToken);
             }
 
-            // Đồng bộ Comment
+            // Sync Comments
             var localPendingComments = await _sqliteContext.Comments
                 .Where(c => !c.IsSynced)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             if (localPendingComments.Any())
             {
                 foreach (var comment in localPendingComments)
                 {
-                    var serverComment = await _dataContext.Comments.FindAsync(comment.Id);
+                    var serverComment = await _dataContext.Comments.FindAsync(new object[] { comment.Id }, cancellationToken);
                     if (serverComment == null)
                     {
-                        _dataContext.Comments.Add(comment);
+                        await _dataContext.Comments.AddAsync(comment, cancellationToken);
                     }
                     else
                     {
@@ -137,32 +156,35 @@ namespace SocialMauiApp.Api.Services
                         _dataContext.Comments.Update(serverComment);
                     }
                 }
-                await _dataContext.SaveChangesAsync();
+                await _dataContext.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("Synced {Count} comments to server.", localPendingComments.Count);
 
-                // Cập nhật trạng thái đồng bộ trong SQLite
+                // Update sync status in SQLite
                 foreach (var comment in localPendingComments)
                 {
                     comment.IsSynced = true;
                 }
-                await _sqliteContext.SaveChangesAsync();
+                await _sqliteContext.SaveChangesAsync(cancellationToken);
             }
         }
 
-        private async Task SyncServerToLocalAsync(DateTime lastSyncTime)
+        private async Task SyncServerToLocalAsync(DateTime lastSyncTime, CancellationToken cancellationToken)
         {
-            // Step 1: Đồng bộ Users từ SQL Server xuống SQLite
+            _logger.LogDebug("Starting server-to-local synchronization with last sync time: {LastSyncTime}.", lastSyncTime);
+
+            // Step 1: Sync Users from SQL Server to SQLite
             var serverUsers = await _dataContext.Users
                 .Where(u => u.RefreshTokenExpiry > lastSyncTime || u.ResetTokenExpiry > lastSyncTime || (u.VerificationTokenExpiry.HasValue && u.VerificationTokenExpiry > lastSyncTime))
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             var userIds = serverUsers.Select(u => u.Id).ToList();
 
             // Fetch additional Users referenced by Posts and Comments
             var serverPosts = await _dataContext.Posts
                 .Where(p => p.ModifiedOn > lastSyncTime)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             var serverComments = await _dataContext.Comments
                 .Where(c => c.AddedOn > lastSyncTime)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             var referencedUserIdsFromPosts = serverPosts.Select(p => p.UserId).Distinct().ToList();
             var referencedUserIdsFromComments = serverComments.Select(c => c.UserId).Distinct().ToList();
             var allReferencedUserIds = userIds
@@ -174,24 +196,24 @@ namespace SocialMauiApp.Api.Services
             var existingUserIds = await _sqliteContext.Users
                 .Where(u => allReferencedUserIds.Contains(u.Id))
                 .Select(u => u.Id)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             var missingUserIds = allReferencedUserIds.Except(existingUserIds).ToList();
 
             if (missingUserIds.Any())
             {
                 var missingUsers = await _dataContext.Users
                     .Where(u => missingUserIds.Contains(u.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
                 serverUsers.AddRange(missingUsers);
             }
 
             foreach (var serverUser in serverUsers)
             {
                 var localUser = await _sqliteContext.Users
-                    .FirstOrDefaultAsync(u => u.Id == serverUser.Id);
+                    .FirstOrDefaultAsync(u => u.Id == serverUser.Id, cancellationToken);
                 if (localUser == null)
                 {
-                    await _sqliteContext.Users.AddAsync(serverUser);
+                    await _sqliteContext.Users.AddAsync(serverUser, cancellationToken);
                 }
                 else
                 {
@@ -211,18 +233,18 @@ namespace SocialMauiApp.Api.Services
                     localUser.RefreshTokenExpiry = serverUser.RefreshTokenExpiry;
                 }
             }
-            await _sqliteContext.SaveChangesAsync();
-            Console.WriteLine($"Synced {serverUsers.Count} users to SQLite at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+            await _sqliteContext.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("Synced {Count} users to SQLite.", serverUsers.Count);
 
-            // Step 2: Đồng bộ Post từ SQL Server xuống SQLite
+            // Step 2: Sync Posts from SQL Server to SQLite
             foreach (var serverPost in serverPosts)
             {
                 var localPost = await _sqliteContext.Posts
-                    .FirstOrDefaultAsync(p => p.Id == serverPost.Id);
+                    .FirstOrDefaultAsync(p => p.Id == serverPost.Id, cancellationToken);
                 if (localPost == null)
                 {
                     serverPost.IsSynced = true;
-                    await _sqliteContext.Posts.AddAsync(serverPost);
+                    await _sqliteContext.Posts.AddAsync(serverPost, cancellationToken);
                 }
                 else if (serverPost.ModifiedOn > localPost.ModifiedOn)
                 {
@@ -234,29 +256,29 @@ namespace SocialMauiApp.Api.Services
                     localPost.IsSynced = true;
                 }
             }
-            await _sqliteContext.SaveChangesAsync();
-            Console.WriteLine($"Synced {serverPosts.Count} posts to SQLite at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+            await _sqliteContext.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("Synced {Count} posts to SQLite.", serverPosts.Count);
 
             // Step 3: Get all PostIds that will be referenced by Comments
             var referencedPostIds = serverComments.Select(c => c.PostId).Distinct().ToList();
             var existingPostIds = await _sqliteContext.Posts
                 .Where(p => referencedPostIds.Contains(p.Id))
                 .Select(p => p.Id)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             var missingPostIds = referencedPostIds.Except(existingPostIds).ToList();
 
             if (missingPostIds.Any())
             {
                 var missingPosts = await _dataContext.Posts
                     .Where(p => missingPostIds.Contains(p.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
                 foreach (var missingPost in missingPosts)
                 {
                     missingPost.IsSynced = true;
-                    await _sqliteContext.Posts.AddAsync(missingPost);
+                    await _sqliteContext.Posts.AddAsync(missingPost, cancellationToken);
                 }
-                await _sqliteContext.SaveChangesAsync();
-                Console.WriteLine($"Synced {missingPosts.Count} additional posts for comments to SQLite at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                await _sqliteContext.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("Synced {Count} additional posts for comments to SQLite.", missingPosts.Count);
             }
 
             // Step 4: Ensure all parent Comments are synced before their replies
@@ -268,37 +290,37 @@ namespace SocialMauiApp.Api.Services
             var existingCommentIds = await _sqliteContext.Comments
                 .Where(c => parentCommentIds.Contains(c.Id))
                 .Select(c => c.Id)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             var missingParentCommentIds = parentCommentIds.Except(existingCommentIds).ToList();
 
             if (missingParentCommentIds.Any())
             {
                 var missingParentComments = await _dataContext.Comments
                     .Where(c => missingParentCommentIds.Contains(c.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
                 foreach (var missingParentComment in missingParentComments)
                 {
                     var localParentComment = await _sqliteContext.Comments
-                        .FirstOrDefaultAsync(c => c.Id == missingParentComment.Id);
+                        .FirstOrDefaultAsync(c => c.Id == missingParentComment.Id, cancellationToken);
                     if (localParentComment == null)
                     {
                         missingParentComment.IsSynced = true;
-                        await _sqliteContext.Comments.AddAsync(missingParentComment);
+                        await _sqliteContext.Comments.AddAsync(missingParentComment, cancellationToken);
                     }
                 }
-                await _sqliteContext.SaveChangesAsync();
-                Console.WriteLine($"Synced {missingParentComments.Count} parent comments to SQLite at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+                await _sqliteContext.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("Synced {Count} parent comments to SQLite.", missingParentComments.Count);
             }
 
-            // Step 5: Đồng bộ Comment từ SQL Server xuống SQLite
+            // Step 5: Sync Comments from SQL Server to SQLite
             foreach (var serverComment in serverComments)
             {
                 var localComment = await _sqliteContext.Comments
-                    .FirstOrDefaultAsync(c => c.Id == serverComment.Id);
+                    .FirstOrDefaultAsync(c => c.Id == serverComment.Id, cancellationToken);
                 if (localComment == null)
                 {
                     serverComment.IsSynced = true;
-                    await _sqliteContext.Comments.AddAsync(serverComment);
+                    await _sqliteContext.Comments.AddAsync(serverComment, cancellationToken);
                 }
                 else if (serverComment.AddedOn > localComment.AddedOn)
                 {
@@ -309,29 +331,35 @@ namespace SocialMauiApp.Api.Services
                     localComment.IsSynced = true;
                 }
             }
-
-            await _sqliteContext.SaveChangesAsync();
-            Console.WriteLine($"Synced {serverComments.Count} comments to SQLite at {DateTime.Now:HH:mm:ss} +07, 04/06/2025.");
+            await _sqliteContext.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("Synced {Count} comments to SQLite.", serverComments.Count);
         }
-        // Phương thức lấy Post từ SQL Server dựa trên thời gian (dành cho endpoint)
-        public async Task<List<Post>> GetPostsSinceAsync(DateTime since)
+
+        public async Task<List<Post>> GetPostsSinceAsync(DateTime since, CancellationToken cancellationToken = default)
         {
+            _logger.LogDebug("Retrieving posts modified since {Since}.", since);
             return await _dataContext.Posts
                 .Where(p => p.ModifiedOn > since)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        // Phương thức cập nhật hoặc chèn Post vào SQL Server (dành cho endpoint)
-        public async Task<bool> UpsertPostsAsync(List<Post> posts)
+        public async Task<bool> UpsertPostsAsync(List<Post> posts, CancellationToken cancellationToken = default)
         {
             try
             {
+                _logger.LogDebug("Upserting {Count} posts.", posts?.Count ?? 0);
+                if (posts == null || !posts.Any())
+                {
+                    _logger.LogWarning("No posts provided for upsert.");
+                    return true;
+                }
+
                 foreach (var post in posts)
                 {
-                    var existingPost = await _dataContext.Posts.FindAsync(post.Id);
+                    var existingPost = await _dataContext.Posts.FindAsync(new object[] { post.Id }, cancellationToken);
                     if (existingPost == null)
                     {
-                        _dataContext.Posts.Add(post);
+                        await _dataContext.Posts.AddAsync(post, cancellationToken);
                     }
                     else
                     {
@@ -343,35 +371,42 @@ namespace SocialMauiApp.Api.Services
                         _dataContext.Posts.Update(existingPost);
                     }
                 }
-                await _dataContext.SaveChangesAsync();
+                await _dataContext.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("Successfully upserted {Count} posts.", posts.Count);
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"UpsertPostsAsync Error: {ex.Message}");
+                _logger.LogError(ex, "Error upserting posts: {Message}", ex.Message);
                 return false;
             }
         }
 
-        // Phương thức lấy Comment từ SQL Server dựa trên thời gian (dành cho endpoint)
-        public async Task<List<Comment>> GetCommentsSinceAsync(DateTime since, Guid postId)
+        public async Task<List<Comment>> GetCommentsSinceAsync(DateTime since, Guid postId, CancellationToken cancellationToken = default)
         {
+            _logger.LogDebug("Retrieving comments for PostId {PostId} added since {Since}.", postId, since);
             return await _dataContext.Comments
                 .Where(c => c.AddedOn > since && c.PostId == postId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        // Phương thức cập nhật hoặc chèn Comment vào SQL Server (dành cho endpoint)
-        public async Task<bool> UpsertCommentsAsync(List<Comment> comments)
+        public async Task<bool> UpsertCommentsAsync(List<Comment> comments, CancellationToken cancellationToken = default)
         {
             try
             {
+                _logger.LogDebug("Upserting {Count} comments.", comments?.Count ?? 0);
+                if (comments == null || !comments.Any())
+                {
+                    _logger.LogWarning("No comments provided for upsert.");
+                    return true;
+                }
+
                 foreach (var comment in comments)
                 {
-                    var existingComment = await _dataContext.Comments.FindAsync(comment.Id);
+                    var existingComment = await _dataContext.Comments.FindAsync(new object[] { comment.Id }, cancellationToken);
                     if (existingComment == null)
                     {
-                        _dataContext.Comments.Add(comment);
+                        await _dataContext.Comments.AddAsync(comment, cancellationToken);
                     }
                     else
                     {
@@ -382,12 +417,13 @@ namespace SocialMauiApp.Api.Services
                         _dataContext.Comments.Update(existingComment);
                     }
                 }
-                await _dataContext.SaveChangesAsync();
+                await _dataContext.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("Successfully upserted {Count} comments.", comments.Count);
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"UpsertCommentsAsync Error: {ex.Message}");
+                _logger.LogError(ex, "Error upserting comments: {Message}", ex.Message);
                 return false;
             }
         }

@@ -46,8 +46,8 @@ namespace SocialMauiApp.ViewModel
         private void LoadData()
         {
             var name = _prefs.GetString("DisplayName", "");
-            GreetingText = $"Chào mừng, {name}";
-            AvatarUrl = _prefs.GetString("AvatarUrl", "default_avatar.png");
+            GreetingText = $"Welcome, {name}";
+            AvatarUrl = _prefs.GetString("AvatarUrl", "user.png");
         }
 
         private async Task CheckBiometricAsync()
@@ -98,7 +98,7 @@ namespace SocialMauiApp.ViewModel
         {
             if (string.IsNullOrWhiteSpace(Password))
             {
-                await ShowErrorAlertAsync("Vui lòng nhập mật khẩu.");
+                await ShowErrorAlertAsync("Please enter password.");
                 return;
             }
 
@@ -116,12 +116,12 @@ namespace SocialMauiApp.ViewModel
                     _authService.Login(resp.Data);
                     // Cập nhật thông tin hiển thị
                     _prefs.SetString("DisplayName", resp.Data.User.Name);
-                    _prefs.SetString("AvatarUrl", resp.Data.User.PhotoUrl ?? "default_avatar.png");
+                    _prefs.SetString("AvatarUrl", resp.Data.User.PhotoUrl ?? "user.png");
                     await NavigateAsync($"//{nameof(HomePage)}");
                 }
                 else
                 {
-                    await ShowErrorAlertAsync("Mật khẩu không đúng.");
+                    await ShowErrorAlertAsync("Wrong password.");
                 }
             });
         }
@@ -130,10 +130,10 @@ namespace SocialMauiApp.ViewModel
         private async Task LoginWithFingerprintAsync()
         {
             var auth = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
-                "Đăng nhập", "Xác thực để đăng nhập"));
+                "Login", "Confirm to login"));
             if (!auth.Authenticated)
             {
-                await ShowErrorAlertAsync("Xác thực vân tay thất bại.");
+                await ShowErrorAlertAsync("Fingerprint authentication failed");
                 return;
             }
 
@@ -141,7 +141,7 @@ namespace SocialMauiApp.ViewModel
             var refreshToken = await SecureStorage.GetAsync("RefreshToken");
             if (string.IsNullOrEmpty(token))
             {
-                await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                await ShowErrorAlertAsync("Login session is expired. Please login again.");
                 return;
             }
 
@@ -168,12 +168,12 @@ namespace SocialMauiApp.ViewModel
                         }
                         else
                         {
-                            await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                            await ShowErrorAlertAsync("Login session is expired. Please login again.");
                         }
                     }
                     else
                     {
-                        await ShowErrorAlertAsync("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                        await ShowErrorAlertAsync("Login session is expired. Please login again.");
                     }
                 }
             });

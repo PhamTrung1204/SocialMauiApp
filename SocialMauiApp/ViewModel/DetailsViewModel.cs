@@ -394,7 +394,7 @@ namespace SocialMauiApp.ViewModel
                     {
                         comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                         comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                        comment.UserPhotoUrl = comment.UserPhotoUrl ?? "default_avatar.png";
+                        comment.UserPhotoUrl = comment.UserPhoto;
                         comment.Replies = new ObservableCollection<CommentDto>(
                             comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
                         addedComments.Add(comment);

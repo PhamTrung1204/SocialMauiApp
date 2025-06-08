@@ -28,6 +28,5 @@ namespace SocialMauiApp.Data
         public int Level { get; set; }
 
         public Guid? ParentCommentId { get; set; }
-
     }
 }

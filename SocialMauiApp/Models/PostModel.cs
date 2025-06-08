@@ -159,35 +159,33 @@ namespace SocialMauiApp.Models
         [Ignore]
         public string IsBookmarkIcon => IsBookmarked ? "bookmark_f.png" : "bookmark.png";
 
-        //private void OnUpdateTimerTick(object sender, EventArgs e)
-        //{
-        //    UpdatePostedOnDisplay();
-        //    // Bỏ dòng này vì IDispatcherTimer tự động lặp lại
-        //    // ((IDispatcherTimer)sender).IsRepeating = true;
-        //}
-
-        //private void UpdatePostedOnDisplay()
-        //{
-        //    var postTime = PostedOn ?? ModifiedOn;
-        //    var now = DateTime.UtcNow;
-        //    var timeSpan = now - postTime;
-
-        //    string newDisplay;
-        //    if (timeSpan.TotalMinutes < 1)
-        //        newDisplay = "Just posted";
-        //    else if (timeSpan.TotalMinutes < 60)
-        //        newDisplay = $"{(int)timeSpan.TotalMinutes} minutes ago";
-        //    else if (timeSpan.TotalHours < 24)
-        //        newDisplay = $"{(int)timeSpan.TotalHours} hours ago";
-        //    else if (timeSpan.TotalDays < 7)
-        //        newDisplay = $"{(int)timeSpan.TotalDays} days ago";
-        //    else
-        //        newDisplay = postTime.ToString("MMM dd yyyy", new CultureInfo("en-US"));
-
-        //    // Luôn cập nhật PostedOnDisplay, không cần so sánh
-        //    PostedOnDisplay = newDisplay;
-        //    OnPropertyChanged(nameof(PostedOnDisplay));
-        //}
+        [RelayCommand]
+        private async Task ShowLikersAsync()
+        {
+            if (IsBusy || LikeCount == 0) return;
+            IsBusy = true;
+            try
+            {
+                var likers = await _postsApi.GetPostLikersAsync(PostId);
+                if (likers != null && likers.Any())
+                {
+                    var likersList = string.Join("\n", likers);
+                    await Shell.Current.DisplayAlert("Users Who Liked This Post", likersList, "OK");
+                }
+                else
+                {
+                    await ToastAsync("No users have liked this post.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await ToastAsync($"Error fetching likers: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
 
         [RelayCommand]
         private async Task ToggleCommentsVisibility()
@@ -947,8 +945,8 @@ namespace SocialMauiApp.Models
                             if (!_processedCommentIds.Contains(comment.CommentId))
                             {
                                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                                comment.UserName = comment.UserName ?? "Unknown User";
-                                comment.UserPhotoUrl = _authService.User.Photo ?? "user.png";
+                                comment.UserName = _authService.User != null && comment.UserId == _authService.User.Id ? _authService.User.Name : (comment.UserName ?? "Unknown User");
+                                comment.UserPhotoUrl = comment.UserPhoto;
                                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                                 comment.Replies = new ObservableCollection<CommentDto>(
                                     comment.Replies?.Where(r => !_processedCommentIds.Contains(r.CommentId)) ?? Enumerable.Empty<CommentDto>());
@@ -989,6 +987,7 @@ namespace SocialMauiApp.Models
             _realtimeUpdatesService?.AddCommentUpdatedHandler($"PostModel_{PostId}", OnCommentUpdated);
             _realtimeUpdatesService?.AddCommentDeletedHandler($"PostModel_{PostId}", OnCommentDeleted);
             _realtimeUpdatesService?.AddPostCountsUpdatedHandler($"PostModel_{PostId}", OnPostCountsUpdated);
+            _realtimeUpdatesService?.AddUserNameChangedHandler($"PostModel_{PostId}", OnUserNameChanged);
         }
 
         public void SetDetailsViewState(bool isInDetailsView)
@@ -1032,7 +1031,9 @@ namespace SocialMauiApp.Models
             {
                 if (_isInDetailsView || _processedCommentIds.Contains(comment.CommentId)) return;
                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                comment.UserName = comment.UserName ?? "Unknown User";
+                comment.UserName = _authService.User != null && comment.UserId == _authService.User.Id
+               ? _authService.User.Name
+               : (comment.UserName ?? "Unknown User");
                 comment.UserPhotoUrl = _authService.User.PhotoUrl ?? "user.png";
                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                 comment.Replies = new ObservableCollection<CommentDto>(
@@ -1075,7 +1076,7 @@ namespace SocialMauiApp.Models
             {
                 if (_isInDetailsView) return;
                 comment.Level = comment.ParentCommentId == null ? 0 : 1;
-                comment.UserName = comment.UserName ?? "Unknown User";
+                comment.UserName = _authService.User != null && comment.UserId == _authService.User.Id ? _authService.User.Name : (comment.UserName ?? "Unknown User");
                 comment.UserPhotoUrl = _authService.User.PhotoUrl ?? "user.png";
                 comment.IsOwnComment = _authService.User != null && comment.UserId == _authService.User.Id;
                 comment.Replies = new ObservableCollection<CommentDto>(
@@ -1191,6 +1192,33 @@ namespace SocialMauiApp.Models
             });
         }
 
+        private void OnUserNameChanged(UserNameChangedDto dto)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (dto.UserId == UserId)
+                {
+                    UserName = dto.NewName;
+                    OnPropertyChanged(nameof(UserName));
+                }
+
+                lock (_commentLock)
+                {
+                    foreach (var comment in Comments.Where(c => c.UserId == dto.UserId))
+                    {
+                        comment.UserName = dto.NewName;
+                    }
+                    foreach (var comment in Comments.Where(c => c.Replies != null))
+                    {
+                        foreach (var reply in comment.Replies.Where(r => r.UserId == dto.UserId))
+                        {
+                            reply.UserName = dto.NewName;
+                        }
+                    }
+                    OnPropertyChanged(nameof(Comments));
+                }
+            });
+        }
         ~PostModel()
         {
             _updateTimer?.Stop();

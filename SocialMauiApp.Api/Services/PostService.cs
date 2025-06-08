@@ -443,6 +443,26 @@ namespace SocialMauiApp.Api.Services
             return comments;
         }
 
+        public async Task<string[]> GetPostLikersAsync(Guid postId)
+        {
+            var postExists = await _context.Posts.AnyAsync(p => p.Id == postId);
+            if (!postExists)
+            {
+                return Array.Empty<string>();
+            }
+
+            var likers = await _context.Likes
+                .Where(l => l.PostId == postId)
+                .Join(_context.Users,
+                    like => like.UserId,
+                    user => user.Id,
+                    (like, user) => user.Name)
+                .Distinct()
+                .ToArrayAsync();
+
+            return likers;
+        }
+
         public async Task<ApiResult> ToggleLikeAsync(Guid postId, LoggedInUser currentUser)
         {
             var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p => p.UserId).FirstOrDefaultAsync();
@@ -484,7 +504,6 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        // Lưu bài post
         public async Task<ApiResult> ToggleBookmarkAsync(Guid postId, LoggedInUser currentUser)
         {
             var postOwnerId = await _context.Posts.Where(p => p.Id == postId).Select(p => p.UserId).FirstOrDefaultAsync();
@@ -525,7 +544,6 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        // Xóa bài post
         public async Task<ApiResult> DeletePostAsync(Guid postId, Guid currentUserId)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -569,7 +587,6 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        // Lưu thông báo
         public async Task SaveNotificationAsync(NotificationDto dto)
         {
             try
