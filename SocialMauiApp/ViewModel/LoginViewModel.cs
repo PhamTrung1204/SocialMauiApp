@@ -50,7 +50,6 @@ public partial class LoginViewModel : BaseViewModel
             ShowFingerprintOption = await _fingerprint.IsAvailableAsync();
         }
 
-        // Kiểm tra token khi khởi động
         await CheckLoginStatusAsync();
     }
 
@@ -70,7 +69,6 @@ public partial class LoginViewModel : BaseViewModel
             }
             else
             {
-                // Thử làm mới token
                 var refreshToken = await SecureStorage.GetAsync("RefreshToken");
                 if (!string.IsNullOrEmpty(refreshToken))
                 {
@@ -89,7 +87,6 @@ public partial class LoginViewModel : BaseViewModel
             }
         }
 
-        // Nếu không có token hoặc làm mới thất bại, giữ ở trang đăng nhập
         await NavigateAsync($"//{nameof(LoginPage)}");
     }
 
@@ -98,7 +95,7 @@ public partial class LoginViewModel : BaseViewModel
     {
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
-            await ShowErrorAlertAsync("Email and Password required.");
+            await ShowErrorAlertAsync("Email and Password are required.");
             return;
         }
 
@@ -107,22 +104,20 @@ public partial class LoginViewModel : BaseViewModel
             var resp = await _authApi.LoginAsync(new LoginDto(Email, Password));
             if (!resp.IsSuccess)
             {
-                await ShowErrorAlertAsync(resp.Error ?? "Login failed");
+                await ShowErrorAlertAsync(resp.Error ?? "Login failed.");
                 return;
             }
 
-            // Đăng nhập thành công
             _authService.Login(resp.Data);
             await SecureStorage.SetAsync("AuthToken", resp.Data.Token);
             await SecureStorage.SetAsync("RefreshToken", resp.Data.RefreshToken);
 
-            // Lưu để biometric
             _pref.SetBool("FingerprintAuthEnabled", true);
             _pref.SetString("LastEmail", resp.Data.User.Email);
             _pref.SetString("Username", resp.Data.User.Name);
             _pref.SetInt(FailKey, 0);
+            await SecureStorage.SetAsync("StoredPassword", Password); // Lưu mật khẩu để sử dụng cho vân tay
 
-            // Kiểm tra Role để điều hướng
             string targetPage = resp.Data.User.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
             await NavigateAsync($"//{targetPage}");
         });
@@ -131,17 +126,16 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     private async Task LoginWithFingerprintAsync()
     {
-        // Lấy số lần thất bại hiện tại
         int failCount = _pref.GetInt(FailKey, 0);
 
         if (failCount >= 3)
         {
-            await ShowErrorAlertAsync("Too many failed attempts. Please log in with your password.");
+            await ShowErrorAlertAsync("Too many failed fingerprint attempts. Please log in with your password.");
             return;
         }
 
         var result = await _fingerprint.AuthenticateAsync(new AuthenticationRequestConfiguration(
-           "Login", "Use fingerprint to log in"));
+           "Login", "Use your fingerprint to log in"));
 
         if (!result.Authenticated)
         {
@@ -158,45 +152,39 @@ public partial class LoginViewModel : BaseViewModel
         }
 
         _pref.SetInt(FailKey, 0);
+        await GenerateNewTokensAsync();
+    }
 
-        var token = await SecureStorage.GetAsync("AuthToken");
-        var refreshToken = await SecureStorage.GetAsync("RefreshToken");
+    private async Task GenerateNewTokensAsync()
+    {
         var email = _pref.GetString("LastEmail");
-        var user = _pref.GetString("Username");
+        var storedPassword = await SecureStorage.GetAsync("StoredPassword");
 
-        if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(storedPassword))
         {
-            await ShowErrorAlertAsync("Please log in with password first.");
+            await ShowErrorAlertAsync("No saved credentials found. Please log in with email and password first.");
+            _pref.SetBool("FingerprintAuthEnabled", false);
+            SecureStorage.Remove("StoredPassword");
             return;
         }
 
         await MakeApiCall(async () =>
         {
-            var v = await _authApi.ValidateTokenAsync($"Bearer {token}");
-            if (v.IsSuccess && v.Data is not null)
+            var resp = await _authApi.LoginAsync(new LoginDto(email, storedPassword));
+            if (resp.IsSuccess)
             {
-                _authService.Login(new LoginResponseDto(v.Data, token, refreshToken));
-                Username = user;
-                string targetPage = v.Data.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
+                await SecureStorage.SetAsync("AuthToken", resp.Data.Token);
+                await SecureStorage.SetAsync("RefreshToken", resp.Data.RefreshToken);
+                _authService.Login(resp.Data);
+                _pref.SetString("Username", resp.Data.User.Name);
+                string targetPage = resp.Data.User.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
                 await NavigateAsync($"//{targetPage}");
             }
             else
             {
-                // Thử làm mới token
-                var refreshResult = await _authApi.RefreshTokenAsync(new RefreshTokenDto { RefreshToken = refreshToken });
-                if (refreshResult.IsSuccess && refreshResult.Data is not null)
-                {
-                    await SecureStorage.SetAsync("AuthToken", refreshResult.Data.Token);
-                    await SecureStorage.SetAsync("RefreshToken", refreshResult.Data.RefreshToken);
-                    _authService.Login(refreshResult.Data);
-                    Username = refreshResult.Data.User.Name;
-                    string targetPage = refreshResult.Data.User.Role == "Admin" ? nameof(AdminDashboardPage) : nameof(HomePage);
-                    await NavigateAsync($"//{targetPage}");
-                }
-                else
-                {
-                    await ShowErrorAlertAsync("Your session has expired, please log in again.");
-                }
+                await ShowErrorAlertAsync("Saved credentials are invalid. Please log in with email and password again.");
+                _pref.SetBool("FingerprintAuthEnabled", false);
+                SecureStorage.Remove("StoredPassword");
             }
         });
     }
@@ -206,7 +194,7 @@ public partial class LoginViewModel : BaseViewModel
     {
         if (IsBusy || string.IsNullOrWhiteSpace(Email) || !IsValidGmail(Email))
         {
-            await Shell.Current.DisplayAlert("Error", "Please enter a valid Gmail address", "OK");
+            await Shell.Current.DisplayAlert("Error", "Please enter a valid Gmail address.", "OK");
             return;
         }
 
@@ -230,6 +218,7 @@ public partial class LoginViewModel : BaseViewModel
         _pref.SetInt(FailKey, 0);
         SecureStorage.Remove("AuthToken");
         SecureStorage.Remove("RefreshToken");
+        SecureStorage.Remove("StoredPassword");
         ShowFingerprintOption = false;
 
         await NavigateAsync($"//{nameof(LoginPage)}");
