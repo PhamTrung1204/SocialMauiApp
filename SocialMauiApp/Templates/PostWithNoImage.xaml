@@ -93,11 +93,13 @@
             <!--  Nội dung bài viết  -->
             <Label
                 Grid.Row="1"
-                Padding="8,0"
-                FontSize="30"
-                Text="{Binding Content}"
+                Padding="8,0,0,0"
+                FontSize="{Binding Content, Converter={StaticResource ContentLengthToFontSizeConverter}}"
+                LineBreakMode="WordWrap"
+                Text="{Binding DisplayContent}"
                 TextColor="{StaticResource Gray900}">
                 <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleContentTruncationCommand}" />
                     <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:BasePostViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding}" />
                 </Label.GestureRecognizers>
             </Label>

@@ -63,9 +63,13 @@ namespace SocialMauiApp.Models
             get
             {
                 if (string.IsNullOrEmpty(Content)) return string.Empty;
-                if (IsContentTruncated && Content.Length > 50 && string.IsNullOrWhiteSpace(PhotoUrl)!=null)
+                if (IsContentTruncated && Content.Length > 100 && !string.IsNullOrWhiteSpace(PhotoUrl))
                 {
-                    return Content.Substring(0, 50) + "... See More";
+                    return Content.Substring(0, 100) + "... See More";
+                }
+                else if (string.IsNullOrWhiteSpace(PhotoUrl) && IsContentTruncated && Content.Length > 300)
+                {
+                    return Content.Substring(0, 200) + "... See More";
                 }
                 return Content + (IsContentTruncated && IsSeeMoreVisible ? " See Less" : "");
             }
