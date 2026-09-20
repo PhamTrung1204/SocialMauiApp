@@ -24,7 +24,7 @@ namespace SocialMauiApp.Api.Endpoints
                 .Produces<object>()
                 .WithName("SynchronizeData");
 
-            // Endpoint lấy Post từ SQL Server dựa trên thời gian
+            // Endpoint lấy Post từ PostgreSQL dựa trên thời gian
             syncGroup.MapGet("/posts", async (DateTime since, SyncService syncService) =>
             {
                 var posts = await syncService.GetPostsSinceAsync(since);
@@ -33,7 +33,7 @@ namespace SocialMauiApp.Api.Endpoints
                 .Produces<Post[]>()
                 .WithName("GetPostsSince");
 
-            // Endpoint cập nhật hoặc chèn Post vào SQL Server
+            // Endpoint cập nhật hoặc chèn Post vào PostgreSQL
             syncGroup.MapPost("/posts/upsert", async (List<Post> posts, SyncService syncService) =>
             {
                 var success = await syncService.UpsertPostsAsync(posts);
@@ -44,7 +44,7 @@ namespace SocialMauiApp.Api.Endpoints
                 .Produces<object>()
                 .WithName("UpsertPosts");
 
-            // Endpoint lấy Comment từ SQL Server dựa trên thời gian
+            // Endpoint lấy Comment từ PostgreSQL dựa trên thời gian
             syncGroup.MapGet("/comments", async (DateTime since, Guid postId, SyncService syncService) =>
             {
                 var comments = await syncService.GetCommentsSinceAsync(since, postId);
@@ -53,7 +53,7 @@ namespace SocialMauiApp.Api.Endpoints
      .Produces<Comment[]>()
      .WithName("GetCommentsSince");
 
-            // Endpoint cập nhật hoặc chèn Comment vào SQL Server
+            // Endpoint cập nhật hoặc chèn Comment vào PostgreSQL
             syncGroup.MapPost("/comments/upsert", async (List<Comment> comments, SyncService syncService) =>
             {
                 var success = await syncService.UpsertCommentsAsync(comments);

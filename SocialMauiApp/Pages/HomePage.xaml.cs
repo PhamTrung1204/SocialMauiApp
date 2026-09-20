@@ -43,6 +43,11 @@ namespace SocialMauiApp.Pages
             await Shell.Current.GoToAsync(nameof(ProfilePage), animate: true);
         }
 
+        private async void GoToFriends(object sender, TappedEventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(FriendsPage), animate: true);
+        }
+
         private async void GoToNotification(object sender, TappedEventArgs e)
         {
             _homeViewModel.IsThereNewNotification = false;

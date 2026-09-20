@@ -1,104 +1,80 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.RegisterPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:ext="clr-namespace:SocialMauiApp.Extensions"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
-    Title="Register"
+    Title="{ext:Translate Login_Register}"
+    Padding="0"
     x:DataType="vm:RegisterViewModel"
     BackgroundColor="{StaticResource Primary}"
-    Shell.TitleColor="{StaticResource Primary}"
-    Padding="0">
-    <ScrollView>
-        <Grid RowDefinitions="*, Auto, *" BackgroundColor="{StaticResource Primary}">
-            <Border
-                Grid.Row="1"
-                Margin="20"
-                Padding="30"
-                BackgroundColor="White"
-                Stroke="#D0D0D0"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
+    Shell.TitleColor="White">
+
+    <Grid Background="{StaticResource BrandGradientBrush}">
+        <!--  Một ScrollView duy nhất: lồng hai ScrollView cùng trục làm hỏng cuộn trên Android.  -->
+        <ScrollView>
+            <Border Margin="18,28" Padding="26,30" Style="{StaticResource FlatCardStyle}">
                 <Border.Shadow>
-                    <Shadow Brush="#20000000" Offset="0,2" Radius="8" Opacity="0.1" />
+                    <Shadow Brush="Black" Offset="0,6" Radius="18" Opacity="0.18" />
                 </Border.Shadow>
-                <ScrollView>
-                    <VerticalStackLayout Spacing="25">
-                        <Image
-                            Source="logomaui.png"
-                            HeightRequest="100"
-                            HorizontalOptions="Center" />
-                        <Label
-                            Text="Create Account"
-                            FontSize="26"
-                            FontAttributes="Bold"
-                            HorizontalOptions="Center"
-                            TextColor="{StaticResource Primary}" />
-                        <Grid HeightRequest="120" WidthRequest="120" HorizontalOptions="Center">
-                            <Border
-                                BackgroundColor="#F8F8F8"
-                                HeightRequest="120"
-                                WidthRequest="120"
-                                StrokeShape="RoundRectangle 60"
-                                StrokeThickness="2"
-                                Stroke="{StaticResource Primary}">
-                                <Border.Shadow>
-                                    <Shadow Brush="#20000000" Offset="0,2" Radius="8" Opacity="0.1" />
-                                </Border.Shadow>
-                                <Image
-                                    Aspect="AspectFill"
-                                    HeightRequest="120"
-                                    WidthRequest="120"
-                                    Source="{Binding PhotoImageSource}" />
-                            </Border>
-                            <Border
-                                Margin="0,0,4,-10"
-                                BackgroundColor="White"
-                                HeightRequest="50"
-                                WidthRequest="50"
-                                StrokeShape="Ellipse"
-                                StrokeThickness="2"
-                                Stroke="#D0D0D0"
+
+                <VerticalStackLayout Spacing="20">
+
+                    <VerticalStackLayout Spacing="2">
+                        <Label HorizontalTextAlignment="Center" Style="{StaticResource PageTitleStyle}" Text="{ext:Translate Register_Title}" />
+                        <Label HorizontalTextAlignment="Center" Style="{StaticResource MutedTextStyle}" Text="{ext:Translate Register_Subtitle}" />
+                    </VerticalStackLayout>
+
+                    <!--  Ảnh đại diện + nút chọn ảnh  -->
+                    <Grid HeightRequest="124" HorizontalOptions="Center" WidthRequest="124">
+                        <Border Padding="0"
+                                BackgroundColor="{StaticResource Gray100}"
+                                HeightRequest="118"
+                                Stroke="{StaticResource PrimarySoft}"
+                                StrokeShape="RoundRectangle 59"
+                                StrokeThickness="3"
+                                WidthRequest="118">
+                            <Image Aspect="AspectFill"
+                                   HeightRequest="118"
+                                   Source="{Binding PhotoImageSource}"
+                                   WidthRequest="118" />
+                        </Border>
+                        <Border Padding="0"
+                                BackgroundColor="{StaticResource Primary}"
+                                HeightRequest="42"
                                 HorizontalOptions="End"
-                                VerticalOptions="End">
-                                <Border.Shadow>
-                                    <Shadow Brush="#20000000" Offset="0,2" Radius="5" Opacity="0.05" />
-                                </Border.Shadow>
-                                <ImageButton
-                                    Source="camera.png"
-                                    Aspect="AspectFit"
-                                    BackgroundColor="Transparent"
-                                    Command="{Binding SelectPhotoCommand}"
-                                    HeightRequest="24"
-                                    WidthRequest="24"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center" />
-                            </Border>
-                        </Grid>
-                        <VerticalStackLayout Spacing="15">
-                            <Label Text="Name" Style="{StaticResource formLabel}" FontSize="16" />
-                            <Border
-                                x:Name="NameBorder"
-                                Stroke="#D0D0D0"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 10"
-                                BackgroundColor="#F8F8F8">
-                                <Border.Shadow>
-                                    <Shadow Brush="#20000000" Offset="0,1" Radius="5" Opacity="0.05" />
-                                </Border.Shadow>
+                                StrokeShape="Ellipse"
+                                StrokeThickness="0"
+                                VerticalOptions="End"
+                                WidthRequest="42">
+                            <ImageButton Aspect="AspectFit"
+                                         BackgroundColor="Transparent"
+                                         Command="{Binding SelectPhotoCommand}"
+                                         HeightRequest="20"
+                                         HorizontalOptions="Center"
+                                         Source="camera.png"
+                                         VerticalOptions="Center"
+                                         WidthRequest="20" />
+                        </Border>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="14">
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label Style="{StaticResource MutedTextStyle}" Text="{ext:Translate Register_Name}" />
+                            <Border x:Name="NameBorder" Style="{StaticResource FieldStyle}">
                                 <controls:NoBorderEntry
-                                    Placeholder="Enter your name"
                                     BackgroundColor="Transparent"
-                                    PlaceholderColor="#A0A0A0"
-                                    Text="{Binding Username}"
-                                    HeightRequest="50">
+                                    HeightRequest="46"
+                                    Placeholder="{ext:Translate Register_NamePlaceholder}"
+                                    Text="{Binding Username}">
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup Name="CommonStates">
                                             <VisualState Name="Normal" />
                                             <VisualState Name="Focused">
                                                 <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="#F0F0F0" />
                                                     <Setter TargetName="NameBorder" Property="Border.Stroke" Value="{StaticResource Primary}" />
                                                 </VisualState.Setters>
                                             </VisualState>
@@ -106,29 +82,22 @@
                                     </VisualStateManager.VisualStateGroups>
                                 </controls:NoBorderEntry>
                             </Border>
-                            <Label Text="Email" Style="{StaticResource formLabel}" FontSize="16" />
-                            <Border
-                                x:Name="EmailBorder"
-                                Stroke="#D0D0D0"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 10"
-                                BackgroundColor="#F8F8F8">
-                                <Border.Shadow>
-                                    <Shadow Brush="#20000000" Offset="0,1" Radius="5" Opacity="0.05" />
-                                </Border.Shadow>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label Style="{StaticResource MutedTextStyle}" Text="{ext:Translate Login_Email}" />
+                            <Border x:Name="EmailBorder" Style="{StaticResource FieldStyle}">
                                 <controls:NoBorderEntry
-                                    Keyboard="Email"
-                                    Placeholder="Enter your email"
                                     BackgroundColor="Transparent"
-                                    PlaceholderColor="#A0A0A0"
-                                    Text="{Binding Email}"
-                                    HeightRequest="50">
+                                    HeightRequest="46"
+                                    Keyboard="Email"
+                                    Placeholder="{ext:Translate Login_EmailPlaceholder}"
+                                    Text="{Binding Email}">
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup Name="CommonStates">
                                             <VisualState Name="Normal" />
                                             <VisualState Name="Focused">
                                                 <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="#F0F0F0" />
                                                     <Setter TargetName="EmailBorder" Property="Border.Stroke" Value="{StaticResource Primary}" />
                                                 </VisualState.Setters>
                                             </VisualState>
@@ -136,29 +105,22 @@
                                     </VisualStateManager.VisualStateGroups>
                                 </controls:NoBorderEntry>
                             </Border>
-                            <Label Text="Password" Style="{StaticResource formLabel}" FontSize="16" />
-                            <Border
-                                x:Name="PasswordBorder"
-                                Stroke="#D0D0D0"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 10"
-                                BackgroundColor="#F8F8F8">
-                                <Border.Shadow>
-                                    <Shadow Brush="#20000000" Offset="0,1" Radius="5" Opacity="0.05" />
-                                </Border.Shadow>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label Style="{StaticResource MutedTextStyle}" Text="{ext:Translate Login_Password}" />
+                            <Border x:Name="PasswordBorder" Style="{StaticResource FieldStyle}">
                                 <controls:NoBorderEntry
-                                    IsPassword="True"
-                                    Placeholder="Enter password"
                                     BackgroundColor="Transparent"
-                                    PlaceholderColor="#A0A0A0"
-                                    Text="{Binding Password}"
-                                    HeightRequest="50">
+                                    HeightRequest="46"
+                                    IsPassword="True"
+                                    Placeholder="{ext:Translate Login_PasswordPlaceholder}"
+                                    Text="{Binding Password}">
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup Name="CommonStates">
                                             <VisualState Name="Normal" />
                                             <VisualState Name="Focused">
                                                 <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="#F0F0F0" />
                                                     <Setter TargetName="PasswordBorder" Property="Border.Stroke" Value="{StaticResource Primary}" />
                                                 </VisualState.Setters>
                                             </VisualState>
@@ -166,29 +128,22 @@
                                     </VisualStateManager.VisualStateGroups>
                                 </controls:NoBorderEntry>
                             </Border>
-                            <Label Text="Confirm Password" Style="{StaticResource formLabel}" FontSize="16" />
-                            <Border
-                                x:Name="ConfirmPasswordBorder"
-                                Stroke="#D0D0D0"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 10"
-                                BackgroundColor="#F8F8F8">
-                                <Border.Shadow>
-                                    <Shadow Brush="#20000000" Offset="0,1" Radius="5" Opacity="0.05" />
-                                </Border.Shadow>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label Style="{StaticResource MutedTextStyle}" Text="{ext:Translate Register_ConfirmPassword}" />
+                            <Border x:Name="ConfirmPasswordBorder" Style="{StaticResource FieldStyle}">
                                 <controls:NoBorderEntry
-                                    IsPassword="True"
-                                    Placeholder="Confirm password"
                                     BackgroundColor="Transparent"
-                                    PlaceholderColor="#A0A0A0"
-                                    Text="{Binding RepeatPassword}"
-                                    HeightRequest="50">
+                                    HeightRequest="46"
+                                    IsPassword="True"
+                                    Placeholder="{ext:Translate Register_ConfirmPasswordPlaceholder}"
+                                    Text="{Binding RepeatPassword}">
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup Name="CommonStates">
                                             <VisualState Name="Normal" />
                                             <VisualState Name="Focused">
                                                 <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="#F0F0F0" />
                                                     <Setter TargetName="ConfirmPasswordBorder" Property="Border.Stroke" Value="{StaticResource Primary}" />
                                                 </VisualState.Setters>
                                             </VisualState>
@@ -197,55 +152,30 @@
                                 </controls:NoBorderEntry>
                             </Border>
                         </VerticalStackLayout>
-                        <Button
-                            Text="Register"
-                            Command="{Binding RegisterCommand}"
-                            CornerRadius="10"
-                            HeightRequest="50"
-                            WidthRequest="280"
-                            BackgroundColor="{StaticResource Primary}"
-                            TextColor="White"
-                            FontAttributes="Bold">
-                            <Button.Shadow>
-                                <Shadow Brush="#20000000" Offset="0,2" Radius="8" Opacity="0.1" />
-                            </Button.Shadow>
-                        </Button>
-                        <Grid ColumnDefinitions="*, Auto, *" VerticalOptions="Center" Margin="0,10">
-                            <BoxView Grid.Column="0" HeightRequest="1" BackgroundColor="#D0D0D0" />
-                            <Label
-                                Grid.Column="1"
-                                Text="Have an account?"
-                                Padding="15,0"
-                                TextColor="{StaticResource Primary}"
-                                FontAttributes="Bold"
-                                FontSize="14" />
-                            <BoxView Grid.Column="2" HeightRequest="1" BackgroundColor="#D0D0D0" />
-                        </Grid>
-                        <Button
-                            Text="Login"
-                            Clicked="btnLogin_Clicked"
-                            CornerRadius="10"
-                            HeightRequest="50"
-                            WidthRequest="280"
-                            BackgroundColor="White"
-                            TextColor="{StaticResource Primary}"
-                            BorderColor="{StaticResource Primary}"
-                            BorderWidth="1"
-                            FontAttributes="Bold">
-                            <Button.Shadow>
-                                <Shadow Brush="#20000000" Offset="0,2" Radius="8" Opacity="0.1" />
-                            </Button.Shadow>
-                        </Button>
                     </VerticalStackLayout>
-                </ScrollView>
+
+                    <Button Command="{Binding RegisterCommand}" Text="{ext:Translate Login_Register}" />
+
+                    <Grid Margin="0,4" ColumnDefinitions="*,Auto,*" VerticalOptions="Center">
+                        <BoxView Grid.Column="0" Style="{StaticResource SeparatorStyle}" VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Padding="12,0"
+                               Style="{StaticResource CaptionTextStyle}"
+                               Text="{ext:Translate Register_HaveAccount}" />
+                        <BoxView Grid.Column="2" Style="{StaticResource SeparatorStyle}" VerticalOptions="Center" />
+                    </Grid>
+
+                    <Button Clicked="btnLogin_Clicked"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Text="{ext:Translate Login_SignIn}" />
+                </VerticalStackLayout>
             </Border>
-            <ActivityIndicator
-                Grid.RowSpan="3"
-                IsRunning="{Binding IsBusy}"
-                IsVisible="{Binding IsBusy}"
-                Color="White"
-                VerticalOptions="Center"
-                HorizontalOptions="Center" />
-        </Grid>
-    </ScrollView>
+        </ScrollView>
+
+        <ActivityIndicator HorizontalOptions="Center"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           VerticalOptions="Center"
+                           Color="White" />
+    </Grid>
 </ContentPage>

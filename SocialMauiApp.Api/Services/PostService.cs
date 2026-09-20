@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SocialMauiApp.Api.Data;
 using SocialMauiApp.Api.Data.Entities;
@@ -17,31 +16,30 @@ namespace SocialMauiApp.Api.Services
         private readonly DataContext _context;
         private readonly PhotoUploadService _photoUploadService;
         private readonly IHubContext<SocialHub, ISocialHubClient> _hubContext;
+        private readonly NotificationService _notificationService;
 
-        public PostService(DataContext context, PhotoUploadService photoUploadService, IHubContext<SocialHub, ISocialHubClient> hubContext)
+        public PostService(DataContext context, PhotoUploadService photoUploadService, IHubContext<SocialHub, ISocialHubClient> hubContext, NotificationService notificationService)
         {
             _context = context;
             _photoUploadService = photoUploadService;
             _hubContext = hubContext;
+            _notificationService = notificationService;
         }
 
         public async Task<ApiResult<PostDto>> SavePostAsync(SavePostDto dto, LoggedInUser user)
         {
-            string? _existingPhotoPath = null;
-            Post? post = null;
+            var staleFiles = new List<string?>();
+            Post? post;
             bool sendNotification = false;
+
             if (dto.PostId == default)
             {
                 post = new Post
                 {
                     Content = dto.Content,
-                    PostedOn = DateTime.Now,
+                    PostedOn = DateTime.UtcNow,
                     UserId = user.Id
                 };
-                if (dto.Photo is not null)
-                {
-                    (post.PhotoPath, post.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", user.Id.ToString(), "posts");
-                }
                 _context.Posts.Add(post);
             }
             else
@@ -56,35 +54,67 @@ namespace SocialMauiApp.Api.Services
                     return ApiResult<PostDto>.Fail("Permission Denied");
                 }
                 post.Content = dto.Content;
-                post.ModifiedOn = DateTime.Now;
+                post.ModifiedOn = DateTime.UtcNow;
+                sendNotification = true;
+            }
+
+            try
+            {
+                // Một bài viết chỉ mang MỘT loại media: ảnh mới thay video cũ và ngược lại.
                 if (dto.Photo is not null)
                 {
-                    _existingPhotoPath = post.PhotoPath;
-                    (post.PhotoPath, post.PhotoUrl) = await _photoUploadService.SavePhotoAsync(dto.Photo, "uploads", "images", "users", user.Id.ToString(), "posts");
+                    staleFiles.Add(post.PhotoPath);
+                    staleFiles.Add(post.VideoPath);
+                    (post.PhotoPath, post.PhotoUrl) = await _photoUploadService.SavePhotoAsync(
+                        dto.Photo, "uploads", "images", "users", user.Id.ToString(), "posts");
+                    post.VideoPath = null;
+                    post.VideoUrl = null;
+                }
+                else if (dto.Video is not null)
+                {
+                    staleFiles.Add(post.PhotoPath);
+                    staleFiles.Add(post.VideoPath);
+                    (post.VideoPath, post.VideoUrl) = await _photoUploadService.SaveVideoAsync(
+                        dto.Video, "uploads", "videos", "users", user.Id.ToString(), "posts");
+                    post.PhotoPath = null;
+                    post.PhotoUrl = null;
                 }
                 else
                 {
                     if (dto.IsExistingPhotoRemoved)
                     {
-                        _existingPhotoPath = post.PhotoPath;
+                        staleFiles.Add(post.PhotoPath);
                         post.PhotoPath = null;
                         post.PhotoUrl = null;
                     }
+                    if (dto.IsExistingVideoRemoved)
+                    {
+                        staleFiles.Add(post.VideoPath);
+                        post.VideoPath = null;
+                        post.VideoUrl = null;
+                    }
                 }
-                _context.Posts.Update(post);
-                sendNotification = true;
             }
+            catch (Exception ex)
+            {
+                return ApiResult<PostDto>.Fail(ex.Message);
+            }
+
+            if (dto.PostId != default)
+            {
+                _context.Posts.Update(post);
+            }
+
             try
             {
                 await _context.SaveChangesAsync();
-                if (!string.IsNullOrEmpty(_existingPhotoPath) && File.Exists(_existingPhotoPath))
-                {
-                    File.Delete(_existingPhotoPath);
-                }
+                DeleteFiles(staleFiles);
+
                 var postDto = new PostDto
                 {
                     Content = post.Content,
                     PhotoUrl = post.PhotoUrl,
+                    VideoUrl = post.VideoUrl,
                     ModifiedOn = post.ModifiedOn,
                     PostId = post.Id,
                     UserId = user.Id,
@@ -104,36 +134,38 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize, Guid currentUserId)
+        private void DeleteFiles(IEnumerable<string?> paths)
         {
-            var posts = await _context.Set<PostDto>()
-                .FromSqlInterpolated($"EXEC GetPosts @StartIndex={startIndex}, @PageSize={pageSize}, @CurrentUserId={currentUserId}")
-                .ToArrayAsync();
-            return posts;
+            foreach (var path in paths)
+            {
+                if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                {
+                    continue;
+                }
+                try
+                {
+                    File.Delete(path);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error deleting media file '{path}': {ex.Message}");
+                }
+            }
         }
 
-        public async Task<PostDto?> GetPostAsync(Guid postId, Guid currentUserId)
-        {
-            var rawPosts = await _context.Set<PostDto>()
-                .FromSqlRaw("EXEC GetPostById @PostId, @CurrentUserId",
-                    new SqlParameter("@PostId", postId),
-                    new SqlParameter("@CurrentUserId", currentUserId))
-                .ToListAsync();
-            var posts = rawPosts.Select(p => new PostDto
-            {
-                PostId = p.PostId,
-                UserId = p.UserId,
-                UserName = p.UserName,
-                UserPhotoUrl = p.UserPhotoUrl,
-                Content = p.Content,
-                PhotoUrl = p.PhotoUrl,
-                PostedOn = p.PostedOn,
-                ModifiedOn = p.ModifiedOn,
-                IsLiked = Convert.ToBoolean(p.IsLiked),
-                IsBookmarked = Convert.ToBoolean(p.IsBookmarked)
-            }).ToList();
-            return posts.FirstOrDefault();
-        }
+        public async Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize, Guid currentUserId) =>
+            await _context.Posts
+                .OrderByMostRecent()
+                .Skip(startIndex)
+                .Take(pageSize)
+                .ToPostDto(_context, currentUserId)
+                .ToArrayAsync();
+
+        public async Task<PostDto?> GetPostAsync(Guid postId, Guid currentUserId) =>
+            await _context.Posts
+                .Where(p => p.Id == postId)
+                .ToPostDto(_context, currentUserId)
+                .FirstOrDefaultAsync();
 
         private async Task NotifyCountsAsync(Guid postId)
         {
@@ -160,7 +192,7 @@ namespace SocialMauiApp.Api.Services
             if (dto.CommentId == Guid.Empty)
             {
                 var existingComment = await _context.Comments
-                    .FirstOrDefaultAsync(c => c.PostId == dto.PostId && c.UserId == currentUser.Id && c.Content == dto.Content && c.AddedOn > DateTime.Now.AddSeconds(-5));
+                    .FirstOrDefaultAsync(c => c.PostId == dto.PostId && c.UserId == currentUser.Id && c.Content == dto.Content && c.AddedOn > DateTime.UtcNow.AddSeconds(-5));
                 if (existingComment != null)
                 {
                     return ApiResult<CommentDto>.Fail("Duplicate comment detected");
@@ -172,7 +204,7 @@ namespace SocialMauiApp.Api.Services
                     PostId = dto.PostId,
                     UserId = currentUser.Id,
                     Content = dto.Content,
-                    AddedOn = DateTime.Now,
+                    AddedOn = DateTime.UtcNow,
                     ParentCommentId = dto.ParentCommentId
                 };
                 if (dto.Photo != null)
@@ -194,7 +226,7 @@ namespace SocialMauiApp.Api.Services
                     return ApiResult<CommentDto>.Fail("You can modify your own comments only");
                 }
                 comment.Content = dto.Content;
-                comment.AddedOn = DateTime.Now;
+                comment.AddedOn = DateTime.UtcNow;
                 if (dto.Photo != null)
                 {
                     var existingPhotoPath = comment.PhotoPath;
@@ -234,7 +266,7 @@ namespace SocialMauiApp.Api.Services
                 };
                 if (sendNotification)
                 {
-                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} commented on your post", DateTime.Now, dto.PostId);
+                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} commented on your post", DateTime.UtcNow, dto.PostId);
                     await SaveNotificationAsync(notificationDto);
                     await _hubContext.Clients.All.CommentAddedToThePost(commentDto);
                 }
@@ -259,7 +291,7 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<CommentDto>.Fail("You can only edit your own comment");
             }
             comment.Content = dto.Content;
-            comment.AddedOn = DateTime.Now;
+            comment.AddedOn = DateTime.UtcNow;
             string? existingPhotoPath = null;
             if (dto.Photo != null)
             {
@@ -379,7 +411,7 @@ namespace SocialMauiApp.Api.Services
                 return ApiResult<CommentDto>.Fail("You can only edit your own comment");
             }
             comment.Content = dto.Content;
-            comment.AddedOn = DateTime.Now;
+            comment.AddedOn = DateTime.UtcNow;
             try
             {
                 _context.Comments.Update(comment);
@@ -491,7 +523,7 @@ namespace SocialMauiApp.Api.Services
                 await _context.SaveChangesAsync();
                 if (sendNotification)
                 {
-                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} liked your post", DateTime.Now, postId);
+                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} liked your post", DateTime.UtcNow, postId);
                     await SaveNotificationAsync(notificationDto);
                     await _hubContext.Clients.All.NotificationGenerated(notificationDto);
                 }
@@ -532,7 +564,7 @@ namespace SocialMauiApp.Api.Services
                 await _context.SaveChangesAsync();
                 if (sendNotification)
                 {
-                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} saved your post", DateTime.Now, postId);
+                    var notificationDto = new NotificationDto(postOwnerId, $"{currentUser.Name} saved your post", DateTime.UtcNow, postId);
                     await SaveNotificationAsync(notificationDto);
                     await _hubContext.Clients.All.NotificationGenerated(notificationDto);
                 }
@@ -554,17 +586,7 @@ namespace SocialMauiApp.Api.Services
                     return ApiResult.Fail("Post not found");
                 if (post.UserId != currentUserId)
                     return ApiResult.Fail("You can delete your own posts only");
-                if (!string.IsNullOrEmpty(post.PhotoPath) && File.Exists(post.PhotoPath))
-                {
-                    try
-                    {
-                        File.Delete(post.PhotoPath);
-                    }
-                    catch (Exception exFile)
-                    {
-                        Console.WriteLine("Error deleting file: " + exFile.ToString());
-                    }
-                }
+                DeleteFiles([post.PhotoPath, post.VideoPath]);
                 _context.Comments.RemoveRange(_context.Comments.Where(c => c.PostId == postId));
                 _context.Likes.RemoveRange(_context.Likes.Where(l => l.PostId == postId));
                 _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.PostId == postId));
@@ -587,24 +609,7 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        public async Task SaveNotificationAsync(NotificationDto dto)
-        {
-            try
-            {
-                var notification = new Notification
-                {
-                    ForUserId = dto.ForUserId,
-                    PostId = dto.PostId,
-                    Text = dto.Text,
-                    When = dto.When,
-                };
-                _context.Notifications.Add(notification);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error in SaveNotificationAsync: " + ex.ToString());
-            }
-        }
+        public async Task SaveNotificationAsync(NotificationDto dto) =>
+            await _notificationService.SaveAsync(dto);
     }
 }

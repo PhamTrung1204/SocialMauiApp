@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="SocialMauiApp.Pages.SettingsPage"
+    x:Name="settingsPageRoot"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ext="clr-namespace:SocialMauiApp.Extensions"
+    xmlns:services="clr-namespace:SocialMauiApp.Services"
+    xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
+    Title="{ext:Translate Settings_Title}"
+    x:DataType="vm:SettingsViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}"
+    Shell.BackgroundColor="{StaticResource Primary}"
+    Shell.TitleColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="14,14" Spacing="12">
+
+            <Label Style="{StaticResource SectionTitleStyle}" Text="{ext:Translate Settings_Language}" />
+
+            <Border Style="{StaticResource FlatCardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource MutedTextStyle}" Text="{ext:Translate Settings_LanguageDescription}" />
+
+                    <CollectionView ItemsSource="{Binding Languages}"
+                                    SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
+                                    SelectionMode="Single">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="services:LanguageOption">
+                                <Grid Padding="4,12" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Style="{StaticResource BodyTextStyle}"
+                                           Text="{Binding DisplayName}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           FontAttributes="Bold"
+                                           Text="{Binding Code}"
+                                           TextColor="{StaticResource Primary}"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

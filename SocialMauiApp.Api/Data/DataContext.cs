@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialMauiApp.Api.Data.Entities;
-using SocialMediaMaui.Shared.Dtos;
 
 namespace SocialMauiApp.Api.Data
 {
@@ -15,6 +14,8 @@ namespace SocialMauiApp.Api.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<SyncMetadata> SyncMetadatas { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -25,26 +26,10 @@ namespace SocialMauiApp.Api.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            //Cấu hình PostDto là keyless entity, ánh xạ đến view "PostDto"
-            modelBuilder.Entity<PostDto>()
-        .HasNoKey().ToView(null);
-
-            //// Cấu hình chuyển đổi cho IsLiked
-            //modelBuilder.Entity<PostDto>()
-            //    .Property(p => p.IsLiked)
-            //    .HasConversion(
-            //        v => v ? 1 : 0,
-            //        v => v == 1
-            //    );
-
-            //// Cấu hình tương tự cho IsBookmarked
-            //modelBuilder.Entity<PostDto>()
-            //    .Property(p => p.IsBookmarked)
-            //    .HasConversion(
-            //        v => v ? 1 : 0,
-            //        v => v == 1
-            //    );
-
+            modelBuilder.Entity<User>(e =>
+            {
+                e.HasIndex(u => u.Email).IsUnique();
+            });
 
             modelBuilder.Entity<Bookmarks>(e =>
             {
@@ -62,13 +47,30 @@ namespace SocialMauiApp.Api.Data
             {
                 e.HasOne(b => b.User).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
+
             modelBuilder.Entity<Notification>(e =>
             {
                 e.HasOne(b => b.User).WithMany().OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(b => b.Post).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
-            modelBuilder.Entity<SyncMetadata>().ToTable("SyncMetadata");
-        }
 
+            modelBuilder.Entity<Friendship>(e =>
+            {
+                e.HasKey(f => new { f.RequesterId, f.AddresseeId });
+                e.Property(f => f.Status).HasConversion<string>().HasMaxLength(20);
+                e.HasIndex(f => f.AddresseeId);
+                e.HasIndex(f => f.Status);
+                e.HasOne(f => f.Requester).WithMany().HasForeignKey(f => f.RequesterId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(f => f.Addressee).WithMany().HasForeignKey(f => f.AddresseeId).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<SyncMetadata>(e =>
+            {
+                e.ToTable("SyncMetadata");
+                e.Property(x => x.ConcurrencyToken).IsConcurrencyToken();
+            });
+
+            modelBuilder.ApplyUtcDateTimeConversion();
+        }
     }
 }

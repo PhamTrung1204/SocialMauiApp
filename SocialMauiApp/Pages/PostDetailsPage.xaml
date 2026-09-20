@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.PostDetailsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -56,7 +56,7 @@
             ColumnSpacing="10">
             <Border
                 Grid.Column="0"
-                BackgroundColor="White"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
                 HeightRequest="30"
                 StrokeShape="RoundRectangle 8"
                 StrokeThickness="0"
@@ -77,7 +77,7 @@
             <Grid Grid.Column="1" />
             <Border
                 Grid.Column="2"
-                BackgroundColor="White"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
                 HeightRequest="30"
                 IsVisible="{Binding IsOwnPost}"
                 StrokeShape="RoundRectangle 8"
@@ -97,7 +97,7 @@
             </Border>
             <Border
                 Grid.Column="3"
-                BackgroundColor="White"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
                 HeightRequest="30"
                 IsVisible="{Binding IsOwnPost}"
                 StrokeShape="RoundRectangle 8"
@@ -162,7 +162,7 @@
                 <VerticalStackLayout
                     Grid.Row="1"
                     Padding="10"
-                    BackgroundColor="White"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
                     Spacing="1">
                     <CollectionView
                         ItemsSource="{Binding Comments}"
@@ -176,7 +176,7 @@
                                 FontSize="15"
                                 HorizontalOptions="Center"
                                 Text="No comments yet."
-                                TextColor="Gray" />
+                                TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}" />
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="dto:CommentDto">
@@ -202,8 +202,8 @@
                                     <Border
                                         Grid.Column="1"
                                         Padding="10,5,5,5"
-                                        BackgroundColor="#F8F9FA"
-                                        Stroke="#E0E0E0"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource LightSurfaceAlt}, Dark={StaticResource DarkSurfaceAlt}}"
+                                        Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
                                         StrokeShape="RoundRectangle 12"
                                         StrokeThickness="1"
                                         VerticalOptions="Start">
@@ -222,7 +222,7 @@
                                                     FontAttributes="Bold"
                                                     FontSize="15"
                                                     Text="{Binding UserName}"
-                                                    TextColor="#1C2526" />
+                                                    TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
                                             </StackLayout>
                                             <!--  More Options  -->
                                             <Label
@@ -233,7 +233,7 @@
                                                 HeightRequest="24"
                                                 IsVisible="{Binding IsOwnComment}"
                                                 Text="⋮"
-                                                TextColor="Black"
+                                                TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}"
                                                 VerticalOptions="Start">
                                                 <Label.GestureRecognizers>
                                                     <TapGestureRecognizer Tapped="OnMoreOptionsTapped" />
@@ -247,7 +247,7 @@
                                                 FontSize="15"
                                                 LineBreakMode="WordWrap"
                                                 Text="{Binding Content}"
-                                                TextColor="#1C2526" />
+                                                TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
                                             <!--  Comment Image  -->
                                             <Border
                                                 Grid.Row="2"
@@ -268,7 +268,7 @@
                                                 <Label
                                                     FontSize="12"
                                                     Text="{Binding AddedOn, Converter={StaticResource HumanizedTimeConverter}}"
-                                                    TextColor="#65676B"
+                                                    TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"
                                                     VerticalOptions="Center" />
                                                 <Label
                                                     BackgroundColor="Transparent"
@@ -319,8 +319,8 @@
                                                     <Border
                                                         Grid.Column="1"
                                                         Padding="10"
-                                                        BackgroundColor="#EDF1F4"
-                                                        Stroke="#E0E0E0"
+                                                        BackgroundColor="{AppThemeBinding Light={StaticResource LightSurfaceAlt}, Dark={StaticResource DarkSurfaceAlt}}"
+                                                        Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
                                                         StrokeShape="RoundRectangle 10"
                                                         StrokeThickness="1"
                                                         VerticalOptions="Start">
@@ -339,7 +339,7 @@
                                                                     FontAttributes="Bold"
                                                                     FontSize="13"
                                                                     Text="{Binding UserName}"
-                                                                    TextColor="#1C2526" />
+                                                                    TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
                                                             </StackLayout>
                                                             <!--  More Options  -->
                                                             <Label
@@ -350,7 +350,7 @@
                                                                 HeightRequest="24"
                                                                 IsVisible="{Binding IsOwnComment}"
                                                                 Text="⋮"
-                                                                TextColor="Black"
+                                                                TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}"
                                                                 VerticalOptions="Start">
                                                                 <Label.GestureRecognizers>
                                                                     <TapGestureRecognizer Tapped="OnMoreOptionsTapped" />
@@ -364,7 +364,7 @@
                                                                 FontSize="13"
                                                                 LineBreakMode="WordWrap"
                                                                 Text="{Binding Content}"
-                                                                TextColor="#1C2526" />
+                                                                TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
                                                             <!--  Reply Image  -->
                                                             <Border
                                                                 Grid.Row="2"
@@ -382,7 +382,7 @@
                                                                     Padding="0,0,10,0"
                                                                     FontSize="11"
                                                                     Text="{Binding AddedOn, Converter={StaticResource HumanizedTimeConverter}}"
-                                                                    TextColor="#65676B"
+                                                                    TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"
                                                                     VerticalOptions="Center" />
                                                                 <Label
                                                                     FontSize="12"
@@ -411,7 +411,7 @@
         <Grid
             Grid.Row="2"
             Padding="10,5,10,10"
-            BackgroundColor="White"
+            BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
             ColumnDefinitions="Auto,*,Auto"
             ColumnSpacing="8"
             RowDefinitions="Auto,Auto,Auto">
@@ -438,7 +438,7 @@
                     TextColor="{StaticResource Primary}"
                     VerticalOptions="Center" />
                 <Border
-                    BackgroundColor="White"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
                     HeightRequest="24"
                     IsVisible="{Binding IsEditing}"
                     Stroke="{StaticResource Gray200}"
@@ -480,7 +480,7 @@
                 Grid.Column="1"
                 Placeholder="Write a comment or reply..."
                 Text="{Binding Comment, Mode=TwoWay}"
-                TextColor="Black"
+                TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}"
                 VerticalOptions="Center">
                 <controls:NoBorderEntry.Behaviors>
                     <behaviors:AutoFocusBehavior ShouldFocus="{Binding ReplyingToComment, Converter={StaticResource ObjectToBoolConverter}}" />
@@ -519,7 +519,7 @@
                                 <!--  Bọc Image trong Border để bo góc  -->
                                 <Border
                                     HeightRequest="100"
-                                    Stroke="LightGray"
+                                    Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
                                     StrokeShape="RoundRectangle 10"
                                     StrokeThickness="2"
                                     WidthRequest="80">

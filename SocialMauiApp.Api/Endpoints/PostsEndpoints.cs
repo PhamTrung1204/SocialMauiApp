@@ -15,13 +15,17 @@ namespace SocialMauiApp.Api.Endpoints
                 .RequireAuthorization()
                 .WithTags("Posts");
 
-            postsGroup.MapPost("/save", async ([FromForm] IFormFile? photo, [FromForm] string serializedSavePostDto, PostService postService, ClaimsPrincipal principal) =>
+            postsGroup.MapPost("/save", async ([FromForm] IFormFile? photo, [FromForm] IFormFile? video, [FromForm] string serializedSavePostDto, PostService postService, ClaimsPrincipal principal) =>
             {
                 if (string.IsNullOrWhiteSpace(serializedSavePostDto))
                     return Results.BadRequest("Missing data");
 
                 SavePostDto dto = JsonSerializer.Deserialize<SavePostDto>(serializedSavePostDto)!;
                 dto.Photo = photo;
+                dto.Video = video;
+
+                if (!dto.Validate())
+                    return Results.BadRequest("Either content, a photo or a video is required");
 
                 return Results.Ok(await postService.SavePostAsync(dto, principal.GetUser()));
             })

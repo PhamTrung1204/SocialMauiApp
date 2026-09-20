@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SocialMauiApp.Api.Constants;
 using SocialMauiApp.Api.Data;
 using SocialMauiApp.Api.Data.Entities;
 using SocialMediaMaui.Shared.Dtos;
@@ -77,17 +78,7 @@ namespace SocialMauiApp.Api.Services
                 if (post == null)
                     return ApiResult.Fail("Post not found");
 
-                if (!string.IsNullOrEmpty(post.PhotoPath) && File.Exists(post.PhotoPath))
-                {
-                    try
-                    {
-                        File.Delete(post.PhotoPath);
-                    }
-                    catch (Exception exFile)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Error deleting post photo file: {exFile.Message}");
-                    }
-                }
+                DeleteFiles(post.PhotoPath, post.VideoPath);
 
                 _context.Comments.RemoveRange(_context.Comments.Where(c => c.PostId == postId));
                 _context.Likes.RemoveRange(_context.Likes.Where(l => l.PostId == postId));
@@ -117,10 +108,13 @@ namespace SocialMauiApp.Api.Services
         {
             var query = _context.Users.AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchText))
+            if (!string.IsNullOrWhiteSpace(searchText))
             {
-                searchText = searchText.ToLower();
-                query = query.Where(u => u.Name.ToLower().Contains(searchText) || u.Email.ToLower().Contains(searchText));
+                var pattern = "%" + searchText.Trim()
+                    .Replace("\\", "\\\\")
+                    .Replace("%", "\\%")
+                    .Replace("_", "\\_") + "%";
+                query = query.Where(u => EF.Functions.ILike(u.Name, pattern) || EF.Functions.ILike(u.Email, pattern));
             }
 
             if (!string.IsNullOrEmpty(role))
@@ -152,7 +146,7 @@ namespace SocialMauiApp.Api.Services
             if (user == null)
                 return ApiResult.Fail("User not found");
 
-            if (user.Role == "Admin")
+            if (user.Role == Roles.Admin)
                 return ApiResult.Fail("Cannot lock an admin user");
 
             user.IsLocked = true;
@@ -186,23 +180,13 @@ namespace SocialMauiApp.Api.Services
                 if (user == null)
                     return ApiResult.Fail("User not found");
 
-                if (user.Role == "Admin")
+                if (user.Role == Roles.Admin)
                     return ApiResult.Fail("Cannot delete an admin user");
 
                 var userPosts = await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
                 foreach (var post in userPosts)
                 {
-                    if (!string.IsNullOrEmpty(post.PhotoPath) && File.Exists(post.PhotoPath))
-                    {
-                        try
-                        {
-                            File.Delete(post.PhotoPath);
-                        }
-                        catch (Exception exFile)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"Error deleting post photo file: {exFile.Message}");
-                        }
-                    }
+                    DeleteFiles(post.PhotoPath, post.VideoPath);
                     _context.Comments.RemoveRange(_context.Comments.Where(c => c.PostId == post.Id));
                     _context.Likes.RemoveRange(_context.Likes.Where(l => l.PostId == post.Id));
                     _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.PostId == post.Id));
@@ -230,6 +214,7 @@ namespace SocialMauiApp.Api.Services
                 _context.Likes.RemoveRange(_context.Likes.Where(l => l.UserId == userId));
                 _context.Bookmarks.RemoveRange(_context.Bookmarks.Where(b => b.UserId == userId));
                 _context.Notifications.RemoveRange(_context.Notifications.Where(n => n.ForUserId == userId));
+                _context.Friendships.RemoveRange(_context.Friendships.Where(f => f.RequesterId == userId || f.AddresseeId == userId));
                 _context.Users.Remove(user);
 
                 await _context.SaveChangesAsync();
@@ -333,6 +318,25 @@ namespace SocialMauiApp.Api.Services
             }
         }
     
+        private void DeleteFiles(params string?[] paths)
+        {
+            foreach (var path in paths)
+            {
+                if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                {
+                    continue;
+                }
+                try
+                {
+                    File.Delete(path);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error deleting media file '{path}': {ex.Message}");
+                }
+            }
+        }
+
         private async Task DeleteCommentRecursivelyAsync(Guid commentId)
         {
             var childComments = await _context.Comments

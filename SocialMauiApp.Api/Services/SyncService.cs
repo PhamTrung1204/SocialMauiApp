@@ -40,7 +40,7 @@ namespace SocialMauiApp.Api.Services
                 var syncMetadata = await _sqliteContext.SyncMetadata.FirstOrDefaultAsync(cancellationToken);
                 if (syncMetadata == null)
                 {
-                    syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = DateTime.MinValue };
+                    syncMetadata = new SyncMetadata { Id = 1, LastSyncTime = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc), ConcurrencyToken = Guid.NewGuid() };
                     await _sqliteContext.SyncMetadata.AddAsync(syncMetadata, cancellationToken);
                     await _sqliteContext.SaveChangesAsync(cancellationToken);
                     _logger.LogInformation("Initialized new SyncMetadata record at {Time}.", DateTime.Now.ToString("HH:mm:ss"));
@@ -54,6 +54,7 @@ namespace SocialMauiApp.Api.Services
 
                 // Update SyncMetadata with concurrency handling
                 syncMetadata.LastSyncTime = DateTime.UtcNow;
+                syncMetadata.ConcurrencyToken = Guid.NewGuid();
 
                 try
                 {
@@ -74,6 +75,7 @@ namespace SocialMauiApp.Api.Services
                     else
                     {
                         entry.OriginalValues.SetValues(databaseValues);
+                        syncMetadata.ConcurrencyToken = Guid.NewGuid();
                         _sqliteContext.SyncMetadata.Update(syncMetadata);
                     }
                     await _sqliteContext.SaveChangesAsync(cancellationToken);
@@ -118,6 +120,8 @@ namespace SocialMauiApp.Api.Services
                         serverPost.Content = post.Content;
                         serverPost.PhotoPath = post.PhotoPath;
                         serverPost.PhotoUrl = post.PhotoUrl;
+                        serverPost.VideoPath = post.VideoPath;
+                        serverPost.VideoUrl = post.VideoUrl;
                         serverPost.ModifiedOn = post.ModifiedOn;
                         serverPost.IsDeleted = post.IsDeleted;
                         _dataContext.Posts.Update(serverPost);
@@ -172,7 +176,7 @@ namespace SocialMauiApp.Api.Services
         {
             _logger.LogDebug("Starting server-to-local synchronization with last sync time: {LastSyncTime}.", lastSyncTime);
 
-            // Step 1: Sync Users from SQL Server to SQLite
+            // Step 1: Sync Users from PostgreSQL to SQLite
             var serverUsers = await _dataContext.Users
                 .Where(u => u.RefreshTokenExpiry > lastSyncTime || u.ResetTokenExpiry > lastSyncTime || (u.VerificationTokenExpiry.HasValue && u.VerificationTokenExpiry > lastSyncTime))
                 .ToListAsync(cancellationToken);
@@ -236,7 +240,7 @@ namespace SocialMauiApp.Api.Services
             await _sqliteContext.SaveChangesAsync(cancellationToken);
             _logger.LogInformation("Synced {Count} users to SQLite.", serverUsers.Count);
 
-            // Step 2: Sync Posts from SQL Server to SQLite
+            // Step 2: Sync Posts from PostgreSQL to SQLite
             foreach (var serverPost in serverPosts)
             {
                 var localPost = await _sqliteContext.Posts
@@ -251,6 +255,8 @@ namespace SocialMauiApp.Api.Services
                     localPost.Content = serverPost.Content;
                     localPost.PhotoPath = serverPost.PhotoPath;
                     localPost.PhotoUrl = serverPost.PhotoUrl;
+                    localPost.VideoPath = serverPost.VideoPath;
+                    localPost.VideoUrl = serverPost.VideoUrl;
                     localPost.ModifiedOn = serverPost.ModifiedOn;
                     localPost.IsDeleted = serverPost.IsDeleted;
                     localPost.IsSynced = true;
@@ -312,7 +318,7 @@ namespace SocialMauiApp.Api.Services
                 _logger.LogInformation("Synced {Count} parent comments to SQLite.", missingParentComments.Count);
             }
 
-            // Step 5: Sync Comments from SQL Server to SQLite
+            // Step 5: Sync Comments from PostgreSQL to SQLite
             foreach (var serverComment in serverComments)
             {
                 var localComment = await _sqliteContext.Comments
@@ -366,6 +372,8 @@ namespace SocialMauiApp.Api.Services
                         existingPost.Content = post.Content;
                         existingPost.PhotoPath = post.PhotoPath;
                         existingPost.PhotoUrl = post.PhotoUrl;
+                        existingPost.VideoPath = post.VideoPath;
+                        existingPost.VideoUrl = post.VideoUrl;
                         existingPost.ModifiedOn = post.ModifiedOn;
                         existingPost.IsDeleted = post.IsDeleted;
                         _dataContext.Posts.Update(existingPost);

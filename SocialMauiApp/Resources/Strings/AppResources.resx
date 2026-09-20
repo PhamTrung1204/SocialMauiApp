@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence><xsd:element name="value" type="xsd:string" minOccurs="0" /></xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence><xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" /></xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Admin_Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Admin_DeleteUser" xml:space="preserve">
+    <value>Delete user</value>
+  </data>
+  <data name="Admin_EmptyUsers" xml:space="preserve">
+    <value>No users yet.</value>
+  </data>
+  <data name="Admin_LockUnlock" xml:space="preserve">
+    <value>Lock / Unlock</value>
+  </data>
+  <data name="Admin_ManagePosts" xml:space="preserve">
+    <value>Manage posts</value>
+  </data>
+  <data name="Admin_Overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Admin_Posts" xml:space="preserve">
+    <value>Posts</value>
+  </data>
+  <data name="Admin_RoleFormat" xml:space="preserve">
+    <value>Role: {0}</value>
+  </data>
+  <data name="Admin_Title" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Admin_Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Common_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Common_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Common_Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Common_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Error_AcceptRequest" xml:space="preserve">
+    <value>Could not accept the request.</value>
+  </data>
+  <data name="Error_DeclineRequest" xml:space="preserve">
+    <value>Could not decline the request.</value>
+  </data>
+  <data name="Error_FriendshipUpdate" xml:space="preserve">
+    <value>Could not update the friendship status.</value>
+  </data>
+  <data name="Error_InvalidUserId" xml:space="preserve">
+    <value>Invalid user id.</value>
+  </data>
+  <data name="Error_SendRequest" xml:space="preserve">
+    <value>Could not send the friend request.</value>
+  </data>
+  <data name="Error_SessionInvalid" xml:space="preserve">
+    <value>Your session has expired. Please sign in again.</value>
+  </data>
+  <data name="Error_Unfriend" xml:space="preserve">
+    <value>Could not unfriend.</value>
+  </data>
+  <data name="Friends_Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="Friends_Add" xml:space="preserve">
+    <value>Add friend</value>
+  </data>
+  <data name="Friends_CancelRequest" xml:space="preserve">
+    <value>Cancel request</value>
+  </data>
+  <data name="Friends_ConfirmUnfriend" xml:space="preserve">
+    <value>Unfriend {0}?</value>
+  </data>
+  <data name="Friends_ConfirmUnfriendPlain" xml:space="preserve">
+    <value>Are you sure you want to unfriend?</value>
+  </data>
+  <data name="Friends_Decline" xml:space="preserve">
+    <value>Decline</value>
+  </data>
+  <data name="Friends_EmptyFriends" xml:space="preserve">
+    <value>No friends yet.
+Try the Suggestions tab.</value>
+  </data>
+  <data name="Friends_EmptyRequests" xml:space="preserve">
+    <value>No pending requests.</value>
+  </data>
+  <data name="Friends_EmptySuggestions" xml:space="preserve">
+    <value>No users found.</value>
+  </data>
+  <data name="Friends_NowFriendsWith" xml:space="preserve">
+    <value>You are now friends with {0}.</value>
+  </data>
+  <data name="Friends_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Friends_RequestAccepted" xml:space="preserve">
+    <value>Friend request accepted.</value>
+  </data>
+  <data name="Friends_RequestCancelled" xml:space="preserve">
+    <value>Friend request cancelled.</value>
+  </data>
+  <data name="Friends_RequestDeclined" xml:space="preserve">
+    <value>Request declined.</value>
+  </data>
+  <data name="Friends_RequestSent" xml:space="preserve">
+    <value>Friend request sent.</value>
+  </data>
+  <data name="Friends_RequestSentTo" xml:space="preserve">
+    <value>Friend request sent to {0}.</value>
+  </data>
+  <data name="Friends_SearchPlaceholder" xml:space="preserve">
+    <value>Search by name or email</value>
+  </data>
+  <data name="Friends_StatusFriends" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="Friends_TabRequests" xml:space="preserve">
+    <value>Requests</value>
+  </data>
+  <data name="Friends_TabSuggestions" xml:space="preserve">
+    <value>Suggestions</value>
+  </data>
+  <data name="Friends_Title" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="Friends_Unfriended" xml:space="preserve">
+    <value>Unfriended.</value>
+  </data>
+  <data name="Friends_YourProfile" xml:space="preserve">
+    <value>Your profile</value>
+  </data>
+  <data name="Home_ComposerPlaceholder" xml:space="preserve">
+    <value>What's on your mind?</value>
+  </data>
+  <data name="Home_EmptyFeed" xml:space="preserve">
+    <value>No posts yet.
+Be the first to share!</value>
+  </data>
+  <data name="Login_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Login_EmailPlaceholder" xml:space="preserve">
+    <value>Enter your email</value>
+  </data>
+  <data name="Login_FingerprintHint" xml:space="preserve">
+    <value>Enter your password or use your fingerprint</value>
+  </data>
+  <data name="Login_Forgot" xml:space="preserve">
+    <value>Forgot password?</value>
+  </data>
+  <data name="Login_NoAccount" xml:space="preserve">
+    <value>Don't have an account?</value>
+  </data>
+  <data name="Login_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Login_PasswordPlaceholder" xml:space="preserve">
+    <value>Enter your password</value>
+  </data>
+  <data name="Login_Register" xml:space="preserve">
+    <value>Sign up</value>
+  </data>
+  <data name="Login_SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Login_Subtitle" xml:space="preserve">
+    <value>Sign in to continue</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>Welcome back</value>
+  </data>
+  <data name="Login_UseAnotherAccount" xml:space="preserve">
+    <value>Use another account</value>
+  </data>
+  <data name="Login_WelcomeNamed" xml:space="preserve">
+    <value>Hi {0}!</value>
+  </data>
+  <data name="Notifications_Empty" xml:space="preserve">
+    <value>No notifications yet.</value>
+  </data>
+  <data name="Notifications_Title" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Post_Create" xml:space="preserve">
+    <value>Create Post</value>
+  </data>
+  <data name="Post_NeedContent" xml:space="preserve">
+    <value>Content, a photo or a video is required</value>
+  </data>
+  <data name="Post_NoVideoSelected" xml:space="preserve">
+    <value>No video selected</value>
+  </data>
+  <data name="Post_Photo" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+  <data name="Post_SelectVideoTitle" xml:space="preserve">
+    <value>Select video</value>
+  </data>
+  <data name="Post_Submit" xml:space="preserve">
+    <value>Post</value>
+  </data>
+  <data name="Post_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="Post_VideoPickError" xml:space="preserve">
+    <value>Could not select video: {0}</value>
+  </data>
+  <data name="Post_VideoTooLarge" xml:space="preserve">
+    <value>Video is {0} MB, over the 60 MB limit</value>
+  </data>
+  <data name="Profile_ChangeName" xml:space="preserve">
+    <value>Change display name</value>
+  </data>
+  <data name="Profile_ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="Profile_ChangePhoto" xml:space="preserve">
+    <value>Change profile photo</value>
+  </data>
+  <data name="Profile_EmptyMyPosts" xml:space="preserve">
+    <value>You haven't posted anything yet.</value>
+  </data>
+  <data name="Profile_EmptySaved" xml:space="preserve">
+    <value>No saved posts yet.</value>
+  </data>
+  <data name="Profile_Logout" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="Profile_MyPosts" xml:space="preserve">
+    <value>My posts</value>
+  </data>
+  <data name="Profile_Saved" xml:space="preserve">
+    <value>Saved</value>
+  </data>
+  <data name="Profile_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Profile_Title" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Register_ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Register_ConfirmPasswordPlaceholder" xml:space="preserve">
+    <value>Re-enter your password</value>
+  </data>
+  <data name="Register_HaveAccount" xml:space="preserve">
+    <value>Already have an account?</value>
+  </data>
+  <data name="Register_Name" xml:space="preserve">
+    <value>Display name</value>
+  </data>
+  <data name="Register_NamePlaceholder" xml:space="preserve">
+    <value>Enter your name</value>
+  </data>
+  <data name="Register_Subtitle" xml:space="preserve">
+    <value>Join the community today</value>
+  </data>
+  <data name="Register_Title" xml:space="preserve">
+    <value>Create account</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_LanguageChanged" xml:space="preserve">
+    <value>Language updated</value>
+  </data>
+  <data name="Settings_LanguageDescription" xml:space="preserve">
+    <value>Choose the language used across the app</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="UserProfile_EmptyPosts" xml:space="preserve">
+    <value>This user hasn't posted anything yet.</value>
+  </data>
+  <data name="Admin_EmptyComments" xml:space="preserve">
+    <value>No comments to moderate.</value>
+  </data>
+  <data name="Admin_FilterAdmin" xml:space="preserve">
+    <value>Admins</value>
+  </data>
+  <data name="Admin_FilterAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Admin_FilterClient" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="Admin_Likes" xml:space="preserve">
+    <value>Likes</value>
+  </data>
+  <data name="Admin_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Admin_PageFormat" xml:space="preserve">
+    <value>Page {0}</value>
+  </data>
+  <data name="Admin_Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Admin_SearchPlaceholder" xml:space="preserve">
+    <value>Search users by name or email</value>
+  </data>
+  <data name="Admin_TabComments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Admin_TabUsers" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+</root>

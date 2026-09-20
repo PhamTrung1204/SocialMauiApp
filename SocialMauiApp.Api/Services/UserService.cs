@@ -112,21 +112,32 @@ namespace SocialMauiApp.Api.Services
             }
         }
 
-        public async Task<PostDto[]> GetUserPostsAsync(int startIndex, int pageSize, Guid currentUserId)
-        {
-            var posts = await _context.Set<PostDto>()
-              .FromSqlInterpolated($"EXEC GetUserPosts @StartIndex={startIndex},@PageSize={pageSize},@CurrentUserId={currentUserId}")
-              .ToArrayAsync();
-            return posts;
-        }
+        public async Task<PostDto[]> GetUserPostsAsync(int startIndex, int pageSize, Guid currentUserId) =>
+            await GetPostsOfUserAsync(currentUserId, currentUserId, startIndex, pageSize);
 
-        public async Task<PostDto[]> GetUserBookmarkedPostsAsync(int startIndex, int pageSize, Guid currentUserId)
-        {
-            var posts = await _context.Set<PostDto>()
-              .FromSqlInterpolated($"EXEC GetUserBookmarkedPosts @StartIndex={startIndex},@PageSize={pageSize},@CurrentUserId={currentUserId}")
-              .ToArrayAsync();
-            return posts;
-        }
+        public async Task<PostDto[]> GetPostsOfUserAsync(Guid targetUserId, Guid currentUserId, int startIndex, int pageSize) =>
+            await _context.Posts
+                .Where(p => p.UserId == targetUserId && !p.IsDeleted)
+                .OrderByMostRecent()
+                .Skip(startIndex)
+                .Take(pageSize)
+                .ToPostDto(_context, currentUserId)
+                .ToArrayAsync();
+
+        public async Task<UserInfoDto?> GetUserInfoAsync(Guid userId) =>
+            await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new UserInfoDto(u.Name, u.PhotoUrl))
+                .FirstOrDefaultAsync();
+
+        public async Task<PostDto[]> GetUserBookmarkedPostsAsync(int startIndex, int pageSize, Guid currentUserId) =>
+            await _context.Posts
+                .Where(p => _context.Bookmarks.Any(b => b.PostId == p.Id && b.UserId == currentUserId))
+                .OrderByMostRecent()
+                .Skip(startIndex)
+                .Take(pageSize)
+                .ToPostDto(_context, currentUserId)
+                .ToArrayAsync();
 
         public async Task<NotificationDto[]> GetNotificationAsync(int startIndex, int pageSize, Guid currentUserId) =>
              await _context.Notifications

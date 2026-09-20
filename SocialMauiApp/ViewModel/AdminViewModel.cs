@@ -1,116 +1,93 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel;
 using SocialMauiApp.Apis;
 using SocialMauiApp.Services;
 using SocialMediaMaui.Shared.Dtos;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SocialMauiApp.ViewModel
 {
     public partial class AdminViewModel : BaseViewModel
     {
+        private const int PageSize = 20;
+
         private readonly AuthService _authService;
         private readonly IAdminApi _adminApi;
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
 
-        [ObservableProperty]
-        private int _postCount;
+        [ObservableProperty] private int _postCount;
+        [ObservableProperty] private int _userCount;
+        [ObservableProperty] private int _commentCount;
+        [ObservableProperty] private int _likeCount;
+        [ObservableProperty] private bool _isLoading;
+        [ObservableProperty] private UserDto? _selectedUser;
+        [ObservableProperty] private string? _searchText;
+        [ObservableProperty] private int _page = 1;
 
         [ObservableProperty]
-        private int _userCount;
+        [NotifyPropertyChangedFor(nameof(IsUsersTab))]
+        [NotifyPropertyChangedFor(nameof(IsCommentsTab))]
+        private int _selectedTab;
 
         [ObservableProperty]
-        private int _commentCount;
+        [NotifyPropertyChangedFor(nameof(IsAllRoles))]
+        [NotifyPropertyChangedFor(nameof(IsAdminRole))]
+        [NotifyPropertyChangedFor(nameof(IsClientRole))]
+        private string? _roleFilter;
 
-        [ObservableProperty]
-        private int _likeCount;
+        public bool IsUsersTab => SelectedTab == 0;
+        public bool IsCommentsTab => SelectedTab == 1;
 
-        [ObservableProperty]
-        private bool _isLoading;
+        public bool IsAllRoles => string.IsNullOrEmpty(RoleFilter);
+        public bool IsAdminRole => RoleFilter == "Admin";
+        public bool IsClientRole => RoleFilter == "Client";
 
-        [ObservableProperty]
-        private ObservableCollection<UserDto> _users;
+        public bool CanGoPrevious => Page > 1;
 
-        [ObservableProperty]
-        private UserDto? _selectedUser;
+        public ObservableCollection<UserDto> Users { get; } = new();
+        public ObservableCollection<CommentDto> Comments { get; } = new();
 
         public AdminViewModel(AuthService authService, IAdminApi adminApi, RealtimeUpdatesService realtimeUpdatesService)
         {
             _authService = authService;
             _adminApi = adminApi;
             _realtimeUpdatesService = realtimeUpdatesService;
-            Users = new ObservableCollection<UserDto>();
-
-            // Initialize commands
-            LoadDashboardCommand = new AsyncRelayCommand(LoadDashboardAsync);
-            NavigateToPostManagementCommand = new AsyncRelayCommand(NavigateToPostManagementAsync);
-            ToggleUserLockCommand = new AsyncRelayCommand(ToggleUserLockAsync);
-            DeleteUserCommand = new AsyncRelayCommand(DeleteUserAsync);
-            LogoutCommand = new AsyncRelayCommand(LogoutAsync);
         }
 
-        public IAsyncRelayCommand LoadDashboardCommand { get; }
-        public IAsyncRelayCommand NavigateToPostManagementCommand { get; }
-        public IAsyncRelayCommand ToggleUserLockCommand { get; }
-        public IAsyncRelayCommand DeleteUserCommand { get; }
-        public IAsyncRelayCommand LogoutCommand { get; }
+        public async Task InitializeAsync() => await LoadDashboardCommand.ExecuteAsync(null);
 
-        public async Task InitializeAsync()
-        {
-            await LoadDashboardCommand.ExecuteAsync(null);
-        }
+        public void Cleanup() => _realtimeUpdatesService.RemoveHandlers(nameof(AdminViewModel));
 
-        public void Cleanup()
-        {
-            _realtimeUpdatesService.RemoveHandlers(nameof(AdminViewModel));
-        }
-
+        [RelayCommand]
         private async Task LoadDashboardAsync()
         {
             if (IsLoading) return;
             IsLoading = true;
-
             try
             {
-                // Verify admin access
-                if (_authService.User == null || _authService.User.Role != "Admin")
+                if (_authService.User is null || _authService.User.Role != "Admin")
                 {
                     await ShowErrorAlertAsync("You do not have permission to access the admin dashboard.");
-                    await Shell.Current.GoToAsync("..");
+                    await NavigateBackAsync();
                     return;
                 }
 
-                // Fetch dashboard data
-                var dashboardData = await _adminApi.GetDashboardAsync();
-                Debug.WriteLine($"Dashboard data received: {JsonSerializer.Serialize(dashboardData)}");
-
-                if (dashboardData == null)
+                var dashboard = await _adminApi.GetDashboardAsync();
+                if (dashboard is not null)
                 {
-                    await ShowErrorAlertAsync("Received null dashboard data from server.");
-                    return;
+                    PostCount = dashboard.PostCount;
+                    UserCount = dashboard.UserCount;
+                    CommentCount = dashboard.CommentCount;
+                    LikeCount = dashboard.LikeCount;
                 }
 
-                // Update UI properties on main thread
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    PostCount = dashboardData.PostCount;
-                    UserCount = dashboardData.UserCount;
-                    CommentCount = dashboardData.CommentCount;
-                    LikeCount = dashboardData.LikeCount;
-                    Debug.WriteLine($"UI updated - PostCount: {PostCount}, UserCount: {UserCount}, CommentCount: {CommentCount}, LikeCount: {LikeCount}");
-                });
-
-                // Load users and configure real-time updates
-                await LoadUsersAsync();
+                await LoadCurrentTabAsync();
                 ConfigureRealtimeUpdates();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"LoadDashboardAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
+                Debug.WriteLine($"LoadDashboardAsync error: {ex}");
                 await ShowErrorAlertAsync($"Failed to load dashboard: {ex.Message}");
             }
             finally
@@ -119,81 +96,126 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
+        private async Task LoadCurrentTabAsync()
+        {
+            if (IsCommentsTab)
+            {
+                await LoadCommentsAsync();
+            }
+            else
+            {
+                await LoadUsersAsync();
+            }
+        }
+
         private async Task LoadUsersAsync()
         {
             try
             {
-                var users = await _adminApi.GetUsersAsync(null, null, 1, 10);
-                Debug.WriteLine($"Users fetched: {JsonSerializer.Serialize(users)}");
-
-                if (users == null)
+                var users = await _adminApi.GetUsersAsync(SearchText, RoleFilter, Page, PageSize);
+                Users.Clear();
+                foreach (var user in users ?? [])
                 {
-                    await ShowErrorAlertAsync("Received null user data from server.");
-                    return;
+                    Users.Add(user);
                 }
-
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    Users.Clear();
-                    foreach (var user in users)
-                    {
-                        Users.Add(user);
-                    }
-                    Debug.WriteLine($"Users collection updated: {Users.Count} items");
-                });
+                OnPropertyChanged(nameof(CanGoPrevious));
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"LoadUsersAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
+                Debug.WriteLine($"LoadUsersAsync error: {ex}");
                 await ShowErrorAlertAsync($"Failed to load users: {ex.Message}");
             }
         }
 
-        private async Task NavigateToPostManagementAsync()
+        private async Task LoadCommentsAsync()
         {
             try
             {
-                await NavigateAsync($"{nameof(PostManagementPage)}");
+                var comments = await _adminApi.GetCommentsAsync((Page - 1) * PageSize, PageSize);
+                Comments.Clear();
+                foreach (var comment in comments ?? [])
+                {
+                    Comments.Add(comment);
+                }
+                OnPropertyChanged(nameof(CanGoPrevious));
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"NavigateToPostManagementAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
-                await ShowErrorAlertAsync($"Failed to navigate: {ex.Message}");
+                Debug.WriteLine($"LoadCommentsAsync error: {ex}");
+                await ShowErrorAlertAsync($"Failed to load comments: {ex.Message}");
             }
         }
 
+        [RelayCommand]
+        private async Task SelectTabAsync(string tabIndex)
+        {
+            if (!int.TryParse(tabIndex, out var index) || index == SelectedTab) return;
+            SelectedTab = index;
+            Page = 1;
+            await LoadCurrentTabAsync();
+        }
+
+        [RelayCommand]
+        private async Task SearchAsync()
+        {
+            Page = 1;
+            await LoadUsersAsync();
+        }
+
+        [RelayCommand]
+        private async Task FilterRoleAsync(string? role)
+        {
+            RoleFilter = string.IsNullOrEmpty(role) ? null : role;
+            Page = 1;
+            await LoadUsersAsync();
+        }
+
+        [RelayCommand]
+        private async Task NextPageAsync()
+        {
+            Page++;
+            await LoadCurrentTabAsync();
+        }
+
+        [RelayCommand]
+        private async Task PreviousPageAsync()
+        {
+            if (Page <= 1) return;
+            Page--;
+            await LoadCurrentTabAsync();
+        }
+
+        [RelayCommand]
+        private async Task NavigateToPostManagementAsync() => await NavigateAsync(nameof(Pages.PostManagementPage));
+
+        [RelayCommand]
         private async Task ToggleUserLockAsync()
         {
-            if (IsLoading || SelectedUser == null) return;
+            if (IsLoading || SelectedUser is null) return;
             IsLoading = true;
-
             try
             {
-                var result = SelectedUser.IsLocked
-                    ? await _adminApi.UnlockUserAsync(SelectedUser.Id)
-                    : await _adminApi.LockUserAsync(SelectedUser.Id);
+                var target = SelectedUser;
+                var result = target.IsLocked
+                    ? await _adminApi.UnlockUserAsync(target.Id)
+                    : await _adminApi.LockUserAsync(target.Id);
 
-                Debug.WriteLine($"ToggleUserLock result: {JsonSerializer.Serialize(result)}");
+                if (!result.IsSuccess)
+                {
+                    await ShowErrorAlertAsync(result.Error ?? "Could not change the lock state.");
+                    return;
+                }
 
-                if (result.IsSuccess)
+                target.IsLocked = !target.IsLocked;
+                var index = Users.IndexOf(target);
+                if (index >= 0)
                 {
-                    await MainThread.InvokeOnMainThreadAsync(() =>
-                    {
-                        SelectedUser.IsLocked = !SelectedUser.IsLocked;
-                        var index = Users.IndexOf(Users.First(u => u.Id == SelectedUser.Id));
-                        Users[index] = SelectedUser; // Update collection
-                        Debug.WriteLine($"User {SelectedUser.Name} {(SelectedUser.IsLocked ? "locked" : "unlocked")}");
-                    });
-                    await ToastAsync($"User {(SelectedUser.IsLocked ? "locked" : "unlocked")} successfully.");
+                    Users[index] = target;
                 }
-                else
-                {
-                    await ShowErrorAlertAsync(result.Error);
-                }
+                await ToastAsync(target.IsLocked ? "User locked." : "User unlocked.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"ToggleUserLockAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
                 await ShowErrorAlertAsync($"Failed to toggle user lock: {ex.Message}");
             }
             finally
@@ -202,42 +224,35 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
+        [RelayCommand]
         private async Task DeleteUserAsync()
         {
-            if (IsLoading || SelectedUser == null) return;
-            IsLoading = true;
+            if (IsLoading || SelectedUser is null) return;
 
+            var target = SelectedUser;
+            if (!await Shell.Current.DisplayAlert("Confirm delete", $"Delete user {target.Name}?", "Yes", "No"))
+            {
+                return;
+            }
+
+            IsLoading = true;
             try
             {
-                var confirm = await Application.Current.MainPage.DisplayAlert(
-                    "Confirm Delete",
-                    $"Are you sure you want to delete user {SelectedUser.Name}?",
-                    "Yes", "No");
-
-                if (!confirm) return;
-
-                var result = await _adminApi.DeleteUserAsync(SelectedUser.Id);
-                Debug.WriteLine($"DeleteUser result: {JsonSerializer.Serialize(result)}");
-
-                if (result.IsSuccess)
+                var result = await _adminApi.DeleteUserAsync(target.Id);
+                if (!result.IsSuccess)
                 {
-                    await MainThread.InvokeOnMainThreadAsync(() =>
-                    {
-                        Users.Remove(SelectedUser);
-                        SelectedUser = null;
-                        UserCount = Users.Count; // Update user count
-                        Debug.WriteLine($"User deleted, new UserCount: {UserCount}");
-                    });
-                    await ToastAsync("User deleted successfully.");
+                    await ShowErrorAlertAsync(result.Error ?? "Could not delete the user.");
+                    return;
                 }
-                else
-                {
-                    await ShowErrorAlertAsync(result.Error);
-                }
+
+                Users.Remove(target);
+                SelectedUser = null;
+                // UserCount là tổng toàn hệ thống, không phải số dòng của trang hiện tại.
+                if (UserCount > 0) UserCount--;
+                await ToastAsync("User deleted.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"DeleteUserAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
                 await ShowErrorAlertAsync($"Failed to delete user: {ex.Message}");
             }
             finally
@@ -246,77 +261,53 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
-        private async Task LogoutAsync()
+        [RelayCommand]
+        private async Task DeleteCommentAsync(CommentDto comment)
         {
-            if (IsLoading) return;
-            IsLoading = true;
+            if (comment is null) return;
+            if (!await Shell.Current.DisplayAlert("Confirm delete", "Delete this comment?", "Yes", "No"))
+            {
+                return;
+            }
 
             try
             {
-                // Clear auth token and user data
-                _authService.Logout();
-                Debug.WriteLine("User logged out successfully.");
-
-                // Navigate to login page
-                await MainThread.InvokeOnMainThreadAsync(async () =>
+                var result = await _adminApi.DeleteCommentAsync(comment.CommentId);
+                if (!result.IsSuccess)
                 {
-                    await Shell.Current.GoToAsync("//LoginPage");
-                });
-                await ToastAsync("Logged out successfully.");
+                    await ShowErrorAlertAsync(result.Error ?? "Could not delete the comment.");
+                    return;
+                }
+
+                Comments.Remove(comment);
+                if (CommentCount > 0) CommentCount--;
+                await ToastAsync("Comment deleted.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"LogoutAsync error: {ex.Message}, StackTrace: {ex.StackTrace}");
-                await ShowErrorAlertAsync($"Failed to logout: {ex.Message}");
-            }
-            finally
-            {
-                IsLoading = false;
+                await ShowErrorAlertAsync($"Failed to delete comment: {ex.Message}");
             }
         }
 
-        private void OnPostAdded(PostDto post)
+        [RelayCommand]
+        private async Task LogoutAsync()
         {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                PostCount++;
-                OnPropertyChanged(nameof(PostCount));
-                Debug.WriteLine($"Post added, new PostCount: {PostCount}");
-            });
+            _authService.Logout();
+            await NavigateAsync("//LoginPage");
         }
 
         private void OnPostDeleted(Guid postId)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (PostCount > 0)
-                {
-                    PostCount--;
-                    OnPropertyChanged(nameof(PostCount));
-                    Debug.WriteLine($"Post deleted, new PostCount: {PostCount}");
-                }
+                if (PostCount > 0) PostCount--;
             });
         }
 
         private void ConfigureRealtimeUpdates()
         {
             _realtimeUpdatesService.RemoveHandlers(nameof(AdminViewModel));
-            //_realtimeUpdatesService.AddPostAddedHandler(nameof(AdminViewModel), OnPostAdded);
             _realtimeUpdatesService.AddPostDeletedHandler(nameof(AdminViewModel), OnPostDeleted);
-            Debug.WriteLine("Realtime updates configured for AdminViewModel.");
-        }
-
-        private async Task ShowErrorAlertAsync(string message)
-        {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", message, "OK");
-            });
-        }
-
-        private async Task ToastAsync(string message)
-        {
-            await CommunityToolkit.Maui.Alerts.Toast.Make(message, CommunityToolkit.Maui.Core.ToastDuration.Short).Show();
         }
     }
 }

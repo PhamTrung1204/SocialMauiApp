@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="SocialMauiApp.Pages.UserProfilePage"
+    x:Name="userProfilePageRoot"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:ext="clr-namespace:SocialMauiApp.Extensions"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
+    Title="{Binding TargetUserName}"
+    x:DataType="vm:UserProfileViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}"
+    Shell.BackgroundColor="{StaticResource Primary}"
+    Shell.TitleColor="White">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!--  Đầu trang: dải gradient + avatar đè lên  -->
+        <Grid Grid.Row="0" RowDefinitions="90,Auto">
+            <BoxView Grid.Row="0" Background="{StaticResource BrandGradientBrush}" />
+
+            <Border Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Margin="14,40,14,0"
+                    Style="{StaticResource FlatCardStyle}"
+                    Padding="16,60,16,16">
+                <VerticalStackLayout Spacing="14">
+                    <Label HorizontalTextAlignment="Center"
+                           Style="{StaticResource PageTitleStyle}"
+                           Text="{Binding TargetUserName}" />
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Button Command="{Binding ManageFriendshipCommand}"
+                                IsVisible="{Binding CanManageFriendship}"
+                                MinimumWidthRequest="150"
+                                Text="{Binding FriendshipStatus, Converter={StaticResource FriendshipStatusToTextConverter}}" />
+                        <Button Command="{Binding RejectRequestCommand}"
+                                IsVisible="{Binding IsIncomingRequest}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Text="{ext:Translate Friends_Decline}" />
+                    </HorizontalStackLayout>
+
+                    <Label HorizontalTextAlignment="Center"
+                           IsVisible="{Binding HasError}"
+                           Text="{Binding ErrorMessage}"
+                           TextColor="{StaticResource Danger}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Grid.Row="0"
+                    Grid.RowSpan="2"
+                    HorizontalOptions="Center"
+                    Style="{StaticResource AvatarLargeStyle}"
+                    VerticalOptions="Start"
+                    Margin="0,-12,0,0">
+                <Image Aspect="AspectFill" Source="{Binding TargetUserPhotoUrl}" />
+            </Border>
+        </Grid>
+
+        <RefreshView Grid.Row="1" Command="{Binding LoadUserProfileCommand}" IsRefreshing="{Binding IsBusy}">
+            <CollectionView ItemTemplate="{StaticResource postDataTemplateSelector}" ItemsSource="{Binding UserPosts}">
+                <CollectionView.EmptyView>
+                    <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate UserProfile_EmptyPosts}" />
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

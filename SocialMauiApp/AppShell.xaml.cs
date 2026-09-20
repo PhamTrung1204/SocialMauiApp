@@ -30,6 +30,9 @@ namespace SocialMauiApp
             Routing.RegisterRoute(nameof(AdminDashboardPage), typeof(AdminDashboardPage));
             Routing.RegisterRoute(nameof(ResetPasswordPage), typeof(ResetPasswordPage));
             Routing.RegisterRoute(nameof(PostManagementPage), typeof(PostManagementPage));
+            Routing.RegisterRoute(nameof(FriendsPage), typeof(FriendsPage));
+            Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
+            Routing.RegisterRoute(nameof(UserProfilePage), typeof(UserProfilePage));
         }
     }
 }

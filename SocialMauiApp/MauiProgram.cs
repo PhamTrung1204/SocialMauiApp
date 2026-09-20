@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Refit;
@@ -24,6 +25,7 @@ namespace SocialMauiApp
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseMauiCommunityToolkitMediaElement()
                 .ConfigureSyncfusionToolkit()
                 .ConfigureMauiHandlers(handlers =>
                 {
@@ -57,6 +59,9 @@ namespace SocialMauiApp
             builder.Services.AddTransient<DetailsViewModel>().AddTransient<PostDetailsPage>();
             builder.Services.AddTransient<ProfileViewModel>().AddTransient<ProfilePage>();
             builder.Services.AddTransient<NotificationViewModel>().AddTransient<NotificationPage>();
+            builder.Services.AddTransient<FriendsViewModel>().AddTransient<FriendsPage>();
+            builder.Services.AddTransient<SettingsViewModel>().AddTransient<SettingsPage>();
+            builder.Services.AddTransient<UserProfileViewModel>().AddTransient<UserProfilePage>();
             builder.Services.AddTransient<RealtimeUpdatesService>();
 
             // Cấu hình Refit
@@ -69,7 +74,14 @@ namespace SocialMauiApp
             builder.Services.AddSingleton<IDeepLinkService, DefaultDeepLinkService>();
 #endif
 
-            return builder.Build();
+            var app = builder.Build();
+
+            // Khôi phục ngôn ngữ người dùng đã chọn; mặc định là tiếng Anh.
+            var preferences = app.Services.GetRequiredService<IPreferencesService>();
+            LocalizationService.Instance.SetLanguage(
+                preferences.GetString(LocalizationService.PreferenceKey, LocalizationService.DefaultLanguage));
+
+            return app;
         }
 
         private static void ConfigureRefit(IServiceCollection services)
@@ -83,6 +95,8 @@ namespace SocialMauiApp
             services.AddRefitClient<IPostApi>(GetRefitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(AppConstants.ApiBaseUrl));
             services.AddRefitClient<IUserApi>(GetRefitSettings)
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(AppConstants.ApiBaseUrl));
+            services.AddRefitClient<IFriendApi>(GetRefitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(AppConstants.ApiBaseUrl));
 
             RefitSettings GetRefitSettings(IServiceProvider sp)

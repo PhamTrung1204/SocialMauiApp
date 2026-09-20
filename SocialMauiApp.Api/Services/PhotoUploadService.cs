@@ -1,20 +1,15 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SocialMauiApp.Api.Services
+﻿namespace SocialMauiApp.Api.Services
 {
     public class PhotoUploadService
     {
+        private static readonly string[] ImageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"];
+        private static readonly string[] VideoExtensions = [".mp4", ".mov", ".m4v", ".webm"];
+
+        private const long MaxImageBytes = 5 * 1024 * 1024;    // 5 MB
+        private const long MaxVideoBytes = 60 * 1024 * 1024;   // 60 MB
+
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IConfiguration _configuration;
-        private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
-        private const long _maxFileSize = 5 * 1024 * 1024; // 5MB
 
         public PhotoUploadService(IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
@@ -22,61 +17,57 @@ namespace SocialMauiApp.Api.Services
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public async Task<(string PhotoPath, string PhotoUrl)> SavePhotoAsync(IFormFile photo, params string[] folderPaths)
-        {
-            // Kiểm tra file có tồn tại và tên hợp lệ hay không
-            if (photo == null || string.IsNullOrEmpty(photo.FileName))
-                throw new ArgumentNullException(nameof(photo), "Photo file is null or invalid.");
+        public async Task<(string PhotoPath, string PhotoUrl)> SavePhotoAsync(IFormFile photo, params string[] folderPaths) =>
+            await SaveFileAsync(photo, ImageExtensions, MaxImageBytes, folderPaths);
 
-            // Kiểm tra folderPaths có hợp lệ không
-            if (folderPaths == null || !folderPaths.Any())
+        public async Task<(string VideoPath, string VideoUrl)> SaveVideoAsync(IFormFile video, params string[] folderPaths) =>
+            await SaveFileAsync(video, VideoExtensions, MaxVideoBytes, folderPaths);
+
+        public bool IsVideo(IFormFile file) =>
+            !string.IsNullOrEmpty(file.FileName)
+            && VideoExtensions.Contains(Path.GetExtension(file.FileName).ToLowerInvariant());
+
+        private async Task<(string FilePath, string FileUrl)> SaveFileAsync(
+            IFormFile file,
+            string[] allowedExtensions,
+            long maxBytes,
+            string[] folderPaths)
+        {
+            if (file is null || string.IsNullOrEmpty(file.FileName))
+                throw new ArgumentNullException(nameof(file), "File is null or invalid.");
+
+            if (folderPaths is null || folderPaths.Length == 0)
                 throw new ArgumentNullException(nameof(folderPaths), "Folder paths cannot be null or empty.");
 
-            // Kiểm tra WebRootPath đã được thiết lập chưa
             if (string.IsNullOrEmpty(_webHostEnvironment?.WebRootPath))
                 throw new InvalidOperationException("WebRootPath is not set.");
 
-            // Validate extension: chuyển về chữ thường để so sánh
-            var extension = Path.GetExtension(photo.FileName).ToLower();
-            if (!_allowedExtensions.Contains(extension))
-                throw new InvalidOperationException($"Invalid file type. Allowed types are: {string.Join(", ", _allowedExtensions)}");
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowedExtensions.Contains(extension))
+                throw new InvalidOperationException($"Invalid file type. Allowed types are: {string.Join(", ", allowedExtensions)}");
 
-            // Validate kích thước file
-            if (photo.Length > _maxFileSize)
-                throw new InvalidOperationException($"File size exceeds the limit of {_maxFileSize / (1024 * 1024)} MB.");
+            if (file.Length > maxBytes)
+                throw new InvalidOperationException($"File size exceeds the limit of {maxBytes / (1024 * 1024)} MB.");
 
-            // Xây dựng đường dẫn vật lý để lưu file
             var physicalPaths = new List<string> { _webHostEnvironment.WebRootPath };
             physicalPaths.AddRange(folderPaths);
-            var targetFolderPath = Path.Combine(physicalPaths.ToArray());
+            var targetFolderPath = Path.Combine([.. physicalPaths]);
+            Directory.CreateDirectory(targetFolderPath);
 
-            // Tạo thư mục nếu chưa tồn tại
-            if (!Directory.Exists(targetFolderPath))
-                Directory.CreateDirectory(targetFolderPath);
+            var newFileName = $"{Guid.NewGuid()}_{DateTime.UtcNow.Ticks}{extension}";
+            var fullPath = Path.Combine(targetFolderPath, newFileName);
 
-            // Tạo tên file mới duy nhất
-            var newPhotoName = $"{Guid.NewGuid()}_{DateTime.UtcNow.Ticks}{extension}";
-            var fullPhotoPath = Path.Combine(targetFolderPath, newPhotoName);
-
-            // Lưu file ảnh vào đường dẫn vật lý
-            using (var fs = new FileStream(fullPhotoPath, FileMode.Create))
+            await using (var fs = new FileStream(fullPath, FileMode.Create))
             {
-                await photo.CopyToAsync(fs);
+                await file.CopyToAsync(fs);
             }
 
-            // Lấy domain từ cấu hình
             var domainUrl = _configuration.GetValue<string>("Domain")?.TrimEnd('/');
             if (string.IsNullOrEmpty(domainUrl))
                 throw new InvalidOperationException("Domain is not configured properly.");
 
-            // Tạo URL công khai cho ảnh
             var relativePath = Path.Combine(folderPaths).Replace("\\", "/").Trim('/');
-            var photoUrl = $"{domainUrl}/{relativePath}/{newPhotoName}";
-
-            Console.WriteLine($"\ud83d\udcf8 Full Photo Path: {fullPhotoPath}");
-            Console.WriteLine($"\ud83c\udf10 Public Photo URL: {photoUrl}");
-
-            return (fullPhotoPath, photoUrl);
+            return (fullPath, $"{domainUrl}/{relativePath}/{newFileName}");
         }
     }
 }

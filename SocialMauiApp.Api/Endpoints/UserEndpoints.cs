@@ -34,6 +34,20 @@ namespace SocialMauiApp.Api.Endpoints
                 .Produces<NotificationDto[]>()
                 .WithName("GetNotifications");
 
+            userGroup.MapGet("/{userId:guid}/info", async (Guid userId, UserService userService) =>
+            {
+                var info = await userService.GetUserInfoAsync(userId);
+                return info is null ? Results.NotFound() : Results.Ok(info);
+            })
+                .Produces<UserInfoDto>()
+                .Produces(StatusCodes.Status404NotFound)
+                .WithName("GetUserInfo");
+
+            userGroup.MapGet("/{userId:guid}/posts", async (Guid userId, [FromQuery] int startIndex, [FromQuery] int pageSize, UserService userService, ClaimsPrincipal principal) =>
+                Results.Ok(await userService.GetPostsOfUserAsync(userId, principal.GetUserId(), startIndex, pageSize)))
+                .Produces<PostDto[]>()
+                .WithName("GetPostsOfUser");
+
             userGroup.MapPost("/change-password", async (ChangePasswordDto dto, UserService userService, ClaimsPrincipal principal) =>
                 Results.Ok(await userService.ChangePasswordAsync(dto, principal.GetUserId())))
                 .Produces<ApiResult<string>>()

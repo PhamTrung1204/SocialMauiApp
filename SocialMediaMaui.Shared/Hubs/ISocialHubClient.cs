@@ -20,6 +20,9 @@ namespace SocialMediaMaui.Shared.Hubs
         Task UserLocked(Guid userId);
         Task UserUnlocked(Guid userId);
         Task UserDeleted(Guid userId);
+        Task FriendRequestReceived(FriendRequestDto request);
+        Task FriendRequestAccepted(FriendRequestDto request);
+        Task FriendRemoved(FriendRequestDto request);
     }
     public record struct UserPhotoChangedDto(Guid UserId, string? PhotoUrl);
 }

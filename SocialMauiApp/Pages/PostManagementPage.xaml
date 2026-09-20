@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.PostManagementPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:SocialMauiApp.Behaviors"
     Title="Post Management"
-    BackgroundColor="#F7F9FC">
+    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
     <Grid RowDefinitions="Auto, *, *">
         <!--  Loading Indicator  -->
         <ActivityIndicator
@@ -16,13 +16,13 @@
             IsVisible="{Binding IsLoading}"
             VerticalOptions="Center"
             WidthRequest="50"
-            Color="#0052CC" />
+            Color="{StaticResource Primary}" />
 
         <!--  Header Section  -->
         <StackLayout
             Grid.Row="0"
             Padding="20,15"
-            BackgroundColor="#0052CC"
+            BackgroundColor="{StaticResource Primary}"
             Spacing="15">
             <Label
                 FontAttributes="Bold"
@@ -30,34 +30,34 @@
                 FontSize="28"
                 HorizontalOptions="Center"
                 Text="Admin Dashboard"
-                TextColor="#FFFFFF" />
+                TextColor="{StaticResource White}" />
             <Grid ColumnDefinitions="*,Auto,*,Auto">
                 <Label
                     Grid.Column="0"
                     FontFamily="Roboto"
                     FontSize="16"
                     Text="Total Posts:"
-                    TextColor="#E6F0FA" />
+                    TextColor="{StaticResource PrimarySoft}" />
                 <Label
                     Grid.Column="1"
                     Margin="5,0,15,0"
                     FontFamily="Roboto"
                     FontSize="16"
                     Text="{Binding PostCount}"
-                    TextColor="#E6F0FA" />
+                    TextColor="{StaticResource PrimarySoft}" />
                 <Label
                     Grid.Column="2"
                     FontFamily="Roboto"
                     FontSize="16"
                     Text="Total Comments:"
-                    TextColor="#E6F0FA" />
+                    TextColor="{StaticResource PrimarySoft}" />
                 <Label
                     Grid.Column="3"
                     Margin="5,0,0,0"
                     FontFamily="Roboto"
                     FontSize="16"
                     Text="{Binding CommentCount}"
-                    TextColor="#E6F0FA" />
+                    TextColor="{StaticResource PrimarySoft}" />
             </Grid>
         </StackLayout>
 
@@ -69,11 +69,11 @@
                 FontFamily="Roboto"
                 FontSize="24"
                 Text="Posts"
-                TextColor="#1A1A1A" />
+                TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
             <RefreshView
                 Command="{Binding RefreshPostsCommand}"
                 IsRefreshing="{Binding IsLoading, Mode=OneWay}"
-                RefreshColor="#0052CC">
+                RefreshColor="{StaticResource Primary}">
                 <CollectionView
                     Margin="0,0,0,10"
                     ItemsSource="{Binding Posts}"
@@ -83,8 +83,8 @@
                             <Border
                                 Margin="0,5"
                                 Padding="15"
-                                BackgroundColor="#FFFFFF"
-                                Stroke="#E0E0E0"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
+                                Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
                                 StrokeShape="RoundRectangle 8"
                                 StrokeThickness="1">
                                 <Border.GestureRecognizers>
@@ -97,24 +97,24 @@
                                             FontFamily="Roboto"
                                             FontSize="18"
                                             Text="{Binding UserName}"
-                                            TextColor="#1A1A1A" />
+                                            TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
                                         <Label
                                             FontFamily="Roboto"
                                             FontSize="16"
                                             LineBreakMode="TailTruncation"
                                             MaxLines="2"
                                             Text="{Binding Content}"
-                                            TextColor="#333333" />
+                                            TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
                                         <Label
                                             FontFamily="Roboto"
                                             FontSize="14"
                                             Text="{Binding PostedOn, StringFormat='Posted on {0:dd/MM/yyyy HH:mm}'}"
-                                            TextColor="#666666" />
+                                            TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}" />
                                     </StackLayout>
                                     <Button
                                         Grid.Column="1"
                                         Margin="10,0,0,0"
-                                        BackgroundColor="#D32F2F"
+                                        BackgroundColor="{StaticResource Danger}"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeletePostCommand}"
                                         CommandParameter="{Binding PostId}"
                                         CornerRadius="8"
@@ -122,7 +122,7 @@
                                         FontSize="14"
                                         HeightRequest="40"
                                         Text="Delete"
-                                        TextColor="#FFFFFF"
+                                        TextColor="{StaticResource White}"
                                         WidthRequest="80">
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup Name="CommonStates">
@@ -179,11 +179,11 @@
                 FontFamily="Roboto"
                 FontSize="24"
                 Text="Comments"
-                TextColor="#1A1A1A" />
+                TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
             <RefreshView
                 Command="{Binding RefreshCommentsCommand}"
                 IsRefreshing="{Binding IsRefreshingComments, Mode=OneWay}"
-                RefreshColor="#0052CC">
+                RefreshColor="{StaticResource Primary}">
                 <CollectionView
                     ItemsSource="{Binding SelectedPostComments}"
                     RemainingItemsThreshold="1"
@@ -194,8 +194,8 @@
                             <Border
                                 Margin="0,5"
                                 Padding="15"
-                                BackgroundColor="#FFFFFF"
-                                Stroke="#E0E0E0"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
+                                Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
                                 StrokeShape="RoundRectangle 8"
                                 StrokeThickness="1">
                                 <Grid ColumnDefinitions="*,Auto">
@@ -205,24 +205,24 @@
                                             FontFamily="Roboto"
                                             FontSize="18"
                                             Text="{Binding UserName}"
-                                            TextColor="#1A1A1A" />
+                                            TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
                                         <Label
                                             FontFamily="Roboto"
                                             FontSize="16"
                                             LineBreakMode="TailTruncation"
                                             MaxLines="2"
                                             Text="{Binding Content}"
-                                            TextColor="#333333" />
+                                            TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
                                         <Label
                                             FontFamily="Roboto"
                                             FontSize="14"
                                             Text="{Binding AddedOn, StringFormat='Commented on {0:dd/MM/yyyy HH:mm}'}"
-                                            TextColor="#666666" />
+                                            TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}" />
                                     </StackLayout>
                                     <Button
                                         Grid.Column="1"
                                         Margin="10,0,0,0"
-                                        BackgroundColor="#D32F2F"
+                                        BackgroundColor="{StaticResource Danger}"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCommentCommand}"
                                         CommandParameter="{Binding CommentId}"
                                         CornerRadius="8"
@@ -230,7 +230,7 @@
                                         FontSize="14"
                                         HeightRequest="40"
                                         Text="Delete"
-                                        TextColor="#FFFFFF"
+                                        TextColor="{StaticResource White}"
                                         WidthRequest="80">
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup Name="CommonStates">

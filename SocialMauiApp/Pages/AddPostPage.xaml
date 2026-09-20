@@ -1,102 +1,116 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.AddPostPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:ext="clr-namespace:SocialMauiApp.Extensions"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
-    xmlns:dto="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
-    xmlns:models="clr-namespace:SocialMauiApp.Models"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui.MediaElement"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
-    Title="Create Post"
-    Padding="15"
+    Title="{ext:Translate Post_Create}"
+    Padding="0"
     x:DataType="vm:SavePostViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}"
     Shell.BackgroundColor="{StaticResource Primary}"
     Shell.TitleColor="White">
-    <ScrollView>
-        <Grid RowDefinitions="Auto, *,Auto,Auto" RowSpacing="5">
-            <!-- Editor for content -->
-            <controls:NoBorderEditor
-                Grid.Row="1"
-                BackgroundColor="LightGoldenrodYellow"
-                Placeholder="Start typing..." 
-                PlaceholderColor="Black"
-                Text="{Binding Content}"
-                TextColor="Black"/>
-            <!-- Image display area -->
-            <Grid Grid.Row="2">
-                <Border
-                    BackgroundColor="LightSalmon"
-                    HeightRequest="250"
-                    StrokeThickness="0">
-                    <Image HeightRequest="250" Source="{Binding PhotoPath}" Aspect="AspectFill" />
+
+    <Grid RowDefinitions="*,Auto">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="14,12" Spacing="12">
+
+                <Border Style="{StaticResource FlatCardStyle}">
+                    <controls:NoBorderEditor
+                        AutoSize="TextChanges"
+                        BackgroundColor="Transparent"
+                        MinimumHeightRequest="120"
+                        Placeholder="{ext:Translate Home_ComposerPlaceholder}"
+                        Text="{Binding Content}" />
                 </Border>
-                <!-- Remove photo button -->
-                <Border
-                    Margin="2"
-                    BackgroundColor="{StaticResource Primary}"
-                    HeightRequest="40"
-                    HorizontalOptions="End"
-                    StrokeShape="RoundRectangle 5"
-                    StrokeThickness="0"
-                    VerticalOptions="Start"
-                    WidthRequest="40">
-                    <controls:WhiteImage
-                        HeightRequest="30"
-                        Source="trash.png"
-                        WidthRequest="30" />
-                    <Border.Shadow>
-                        <Shadow />
-                    </Border.Shadow>
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding RemovePhotoCommand}" />
-                    </Border.GestureRecognizers>
-                </Border>
-                <Grid.Triggers>
-                    <DataTrigger
-                        Binding="{Binding PhotoPath}"
-                        TargetType="Grid"
-                        Value="">
-                        <Setter Property="IsVisible" Value="False" />
-                    </DataTrigger>
-                </Grid.Triggers>
+
+                <!--  Photo preview  -->
+                <Grid IsVisible="{Binding HasPhoto}">
+                    <Border Padding="0" Style="{StaticResource FlatCardStyle}">
+                        <Image Aspect="AspectFill" HeightRequest="250" Source="{Binding PhotoPath}" />
+                    </Border>
+                    <Border Margin="8"
+                            Padding="0"
+                            BackgroundColor="{StaticResource Danger}"
+                            HeightRequest="38"
+                            HorizontalOptions="End"
+                            StrokeShape="RoundRectangle 19"
+                            StrokeThickness="0"
+                            VerticalOptions="Start"
+                            WidthRequest="38">
+                        <controls:WhiteImage HeightRequest="18"
+                                             HorizontalOptions="Center"
+                                             Source="trash.png"
+                                             VerticalOptions="Center"
+                                             WidthRequest="18" />
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RemovePhotoCommand}" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+
+                <!--  Video preview  -->
+                <Grid IsVisible="{Binding HasVideo}">
+                    <Border Padding="0" Style="{StaticResource FlatCardStyle}">
+                        <toolkit:MediaElement
+                            Aspect="AspectFit"
+                            HeightRequest="250"
+                            ShouldAutoPlay="False"
+                            ShouldShowPlaybackControls="True"
+                            Source="{Binding VideoPath}" />
+                    </Border>
+                    <Border Margin="8"
+                            Padding="0"
+                            BackgroundColor="{StaticResource Danger}"
+                            HeightRequest="38"
+                            HorizontalOptions="End"
+                            StrokeShape="RoundRectangle 19"
+                            StrokeThickness="0"
+                            VerticalOptions="Start"
+                            WidthRequest="38">
+                        <controls:WhiteImage HeightRequest="18"
+                                             HorizontalOptions="Center"
+                                             Source="trash.png"
+                                             VerticalOptions="Center"
+                                             WidthRequest="18" />
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RemoveVideoCommand}" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!--  Action bar  -->
+        <Border Grid.Row="1" Padding="14,10" Style="{StaticResource SurfacePanelStyle}">
+            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="8">
+
+                <Button Grid.Column="0"
+                        Command="{Binding SelectPhotoCommand}"
+                        Style="{StaticResource SmallSecondaryButtonStyle}"
+                        Text="{ext:Translate Post_Photo}" />
+
+                <Button Grid.Column="1"
+                        Command="{Binding SelectVideoCommand}"
+                        Style="{StaticResource SmallSecondaryButtonStyle}"
+                        Text="{ext:Translate Post_Video}" />
+
+                <Button Grid.Column="2"
+                        Command="{Binding SavePostCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                        Style="{StaticResource SmallButtonStyle}"
+                        Text="{ext:Translate Post_Submit}" />
             </Grid>
-            <!-- Controls for selecting photo and posting -->
-            <FlexLayout
-                Grid.Row="3"
-                Padding="0,0,2,0"
-                JustifyContent="SpaceBetween">
-                <Border
-                    Padding="15,5"
-                    Stroke="{StaticResource Primary}"
-                    StrokeShape="RoundRectangle 5">
-                    <HorizontalStackLayout Spacing="5">
-                        <controls:PrimaryColorImage
-                            HeightRequest="25"
-                            Source="photo.png"
-                            VerticalOptions="Center"
-                            WidthRequest="25" />
-                        <Label Text="Change Photo" VerticalOptions="Center">
-                            <Label.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding PhotoPath}"
-                                    TargetType="Label"
-                                    Value="">
-                                    <Setter Property="Text" Value="Add Photo" />
-                                </DataTrigger>
-                            </Label.Triggers>
-                        </Label>
-                    </HorizontalStackLayout>
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectPhotoCommand}" />
-                    </Border.GestureRecognizers>
-                </Border>
-                <Button
-                    Padding="50,0"
-                    Command="{Binding SavePostCommand}"
-                    Style="{StaticResource rounded}"
-                    Text="Post" />
-            </FlexLayout>
-        </Grid>
-    </ScrollView>
+        </Border>
+
+        <ActivityIndicator Grid.RowSpan="2"
+                           HorizontalOptions="Center"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           VerticalOptions="Center" />
+    </Grid>
 </ContentPage>

@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SocialMauiApp.Services;
+using SocialMediaMaui.Shared.Dtos;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SocialMauiApp.Converters
 {
     public class FriendshipStatusToTextConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value switch
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            LocalizationService.Instance.Get(value as string switch
             {
-                "NotFriends" => "Thêm bạn",
-                "Pending" => "Hủy lời mời",
-                "Friends" => "Bạn bè",
-                _ => "Thêm bạn"
-            };
-        }
+                FriendshipStatuses.Pending => "Friends_CancelRequest",
+                FriendshipStatuses.RequestReceived => "Friends_Accept",
+                FriendshipStatuses.Friends => "Friends_StatusFriends",
+                FriendshipStatuses.Self => "Friends_YourProfile",
+                _ => "Friends_Add"
+            });
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+            throw new NotSupportedException();
     }
 }

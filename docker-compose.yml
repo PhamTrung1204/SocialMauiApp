@@ -1,0 +1,75 @@
+name: socialmauiapp
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: socialmaui-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-socialmaui}
+      POSTGRES_USER: ${POSTGRES_USER:-socialmaui}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required, see .env.example}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-socialmaui} -d ${POSTGRES_DB:-socialmaui}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build:
+      context: .
+      dockerfile: SocialMauiApp.Api/Dockerfile
+    image: socialmauiapp-api:latest
+    container_name: socialmaui-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ConnectionStrings__SocialConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-socialmaui};Username=${POSTGRES_USER:-socialmaui};Password=${POSTGRES_PASSWORD}"
+      Database__AutoMigrate: "true"
+      Hosting__UseHttpsRedirection: ${HOSTING_USE_HTTPS_REDIRECTION:-false}
+      Domain: ${PUBLIC_BASE_URL:?PUBLIC_BASE_URL is required, see .env.example}
+      AppSettings__BaseUrl: ${PUBLIC_BASE_URL}
+      Jwt__Issuer: ${PUBLIC_BASE_URL}
+      Jwt__SecretKey: ${JWT_SECRET_KEY:?JWT_SECRET_KEY is required, see .env.example}
+      Jwt__ExpireInMinutes: ${JWT_EXPIRE_MINUTES:-60}
+      Jwt__RefreshTokenExpiryInDays: ${JWT_REFRESH_TOKEN_EXPIRY_DAYS:-30}
+      SmtpSettings__Host: ${SMTP_HOST:-smtp.gmail.com}
+      SmtpSettings__Port: ${SMTP_PORT:-587}
+      SmtpSettings__EnableSsl: ${SMTP_ENABLE_SSL:-true}
+      SmtpSettings__SenderEmail: ${SMTP_SENDER_EMAIL:-}
+      SmtpSettings__AppPassword: ${SMTP_APP_PASSWORD:-}
+    ports:
+      - "${API_PORT:-8080}:8080"
+    volumes:
+      - api-uploads:/app/wwwroot/uploads
+      - api-localcache:/app/Data
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: socialmaui-pgadmin
+    profiles: ["tools"]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@local.dev}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  postgres-data:
+  api-uploads:
+  api-localcache:
+  pgadmin-data:

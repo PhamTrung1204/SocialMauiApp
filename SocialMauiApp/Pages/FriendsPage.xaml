@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="SocialMauiApp.Pages.FriendsPage"
+    x:Name="friendsPageRoot"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:ext="clr-namespace:SocialMauiApp.Extensions"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dtos="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
+    xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
+    Title="{ext:Translate Friends_Title}"
+    x:DataType="vm:FriendsViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}"
+    Shell.BackgroundColor="{StaticResource Primary}"
+    Shell.TitleColor="White">
+
+    <Grid RowDefinitions="Auto,*" RowSpacing="0">
+
+        <!--  Thanh tìm kiếm + chuyển tab  -->
+        <Border Grid.Row="0" Padding="14,12" Style="{StaticResource SurfacePanelStyle}">
+            <VerticalStackLayout Spacing="12">
+
+                <Border Padding="8,0" Style="{StaticResource FieldStyle}">
+                    <SearchBar Placeholder="{ext:Translate Friends_SearchPlaceholder}"
+                               SearchCommand="{Binding SearchCommand}"
+                               Text="{Binding SearchText}" />
+                </Border>
+
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                    <Button Grid.Column="0"
+                            Command="{Binding SelectTabCommand}"
+                            CommandParameter="0"
+                            Style="{StaticResource ChipButtonStyle}"
+                            Text="{ext:Translate Friends_Title}"
+                            BackgroundColor="{Binding IsFriendsTab, Converter={StaticResource BoolToTabColorConverter}}"
+                            TextColor="{Binding IsFriendsTab, Converter={StaticResource BoolToTabTextColorConverter}}" />
+                    <Button Grid.Column="1"
+                            Command="{Binding SelectTabCommand}"
+                            CommandParameter="1"
+                            Style="{StaticResource ChipButtonStyle}"
+                            Text="{ext:Translate Friends_TabRequests}"
+                            BackgroundColor="{Binding IsRequestsTab, Converter={StaticResource BoolToTabColorConverter}}"
+                            TextColor="{Binding IsRequestsTab, Converter={StaticResource BoolToTabTextColorConverter}}" />
+                    <Button Grid.Column="2"
+                            Command="{Binding SelectTabCommand}"
+                            CommandParameter="2"
+                            Style="{StaticResource ChipButtonStyle}"
+                            Text="{ext:Translate Friends_TabSuggestions}"
+                            BackgroundColor="{Binding IsSuggestionsTab, Converter={StaticResource BoolToTabColorConverter}}"
+                            TextColor="{Binding IsSuggestionsTab, Converter={StaticResource BoolToTabTextColorConverter}}" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <RefreshView Grid.Row="1" Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <Grid>
+
+                <!--  Bạn bè  -->
+                <CollectionView IsVisible="{Binding IsFriendsTab}" ItemsSource="{Binding Friends}">
+                    <CollectionView.EmptyView>
+                        <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Friends_EmptyFriends}" />
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dtos:FriendshipDto">
+                            <Border Style="{StaticResource CardStyle}">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                    <Border Grid.Column="0" Style="{StaticResource AvatarStyle}">
+                                        <Image Aspect="AspectFill" Source="{Binding FriendPhotoUrl}" />
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                        <Label Style="{StaticResource CardTitleStyle}" Text="{Binding FriendName}" />
+                                        <Label Style="{StaticResource CaptionTextStyle}" Text="{ext:Translate Friends_Title}" />
+                                    </VerticalStackLayout>
+                                    <Button Grid.Column="2"
+                                            x:DataType="{x:Null}"
+                                            Command="{Binding Source={x:Reference friendsPageRoot}, Path=BindingContext.RemoveFriendCommand}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource SmallDangerButtonStyle}"
+                                            Text="{ext:Translate Friends_Remove}" />
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer x:DataType="{x:Null}"
+                                                              Command="{Binding Source={x:Reference friendsPageRoot}, Path=BindingContext.OpenProfileCommand}"
+                                                              CommandParameter="{Binding FriendId}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!--  Lời mời đến  -->
+                <CollectionView IsVisible="{Binding IsRequestsTab}" ItemsSource="{Binding Requests}">
+                    <CollectionView.EmptyView>
+                        <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Friends_EmptyRequests}" />
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dtos:FriendshipDto">
+                            <Border Style="{StaticResource CardStyle}">
+                                <VerticalStackLayout Spacing="12">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                        <Border Grid.Column="0" Style="{StaticResource AvatarStyle}">
+                                            <Image Aspect="AspectFill" Source="{Binding FriendPhotoUrl}" />
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                            <Label Style="{StaticResource CardTitleStyle}" Text="{Binding FriendName}" />
+                                            <Label Style="{StaticResource CaptionTextStyle}"
+                                                   Text="{Binding CreatedAt, Converter={StaticResource HumanizedTimeConverter}}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                        <Button Grid.Column="0"
+                                                x:DataType="{x:Null}"
+                                                Command="{Binding Source={x:Reference friendsPageRoot}, Path=BindingContext.AcceptCommand}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource SmallButtonStyle}"
+                                                Text="{ext:Translate Friends_Accept}" />
+                                        <Button Grid.Column="1"
+                                                x:DataType="{x:Null}"
+                                                Command="{Binding Source={x:Reference friendsPageRoot}, Path=BindingContext.RejectCommand}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource SmallSecondaryButtonStyle}"
+                                                Text="{ext:Translate Friends_Decline}" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!--  Gợi ý  -->
+                <CollectionView IsVisible="{Binding IsSuggestionsTab}" ItemsSource="{Binding Suggestions}">
+                    <CollectionView.EmptyView>
+                        <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Friends_EmptySuggestions}" />
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dtos:UserDto">
+                            <Border Style="{StaticResource CardStyle}">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                    <Border Grid.Column="0" Style="{StaticResource AvatarStyle}">
+                                        <Image Aspect="AspectFill" Source="{Binding PhotoUrl}" />
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                        <Label Style="{StaticResource CardTitleStyle}" Text="{Binding Name}" />
+                                        <Label LineBreakMode="TailTruncation"
+                                               Style="{StaticResource CaptionTextStyle}"
+                                               Text="{Binding Email}" />
+                                    </VerticalStackLayout>
+                                    <Button Grid.Column="2"
+                                            x:DataType="{x:Null}"
+                                            Command="{Binding Source={x:Reference friendsPageRoot}, Path=BindingContext.AddFriendCommand}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource SmallButtonStyle}"
+                                            Text="{ext:Translate Friends_Add}" />
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer x:DataType="{x:Null}"
+                                                              Command="{Binding Source={x:Reference friendsPageRoot}, Path=BindingContext.OpenProfileCommand}"
+                                                              CommandParameter="{Binding Id}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <ActivityIndicator HorizontalOptions="Center"
+                                   IsRunning="{Binding IsBusy}"
+                                   IsVisible="{Binding IsBusy}"
+                                   VerticalOptions="Center" />
+            </Grid>
+        </RefreshView>
+    </Grid>
+</ContentPage>

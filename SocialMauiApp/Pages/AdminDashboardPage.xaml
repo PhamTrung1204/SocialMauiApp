@@ -1,233 +1,216 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.AdminDashboardPage"
+    x:Name="adminPageRoot"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:converters="clr-namespace:SocialMauiApp.Converters"
+    xmlns:dtos="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
+    xmlns:ext="clr-namespace:SocialMauiApp.Extensions"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
-    Title="Admin Dashboard"
-    BackgroundColor="#F5F7FA">
+    Title="{ext:Translate Admin_Title}"
+    x:DataType="vm:AdminViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}"
+    Shell.BackgroundColor="{StaticResource Primary}"
+    Shell.TitleColor="White">
 
-    <!-- Toolbar for Logout -->
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Command="{Binding LogoutCommand}"
-            Order="Primary"
-            Priority="0"
-            Text="Logout" />
+        <ToolbarItem Command="{Binding LogoutCommand}" Order="Primary" Priority="0" Text="{ext:Translate Profile_Logout}" />
     </ContentPage.ToolbarItems>
 
-    <Grid Padding="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Grid RowDefinitions="Auto,Auto,*,Auto" RowSpacing="10">
 
-        <!-- Summary Section -->
-        <StackLayout
-            Grid.Row="0"
-            Margin="0,0,0,20"
-            x:DataType="vm:AdminViewModel">
-            <Label
-                FontAttributes="Bold"
-                FontFamily="UbuntuBold"
-                FontSize="24"
-                Text="Overview"
-                TextColor="#2D3748" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <!-- Post Count -->
-                <Border
-                    Grid.Column="0"
-                    Margin="5"
-                    Padding="15"
-                    BackgroundColor="White"
-                    Stroke="#E2E8F0"
-                    StrokeShape="RoundRectangle 12"
-                    StrokeThickness="1">
-                    <StackLayout>
-                        <Label
-                            FontFamily="UbuntuRegular"
-                            FontSize="16"
-                            Text="Total Posts"
-                            TextColor="#4A5568" />
-                        <Label
-                            FontAttributes="Bold"
-                            FontFamily="UbuntuBold"
-                            FontSize="22"
-                            Text="{Binding PostCount}"
-                            TextColor="#2D3748" />
-                    </StackLayout>
+        <!--  ===== Stats =====  -->
+        <VerticalStackLayout Grid.Row="0" Padding="14,12,14,0" Spacing="10">
+            <Label Style="{StaticResource SectionTitleStyle}" Text="{ext:Translate Admin_Overview}" />
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+                <Border Grid.Column="0" Padding="10" Style="{StaticResource FlatCardStyle}">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Style="{StaticResource CaptionTextStyle}" Text="{ext:Translate Admin_Posts}" />
+                        <Label FontAttributes="Bold" FontSize="20" Text="{Binding PostCount}" TextColor="{StaticResource Primary}" />
+                    </VerticalStackLayout>
                 </Border>
-                <!-- Comment Count -->
-                <Border
-                    Grid.Column="1"
-                    Margin="5"
-                    Padding="15"
-                    BackgroundColor="White"
-                    Stroke="#E2E8F0"
-                    StrokeShape="RoundRectangle 12"
-                    StrokeThickness="1">
-                    <StackLayout>
-                        <Label
-                            FontFamily="UbuntuRegular"
-                            FontSize="16"
-                            Text="Total Comments"
-                            TextColor="#4A5568" />
-                        <Label
-                            FontAttributes="Bold"
-                            FontFamily="UbuntuBold"
-                            FontSize="22"
-                            Text="{Binding CommentCount}"
-                            TextColor="#2D3748" />
-                    </StackLayout>
+                <Border Grid.Column="1" Padding="10" Style="{StaticResource FlatCardStyle}">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Style="{StaticResource CaptionTextStyle}" Text="{ext:Translate Admin_Comments}" />
+                        <Label FontAttributes="Bold" FontSize="20" Text="{Binding CommentCount}" TextColor="{StaticResource Tertiary}" />
+                    </VerticalStackLayout>
                 </Border>
-                <!-- User Count -->
-                <Border
-                    Grid.Column="2"
-                    Margin="5"
-                    Padding="15"
-                    BackgroundColor="White"
-                    Stroke="#E2E8F0"
-                    StrokeShape="RoundRectangle 12"
-                    StrokeThickness="1">
-                    <StackLayout>
-                        <Label
-                            FontFamily="UbuntuRegular"
-                            FontSize="16"
-                            Text="Total Users"
-                            TextColor="#4A5568" />
-                        <Label
-                            FontAttributes="Bold"
-                            FontFamily="UbuntuBold"
-                            FontSize="22"
-                            Text="{Binding UserCount}"
-                            TextColor="#2D3748" />
-                    </StackLayout>
+                <Border Grid.Column="2" Padding="10" Style="{StaticResource FlatCardStyle}">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Style="{StaticResource CaptionTextStyle}" Text="{ext:Translate Admin_Users}" />
+                        <Label FontAttributes="Bold" FontSize="20" Text="{Binding UserCount}" TextColor="{StaticResource Success}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="3" Padding="10" Style="{StaticResource FlatCardStyle}">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Style="{StaticResource CaptionTextStyle}" Text="{ext:Translate Admin_Likes}" />
+                        <Label FontAttributes="Bold" FontSize="20" Text="{Binding LikeCount}" TextColor="{StaticResource Like}" />
+                    </VerticalStackLayout>
                 </Border>
             </Grid>
-        </StackLayout>
+        </VerticalStackLayout>
 
-        <!-- Navigation Button -->
-        <StackLayout
-            Grid.Row="1"
-            Margin="0,0,0,20"
-            Orientation="Horizontal"
-            Spacing="10">
-            <Button
-                Padding="10,5"
-                BackgroundColor="#3182CE"
-                Command="{Binding NavigateToPostManagementCommand}"
-                CornerRadius="8"
-                FontFamily="UbuntuBold"
-                Text="Manage Post"
-                TextColor="White" />
-        </StackLayout>
+        <!--  ===== Tabs + filters =====  -->
+        <VerticalStackLayout Grid.Row="1" Padding="14,0" Spacing="10">
 
-        <!-- User List with RefreshView -->
-        <RefreshView
-            Grid.Row="2"
-            Command="{Binding LoadDashboardCommand}"
-            IsRefreshing="{Binding IsLoading, Mode=OneWay}"
-            RefreshColor="#3182CE">
-            <CollectionView
-                BackgroundColor="Transparent"
-                ItemsSource="{Binding Users}"
-                SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
-                SelectionMode="Single">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            Margin="0,5"
-                            Padding="10"
-                            BackgroundColor="White"
-                            Stroke="#E2E8F0"
-                            StrokeShape="RoundRectangle 12"
-                            StrokeThickness="1">
-                            <Grid ColumnDefinitions="Auto,*">
-                                <!-- User Avatar -->
-                                <Image
-                                    Aspect="AspectFill"
-                                    HeightRequest="50"
-                                    Source="{Binding PhotoUrl}"
-                                    VerticalOptions="Center"
-                                    WidthRequest="50">
-                                    <Image.Clip>
-                                        <RoundRectangleGeometry CornerRadius="25" Rect="0,0,50,50" />
-                                    </Image.Clip>
-                                </Image>
-                                <!-- User Info -->
-                                <StackLayout
-                                    Grid.Column="1"
-                                    Padding="10,0"
-                                    VerticalOptions="Center">
-                                    <Label
-                                        FontFamily="UbuntuBold"
-                                        FontSize="16"
-                                        Text="{Binding Name}"
-                                        TextColor="#2D3748" />
-                                    <Label
-                                        FontFamily="UbuntuRegular"
-                                        FontSize="14"
-                                        Text="{Binding Email}"
-                                        TextColor="#4A5568" />
-                                    <Label
-                                        FontFamily="UbuntuRegular"
-                                        FontSize="12"
-                                        Text="{Binding Role, StringFormat='Role: {0}'}"
-                                        TextColor="#718096" />
-                                    <Label
-                                        FontFamily="UbuntuRegular"
-                                        FontSize="12"
-                                        Text="{Binding IsLocked, StringFormat='Status: {0:Locked|Active}'}"
-                                        TextColor="{Binding IsLocked, Converter={StaticResource BoolToColorConverter}}" />
-                                </StackLayout>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="8">
+                <Button Grid.Column="0"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="0"
+                        Style="{StaticResource ChipButtonStyle}"
+                        Text="{ext:Translate Admin_TabUsers}"
+                        BackgroundColor="{Binding IsUsersTab, Converter={StaticResource BoolToTabColorConverter}}"
+                        TextColor="{Binding IsUsersTab, Converter={StaticResource BoolToTabTextColorConverter}}" />
+                <Button Grid.Column="1"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="1"
+                        Style="{StaticResource ChipButtonStyle}"
+                        Text="{ext:Translate Admin_TabComments}"
+                        BackgroundColor="{Binding IsCommentsTab, Converter={StaticResource BoolToTabColorConverter}}"
+                        TextColor="{Binding IsCommentsTab, Converter={StaticResource BoolToTabTextColorConverter}}" />
+                <Button Grid.Column="2"
+                        Command="{Binding NavigateToPostManagementCommand}"
+                        Style="{StaticResource SmallSecondaryButtonStyle}"
+                        Text="{ext:Translate Admin_ManagePosts}" />
+            </Grid>
+
+            <Border IsVisible="{Binding IsUsersTab}" Padding="8,0" Style="{StaticResource FieldStyle}">
+                <SearchBar Placeholder="{ext:Translate Admin_SearchPlaceholder}"
+                           SearchCommand="{Binding SearchCommand}"
+                           Text="{Binding SearchText}" />
+            </Border>
+
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8" IsVisible="{Binding IsUsersTab}">
+                <Button Grid.Column="0"
+                        Command="{Binding FilterRoleCommand}"
+                        Style="{StaticResource ChipButtonStyle}"
+                        Text="{ext:Translate Admin_FilterAll}"
+                        BackgroundColor="{Binding IsAllRoles, Converter={StaticResource BoolToTabColorConverter}}"
+                        TextColor="{Binding IsAllRoles, Converter={StaticResource BoolToTabTextColorConverter}}" />
+                <Button Grid.Column="1"
+                        Command="{Binding FilterRoleCommand}"
+                        CommandParameter="Admin"
+                        Style="{StaticResource ChipButtonStyle}"
+                        Text="{ext:Translate Admin_FilterAdmin}"
+                        BackgroundColor="{Binding IsAdminRole, Converter={StaticResource BoolToTabColorConverter}}"
+                        TextColor="{Binding IsAdminRole, Converter={StaticResource BoolToTabTextColorConverter}}" />
+                <Button Grid.Column="2"
+                        Command="{Binding FilterRoleCommand}"
+                        CommandParameter="Client"
+                        Style="{StaticResource ChipButtonStyle}"
+                        Text="{ext:Translate Admin_FilterClient}"
+                        BackgroundColor="{Binding IsClientRole, Converter={StaticResource BoolToTabColorConverter}}"
+                        TextColor="{Binding IsClientRole, Converter={StaticResource BoolToTabTextColorConverter}}" />
+            </Grid>
+        </VerticalStackLayout>
+
+        <!--  ===== Lists =====  -->
+        <RefreshView Grid.Row="2" Command="{Binding LoadDashboardCommand}" IsRefreshing="{Binding IsLoading, Mode=OneWay}">
+            <Grid>
+                <CollectionView IsVisible="{Binding IsUsersTab}"
+                                ItemsSource="{Binding Users}"
+                                SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
+                                SelectionMode="Single">
+                    <CollectionView.EmptyView>
+                        <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Admin_EmptyUsers}" />
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dtos:UserDto">
+                            <Border Margin="14,5" Style="{StaticResource FlatCardStyle}">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                    <Border Grid.Column="0" Style="{StaticResource AvatarStyle}">
+                                        <Image Aspect="AspectFill" Source="{Binding PhotoUrl}" />
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                        <Label Style="{StaticResource CardTitleStyle}" Text="{Binding Name}" />
+                                        <Label LineBreakMode="TailTruncation" Style="{StaticResource MutedTextStyle}" Text="{Binding Email}" />
+                                        <Label Style="{StaticResource CaptionTextStyle}" Text="{Binding Role, StringFormat='Role: {0}'}" />
+                                    </VerticalStackLayout>
+                                    <Border Grid.Column="2"
+                                            Padding="8,3"
+                                            BackgroundColor="{Binding IsLocked, Converter={StaticResource BoolToColorConverter}}"
+                                            StrokeShape="RoundRectangle 10"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Center">
+                                        <Label FontAttributes="Bold"
+                                               FontSize="11"
+                                               Text="{Binding IsLocked, Converter={StaticResource LockStatusConverter}}"
+                                               TextColor="White" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <CollectionView IsVisible="{Binding IsCommentsTab}" ItemsSource="{Binding Comments}">
+                    <CollectionView.EmptyView>
+                        <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Admin_EmptyComments}" />
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dtos:CommentDto">
+                            <Border Margin="14,5" Style="{StaticResource FlatCardStyle}">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                    <Border Grid.Column="0" Style="{StaticResource AvatarSmallStyle}" VerticalOptions="Start">
+                                        <Image Aspect="AspectFill" Source="{Binding UserPhotoUrl}" />
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                        <Label Style="{StaticResource CardTitleStyle}" Text="{Binding UserName}" />
+                                        <Label Style="{StaticResource BodyTextStyle}" Text="{Binding Content}" />
+                                        <Label Style="{StaticResource CaptionTextStyle}"
+                                               Text="{Binding AddedOn, Converter={StaticResource HumanizedTimeConverter}}" />
+                                    </VerticalStackLayout>
+                                    <Button Grid.Column="2"
+                                            x:DataType="{x:Null}"
+                                            Command="{Binding Source={x:Reference adminPageRoot}, Path=BindingContext.DeleteCommentCommand}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource SmallDangerButtonStyle}"
+                                            Text="{ext:Translate Common_Delete}"
+                                            VerticalOptions="Start" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <ActivityIndicator HorizontalOptions="Center"
+                                   IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   VerticalOptions="Center" />
+            </Grid>
         </RefreshView>
 
-        <!-- Action Buttons -->
-        <StackLayout
-            Grid.Row="3"
-            Margin="0,10"
-            HorizontalOptions="End"
-            Orientation="Horizontal"
-            Spacing="10">
-            <Button
-                Padding="10,5"
-                BackgroundColor="#DD6B20"
-                Command="{Binding ToggleUserLockCommand}"
-                CornerRadius="8"
-                FontFamily="UbuntuBold"
-                IsEnabled="{Binding SelectedUser, Converter={StaticResource NullToBoolConverter}}"
-                Text="Lock/Unlock"
-                TextColor="White" />
-            <Button
-                Padding="10,5"
-                BackgroundColor="#E53E3E"
-                Command="{Binding DeleteUserCommand}"
-                CornerRadius="8"
-                FontFamily="UbuntuBold"
-                IsEnabled="{Binding SelectedUser, Converter={StaticResource NullToBoolConverter}}"
-                Text="Delete User"
-                TextColor="White" />
-        </StackLayout>
+        <!--  ===== Pagination + user actions =====  -->
+        <VerticalStackLayout Grid.Row="3" Padding="14,0,14,12" Spacing="8">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                <Button Grid.Column="0"
+                        Command="{Binding PreviousPageCommand}"
+                        IsEnabled="{Binding CanGoPrevious}"
+                        Style="{StaticResource SmallSecondaryButtonStyle}"
+                        Text="{ext:Translate Admin_Previous}" />
+                <Label Grid.Column="1"
+                       HorizontalTextAlignment="Center"
+                       Style="{StaticResource MutedTextStyle}"
+                       Text="{Binding Page, StringFormat='Page {0}'}"
+                       VerticalOptions="Center" />
+                <Button Grid.Column="2"
+                        Command="{Binding NextPageCommand}"
+                        Style="{StaticResource SmallSecondaryButtonStyle}"
+                        Text="{ext:Translate Admin_Next}" />
+            </Grid>
 
-        <!-- Loading Indicator -->
-        <ActivityIndicator
-            HorizontalOptions="Center"
-            IsRunning="{Binding IsLoading}"
-            IsVisible="{Binding IsLoading}"
-            VerticalOptions="Center"
-            Color="#3182CE" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="8" IsVisible="{Binding IsUsersTab}">
+                <Button Grid.Column="0"
+                        Command="{Binding ToggleUserLockCommand}"
+                        IsEnabled="{Binding SelectedUser, Converter={StaticResource NullToBoolConverter}}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="{ext:Translate Admin_LockUnlock}" />
+                <Button Grid.Column="1"
+                        Command="{Binding DeleteUserCommand}"
+                        IsEnabled="{Binding SelectedUser, Converter={StaticResource NullToBoolConverter}}"
+                        Style="{StaticResource DangerButtonStyle}"
+                        Text="{ext:Translate Admin_DeleteUser}" />
+            </Grid>
+        </VerticalStackLayout>
     </Grid>
 </ContentPage>

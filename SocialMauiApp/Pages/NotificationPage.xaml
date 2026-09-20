@@ -1,44 +1,56 @@
-<ContentPage
+﻿<ContentPage
     x:Class="SocialMauiApp.Pages.NotificationPage"
     x:Name="notificationPageRoot"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:ext="clr-namespace:SocialMauiApp.Extensions"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:dtos="clr-namespace:SocialMediaMaui.Shared.Dtos;assembly=SocialMediaMaui.Shared"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
-    xmlns:converters="clr-namespace:SocialMauiApp.Converters"
-    Title="Notification"
+    Title="{ext:Translate Notifications_Title}"
     x:DataType="vm:NotificationViewModel"
-    BackgroundColor="{StaticResource Gray100}"
+    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}"
     Shell.BackgroundColor="{StaticResource Primary}"
     Shell.TitleColor="White">
 
     <RefreshView Command="{Binding RefreshNotificationsCommand}" IsRefreshing="{Binding IsRefreshing}">
-        <Grid>
-            <CollectionView ItemsSource="{Binding Notifications}"
-                            RemainingItemsThreshold="10"
-                            RemainingItemsThresholdReachedCommand="{Binding FetchNotificationCommand}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="dtos:NotificationDto">
-                        <Border Margin="0,5"
-                                Padding="10"
-                                BackgroundColor="White"
-                                StrokeThickness="0">
-                            <VerticalStackLayout Spacing="5">
-                                <Label FontSize="12"
-                                       Text="{Binding When, Converter={StaticResource HumanizedTimeConverter }}"
-                                       TextColor="DarkGray" />
-                                <Label Text="{Binding Text}" TextColor="DarkGray"/>
+        <CollectionView ItemsSource="{Binding Notifications}"
+                        RemainingItemsThreshold="10"
+                        RemainingItemsThresholdReachedCommand="{Binding FetchNotificationCommand}">
+            <CollectionView.EmptyView>
+                <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Notifications_Empty}" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dtos:NotificationDto">
+                    <Border Style="{StaticResource CardStyle}">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Border Grid.Column="0"
+                                    Padding="0"
+                                    BackgroundColor="{StaticResource PrimarySoft}"
+                                    HeightRequest="40"
+                                    StrokeShape="RoundRectangle 20"
+                                    StrokeThickness="0"
+                                    VerticalOptions="Start"
+                                    WidthRequest="40">
+                                <Image HeightRequest="18"
+                                       HorizontalOptions="Center"
+                                       Source="bell.png"
+                                       VerticalOptions="Center"
+                                       WidthRequest="18" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                <Label Style="{StaticResource BodyTextStyle}" Text="{Binding Text}" />
+                                <Label Style="{StaticResource CaptionTextStyle}"
+                                       Text="{Binding When, Converter={StaticResource HumanizedTimeConverter}}" />
                             </VerticalStackLayout>
-                            <Border.GestureRecognizers>
-                                <!-- Đảm bảo x:DataType được vô hiệu trên TapGestureRecognizer -->
+                            <Grid.GestureRecognizers>
                                 <TapGestureRecognizer x:DataType="{x:Null}"
-                                    Command="{Binding Source={x:Reference notificationPageRoot}, Path=BindingContext.OpenPostCommand}"
-                                    CommandParameter="{Binding PostId}" />
-                            </Border.GestureRecognizers>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
+                                                      Command="{Binding Source={x:Reference notificationPageRoot}, Path=BindingContext.OpenPostCommand}"
+                                                      CommandParameter="{Binding PostId}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </RefreshView>
 </ContentPage>

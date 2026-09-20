@@ -39,7 +39,18 @@ namespace SocialMauiApp.Models
         private string? _content;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasPhoto))]
+        [NotifyPropertyChangedFor(nameof(PostTemplateContentViewName))]
         private string? _photoUrl;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasVideo))]
+        [NotifyPropertyChangedFor(nameof(PostTemplateContentViewName))]
+        private string? _videoUrl;
+
+        public bool HasPhoto => !string.IsNullOrWhiteSpace(PhotoUrl);
+
+        public bool HasVideo => !string.IsNullOrWhiteSpace(VideoUrl);
 
         [ObservableProperty]
         private string? _commentInput;
@@ -72,7 +83,7 @@ namespace SocialMauiApp.Models
         }
 
         public string PostTemplateContentViewName =>
-            string.IsNullOrWhiteSpace(PhotoUrl) ? "WithNoImage" :
+            !HasPhoto && !HasVideo ? "WithNoImage" :
             string.IsNullOrEmpty(Content) ? "ImageOnly" : "WithImage";
 
         [ObservableProperty]
@@ -156,6 +167,7 @@ namespace SocialMauiApp.Models
                 UserPhotoUrl = dto.UserPhotoUrl,
                 Content = dto.Content,
                 PhotoUrl = dto.PhotoUrl,
+                VideoUrl = dto.VideoUrl,
                 PostedOn = dto.PostedOn,
                 ModifiedOn = dto.ModifiedOn,
                 IsLiked = dto.IsLiked,

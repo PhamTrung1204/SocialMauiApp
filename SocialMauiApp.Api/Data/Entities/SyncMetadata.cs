@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SocialMauiApp.Api.Data.Entities
+﻿namespace SocialMauiApp.Api.Data.Entities
 {
     public class SyncMetadata
     {
         public int Id { get; set; }
         public DateTime LastSyncTime { get; set; }
-        [Timestamp] // Đánh dấu thuộc tính này là token đồng thời
-        public byte[] RowVersion { get; set; } // Thêm thuộc tính này cho kiểm soát đồng thời
+
+        // Token đồng thời do ứng dụng quản lý: hoạt động giống nhau trên cả
+        // PostgreSQL và SQLite (SQL Server rowversion không có tương đương).
+        public Guid ConcurrencyToken { get; set; }
     }
 }

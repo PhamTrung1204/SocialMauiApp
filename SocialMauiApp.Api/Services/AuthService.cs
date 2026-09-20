@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SocialMauiApp.Api.Constants;
 using SocialMauiApp.Api.Data;
 using SocialMauiApp.Api.Data.Entities;
 using SocialMediaMaui.Shared.Dtos;
@@ -51,6 +52,7 @@ namespace SocialMauiApp.Api.Services
                 var verificationToken = Guid.NewGuid().ToString();
                 existingUser.VerificationToken = verificationToken;
                 existingUser.VerificationTokenExpiry = DateTime.UtcNow.AddHours(48);
+                _context.Users.Update(existingUser);
                 await _context.SaveChangesAsync();
 
                 _logger.LogDebug("Generated verification token for unverified email {Email}: {Token}", dto.Email, verificationToken);
@@ -70,7 +72,7 @@ namespace SocialMauiApp.Api.Services
                 {
                     Email = dto.Email,
                     Name = dto.Name,
-                    Role = "Client",
+                    Role = Roles.Client,
                     EmailConfirmed = false
                 };
                 user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
@@ -150,8 +152,10 @@ namespace SocialMauiApp.Api.Services
 
             var jwt = GenerateJwtToken(user);
             var refreshToken = GenerateRefreshToken();
-            user.RefreshToken = refreshToken;
+            user.RefreshToken = HashToken(refreshToken);
             user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(_configuration.GetValue<int>("Jwt:RefreshTokenExpiryInDays", 30));
+            // DataContext chạy NoTracking nên thiếu Update() thì SaveChanges không ghi gì.
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
             var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl, user.Role);
@@ -163,17 +167,30 @@ namespace SocialMauiApp.Api.Services
         {
             _logger.LogInformation("Attempting to refresh token.");
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == dto.RefreshToken);
+            if (string.IsNullOrWhiteSpace(dto.RefreshToken))
+            {
+                return ApiResult<LoginResponseDto>.Fail("Refresh token invalid or expired.");
+            }
+
+            var presentedHash = HashToken(dto.RefreshToken);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == presentedHash);
             if (user == null || user.RefreshTokenExpiry < DateTime.UtcNow)
             {
                 _logger.LogWarning("Refresh token invalid or expired.");
                 return ApiResult<LoginResponseDto>.Fail("Refresh token invalid or expired.");
             }
 
+            if (user.IsLocked)
+            {
+                _logger.LogWarning("Refresh refused: account {Email} is locked.", user.Email);
+                return ApiResult<LoginResponseDto>.Fail("This account is locked.");
+            }
+
             var jwt = GenerateJwtToken(user);
             var newRefreshToken = GenerateRefreshToken();
-            user.RefreshToken = newRefreshToken;
+            user.RefreshToken = HashToken(newRefreshToken);
             user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(_configuration.GetValue<int>("Jwt:RefreshTokenExpiryInDays", 30));
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
             var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Email, user.PhotoUrl, user.Role);
@@ -298,6 +315,7 @@ namespace SocialMauiApp.Api.Services
 
                 try
                 {
+                    _context.Users.Update(user);
                     await _context.SaveChangesAsync();
                     _logger.LogInformation("New token {NewToken} saved for user {Email}.", newToken, user.Email);
                     await SendVerificationEmail(user.Email, newToken);
@@ -487,10 +505,16 @@ namespace SocialMauiApp.Api.Services
 
         private string GenerateRefreshToken()
         {
-            var random = new Random();
-            var bytes = new byte[32];
-            random.NextBytes(bytes);
+            // System.Random không an toàn về mật mã -> token có thể đoán được.
+            var bytes = System.Security.Cryptography.RandomNumberGenerator.GetBytes(32);
             return Convert.ToBase64String(bytes);
+        }
+
+        // Refresh token được lưu dưới dạng băm: rò rỉ CSDL không cho phép mạo danh phiên.
+        private string HashToken(string token)
+        {
+            var hash = System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(token));
+            return Convert.ToBase64String(hash);
         }
 
         private async Task SendResetPasswordEmail(string email, string resetCode)

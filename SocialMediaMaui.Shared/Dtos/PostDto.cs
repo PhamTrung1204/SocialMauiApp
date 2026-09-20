@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json.Serialization;
 
 namespace SocialMediaMaui.Shared.Dtos
@@ -11,6 +11,7 @@ namespace SocialMediaMaui.Shared.Dtos
         public string? UserPhotoUrl { get; set; }
         public string? Content { get; set; }
         public string? PhotoUrl { get; set; }
+        public string? VideoUrl { get; set; }
         public DateTime? PostedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
         [JsonIgnore]
@@ -19,8 +20,7 @@ namespace SocialMediaMaui.Shared.Dtos
             get
             {
                 var postTime = PostedOn ?? ModifiedOn;
-                var now = DateTime.Now;
-                var timeSpan = now - postTime;
+                var timeSpan = DateTime.UtcNow - DateTime.SpecifyKind(postTime, DateTimeKind.Utc);
 
                 if (timeSpan.TotalMinutes < 1)
                     return "Just posted";
@@ -31,7 +31,9 @@ namespace SocialMediaMaui.Shared.Dtos
                 if (timeSpan.TotalDays < 7)
                     return $"{(int)timeSpan.TotalDays} days ago";
 
-                return postTime.ToString("MMM dd yyyy", new CultureInfo("en-US"));
+                return DateTime.SpecifyKind(postTime, DateTimeKind.Utc)
+                    .ToLocalTime()
+                    .ToString("MMM dd yyyy", new CultureInfo("en-US"));
             }
         }
         public bool IsLiked { get; set; }
@@ -39,11 +41,17 @@ namespace SocialMediaMaui.Shared.Dtos
         public int CommentCount { get; set; }
         public bool IsBookmarked { get; set; }
         [JsonIgnore]
+        public bool HasVideo => !string.IsNullOrWhiteSpace(VideoUrl);
+
+        [JsonIgnore]
+        public bool HasPhoto => !string.IsNullOrWhiteSpace(PhotoUrl);
+
+        [JsonIgnore]
         public string PostTemplateContentViewName
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(PhotoUrl))
+                if (!HasPhoto && !HasVideo)
                 {
                     return "WithNoImage";
                 }

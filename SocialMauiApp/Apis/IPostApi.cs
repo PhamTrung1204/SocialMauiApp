@@ -10,7 +10,7 @@ namespace SocialMauiApp.Apis
     {
         [Multipart]
         [Post("/api/posts/save")]
-        Task<ApiResult<PostDto>> SavePostAsync([AliasAs("photo")] StreamPart? photo, [AliasAs("serializedSavePostDto")] string serializedSavePostDto);
+        Task<ApiResult<PostDto>> SavePostAsync([AliasAs("photo")] StreamPart? photo, [AliasAs("video")] StreamPart? video, [AliasAs("serializedSavePostDto")] string serializedSavePostDto);
 
         [Get("/api/posts")]
         Task<PostDto[]> GetPostsAsync(int startIndex, int pageSize);

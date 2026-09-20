@@ -13,6 +13,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Theme.xaml" />
                 <ResourceDictionary>
                     <Style x:Key="formLabel" TargetType="Label">
                         <Setter Property="FontAttributes" Value="Bold" />
@@ -46,6 +47,7 @@
                     <converters:DateTimeToHumanizedConverter x:Key="HumanizedTimeConverter"/>
                     <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
                     <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+                    <converters:LockStatusConverter x:Key="LockStatusConverter" />
                     <converters:CountToBoolConverter x:Key="CountToBoolConverter"/>
                     <converters:BooleanToSourceConverter x:Key="BooleanToSourceConverter" />
                     <converters:BooleanToStringConverter x:Key="BooleanToStringConverter" />
@@ -53,6 +55,9 @@
                     <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
                     <converters:LevelToMarginConverter x:Key="LevelToMarginConverter"/>
                     <converters:ContentLengthToFontSizeConverter x:Key="ContentLengthToFontSizeConverter"/>
+                    <converters:FriendshipStatusToTextConverter x:Key="FriendshipStatusToTextConverter"/>
+                    <converters:BoolToTabColorConverter x:Key="BoolToTabColorConverter"/>
+                    <converters:BoolToTabTextColorConverter x:Key="BoolToTabTextColorConverter"/>
                     <behaviors:AnimationBehavior x:Key="AnimationBehavior"/>
                     <behaviors:AutoFocusBehavior x:Key="AutoFocusBehavior"/>
                 </ResourceDictionary>

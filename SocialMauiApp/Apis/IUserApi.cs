@@ -20,6 +20,12 @@ public interface IUserApi
     [Get("/api/user/notifications")]
     Task<NotificationDto[]> GetNotificationAsync([Header("Authorization")] string token, int startIndex, int pageSize);
 
+    [Get("/api/user/{userId}/info")]
+    Task<UserInfoDto> GetUserInfoAsync([Header("Authorization")] string token, Guid userId);
+
+    [Get("/api/user/{userId}/posts")]
+    Task<PostDto[]> GetPostsOfUserAsync([Header("Authorization")] string token, Guid userId, int startIndex, int pageSize);
+
     [Post("/api/user/change-password")]
     Task<ApiResult<string>> ChangePasswordAsync([Header("Authorization")] string token, [Body] ChangePasswordDto dto);
 

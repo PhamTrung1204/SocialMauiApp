@@ -1,206 +1,177 @@
-﻿//using CommunityToolkit.Mvvm.ComponentModel;
-//using CommunityToolkit.Mvvm.Input;
-//using SocialMauiApp.Apis;
-//using SocialMauiApp.Models;
-//using SocialMauiApp.Services;
-//using SocialMediaMaui.Shared.Dtos;
-//using System;
-//using System.Collections.ObjectModel;
-//using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using SocialMauiApp.Apis;
+using SocialMauiApp.Models;
+using SocialMauiApp.Services;
+using SocialMediaMaui.Shared.Dtos;
+using System.Collections.ObjectModel;
 
-//namespace SocialMauiApp.ViewModel
-//{
-//    [QueryProperty(nameof(TargetUserId), "userId")]
-//    public partial class UserProfileViewModel : BasePostViewModel
-//    {
-//        private readonly IUserApi _userApi;
-//        private readonly AuthService _authService;
+namespace SocialMauiApp.ViewModel
+{
+    [QueryProperty(nameof(TargetUserId), "userId")]
+    public partial class UserProfileViewModel : BasePostViewModel
+    {
+        private const int PageSize = 10;
 
-//        [ObservableProperty]
-//        private Guid _targetUserId;
+        private readonly IUserApi _userApi;
+        private readonly IFriendApi _friendApi;
+        private readonly AuthService _authService;
 
-//        [ObservableProperty]
-//        private string _targetUserName;
+        [ObservableProperty]
+        private Guid _targetUserId;
 
-//        [ObservableProperty]
-//        private string _targetUserPhotoUrl;
+        [ObservableProperty]
+        private string _targetUserName = string.Empty;
 
-//        [ObservableProperty]
-//        private string _friendshipStatus;
+        [ObservableProperty]
+        private string? _targetUserPhotoUrl;
 
-//        [ObservableProperty]
-//        private bool _isDataLoaded;
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanManageFriendship))]
+        [NotifyPropertyChangedFor(nameof(IsIncomingRequest))]
+        private string _friendshipStatus = FriendshipStatuses.NotFriends;
 
-//        [ObservableProperty]
-//        private bool _hasError;
+        [ObservableProperty]
+        private bool _isDataLoaded;
 
-//        [ObservableProperty]
-//        private string _errorMessage;
+        [ObservableProperty]
+        private bool _hasError;
 
-//        public ObservableCollection<PostModel> UserPosts { get; } = new();
+        [ObservableProperty]
+        private string _errorMessage = string.Empty;
 
-//        public UserProfileViewModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, IUserApi userApi, AuthService authService)
-//            : base(postApi, realtimeUpdatesService)
-//        {
-//            _userApi = userApi ?? throw new ArgumentNullException(nameof(userApi));
-//            _authService = authService ?? throw new ArgumentNullException(nameof(authService));
-//        }
+        public bool CanManageFriendship => FriendshipStatus != FriendshipStatuses.Self;
 
-//        partial void OnTargetUserIdChanged(Guid value)
-//        {
-//            if (value != Guid.Empty)
-//            {
-//                LoadUserProfileAsync();
-//            }
-//            else
-//            {
-//                HasError = true;
-//                ErrorMessage = "ID người dùng không hợp lệ.";
-//            }
-//        }
+        public bool IsIncomingRequest => FriendshipStatus == FriendshipStatuses.RequestReceived;
 
-//        private async void LoadUserProfileAsync()
-//        {
-//            IsBusy = true;
-//            IsDataLoaded = false;
-//            HasError = false;
-//            ErrorMessage = string.Empty;
+        public ObservableCollection<PostModel> UserPosts { get; } = new();
 
-//            try
-//            {
-//                if (string.IsNullOrEmpty(_authService.Token))
-//                {
-//                    HasError = true;
-//                    ErrorMessage = "Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.";
-//                    return;
-//                }
+        public UserProfileViewModel(
+            IPostApi postApi,
+            RealtimeUpdatesService realtimeUpdatesService,
+            IUserApi userApi,
+            IFriendApi friendApi,
+            AuthService authService)
+            : base(postApi, realtimeUpdatesService)
+        {
+            _userApi = userApi;
+            _friendApi = friendApi;
+            _authService = authService;
+        }
 
-//                var token = "Bearer " + _authService.Token;
+        partial void OnTargetUserIdChanged(Guid value)
+        {
+            if (value == Guid.Empty)
+            {
+                HasError = true;
+                ErrorMessage = LocalizationService.Instance.Get("Error_InvalidUserId");
+                return;
+            }
+            _ = LoadUserProfileAsync();
+        }
 
-//                // Lấy thông tin người dùng
-//                var userInfo = await _userApi.GetUserInfoAsync(token, TargetUserId);
-//                if (userInfo == null)
-//                {
-//                    HasError = true;
-//                    ErrorMessage = "Không thể tải thông tin người dùng.";
-//                    return;
-//                }
-//                TargetUserName = userInfo.Name ?? "Không xác định";
-//                TargetUserPhotoUrl = userInfo.PhotoUrl ?? string.Empty;
+        [RelayCommand]
+        private async Task LoadUserProfileAsync()
+        {
+            if (string.IsNullOrEmpty(_authService.Token))
+            {
+                HasError = true;
+                ErrorMessage = LocalizationService.Instance.Get("Error_SessionInvalid");
+                return;
+            }
 
-//                // Lấy trạng thái kết bạn
-//                var statusResult = await _userApi.GetFriendshipStatusAsync(token, TargetUserId);
-//                if (statusResult.IsSuccess && statusResult.Data != null)
-//                {
-//                    FriendshipStatus = statusResult.Data.Status ?? "NotFriends";
-//                }
-//                else
-//                {
-//                    FriendshipStatus = "NotFriends";
-//                    HasError = true;
-//                    ErrorMessage = statusResult.Error ?? "Không thể lấy trạng thái kết bạn.";
-//                    return;
-//                }
+            IsDataLoaded = false;
+            HasError = false;
+            ErrorMessage = string.Empty;
 
-//                // Lấy bài viết
-//                var posts = await _userApi.GetUserPostsAsync(token, TargetUserId, 0, 10);
-//                UserPosts.Clear();
-//                if (posts != null)
-//                {
-//                    foreach (var post in posts)
-//                    {
-//                        if (post != null)
-//                        {
-//                            UserPosts.Add(PostModel.FromDto(post, PostsApi, _realtimeUpdatesService, _authService));
-//                        }
-//                    }
-//                }
+            await MakeApiCall(async () =>
+            {
+                var token = "Bearer " + _authService.Token;
 
-//                IsDataLoaded = true;
-//            }
-//            catch (Exception ex)
-//            {
-//                HasError = true;
-//                ErrorMessage = $"Lỗi khi tải hồ sơ: {ex.Message}";
-//            }
-//            finally
-//            {
-//                IsBusy = false;
-//            }
-//        }
+                var userInfo = await _userApi.GetUserInfoAsync(token, TargetUserId);
+                TargetUserName = userInfo?.Name ?? string.Empty;
+                TargetUserPhotoUrl = userInfo?.PhotoUrl;
 
-//        [RelayCommand]
-//        private async Task ManageFriendshipAsync()
-//        {
-//            if (string.IsNullOrEmpty(_authService.Token))
-//            {
-//                await ShowErrorAlertAsync("Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.");
-//                return;
-//            }
+                var statusResult = await _friendApi.GetFriendshipStatusAsync(TargetUserId);
+                FriendshipStatus = statusResult.IsSuccess && statusResult.Data is not null
+                    ? statusResult.Data.Status
+                    : FriendshipStatuses.NotFriends;
 
-//            var token = "Bearer " + _authService.Token;
-//            try
-//            {
-//                switch (FriendshipStatus)
-//                {
-//                    case "NotFriends":
-//                        var sendResult = await _userApi.SendFriendRequestAsync(token, TargetUserId);
-//                        if (sendResult.IsSuccess && sendResult.Data != null)
-//                        {
-//                            FriendshipStatus = sendResult.Data.Status ?? "Pending";
-//                            await ToastAsync("Yêu cầu kết bạn đã được gửi.");
-//                        }
-//                        else
-//                        {
-//                            await ShowErrorAlertAsync(sendResult.Error ?? "Không thể gửi yêu cầu kết bạn.");
-//                        }
-//                        break;
+                var posts = await _userApi.GetPostsOfUserAsync(token, TargetUserId, 0, PageSize);
+                UserPosts.Clear();
+                foreach (var post in posts ?? Array.Empty<PostDto>())
+                {
+                    UserPosts.Add(PostModel.FromDto(post, PostsApi, _realtimeUpdatesService!, _authService));
+                }
 
-//                    case "Pending":
-//                        var cancelResult = await _userApi.CancelFriendRequestAsync(token, TargetUserId);
-//                        if (cancelResult.IsSuccess && cancelResult.Data != null)
-//                        {
-//                            FriendshipStatus = cancelResult.Data.Status ?? "NotFriends";
-//                            await ToastAsync("Đã hủy yêu cầu kết bạn.");
-//                        }
-//                        else
-//                        {
-//                            await ShowErrorAlertAsync(cancelResult.Error ?? "Không thể hủy yêu cầu kết bạn.");
-//                        }
-//                        break;
+                IsDataLoaded = true;
+            });
+        }
 
-//                    case "Friends":
-//                        var confirm = await Shell.Current.DisplayAlert("Xác nhận", "Bạn có chắc muốn hủy kết bạn?", "Có", "Không");
-//                        if (confirm)
-//                        {
-//                            var unfriendResult = await _userApi.RemoveFriendAsync(token, TargetUserId);
-//                            if (unfriendResult.IsSuccess && unfriendResult.Data != null)
-//                            {
-//                                FriendshipStatus = unfriendResult.Data.Status ?? "NotFriends";
-//                                await ToastAsync("Đã hủy kết bạn thành công.");
-//                            }
-//                            else
-//                            {
-//                                await ShowErrorAlertAsync(unfriendResult.Error ?? "Không thể hủy kết bạn.");
-//                            }
-//                        }
-//                        break;
+        [RelayCommand]
+        private async Task ManageFriendshipAsync()
+        {
+            await MakeApiCall(async () =>
+            {
+                ApiResult<FriendshipStatusDto> result;
 
-//                    default:
-//                        await ShowErrorAlertAsync("Trạng thái kết bạn không hợp lệ.");
-//                        break;
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                await ShowErrorAlertAsync($"Lỗi khi quản lý kết bạn: {ex.Message}");
-//            }
-//        }
+                switch (FriendshipStatus)
+                {
+                    case FriendshipStatuses.NotFriends:
+                        result = await _friendApi.SendFriendRequestAsync(TargetUserId);
+                        if (result.IsSuccess) await ToastAsync(LocalizationService.Instance.Get("Friends_RequestSent"));
+                        break;
 
-//        [RelayCommand]
-//        private async Task RetryLoadAsync()
-//        {
-//            await Task.Run(LoadUserProfileAsync);
-//        }
-//    }
-//}
+                    case FriendshipStatuses.Pending:
+                        result = await _friendApi.CancelFriendRequestAsync(TargetUserId);
+                        if (result.IsSuccess) await ToastAsync(LocalizationService.Instance.Get("Friends_RequestCancelled"));
+                        break;
+
+                    case FriendshipStatuses.RequestReceived:
+                        result = await _friendApi.AcceptFriendRequestAsync(TargetUserId);
+                        if (result.IsSuccess) await ToastAsync(LocalizationService.Instance.Get("Friends_RequestAccepted"));
+                        break;
+
+                    case FriendshipStatuses.Friends:
+                        if (!await Shell.Current.DisplayAlert(LocalizationService.Instance.Get("Common_Confirm"), LocalizationService.Instance.Get("Friends_ConfirmUnfriendPlain"), LocalizationService.Instance.Get("Common_Yes"), LocalizationService.Instance.Get("Common_No")))
+                        {
+                            return;
+                        }
+                        result = await _friendApi.RemoveFriendAsync(TargetUserId);
+                        if (result.IsSuccess) await ToastAsync(LocalizationService.Instance.Get("Friends_Unfriended"));
+                        break;
+
+                    default:
+                        return;
+                }
+
+                if (result.IsSuccess && result.Data is not null)
+                {
+                    FriendshipStatus = result.Data.Status;
+                }
+                else
+                {
+                    await ShowErrorAlertAsync(result.Error ?? LocalizationService.Instance.Get("Error_FriendshipUpdate"));
+                }
+            });
+        }
+
+        [RelayCommand]
+        private async Task RejectRequestAsync()
+        {
+            await MakeApiCall(async () =>
+            {
+                var result = await _friendApi.RejectFriendRequestAsync(TargetUserId);
+                if (result.IsSuccess && result.Data is not null)
+                {
+                    FriendshipStatus = result.Data.Status;
+                    await ToastAsync(LocalizationService.Instance.Get("Friends_RequestDeclined"));
+                }
+                else
+                {
+                    await ShowErrorAlertAsync(result.Error ?? LocalizationService.Instance.Get("Error_DeclineRequest"));
+                }
+            });
+        }
+    }
+}

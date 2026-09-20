@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using SocialMauiApp.Api.Constants;
 using SocialMauiApp.Api.Services;
 using SocialMediaMaui.Shared.Dtos;
 using System.Security.Claims;
@@ -13,8 +14,7 @@ namespace SocialMauiApp.Api.Endpoints
         public static IEndpointRouteBuilder MapAdminEndpoints(this IEndpointRouteBuilder app)
         {
             var adminGroup = app.MapGroup("/api/admin")
-                .RequireAuthorization()
-                .RequireAuthorization(policy => policy.RequireRole("Admin"))
+                .RequireAuthorization(policy => policy.RequireRole(Roles.Admin))
                 .WithTags("Admin");
 
             adminGroup.MapGet("/dashboard", async ([FromServices] AdminService adminService) =>

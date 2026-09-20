@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace SocialMauiApp.Api.Data.Entities
@@ -15,6 +15,9 @@ namespace SocialMauiApp.Api.Data.Entities
         [Comment("Physical path of the image")]
         public string? PhotoPath { get; set; }
         public string? PhotoUrl { get; set; }
+        [Comment("Physical path of the video")]
+        public string? VideoPath { get; set; }
+        public string? VideoUrl { get; set; }
         public DateTime PostedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }

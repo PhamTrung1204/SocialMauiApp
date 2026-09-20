@@ -11,8 +11,9 @@ namespace SocialMauiApp.Apis
         [Get("/api/admin/dashboard")]
         Task<DashboardDto> GetDashboardAsync();
 
+        // Tên tham số phải là searchText: endpoint bind theo tên, "search" bị bỏ qua.
         [Get("/api/admin/users")]
-        Task<UserDto[]> GetUsersAsync([Query] string? search, [Query] string? role, [Query] int page, [Query] int pageSize);
+        Task<UserDto[]> GetUsersAsync([AliasAs("searchText")] string? searchText, [Query] string? role, [Query] int page, [Query] int pageSize);
 
         [Post("/api/admin/users/{userId}/lock")]
         Task<ApiResult> LockUserAsync(Guid userId);

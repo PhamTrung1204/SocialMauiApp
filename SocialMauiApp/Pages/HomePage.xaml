@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:ext="clr-namespace:SocialMauiApp.Extensions"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -24,7 +25,7 @@
             <Grid
                 Grid.Column="2"
                 Margin="0,0,15,0"
-                ColumnDefinitions="Auto,Auto,Auto"
+                ColumnDefinitions="Auto,Auto,Auto,Auto"
                 ColumnSpacing="20"
                 VerticalOptions="Center">
                 <controls:WhiteImage
@@ -57,6 +58,16 @@
                 <controls:WhiteImage
                     Grid.Column="2"
                     HeightRequest="25"
+                    Source="user.png"
+                    WidthRequest="25">
+                    <controls:WhiteImage.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="GoToFriends" />
+                    </controls:WhiteImage.GestureRecognizers>
+                </controls:WhiteImage>
+
+                <controls:WhiteImage
+                    Grid.Column="3"
+                    HeightRequest="25"
                     Source="personal.png"
                     WidthRequest="25">
                     <controls:WhiteImage.GestureRecognizers>
@@ -70,50 +81,44 @@
     <RefreshView Command="{Binding RefreshPostsCommand}" IsRefreshing="{Binding IsRefreshing}">
         <Grid Padding="0" RowDefinitions="Auto,*">
             <Grid
-                Padding="5"
-                Margin="0,0,0,5"
-                BackgroundColor="White"
-                ColumnDefinitions="Auto, Auto"
-                ColumnSpacing="5">
-                <Border
-                    Grid.Column="0"
-                    HeightRequest="50"
-                    StrokeShape="RoundRectangle 30"
-                    WidthRequest="50">
+                Padding="12,10"
+                Margin="0,0,0,6"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
+                ColumnDefinitions="Auto,*"
+                ColumnSpacing="10">
+                <Border Grid.Column="0" Style="{StaticResource AvatarStyle}">
                     <Image
                         Aspect="AspectFill"
-                        HeightRequest="50"
+                        HeightRequest="48"
                         HorizontalOptions="Center"
                         Source="{Binding User.Photo}"
                         VerticalOptions="Center"
-                        WidthRequest="50">
-                        <Image.Clip>
-                            <EllipseGeometry
-                                Center="25,25"
-                                RadiusX="25"
-                                RadiusY="25" />
-                        </Image.Clip>
-                    </Image>
+                        WidthRequest="48" />
                 </Border>
-                <!-- New post entry at top -->
+
+                <!--  Ô soạn bài: giãn theo bề rộng màn hình thay vì cố định 325px  -->
                 <Border
-                    Grid.Row="0"
                     Grid.Column="1"
-                    Margin="0,5,0,5"
-                    Padding="10,5,0,0"
-                    BackgroundColor="{DynamicResource White}"
-                    HeightRequest="50"
-                    StrokeShape="RoundRectangle 25"
-                    WidthRequest="325">
+                    Padding="14,0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSurfaceAlt}, Dark={StaticResource DarkSurfaceAlt}}"
+                    HeightRequest="48"
+                    HorizontalOptions="Fill"
+                    Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
+                    StrokeShape="RoundRectangle 24"
+                    StrokeThickness="1">
                     <controls:NoUnderLine
-                        FontSize="16"
-                        Placeholder="What's on your mind?"
-                        PlaceholderColor="{DynamicResource Gray500}"
-                        ReturnType="Done">
+                        FontSize="15"
+                        Placeholder="{ext:Translate Home_ComposerPlaceholder}"
+                        PlaceholderColor="{AppThemeBinding Light={StaticResource TextMutedLight}, Dark={StaticResource TextMutedDark}}"
+                        ReturnType="Done"
+                        VerticalOptions="Center">
                         <controls:NoUnderLine.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
                         </controls:NoUnderLine.GestureRecognizers>
                     </controls:NoUnderLine>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
+                    </Border.GestureRecognizers>
                 </Border>
             </Grid>
 
@@ -123,8 +128,11 @@
                 ItemsSource="{Binding Posts}"
                 RemainingItemsThreshold="2"
                 RemainingItemsThresholdReachedCommand="{Binding FetchPostsCommand}">
+                <CollectionView.EmptyView>
+                    <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Home_EmptyFeed}" />
+                </CollectionView.EmptyView>
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
+                    <LinearItemsLayout ItemSpacing="0" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
             </CollectionView>
 

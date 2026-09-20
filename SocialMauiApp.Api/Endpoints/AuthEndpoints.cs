@@ -1,0 +1,92 @@
+﻿using SocialMauiApp.Api.Services;
+using SocialMediaMaui.Shared.Dtos;
+
+namespace SocialMauiApp.Api.Endpoints
+{
+    public static class AuthEndpoints
+    {
+        public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder app)
+        {
+            var authGroup = app.MapGroup("/api/auth")
+                .RequireRateLimiting("auth")
+                .WithTags("Auth");
+
+            authGroup.MapPost("/register", async (RegisterDto dto, AuthService authService) =>
+                Results.Ok(await authService.RegisterAsync(dto)))
+                .Produces<ApiResult<Guid>>()
+                .WithName("Auth-Register");
+
+            authGroup.MapPost("/register/{userId:guid}/add-photo", async (Guid userId, IFormFile photo, AuthService authService) =>
+                Results.Ok(await authService.UploadPhotoAsync(userId, photo)))
+                .DisableAntiforgery()
+                .Produces<ApiResult>()
+                .WithName("Auth-AddPhoto-to-User");
+
+            authGroup.MapPost("/login", async (LoginDto dto, AuthService authService) =>
+                Results.Ok(await authService.LoginAsync(dto)))
+                .Produces<ApiResult<LoginResponseDto>>()
+                .WithName("Auth-Login");
+
+            authGroup.MapGet("/validate", async (HttpContext context, AuthService authService) =>
+            {
+                var authHeader = context.Request.Headers["Authorization"].ToString();
+                if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                    return Results.Unauthorized();
+
+                var token = authHeader.Substring("Bearer ".Length).Trim();
+                var result = await authService.ValidateTokenAsync(token);
+                return Results.Ok(result);
+            })
+                .Produces<ApiResult<LoggedInUser>>()
+                .WithName("Auth-ValidateToken");
+
+            authGroup.MapGet("/verify-email", async (string token, AuthService authService) =>
+            {
+                var result = await authService.VerifyEmailAsync(token);
+                if (result.IsSuccess)
+                {
+                    return Results.Redirect(result.Data);
+                }
+                return Results.BadRequest(new { message = result.Error });
+            })
+                .Produces<ApiResult<string>>()
+                .WithName("Auth-VerifyEmail");
+
+            authGroup.MapGet("/verify-reset-token", async (string token, AuthService authService) =>
+            {
+                var result = await authService.VerifyResetTokenAsync(token);
+                return Results.Ok(result);
+            })
+                .Produces<ApiResult<string>>()
+                .WithName("Auth-VerifyResetToken");
+
+            authGroup.MapPost("/send-verification-email", async (SendVerificationEmailDto dto, AuthService authService) =>
+                Results.Ok(await authService.SendVerificationEmailAsync(dto)))
+                .Produces<ApiResult<string>>()
+                .WithName("Auth-SendVerificationEmail");
+
+            authGroup.MapPost("/request-password-reset", async (PasswordResetRequestDto dto, AuthService authService) =>
+                Results.Ok(await authService.RequestPasswordResetAsync(dto)))
+                .Produces<ApiResult<string>>()
+                .WithName("Auth-RequestPasswordReset");
+
+            authGroup.MapPost("/reset-password", async (ResetPasswordDto dto, AuthService authService) =>
+            {
+                var result = await authService.ResetPasswordAsync(dto);
+                return Results.Ok(result);
+            })
+                .Produces<ApiResult<string>>()
+                .WithName("Auth-ResetPassword");
+
+            authGroup.MapPost("/refresh-token", async (RefreshTokenDto dto, AuthService authService) =>
+            {
+                var result = await authService.RefreshTokenAsync(dto);
+                return Results.Ok(result);
+            })
+                .Produces<ApiResult<LoginResponseDto>>()
+                .WithName("Auth-RefreshToken");
+
+            return app;
+        }
+    }
+}

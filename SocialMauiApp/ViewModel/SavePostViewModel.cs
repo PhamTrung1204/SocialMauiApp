@@ -23,6 +23,7 @@ namespace SocialMauiApp.ViewModel
         private readonly RealtimeUpdatesService _realtimeUpdatesService;
         private readonly AuthService _authService;
         private string? _existingPhotoUrl;
+        private string? _existingVideoUrl;
 
         public SavePostViewModel(IPostApi postApi, RealtimeUpdatesService realtimeUpdatesService, AuthService authService)
         {
@@ -38,7 +39,16 @@ namespace SocialMauiApp.ViewModel
         private string _content = string.Empty;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasPhoto))]
         private string _photoPath = string.Empty;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasVideo))]
+        private string _videoPath = string.Empty;
+
+        public bool HasPhoto => !string.IsNullOrWhiteSpace(PhotoPath);
+
+        public bool HasVideo => !string.IsNullOrWhiteSpace(VideoPath);
 
         [RelayCommand]
         private async Task SelectPhotoAsync()
@@ -107,6 +117,7 @@ namespace SocialMauiApp.ViewModel
             await stream.CopyToAsync(fileStream);
 
             Console.WriteLine($"[PickFromDeviceAsync] File saved at: {tempFile}, exists: {File.Exists(tempFile)} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+            VideoPath = string.Empty;
             PhotoPath = tempFile;
         }
 
@@ -129,7 +140,62 @@ namespace SocialMauiApp.ViewModel
             await stream.CopyToAsync(fileStream);
 
             Console.WriteLine($"[CapturePhotoAsync] File saved at: {tempFile}, exists: {File.Exists(tempFile)} at {DateTime.Now:HH:mm:ss} +07, 31/05/2025.");
+            VideoPath = string.Empty;
             PhotoPath = tempFile;
+        }
+
+        [RelayCommand]
+        private async Task SelectVideoAsync()
+        {
+            if (IsBusy) return;
+            IsBusy = true;
+            try
+            {
+                var fileResult = await MediaPicker.Default.PickVideoAsync(new MediaPickerOptions { Title = LocalizationService.Instance.Get("Post_SelectVideoTitle") });
+                if (fileResult is null)
+                {
+                    await ToastAsync(LocalizationService.Instance.Get("Post_NoVideoSelected"));
+                    return;
+                }
+
+                var fileName = string.IsNullOrWhiteSpace(fileResult.FileName) ? $"{Guid.NewGuid()}.mp4" : fileResult.FileName;
+                var tempFile = Path.Combine(FileSystem.CacheDirectory, fileName);
+
+                using (var stream = await fileResult.OpenReadAsync())
+                using (var fileStream = File.Create(tempFile))
+                {
+                    await stream.CopyToAsync(fileStream);
+                }
+
+                var sizeInMb = new FileInfo(tempFile).Length / (1024d * 1024d);
+                if (sizeInMb > 60)
+                {
+                    File.Delete(tempFile);
+                    await ToastAsync(LocalizationService.Instance.Format("Post_VideoTooLarge", sizeInMb.ToString("F1")));
+                    return;
+                }
+
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    // Một bài viết chỉ mang một loại media.
+                    PhotoPath = string.Empty;
+                    VideoPath = tempFile;
+                });
+            }
+            catch (Exception ex)
+            {
+                await ToastAsync(LocalizationService.Instance.Format("Post_VideoPickError", ex.Message));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task RemoveVideo()
+        {
+            await MainThread.InvokeOnMainThreadAsync(() => VideoPath = string.Empty);
         }
 
         [RelayCommand]
@@ -149,9 +215,9 @@ namespace SocialMauiApp.ViewModel
             IsBusy = true;
             try
             {
-                if (string.IsNullOrWhiteSpace(Content) && string.IsNullOrWhiteSpace(PhotoPath))
+                if (string.IsNullOrWhiteSpace(Content) && !HasPhoto && !HasVideo)
                 {
-                    await ToastAsync("Either content or photo is required");
+                    await ToastAsync(LocalizationService.Instance.Get("Post_NeedContent"));
                     return;
                 }
 
@@ -162,26 +228,19 @@ namespace SocialMauiApp.ViewModel
 
                 await MakeApiCall(async () =>
                 {
-                    StreamPart? photoStreamPart = null;
-                    if (!string.IsNullOrWhiteSpace(PhotoPath) && File.Exists(PhotoPath) && !PhotoPath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-                    {
-                        var fileName = Path.GetFileName(PhotoPath);
-                        using var fileStream = File.OpenRead(PhotoPath);
-                        var memoryStream = new MemoryStream();
-                        await fileStream.CopyToAsync(memoryStream);
-                        memoryStream.Position = 0;
-                        photoStreamPart = new StreamPart(memoryStream, fileName, "image/jpeg");
-                    }
+                    var photoStreamPart = await BuildStreamPartAsync(PhotoPath, "image/jpeg");
+                    var videoStreamPart = await BuildStreamPartAsync(VideoPath, ContentTypeForVideo(VideoPath));
 
                     var dto = new SavePostDto
                     {
                         Content = Content,
                         PostId = Post?.PostId ?? default,
-                        IsExistingPhotoRemoved = string.IsNullOrWhiteSpace(PhotoPath) && !string.IsNullOrWhiteSpace(_existingPhotoUrl)
+                        IsExistingPhotoRemoved = !HasPhoto && !string.IsNullOrWhiteSpace(_existingPhotoUrl),
+                        IsExistingVideoRemoved = !HasVideo && !string.IsNullOrWhiteSpace(_existingVideoUrl)
                     };
 
                     var serializedDto = JsonSerializer.Serialize(dto);
-                    var result = await _postApi.SavePostAsync(photoStreamPart, serializedDto);
+                    var result = await _postApi.SavePostAsync(photoStreamPart, videoStreamPart, serializedDto);
                     if (!result.IsSuccess)
                     {
                         await ShowErrorAlertAsync(result.Error);
@@ -193,6 +252,7 @@ namespace SocialMauiApp.ViewModel
                         PostId = result.Data.PostId,
                         Content = result.Data.Content,
                         PhotoUrl = result.Data.PhotoUrl,
+                        VideoUrl = result.Data.VideoUrl,
                         UserId = _authService.User?.Id ?? result.Data.UserId,
                         UserName = _authService.User?.Name ?? result.Data.UserName ?? "Unknown",
                         UserPhotoUrl = _authService.User?.PhotoUrl ?? result.Data.UserPhotoUrl ?? "default_avatar.png",
@@ -240,6 +300,7 @@ namespace SocialMauiApp.ViewModel
                     {
                         Content = string.Empty;
                         PhotoPath = string.IsNullOrWhiteSpace(saved.PhotoUrl) ? string.Empty : saved.PhotoUrl;
+                        VideoPath = string.IsNullOrWhiteSpace(saved.VideoUrl) ? string.Empty : saved.VideoUrl;
                         Post = saved;
                         OnPropertyChanged(nameof(Content));
                         OnPropertyChanged(nameof(PhotoPath));
@@ -283,6 +344,33 @@ namespace SocialMauiApp.ViewModel
             }
         }
 
+        private async Task<StreamPart?> BuildStreamPartAsync(string path, string contentType)
+        {
+            // Đường dẫn http là media đã có sẵn trên server -> không upload lại.
+            if (string.IsNullOrWhiteSpace(path)
+                || path.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                || !File.Exists(path))
+            {
+                return null;
+            }
+
+            var memoryStream = new MemoryStream();
+            await using (var fileStream = File.OpenRead(path))
+            {
+                await fileStream.CopyToAsync(memoryStream);
+            }
+            memoryStream.Position = 0;
+            return new StreamPart(memoryStream, Path.GetFileName(path), contentType);
+        }
+
+        private string ContentTypeForVideo(string path) =>
+            Path.GetExtension(path).ToLowerInvariant() switch
+            {
+                ".webm" => "video/webm",
+                ".mov" => "video/quicktime",
+                _ => "video/mp4"
+            };
+
         partial void OnPostChanged(PostModel? value)
         {
             if (value is not null)
@@ -291,9 +379,12 @@ namespace SocialMauiApp.ViewModel
                 {
                     Content = value.Content ?? string.Empty;
                     PhotoPath = value.PhotoUrl ?? string.Empty;
+                    VideoPath = value.VideoUrl ?? string.Empty;
                     _existingPhotoUrl = value.PhotoUrl;
+                    _existingVideoUrl = value.VideoUrl;
                     OnPropertyChanged(nameof(Content));
                     OnPropertyChanged(nameof(PhotoPath));
+                    OnPropertyChanged(nameof(VideoPath));
                 });
             }
         }

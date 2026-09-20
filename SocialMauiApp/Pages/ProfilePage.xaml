@@ -1,199 +1,162 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.ProfilePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:ext="clr-namespace:SocialMauiApp.Extensions"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SocialMauiApp.Controls"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
-    Title="My Profile"
+    Title="{ext:Translate Profile_Title}"
     x:DataType="vm:ProfileViewModel"
-    BackgroundColor="{StaticResource Gray100}"
+    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}"
     Shell.BackgroundColor="{StaticResource Primary}"
     Shell.TitleColor="White">
+
     <ContentPage.ToolbarItems>
         <ToolbarItem
             Command="{Binding LogoutCommand}"
             IconImageSource="power_off.png"
             Order="Primary"
-            Text="Logout" />
+            Text="{ext:Translate Profile_Logout}" />
     </ContentPage.ToolbarItems>
 
     <Grid RowDefinitions="Auto,*">
-        <VerticalStackLayout
-            Grid.Row="0"
-            Padding="15,10,15,8"
-            Spacing="5">
-            <!-- Profile Header with Dropmenu -->
-            <Grid>
-                <Border
-                    BackgroundColor="White"
-                    HeightRequest="100"
-                    HorizontalOptions="Center"
-                    StrokeShape="RoundRectangle 50"
-                    WidthRequest="100">
-                    <Image
-                        Aspect="AspectFill"
-                        HeightRequest="90"
-                        HorizontalOptions="Center"
-                        Source="{Binding User.Photo}"
-                        VerticalOptions="Center"
-                        WidthRequest="90">
-                        <Image.Clip>
-                            <EllipseGeometry
-                                Center="45,45"
-                                RadiusX="45"
-                                RadiusY="45" />
-                        </Image.Clip>
-                    </Image>
-                </Border>
-                <Border
-                    x:Name="ProfileMenuTrigger"
-                    Margin="50,50,-5,-20"
-                    BackgroundColor="{StaticResource Primary}"
-                    HeightRequest="28"
-                    HorizontalOptions="Center"
-                    StrokeShape="RoundRectangle 14"
-                    VerticalOptions="Center"
-                    WidthRequest="28">
-                    <controls:WhiteImage
-                        HeightRequest="14"
-                        HorizontalOptions="Center"
-                        Source="pencil.png"
-                        VerticalOptions="Center"
-                        WidthRequest="14" />
-                    <Border.Shadow>
-                        <Shadow
-                            Brush="{StaticResource Primary}"
-                            Opacity="0.5"
-                            Radius="4"
-                            Offset="0,2" />
-                    </Border.Shadow>
-                </Border>
-                <!-- Đặt GestureRecognizers trước nội dung con -->
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ToggleProfileMenuCommand}" />
-                </Grid.GestureRecognizers>
+
+        <VerticalStackLayout Grid.Row="0" Spacing="0">
+
+            <!--  Dải gradient + avatar  -->
+            <Grid RowDefinitions="70,Auto">
+                <BoxView Grid.Row="0" Background="{StaticResource BrandGradientBrush}" />
+
+                <VerticalStackLayout Grid.Row="0"
+                                     Grid.RowSpan="2"
+                                     Margin="0,18,0,0"
+                                     Spacing="8">
+
+                    <Grid HeightRequest="110" HorizontalOptions="Center" WidthRequest="120">
+                        <Border HorizontalOptions="Center" Style="{StaticResource AvatarLargeStyle}">
+                            <Image Aspect="AspectFill"
+                                   HeightRequest="104"
+                                   Source="{Binding User.Photo}"
+                                   WidthRequest="104" />
+                        </Border>
+
+                        <Border x:Name="ProfileMenuTrigger"
+                                Padding="0"
+                                BackgroundColor="{StaticResource Primary}"
+                                HeightRequest="32"
+                                HorizontalOptions="End"
+                                StrokeShape="RoundRectangle 16"
+                                StrokeThickness="2"
+                                Stroke="White"
+                                VerticalOptions="End"
+                                WidthRequest="32">
+                            <controls:WhiteImage HeightRequest="14"
+                                                 HorizontalOptions="Center"
+                                                 Source="pencil.png"
+                                                 VerticalOptions="Center"
+                                                 WidthRequest="14" />
+                        </Border>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleProfileMenuCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="1">
+                        <Label HorizontalTextAlignment="Center"
+                               Style="{StaticResource SectionTitleStyle}"
+                               Text="{Binding User.Name}" />
+                        <Label HorizontalTextAlignment="Center"
+                               Style="{StaticResource MutedTextStyle}"
+                               Text="{Binding User.Email}" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
             </Grid>
 
-            <!-- Dropmenu -->
-            <Border
-                x:Name="ProfileMenu"
-                Margin="0,-50,0,0"
-                Padding="10"
-                BackgroundColor="White"
-                HorizontalOptions="Center"
-                IsVisible="{Binding IsProfileMenuOpen}"
-                Stroke="{StaticResource Gray200}"
-                StrokeShape="RoundRectangle 10"
-                VerticalOptions="End"
-                WidthRequest="200">
-                <VerticalStackLayout Spacing="5">
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="16"
-                        Text="{Binding User.Name}"
-                        TextColor="{StaticResource Gray900}" />
-                    <Label
-                        FontSize="14"
-                        Text="{Binding User.Email}"
-                        TextColor="{StaticResource Gray600}" />
-                    <Border
-                        Margin="0,5,0,0"
-                        Padding="5"
-                        BackgroundColor="{StaticResource LightBackground}"
-                        StrokeShape="RoundRectangle 5">
-                        <Label
-                            FontSize="14"
-                            Text="Change Name"
-                            TextColor="{StaticResource Primary}"
-                            VerticalOptions="Center">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding ShowChangeNameCommand}" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                    </Border>
-                    <Border
-                        Margin="0,5,0,0"
-                        Padding="5"
-                        BackgroundColor="{StaticResource LightBackground}"
-                        StrokeShape="RoundRectangle 5">
-                        <Label
-                            FontSize="14"
-                            Text="Change Password"
-                            TextColor="{StaticResource Primary}"
-                            VerticalOptions="Center">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding ShowChangePasswordCommand}" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                    </Border>
-                    <Border
-                        Margin="0,5,0,0"
-                        Padding="5"
-                        BackgroundColor="{StaticResource LightBackground}"
-                        StrokeShape="RoundRectangle 5">
-                        <Label
-                            FontSize="14"
-                            Text="Change Profile Photo"
-                            TextColor="{StaticResource Primary}"
-                            VerticalOptions="Center">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding ChangePhotoCommand}" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                    </Border>
-                    <Border
-                        Margin="0,5,0,0"
-                        Padding="5"
-                        BackgroundColor="{StaticResource LightBackground}"
-                        StrokeShape="RoundRectangle 5">
-                        <HorizontalStackLayout Spacing="10">
-                            <Label
-                                FontSize="14"
-                                Text="{Binding IsFingerprintEnabled, Converter={StaticResource BooleanToStringConverter}, ConverterParameter='Enable Fingerprint Login|Disable Fingerprint Login'}"
-                                TextColor="{StaticResource Primary}"
-                                VerticalOptions="Center" />
-                            <Image
-                                Source="fingerprint.png"
-                                HeightRequest="16"
-                                WidthRequest="16"
-                                VerticalOptions="Center" />
-                            <HorizontalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding ShowFingerprintSettingsCommand}" />
-                            </HorizontalStackLayout.GestureRecognizers>
-                        </HorizontalStackLayout>
-                    </Border>
+            <!--  Menu thiết lập  -->
+            <Border x:Name="ProfileMenu"
+                    Margin="14,10,14,0"
+                    Padding="6"
+                    IsVisible="{Binding IsProfileMenuOpen}"
+                    Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="2">
+                    <Grid Padding="10,12" ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Style="{StaticResource BodyTextStyle}" Text="{ext:Translate Profile_ChangeName}" />
+                        <Label Grid.Column="1" Style="{StaticResource MutedTextStyle}" Text="›" />
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ShowChangeNameCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                    <BoxView Style="{StaticResource SeparatorStyle}" />
+
+                    <Grid Padding="10,12" ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Style="{StaticResource BodyTextStyle}" Text="{ext:Translate Profile_ChangePassword}" />
+                        <Label Grid.Column="1" Style="{StaticResource MutedTextStyle}" Text="›" />
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ShowChangePasswordCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                    <BoxView Style="{StaticResource SeparatorStyle}" />
+
+                    <Grid Padding="10,12" ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Style="{StaticResource BodyTextStyle}" Text="{ext:Translate Profile_ChangePhoto}" />
+                        <Label Grid.Column="1" Style="{StaticResource MutedTextStyle}" Text="›" />
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangePhotoCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                    <BoxView Style="{StaticResource SeparatorStyle}" />
+
+                    <Grid Padding="10,12" ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Style="{StaticResource BodyTextStyle}" Text="{ext:Translate Settings_Title}" />
+                        <Label Grid.Column="1" Style="{StaticResource MutedTextStyle}" Text="›" />
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToSettingsCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                    <BoxView Style="{StaticResource SeparatorStyle}" />
+
+                    <Grid Padding="10,12" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                        <Image Grid.Column="0"
+                               HeightRequest="18"
+                               Source="fingerprint.png"
+                               VerticalOptions="Center"
+                               WidthRequest="18" />
+                        <Label Grid.Column="1"
+                               Style="{StaticResource BodyTextStyle}"
+                               Text="{Binding IsFingerprintEnabled, Converter={StaticResource BooleanToStringConverter}, ConverterParameter='Bật đăng nhập vân tay|Tắt đăng nhập vân tay'}"
+                               VerticalOptions="Center" />
+                        <Label Grid.Column="2" Style="{StaticResource MutedTextStyle}" Text="›" />
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ShowFingerprintSettingsCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
                 </VerticalStackLayout>
             </Border>
 
-            <controls:Spacer Space="10" />
-
-            <!-- Post Selection Tabs -->
-            <Border
-                Margin="0,5,0,0"
-                HeightRequest="40"
-                Stroke="{StaticResource Primary}"
-                StrokeShape="RoundRectangle 20"
-                StrokeThickness="1">
+            <!--  Tabs  -->
+            <Border Margin="14,12,14,10"
+                    Padding="4"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource DarkSurfaceAlt}}"
+                    HeightRequest="46"
+                    StrokeShape="RoundRectangle 23"
+                    StrokeThickness="0">
                 <Grid ColumnDefinitions="*,*">
-                    <Border
-                        Grid.Column="0"
-                        BackgroundColor="{StaticResource White}"
-                        StrokeShape="RoundRectangle 20,0,0,20"
-                        StrokeThickness="0">
-                        <Label
-                            x:Name="myPostsLabel"
-                            FontAttributes="Bold"
-                            FontSize="14"
-                            HorizontalOptions="Center"
-                            Text="My Posts"
-                            TextColor="{StaticResource Primary}"
-                            VerticalOptions="Center" />
+                    <Border Grid.Column="0"
+                            Padding="0"
+                            BackgroundColor="Transparent"
+                            StrokeShape="RoundRectangle 19"
+                            StrokeThickness="0">
+                        <Label x:Name="myPostsLabel"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               HorizontalOptions="Center"
+                               Text="{ext:Translate Profile_MyPosts}"
+                               TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"
+                               VerticalOptions="Center" />
                         <Border.Triggers>
-                            <DataTrigger
-                                Binding="{Binding IsMyPostsTabSelected}"
-                                TargetType="Border"
-                                Value="true">
+                            <DataTrigger Binding="{Binding IsMyPostsTabSelected}" TargetType="Border" Value="true">
                                 <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
                                 <Setter TargetName="myPostsLabel" Property="Label.TextColor" Value="White" />
                             </DataTrigger>
@@ -202,24 +165,21 @@
                             <TapGestureRecognizer Command="{Binding SelectMyPostsTabCommand}" />
                         </Border.GestureRecognizers>
                     </Border>
-                    <Border
-                        Grid.Column="1"
-                        BackgroundColor="{StaticResource White}"
-                        StrokeShape="RoundRectangle 0,20,20,0"
-                        StrokeThickness="0">
-                        <Label
-                            x:Name="bookmarkedLabel"
-                            FontAttributes="Bold"
-                            FontSize="14"
-                            HorizontalOptions="Center"
-                            Text="Bookmarked"
-                            TextColor="{StaticResource Primary}"
-                            VerticalOptions="Center" />
+
+                    <Border Grid.Column="1"
+                            Padding="0"
+                            BackgroundColor="Transparent"
+                            StrokeShape="RoundRectangle 19"
+                            StrokeThickness="0">
+                        <Label x:Name="bookmarkedLabel"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               HorizontalOptions="Center"
+                               Text="{ext:Translate Profile_Saved}"
+                               TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"
+                               VerticalOptions="Center" />
                         <Border.Triggers>
-                            <DataTrigger
-                                Binding="{Binding IsBookmarksTabSelected}"
-                                TargetType="Border"
-                                Value="true">
+                            <DataTrigger Binding="{Binding IsBookmarksTabSelected}" TargetType="Border" Value="true">
                                 <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
                                 <Setter TargetName="bookmarkedLabel" Property="Label.TextColor" Value="White" />
                             </DataTrigger>
@@ -232,49 +192,38 @@
             </Border>
         </VerticalStackLayout>
 
-        <!-- Posts Collections -->
-        <CollectionView
-            Grid.Row="1"
-            IsVisible="{Binding IsMyPostsTabSelected}"
-            ItemTemplate="{StaticResource postDataTemplateSelector}"
-            ItemsSource="{Binding MyPosts}"
-            RemainingItemsThreshold="2"
-            RemainingItemsThresholdReachedCommand="{Binding FetchMyPostsCommand}">
+        <CollectionView Grid.Row="1"
+                        IsVisible="{Binding IsMyPostsTabSelected}"
+                        ItemTemplate="{StaticResource postDataTemplateSelector}"
+                        ItemsSource="{Binding MyPosts}"
+                        RemainingItemsThreshold="2"
+                        RemainingItemsThresholdReachedCommand="{Binding FetchMyPostsCommand}">
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout ItemSpacing="15" Orientation="Vertical" />
+                <LinearItemsLayout ItemSpacing="0" Orientation="Vertical" />
             </CollectionView.ItemsLayout>
             <CollectionView.EmptyView>
-                <Label
-                    Margin="0,40"
-                    FontSize="18"
-                    HorizontalOptions="Center"
-                    Text="You have not created any post yet"
-                    TextColor="{StaticResource Gray600}" />
+                <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Profile_EmptyMyPosts}" />
             </CollectionView.EmptyView>
         </CollectionView>
-        <CollectionView
-            Grid.Row="1"
-            IsVisible="{Binding IsBookmarksTabSelected}"
-            ItemTemplate="{StaticResource postDataTemplateSelector}"
-            ItemsSource="{Binding BookmarkedPosts}"
-            RemainingItemsThreshold="2"
-            RemainingItemsThresholdReachedCommand="{Binding FetchBookmarkedPostsCommand}">
+
+        <CollectionView Grid.Row="1"
+                        IsVisible="{Binding IsBookmarksTabSelected}"
+                        ItemTemplate="{StaticResource postDataTemplateSelector}"
+                        ItemsSource="{Binding BookmarkedPosts}"
+                        RemainingItemsThreshold="2"
+                        RemainingItemsThresholdReachedCommand="{Binding FetchBookmarkedPostsCommand}">
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout ItemSpacing="15" Orientation="Vertical" />
+                <LinearItemsLayout ItemSpacing="0" Orientation="Vertical" />
             </CollectionView.ItemsLayout>
             <CollectionView.EmptyView>
-                <Label
-                    Margin="0,40"
-                    FontSize="18"
-                    HorizontalOptions="Center"
-                    Text="There are no bookmarked posts"
-                    TextColor="{StaticResource Gray600}" />
+                <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Profile_EmptySaved}" />
             </CollectionView.EmptyView>
         </CollectionView>
-        <ActivityIndicator
-            Grid.RowSpan="2"
-            HorizontalOptions="Center"
-            IsRunning="{Binding IsBusy}"
-            VerticalOptions="Center" />
+
+        <ActivityIndicator Grid.Row="1"
+                           HorizontalOptions="Center"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           VerticalOptions="Center" />
     </Grid>
 </ContentPage>

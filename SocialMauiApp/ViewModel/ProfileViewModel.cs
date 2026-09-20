@@ -129,6 +129,9 @@ namespace SocialMauiApp.ViewModel
         }
 
         [RelayCommand]
+        private async Task GoToSettingsAsync() => await NavigateAsync(nameof(Pages.SettingsPage));
+
+        [RelayCommand]
         private void ToggleProfileMenu()
         {
             IsProfileMenuOpen = !IsProfileMenuOpen;

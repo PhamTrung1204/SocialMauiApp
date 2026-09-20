@@ -1,0 +1,75 @@
+# Render Blueprint - Docker web service + managed PostgreSQL + persistent disk.
+#
+# Deploy:
+#   1. push this repo to GitHub
+#   2. Render dashboard -> New -> Blueprint -> pick the repo
+#   3. fill the four values marked sync:false (see below), then Apply
+#
+# The four you must supply are the public URL of the service and the SMTP
+# credentials. Render only knows the URL after the first create, so:
+#   - Apply once, let it build
+#   - copy the assigned URL (https://socialmaui-api.onrender.com)
+#   - paste it into Domain / AppSettings__BaseUrl / Jwt__Issuer
+#   - redeploy
+
+databases:
+  - name: socialmaui-db
+    databaseName: socialmaui
+    user: socialmaui
+    plan: free          # free Postgres is deleted after 30 days - upgrade before production
+
+services:
+  - type: web
+    name: socialmaui-api
+    runtime: docker
+    dockerfilePath: ./SocialMauiApp.Api/Dockerfile
+    dockerContext: .
+    plan: starter       # free has no persistent disk, and uploads need one
+    region: singapore
+    healthCheckPath: /health
+    disk:
+      name: socialmaui-uploads
+      mountPath: /app/wwwroot/uploads
+      sizeGB: 5
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+
+      # Render hands out a postgres:// URI; Program.cs converts it to Npgsql form.
+      - key: ConnectionStrings__SocialConnection
+        fromDatabase:
+          name: socialmaui-db
+          property: connectionString
+
+      - key: Database__AutoMigrate
+        value: "true"
+
+      # Render terminates TLS at its edge and forwards plain HTTP.
+      - key: Hosting__UseHttpsRedirection
+        value: "false"
+
+      - key: Jwt__SecretKey
+        generateValue: true
+      - key: Jwt__ExpireInMinutes
+        value: "60"
+      - key: Jwt__RefreshTokenExpiryInDays
+        value: "30"
+
+      # ---- set these to the public Render URL after the first deploy ----
+      - key: Domain
+        sync: false
+      - key: AppSettings__BaseUrl
+        sync: false
+      - key: Jwt__Issuer
+        sync: false
+
+      - key: SmtpSettings__Host
+        value: smtp.gmail.com
+      - key: SmtpSettings__Port
+        value: "587"
+      - key: SmtpSettings__EnableSsl
+        value: "true"
+      - key: SmtpSettings__SenderEmail
+        sync: false
+      - key: SmtpSettings__AppPassword
+        sync: false
