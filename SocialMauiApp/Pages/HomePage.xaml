@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="SocialMauiApp.Pages.HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -8,31 +8,31 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SocialMauiApp.ViewModel"
     x:DataType="vm:HomeViewModel"
-    BackgroundColor="{DynamicResource Gray100}"
-    Shell.BackgroundColor="{DynamicResource Primary}">
+    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}"
+    Shell.BackgroundColor="{StaticResource Primary}">
 
-    <!-- Shell TitleView -->
     <Shell.TitleView>
-        <Grid Padding="5" ColumnDefinitions="Auto,*,Auto">
+        <Grid Padding="4,0" ColumnDefinitions="*,Auto">
             <Label
                 Grid.Column="0"
                 FontAttributes="Bold"
-                FontSize="25"
+                FontSize="20"
+                LineBreakMode="TailTruncation"
                 Text="Social App Maui"
-                TextColor="{DynamicResource White}"
+                TextColor="White"
                 VerticalOptions="Center" />
 
             <Grid
-                Grid.Column="2"
-                Margin="0,0,15,0"
+                Grid.Column="1"
+                Margin="0,0,10,0"
                 ColumnDefinitions="Auto,Auto,Auto,Auto"
-                ColumnSpacing="20"
+                ColumnSpacing="22"
                 VerticalOptions="Center">
                 <controls:WhiteImage
                     Grid.Column="0"
-                    HeightRequest="25"
+                    HeightRequest="23"
                     Source="plus.png"
-                    WidthRequest="25">
+                    WidthRequest="23">
                     <controls:WhiteImage.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
                     </controls:WhiteImage.GestureRecognizers>
@@ -40,16 +40,21 @@
 
                 <Grid Grid.Column="1">
                     <controls:WhiteImage
-                        HeightRequest="24"
+                        HeightRequest="23"
                         Source="bell.png"
-                        WidthRequest="24" />
-                    <Ellipse
-                        Fill="Black"
-                        HeightRequest="15"
+                        WidthRequest="23" />
+                    <Border
+                        Margin="0,-3,-3,0"
+                        Padding="0"
+                        BackgroundColor="{StaticResource Danger}"
+                        HeightRequest="12"
                         HorizontalOptions="End"
                         IsVisible="{Binding IsThereNewNotification}"
+                        Stroke="White"
+                        StrokeShape="RoundRectangle 6"
+                        StrokeThickness="2"
                         VerticalOptions="Start"
-                        WidthRequest="15" />
+                        WidthRequest="12" />
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer Tapped="GoToNotification" />
                     </Grid.GestureRecognizers>
@@ -57,9 +62,9 @@
 
                 <controls:WhiteImage
                     Grid.Column="2"
-                    HeightRequest="25"
+                    HeightRequest="23"
                     Source="user.png"
-                    WidthRequest="25">
+                    WidthRequest="23">
                     <controls:WhiteImage.GestureRecognizers>
                         <TapGestureRecognizer Tapped="GoToFriends" />
                     </controls:WhiteImage.GestureRecognizers>
@@ -67,9 +72,9 @@
 
                 <controls:WhiteImage
                     Grid.Column="3"
-                    HeightRequest="25"
+                    HeightRequest="23"
                     Source="personal.png"
-                    WidthRequest="25">
+                    WidthRequest="23">
                     <controls:WhiteImage.GestureRecognizers>
                         <TapGestureRecognizer Tapped="GoToProfile" />
                     </controls:WhiteImage.GestureRecognizers>
@@ -79,48 +84,46 @@
     </Shell.TitleView>
 
     <RefreshView Command="{Binding RefreshPostsCommand}" IsRefreshing="{Binding IsRefreshing}">
-        <Grid Padding="0" RowDefinitions="Auto,*">
-            <Grid
-                Padding="12,10"
-                Margin="0,0,0,6"
-                BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}"
-                ColumnDefinitions="Auto,*"
-                ColumnSpacing="10">
-                <Border Grid.Column="0" Style="{StaticResource AvatarStyle}">
-                    <Image
-                        Aspect="AspectFill"
-                        HeightRequest="48"
-                        HorizontalOptions="Center"
-                        Source="{Binding User.Photo}"
-                        VerticalOptions="Center"
-                        WidthRequest="48" />
-                </Border>
+        <Grid RowDefinitions="Auto,*">
 
-                <!--  Ô soạn bài: giãn theo bề rộng màn hình thay vì cố định 325px  -->
-                <Border
-                    Grid.Column="1"
-                    Padding="14,0"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSurfaceAlt}, Dark={StaticResource DarkSurfaceAlt}}"
-                    HeightRequest="48"
-                    HorizontalOptions="Fill"
-                    Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
-                    StrokeShape="RoundRectangle 24"
-                    StrokeThickness="1">
-                    <controls:NoUnderLine
-                        FontSize="15"
-                        Placeholder="{ext:Translate Home_ComposerPlaceholder}"
-                        PlaceholderColor="{AppThemeBinding Light={StaticResource TextMutedLight}, Dark={StaticResource TextMutedDark}}"
-                        ReturnType="Done"
-                        VerticalOptions="Center">
-                        <controls:NoUnderLine.GestureRecognizers>
+            <!--  Composer  -->
+            <Border
+                Margin="14,12,14,6"
+                Padding="12"
+                Style="{StaticResource FlatCardStyle}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Border Grid.Column="0" Style="{StaticResource AvatarStyle}">
+                        <Image
+                            Aspect="AspectFill"
+                            HeightRequest="48"
+                            Source="{Binding User.Photo}"
+                            WidthRequest="48" />
+                    </Border>
+
+                    <Border
+                        Grid.Column="1"
+                        Padding="16,0"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightSurfaceAlt}, Dark={StaticResource DarkSurfaceAlt}}"
+                        HeightRequest="48"
+                        HorizontalOptions="Fill"
+                        StrokeShape="RoundRectangle 24"
+                        StrokeThickness="0">
+                        <controls:NoUnderLine
+                            FontSize="15"
+                            Placeholder="{ext:Translate Home_ComposerPlaceholder}"
+                            PlaceholderColor="{AppThemeBinding Light={StaticResource TextMutedLight}, Dark={StaticResource TextMutedDark}}"
+                            ReturnType="Done"
+                            VerticalOptions="Center">
+                            <controls:NoUnderLine.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
+                            </controls:NoUnderLine.GestureRecognizers>
+                        </controls:NoUnderLine>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
-                        </controls:NoUnderLine.GestureRecognizers>
-                    </controls:NoUnderLine>
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding GoToAddPostCommand}" />
-                    </Border.GestureRecognizers>
-                </Border>
-            </Grid>
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+            </Border>
 
             <CollectionView
                 Grid.Row="1"

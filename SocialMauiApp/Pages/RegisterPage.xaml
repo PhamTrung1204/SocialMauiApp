@@ -15,10 +15,10 @@
     <Grid Background="{StaticResource BrandGradientBrush}">
         <!--  Một ScrollView duy nhất: lồng hai ScrollView cùng trục làm hỏng cuộn trên Android.  -->
         <ScrollView>
-            <Border Margin="18,28" Padding="26,30" Style="{StaticResource FlatCardStyle}">
-                <Border.Shadow>
-                    <Shadow Brush="Black" Offset="0,6" Radius="18" Opacity="0.18" />
-                </Border.Shadow>
+            <Border Margin="18,28"
+                    Padding="26,30"
+                    Shadow="{StaticResource ShadowLg}"
+                    Style="{StaticResource FlatCardStyle}">
 
                 <VerticalStackLayout Spacing="20">
 
@@ -30,7 +30,7 @@
                     <!--  Ảnh đại diện + nút chọn ảnh  -->
                     <Grid HeightRequest="124" HorizontalOptions="Center" WidthRequest="124">
                         <Border Padding="0"
-                                BackgroundColor="{StaticResource Gray100}"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource DarkSurfaceAlt}}"
                                 HeightRequest="118"
                                 Stroke="{StaticResource PrimarySoft}"
                                 StrokeShape="RoundRectangle 59"

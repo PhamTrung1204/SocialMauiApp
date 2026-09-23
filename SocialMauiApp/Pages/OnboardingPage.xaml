@@ -3,16 +3,57 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SocialMauiApp.Pages.OnboardingPage"
              Title="OnboardingPage"
-             BackgroundColor="{StaticResource Primary}"
              Shell.NavBarIsVisible="False">
 
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Offset="0.0" Color="{StaticResource PrimaryLight}" />
+            <GradientStop Offset="0.55" Color="{StaticResource Primary}" />
+            <GradientStop Offset="1.0" Color="{StaticResource PrimaryDarker}" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
     <Grid RowDefinitions="*, Auto, *, Auto">
-        <Grid x:Name="MainContent" Grid.Row="1" RowDefinitions="Auto, Auto, Auto" RowSpacing="20" Opacity="0">
-            <Image Grid.Row="0" Source="logomaui.png" HeightRequest="200" Aspect="AspectFit"/>
-            <Label Grid.Row="1" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center" TextColor="White" Text="Hello there!"/>
-            <VerticalStackLayout Grid.Row="2" Spacing="10">
-                <Label Text="Welcome to this" HorizontalOptions="Center" FontSize="25" FontAttributes="Bold" TextColor="White"/>
-                <Label Text="Social Network App" HorizontalOptions="Center" FontSize="30" FontAttributes="Bold" TextColor="White"/>
+        <Grid x:Name="MainContent"
+              Grid.Row="1"
+              Padding="32,0"
+              Opacity="0"
+              RowDefinitions="Auto, Auto, Auto"
+              RowSpacing="28">
+
+            <Border Grid.Row="0"
+                    Padding="24"
+                    BackgroundColor="#22FFFFFF"
+                    HeightRequest="188"
+                    HorizontalOptions="Center"
+                    StrokeShape="RoundRectangle 48"
+                    StrokeThickness="0"
+                    WidthRequest="188">
+                <Image Aspect="AspectFit"
+                       HeightRequest="128"
+                       Source="logomaui.png" />
+            </Border>
+
+            <Label Grid.Row="1"
+                   FontAttributes="Bold"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   Opacity="0.85"
+                   Text="HELLO THERE!"
+                   TextColor="White" />
+
+            <VerticalStackLayout Grid.Row="2" Spacing="6">
+                <Label FontSize="26"
+                       HorizontalTextAlignment="Center"
+                       Opacity="0.9"
+                       Text="Welcome to this"
+                       TextColor="White" />
+                <Label FontAttributes="Bold"
+                       FontSize="36"
+                       HorizontalTextAlignment="Center"
+                       LineHeight="1.1"
+                       Text="Social Network App"
+                       TextColor="White" />
             </VerticalStackLayout>
         </Grid>
     </Grid>

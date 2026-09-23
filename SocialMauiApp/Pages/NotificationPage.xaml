@@ -1,4 +1,4 @@
-﻿<ContentPage
+<ContentPage
     x:Class="SocialMauiApp.Pages.NotificationPage"
     x:Name="notificationPageRoot"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -16,29 +16,32 @@
         <CollectionView ItemsSource="{Binding Notifications}"
                         RemainingItemsThreshold="10"
                         RemainingItemsThresholdReachedCommand="{Binding FetchNotificationCommand}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="0" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
             <CollectionView.EmptyView>
                 <Label Style="{StaticResource EmptyStateStyle}" Text="{ext:Translate Notifications_Empty}" />
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="dtos:NotificationDto">
                     <Border Style="{StaticResource CardStyle}">
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
                             <Border Grid.Column="0"
                                     Padding="0"
-                                    BackgroundColor="{StaticResource PrimarySoft}"
-                                    HeightRequest="40"
-                                    StrokeShape="RoundRectangle 20"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource PrimarySoft}, Dark={StaticResource DarkSurfaceAlt}}"
+                                    HeightRequest="42"
+                                    StrokeShape="RoundRectangle 21"
                                     StrokeThickness="0"
                                     VerticalOptions="Start"
-                                    WidthRequest="40">
+                                    WidthRequest="42">
                                 <Image HeightRequest="18"
                                        HorizontalOptions="Center"
                                        Source="bell.png"
                                        VerticalOptions="Center"
                                        WidthRequest="18" />
                             </Border>
-                            <VerticalStackLayout Grid.Column="1" Spacing="3">
-                                <Label Style="{StaticResource BodyTextStyle}" Text="{Binding Text}" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <Label LineHeight="1.3" Style="{StaticResource BodyTextStyle}" Text="{Binding Text}" />
                                 <Label Style="{StaticResource CaptionTextStyle}"
                                        Text="{Binding When, Converter={StaticResource HumanizedTimeConverter}}" />
                             </VerticalStackLayout>

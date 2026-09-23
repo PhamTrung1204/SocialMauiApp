@@ -14,34 +14,45 @@
     Shell.TitleColor="White">
 
     <ScrollView>
-        <VerticalStackLayout Padding="14,14" Spacing="12">
+        <VerticalStackLayout Padding="14,16,14,24" Spacing="10">
 
-            <Label Style="{StaticResource SectionTitleStyle}" Text="{ext:Translate Settings_Language}" />
+            <Label Margin="4,0,0,0"
+                   Style="{StaticResource SectionTitleStyle}"
+                   Text="{ext:Translate Settings_Language}" />
 
-            <Border Style="{StaticResource FlatCardStyle}">
-                <VerticalStackLayout Spacing="10">
-                    <Label Style="{StaticResource MutedTextStyle}" Text="{ext:Translate Settings_LanguageDescription}" />
+            <Label Margin="4,0,0,6"
+                   Style="{StaticResource MutedTextStyle}"
+                   Text="{ext:Translate Settings_LanguageDescription}" />
 
-                    <CollectionView ItemsSource="{Binding Languages}"
-                                    SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
-                                    SelectionMode="Single">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="services:LanguageOption">
-                                <Grid Padding="4,12" ColumnDefinitions="*,Auto">
-                                    <Label Grid.Column="0"
-                                           Style="{StaticResource BodyTextStyle}"
-                                           Text="{Binding DisplayName}"
-                                           VerticalOptions="Center" />
-                                    <Label Grid.Column="1"
-                                           FontAttributes="Bold"
+            <Border Padding="6,2" Style="{StaticResource FlatCardStyle}">
+                <CollectionView ItemsSource="{Binding Languages}"
+                                SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
+                                SelectionMode="Single">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="2" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="services:LanguageOption">
+                            <Grid Padding="10,14" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                <Label Grid.Column="0"
+                                       Style="{StaticResource BodyTextStyle}"
+                                       Text="{Binding DisplayName}"
+                                       VerticalOptions="Center" />
+                                <Border Grid.Column="1"
+                                        Padding="10,4"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource PrimarySoft}, Dark={StaticResource DarkSurfaceAlt}}"
+                                        StrokeShape="RoundRectangle 12"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Center">
+                                    <Label FontAttributes="Bold"
+                                           FontSize="12"
                                            Text="{Binding Code}"
-                                           TextColor="{StaticResource Primary}"
-                                           VerticalOptions="Center" />
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
+                                           TextColor="{AppThemeBinding Light={StaticResource PrimaryDark}, Dark={StaticResource PrimaryLight}}" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </Border>
         </VerticalStackLayout>
     </ScrollView>

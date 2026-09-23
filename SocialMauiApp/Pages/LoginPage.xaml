@@ -16,10 +16,10 @@
         <ScrollView>
             <Grid Padding="18,36" RowDefinitions="*,Auto,*">
 
-                <Border Grid.Row="1" Style="{StaticResource FlatCardStyle}" Padding="26,30">
-                    <Border.Shadow>
-                        <Shadow Brush="Black" Offset="0,6" Radius="18" Opacity="0.18" />
-                    </Border.Shadow>
+                <Border Grid.Row="1"
+                        Padding="26,30"
+                        Shadow="{StaticResource ShadowLg}"
+                        Style="{StaticResource FlatCardStyle}">
 
                     <Grid>
 
@@ -32,15 +32,11 @@
                                     StrokeThickness="3"
                                     WidthRequest="112"
                                     Padding="0"
-                                    BackgroundColor="{StaticResource LightSurface}">
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurfaceAlt}}">
                                 <Image Aspect="AspectFill"
                                        HeightRequest="112"
                                        Source="logomaui.png"
-                                       WidthRequest="112">
-                                    <Image.Clip>
-                                        <EllipseGeometry Center="56,56" RadiusX="56" RadiusY="56" />
-                                    </Image.Clip>
-                                </Image>
+                                       WidthRequest="112" />
                             </Border>
 
                             <VerticalStackLayout Spacing="2">
