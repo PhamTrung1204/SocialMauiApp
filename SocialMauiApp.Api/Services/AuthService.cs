@@ -56,7 +56,16 @@ namespace SocialMauiApp.Api.Services
                 await _context.SaveChangesAsync();
 
                 _logger.LogDebug("Generated verification token for unverified email {Email}: {Token}", dto.Email, verificationToken);
-                await SendVerificationEmail(existingUser.Email, verificationToken);
+                try
+                {
+                    await SendVerificationEmail(existingUser.Email, verificationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Resending verification email failed for {Email}.", dto.Email);
+                    return ApiResult<Guid>.Fail($"Email already exists but is not verified. Resending the verification email failed: {ex.Message}");
+                }
+
                 return ApiResult<Guid>.Fail($"Email already exists but is not verified. A new verification email has been sent to {dto.Email}.");
             }
 
