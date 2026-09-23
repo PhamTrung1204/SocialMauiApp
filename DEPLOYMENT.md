@@ -87,6 +87,40 @@ client, so it is not an environment variable.
 | `healthCheckPath: /health` | every `/api/*` route needs auth and returns 401, which Render reads as unhealthy and rolls back the deploy |
 | `Hosting__UseHttpsRedirection: false` | Render terminates TLS; leaving it on risks a redirect loop |
 | Free/starter instances sleep when idle | SignalR clients disconnect; first request after a sleep is slow |
+## Deploying to Koyeb
+
+Koyeb has no blueprint file, so nothing in this repo configures it — the service
+is created in the dashboard and every variable below has to be supplied
+explicitly. `deploy-koyeb.sh` does that in one shot.
+
+1. **Create the database first.** Koyeb has no managed Postgres; use Neon,
+   Supabase or Aiven and copy the connection URI. `Program.cs` accepts the
+   `postgres://` form as-is.
+2. **Create the service** from the GitHub repo, builder **Dockerfile**, path
+   `SocialMauiApp.Api/Dockerfile`, build context the repo root.
+3. **Fill in the config and apply it:**
+   ```bash
+   cp .env.koyeb.example .env.koyeb   # gitignored
+   ./deploy-koyeb.sh
+   ```
+   The first apply can use a placeholder `PUBLIC_BASE_URL`; once Koyeb assigns
+   the real `*.koyeb.app` URL, put it in `.env.koyeb` and re-run the script.
+4. **Verify:** `curl -fsS "$PUBLIC_BASE_URL/health"` returns
+   `{"status":"healthy"}`. Anything else, read `koyeb services logs <app>/<svc>`.
+5. **Point the client at it**: set `AppConstants.ApiBaseUrl` and rebuild the app.
+
+### Koyeb specifics that bite
+
+| Thing | Why it matters |
+| --- | --- |
+| Missing `ConnectionStrings__SocialConnection` | `Program.cs` throws before the port opens; the instance never becomes healthy and the deploy is rolled back. This is the single most common cause of a failed first deploy |
+| Unreachable database | `InitializeDatabasesAsync` retries 10 × 3s and *then* rethrows — the port stays shut for 30s and the crash looks like a health-check timeout, not a database error |
+| Neon scale-to-zero | the first connect to a cold compute times out and burns a retry; measured 45s from container start to a healthy `/health` |
+| Health check grace period | must exceed that 30s window, or Koyeb kills the instance mid-migration. `deploy-koyeb.sh` sets 120s |
+| Health check must be `http:/health` | the default TCP check passes before the app can serve, and every `/api/*` route returns 401 |
+| `Hosting__UseHttpsRedirection: false` | Koyeb terminates TLS at the edge and forwards plain HTTP |
+| No persistent disk by default | Koyeb volumes are region-limited and cannot be attached to a service that scales to zero. Without one, `/app/wwwroot/uploads` is wiped on every deploy — move uploads to object storage before production |
+| Scale-to-zero | SignalR clients disconnect and the first request after a sleep is slow |
 
 ## Order of operations
 

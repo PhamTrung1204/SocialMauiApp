@@ -8,7 +8,7 @@ namespace SocialMediaMaui.Shared
 {
     public static class AppConstants
     {
-        public const string ApiBaseUrl = "https://r2dpzmzp-7022.asse.devtunnels.ms";
+        public const string ApiBaseUrl = "https://significant-nadine-3love3-51204419.koyeb.app";
         public const string HubPattern = "/hubs/social-hub";
         public const string HubFullUrl = ApiBaseUrl + HubPattern;
     }
